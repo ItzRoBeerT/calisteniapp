@@ -1,101 +1,85 @@
-import Image from "next/image";
+import Image from 'next/image'
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center min-h-screen px-8 py-8 gap-16 sm:px-20 font-[family-name:var(--font-geist-sans)]">
+      <main className="flex flex-col gap-16 items-center sm:items-start">
+        <section className="flex flex-col sm:flex-row items-center gap-8">
+          <div className="text-center sm:text-left">
+            <h2 className="text-xl font-bold mb-2">
+              Consulta tus ejercicios de calistenia favoritos
+            </h2>
+            <p>
+              Explora una variedad de ejercicios diseñados para mejorar tu
+              fuerza y flexibilidad.
+            </p>
+          </div>
+          <Image
+            src="https://nachogst.com/wp-content/uploads/2023/04/1e027aa3-76a0-4488-afff-13eba5fdd879.webp"
+            alt="Generando comunidad"
+            width={300}
+            height={200}
+            className="rounded-lg"
+          />
+        </section>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+        <section className="flex flex-col sm:flex-row items-center gap-8 sm:flex-row-reverse">
+          <div className="text-center sm:text-right">
+            <h2 className="text-xl font-bold mb-2">
+              Revisa todos los entrenamientos y puntúalos
+            </h2>
+            <p>
+              Evalúa y comenta sobre los entrenamientos que te ayudan a alcanzar
+              tus metas.
+            </p>
+          </div>
+          <Image
+            src="https://nachogst.com/wp-content/uploads/2024/06/a56c89e4-03bf-49f5-8a39-62056cf1f717.webp"
+            alt="Consejos y curiosidades"
+            width={300}
+            height={200}
+            className="rounded-lg"
+          />
+        </section>
+        <section className="flex flex-col sm:flex-row items-center gap-8">
+          <div className="text-center sm:text-left">
+            <h2 className="text-xl font-bold mb-2">
+              Genera comunidad comentando y compartiendo
+            </h2>
+            <p>
+              Comparte tus experiencias, consejos y progresos con otros
+              usuarios. Juntos podemos construir una comunidad de apoyo y
+              motivación.
+            </p>
+          </div>
+          <Image
+            src="https://nachogst.com/wp-content/uploads/2024/06/07ee8b21-3a73-45a5-a754-d7e104910b75.webp"
+            alt="Generando comunidad"
+            width={300}
+            height={200}
+            className="rounded-lg"
+          />
+        </section>
+
+        <section className="flex flex-col sm:flex-row items-center gap-8 sm:flex-row-reverse">
+          <div className="text-center sm:text-right">
+            <h2 className="text-xl font-bold mb-2">
+              Comparte consejos y curiosidades de calistenia
+            </h2>
+            <p>
+              Todos tenemos algo que aportar. Comparte tus mejores consejos,
+              técnicas y curiosidades sobre calistenia con la comunidad.
+            </p>
+          </div>
+          <Image
+            src="https://nachogst.com/wp-content/uploads/2024/06/07ee8b21-3a73-45a5-a754-d7e104910b75.webp"
+            alt="Consejos y curiosidades"
+            width={300}
+            height={200}
+            className="rounded-lg"
+          />
+        </section>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
-  );
+  )
 }
