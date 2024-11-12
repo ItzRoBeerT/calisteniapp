@@ -14,7 +14,7 @@ export default function NavLink({ href, children, className, ...props }: NavLink
 	const isActive = path === href || path.startsWith(href + '/');
 
 	return (
-		<Link href={href} className={`${isActive ? 'text-tertiary' : 'text-primary'} ${className || ''}`.trim()} {...props}>
+		<Link href={href} className={`${isActive ? 'text-primary' : 'text-white'} ${className || ''}`.trim()} {...props}>
 			{children}
 		</Link>
 	);
