@@ -1,10 +1,10 @@
 export default function Footer() {
-  const currentYear = new Date().getFullYear()
+	const currentYear = new Date().getFullYear();
 
-  return (
-    <footer className="bg-background flex justify-between px-4 py-2">
-      <span className="text-sm">Made with love by Us</span>
-      <span className="text-sm">Copyright ©{currentYear}</span>
-    </footer>
-  )
+	return (
+		<footer className="bg-background absolute bottom-0 px-4 py-2 mt-12 w-full flex justify-between">
+			<span className="text-sm">Made with love by Us</span>
+			<span className="text-sm">Copyright ©{currentYear}</span>
+		</footer>
+	);
 }
