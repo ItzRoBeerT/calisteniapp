@@ -4,7 +4,7 @@ export interface Exercise {
 	description: string;
 	image: string;
 	video?: string;
-	likes: number[];
+	likes?: number[];
 	comments?: string[];
 	level: number;
 	family: string;
