@@ -1,16 +1,15 @@
 export interface Exercise {
 	id: number;
-	title: string;
+	name: string;
 	description: string;
 	image: string;
 	video?: string;
 	likes?: number[];
-	comments?: string[];
 	level: number;
-	family: string;
+	family: string[];
 	materials?: string[];
-	muscle: string;
-	muscle_group?: string;
+	muscles: string[];
+	muscle_group?: string[];
 }
 
 export interface User {

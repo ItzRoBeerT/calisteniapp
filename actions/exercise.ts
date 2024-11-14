@@ -8,12 +8,27 @@ export async function getExercise(id: number) {
 		id: id as number,
 	};
 
-	const { data } = await supabase.from('Exercise').select('*').eq('id', query.id).single();
+	const { data } = await supabase
+		.from('Exercise')
+		.select('*')
+		.eq('id', query.id)
+		.single();
 
 	if (!data) {
 		return null;
 	}
-	console.log(data);
+
+	return data;
+}
+
+export async function getExercises() {
+	const supabase = await createClient();
+
+	const { data } = await supabase.from('Exercise').select('*');
+
+	if (!data) {
+		return null;
+	}
 
 	return data;
 }
