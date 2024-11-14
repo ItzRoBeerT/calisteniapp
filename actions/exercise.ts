@@ -32,3 +32,21 @@ export async function getExercises() {
 
 	return data;
 }
+
+export async function getExerciseByName(name: string) {
+	const supabase = await createClient();
+
+	console.log(`Searching in column name data: ${name}}`);
+	const { data } = await supabase
+		.from('Exercise')
+		.select('*')
+		.ilike('name', name)
+		.single();
+
+	if (!data) {
+		return null;
+	}
+	console.log(data);
+
+	return data;
+}
