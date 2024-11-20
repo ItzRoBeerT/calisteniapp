@@ -1,5 +1,6 @@
-import { getExercises } from '@/actions/exercise';
-import ExerciseCard from '@/components/exercises/card';
+import { getExercisesByPage } from '@/actions/exercise';
+import ExerciseFilter from '@/components/exercises/Filter';
+import ExercisesList from '@/components/exercises/List';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -9,8 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ExercisesPage() {
-	let exercises = (await getExercises()) || [];
-	console.log(exercises);
+	const exercises = (await getExercisesByPage(1)) || [];
 
 	return (
 		<>
@@ -18,12 +18,10 @@ export default async function ExercisesPage() {
 				Listado De Ejercicios
 			</h1>
 			<section>
-				<p>Filtros</p>
+				<ExerciseFilter />
 			</section>
-			<section className="grid gap-4 xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 my-4">
-				{exercises.map((exercise, index) => (
-					<ExerciseCard exercise={exercise} key={index} />
-				))}
+			<section>
+				<ExercisesList initalExercises={exercises} />
 			</section>
 		</>
 	);
