@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 import Link from 'next/link';
-import NavLink from './NavLink';
+import NavLink from '@/components/header/NavLink';
 import LogoutButton from './logout-button';
 
 export default async function Header() {

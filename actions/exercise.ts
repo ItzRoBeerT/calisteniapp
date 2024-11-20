@@ -24,7 +24,7 @@ export async function getExercise(id: number) {
 export async function getExercises() {
 	const supabase = await createClient();
 
-	const { data } = await supabase.from('Exercise').select('*');
+	const { data } = await supabase.from('exercise_list').select('*');
 
 	if (!data) {
 		return null;
