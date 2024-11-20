@@ -20,7 +20,9 @@ export default function RootLayout({
 		<html lang="en" className="min-h-full relative">
 			<body className={inter.className}>
 				<Header />
-				<main className="container mx-auto my-4">{children}</main>
+				<main className="container mx-auto my-4 px-6 xl:px-0">
+					{children}
+				</main>
 				<Footer />
 			</body>
 		</html>

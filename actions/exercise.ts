@@ -1,5 +1,6 @@
 'use server';
 import { createClient } from '@/utils/supabase/server';
+const EXERCISES_PER_PAGE = 2;
 
 export async function getExercise(id: number) {
 	const supabase = await createClient();
@@ -25,6 +26,21 @@ export async function getExercises() {
 	const supabase = await createClient();
 
 	const { data } = await supabase.from('exercise_list').select('*');
+
+	if (!data) {
+		return null;
+	}
+
+	return data;
+}
+
+export async function getExercisesByPage(page: number) {
+	const supabase = await createClient();
+
+	const { data } = await supabase
+		.from('exercise_list')
+		.select('*')
+		.range((page - 1) * EXERCISES_PER_PAGE, page * EXERCISES_PER_PAGE - 1);
 
 	if (!data) {
 		return null;
