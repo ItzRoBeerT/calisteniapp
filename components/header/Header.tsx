@@ -32,7 +32,7 @@ export default async function Header() {
 					) : (
 						<NavLink
 							href={'/login'}
-							className="bg-secondary rounded p-2 hover:bg-secondaryHover transition text-black"
+							className="bg-purple-500 rounded p-2 hover:bg-purple-600 transition text-black"
 						>
 							Login
 						</NavLink>
