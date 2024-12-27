@@ -1,4 +1,4 @@
-import { getExercisesByPage } from '@/actions/exercise';
+import { getExercisesByPage, getFilters } from '@/actions/exercise';
 import ExerciseFilter from '@/components/exercises/Filter';
 import ExercisesList from '@/components/exercises/List';
 import { Metadata } from 'next';
@@ -11,6 +11,7 @@ export const metadata: Metadata = {
 
 export default async function ExercisesPage() {
 	const exercises = (await getExercisesByPage(1)) || [];
+	const filters = await getFilters();
 
 	return (
 		<>
@@ -18,7 +19,7 @@ export default async function ExercisesPage() {
 				Listado De Ejercicios
 			</h1>
 			<section>
-				<ExerciseFilter />
+				<ExerciseFilter allFilters={filters} />
 			</section>
 			<section>
 				<ExercisesList initalExercises={exercises} />
