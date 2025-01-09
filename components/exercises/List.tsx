@@ -29,13 +29,11 @@ export default function ExercisesList(props: { initalExercises: Exercise[] }) {
 
 		// Si hay filtros, realiza la petición
 		if (Object.keys(updatedFilters).length > 0) {
-			console.log('entro');
 			(async () => {
 				const newExercises = await getExercisesByPage(
 					1,
 					updatedFilters
 				);
-				console.log('New exercises:', newExercises);
 
 				if (newExercises) {
 					setExercises(newExercises);

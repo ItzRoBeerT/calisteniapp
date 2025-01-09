@@ -50,14 +50,12 @@ export default function ExerciseFilter(props: { allFilters: Filter }) {
 		router.push(newUrl);
 	};
 	//#endregion
-
-	console.log({selectedFilters});
 	
 
 	return (
-		<div className="bg-surface w-fit p-4 flex gap-4">
+		<div className="bg-surface w-fit p-4 flex gap-4 rounded-xl">
 			<select
-				className="text-black"
+				className="text-black rounded"
 				name="difficulties"
 				onChange={onFilterChange}
 			>
@@ -70,7 +68,7 @@ export default function ExerciseFilter(props: { allFilters: Filter }) {
 			</select>
 
 			<select
-				className="text-black"
+				className="text-black rounded"
 				name="muscle_groups"
 				onChange={onFilterChange}
 
