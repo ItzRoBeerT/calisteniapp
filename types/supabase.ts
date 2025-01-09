@@ -31,3 +31,9 @@ export interface Workout{
 	comments?: string[];
 	visible: boolean;
 }
+
+export interface Filter {
+	difficulties: string[];
+	muscleGroups: string[];
+	families: string[];
+}
