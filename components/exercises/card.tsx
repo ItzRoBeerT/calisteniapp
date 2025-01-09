@@ -11,7 +11,6 @@ const ExerciseCard = React.memo(function ExerciseCard({
 }: {
 	exercise: Exercise;
 }) {
-	console.log(exercise);
 	return (
 		<article className=" flex flex-col items-center gap-2 rounded-xl p-4 bg-surface">
 			<Link
