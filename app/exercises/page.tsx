@@ -10,19 +10,24 @@ export const metadata: Metadata = {
 };
 
 export default async function ExercisesPage() {
-	const exercises = (await getExercisesByPage(1)) || [];
+	const data = await getExercisesByPage(1);
 	const filters = await getFilters();
 
 	return (
 		<>
 			<h1 className="text-4xl text-center font-bold">
+
+
 				Listado De Ejercicios
 			</h1>
 			<section>
 				<ExerciseFilter allFilters={filters} />
 			</section>
 			<section>
-				<ExercisesList initalExercises={exercises} />
+				<ExercisesList
+					totalPages={data?.totalPages || 0}
+					initalExercises={data?.exercises || []}
+				/>
 			</section>
 		</>
 	);
