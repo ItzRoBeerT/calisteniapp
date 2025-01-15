@@ -34,7 +34,7 @@ export default async function Page({
 							</blockquote>
 						</div>
 						<div className="w-full flex flex-wrapitems-start justify-between">
-							{exercise.muscles.map(
+							{exercise.muscles?.map(
 								(muscle: string, index: number) => {
 									if (muscle == 'legs') {
 										return (
@@ -53,7 +53,7 @@ export default async function Page({
 									return null;
 								}
 							)}
-							{exercise.muscle_group.map(
+							{exercise.muscle_group?.map(
 								(muscle_group: string, index: number) => {
 									if (muscle_group == 'legs') {
 										return (

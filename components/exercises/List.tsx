@@ -3,16 +3,17 @@ import { Exercise } from '@/types/supabase';
 import ExerciseCard from './Card';
 import { useEffect, useState } from 'react';
 import { getExercisesByPage } from '@/actions/exercise';
-import { useInView } from 'react-intersection-observer';
 import { useExerciseStore } from '@/stores/exercise';
-import Loader from '../styles/Loader';
 import { useSearchParams } from 'next/navigation';
+import Paginator from '../pagination/Paginator';
 
-export default function ExercisesList(props: { initalExercises: Exercise[] }) {
+export default function ExercisesList(props: {
+	initalExercises: Exercise[];
+	totalPages: number;
+}) {
 	const { initalExercises } = props;
 	const { page, setPage } = useExerciseStore();
 	const [exercises, setExercises] = useState<Exercise[]>(initalExercises);
-	const { ref, inView } = useInView();
 	const searchParams = useSearchParams();
 
 	//#region FUNCTIONS
@@ -24,9 +25,6 @@ export default function ExercisesList(props: { initalExercises: Exercise[] }) {
 			updatedFilters[key] = value;
 		});
 
-		// Aquí puedes manejar los filtros actualizados, por ejemplo:
-		console.log('Filtros actualizados:', updatedFilters);
-
 		// Si hay filtros, realiza la petición
 		if (Object.keys(updatedFilters).length > 0) {
 			(async () => {
@@ -35,8 +33,8 @@ export default function ExercisesList(props: { initalExercises: Exercise[] }) {
 					updatedFilters
 				);
 
-				if (newExercises) {
-					setExercises(newExercises);
+				if (newExercises?.exercises) {
+					setExercises(newExercises.exercises);
 					setPage(1);
 				}
 			})();
@@ -45,30 +43,31 @@ export default function ExercisesList(props: { initalExercises: Exercise[] }) {
 		}
 	}, [searchParams]);
 
-	useEffect(() => {
-		if (inView) {
-			loadMoreExercises();
-			console.log('In view');
-		}
-	}, [inView]);
-
-	const loadMoreExercises = async () => {
-		const newExercises = await getExercisesByPage(page + 1);
+	const loadMoreExercises = async (newPage: number) => {
+		const newExercises = await getExercisesByPage(newPage);
 		if (newExercises) {
-			setPage(page + 1);
-			setExercises([...exercises, ...newExercises]);
+			setPage(newPage);
+			setExercises(newExercises.exercises);
 		}
+
+		window.scrollTo({ top: 0, behavior: 'smooth' });
 	};
 	//#endregion
 
 	return (
-		<div className="grid gap-4 xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 my-4">
-			{exercises.map((exercise, index) => (
-				<ExerciseCard exercise={exercise} key={index} />
-			))}
-			<div ref={ref}>
-				<Loader />
+		<>
+			<div className="grid gap-4 xl:grid-cols-4 lg:grid-cols-3 sm:grid-cols-2 my-4">
+				{exercises.map((exercise, index) => (
+					<ExerciseCard exercise={exercise} key={index} />
+				))}
 			</div>
-		</div>
+			<div className='m-4'>
+				<Paginator
+					totalPages={props.totalPages}
+					currentPage={page}
+					onPageChange={loadMoreExercises}
+				/>
+			</div>
+		</>
 	);
 }
