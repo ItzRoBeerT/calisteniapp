@@ -1,5 +1,5 @@
 'use server';
-import { Filter } from '@/types/supabase';
+import { Exercise, Filter } from '@/types/supabase';
 import { createClient } from '@/utils/supabase/server';
 import { log } from 'console';
 const EXERCISES_PER_PAGE = 12;
@@ -45,7 +45,7 @@ export async function getExercisesByPage(
 	// Configura la consulta inicial con el rango de paginación
 	let query = supabase
 		.from('exercise_list')
-		.select('*')
+		.select('*', { count: 'exact' })
 		.range((page - 1) * EXERCISES_PER_PAGE, page * EXERCISES_PER_PAGE - 1);
 
 	// Aplica los filtros dinámicamente
@@ -56,22 +56,28 @@ export async function getExercisesByPage(
 				// Si 'value' es un string, lo convertimos a un array
 				const valueArray = Array.isArray(value) ? value : [value];
 				console.log('Value array:', valueArray);
-				
+
 				// Ahora pasamos el array a la función `.in()`
 				query = query.contains('muscle_groups', valueArray);
 			}
 		}
 	}
 
-	// Ejecuta la consulta
-	const { data, error } = await query;
+	const { data, count, error } = await query;
+
+	console.log('count:', count);
 
 	if (error) {
 		console.error('Error fetching exercises:', error.message);
 		return null;
 	}
 
-	return data;
+	let totalPages = 0;
+	if (count && count > 0) {
+		totalPages = Math.ceil(count / EXERCISES_PER_PAGE);
+	}
+	
+	return { exercises: data as unknown as Exercise[], totalPages };
 }
 
 export async function getExerciseByName(name: string) {
