@@ -1,7 +1,7 @@
 'use client';
 import { Filter } from '@/types/supabase';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function ExerciseFilter(props: { allFilters: Filter }) {
 	const { allFilters } = props;
