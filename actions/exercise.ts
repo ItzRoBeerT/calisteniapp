@@ -44,7 +44,7 @@ export async function getExercisesByPage(
 
 	// Configura la consulta inicial con el rango de paginación
 	let query = supabase
-		.from('exercise_list')
+		.from('Exercise')
 		.select('*', { count: 'exact' })
 		.range((page - 1) * EXERCISES_PER_PAGE, page * EXERCISES_PER_PAGE - 1);
 
