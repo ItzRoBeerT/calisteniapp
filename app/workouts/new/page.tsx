@@ -4,9 +4,8 @@ import { useRouter } from 'next/navigation';
 import ExerciseList from './ExerciseList';
 import TagInput from './TagInput';
 import { createWorkout } from '@/actions/workout';
-import { getExercisesByNames } from '@/actions/exercise';
+import { getExercises } from '@/actions/exercise';
 
-// Sugerencias predefinidas para tags
 const DEFAULT_TAG_SUGGESTIONS = [
 	'Fuerza',
 	'Resistencia',
@@ -44,7 +43,11 @@ export default function AddWorkout() {
 		const loadExercises = async () => {
 			setIsLoading(true);
 			try {
-				const exerciseNames = await getExercisesByNames();
+				const exercises = await getExercises();
+				const exerciseNames =
+					exercises?.map(
+						(exercise: { name: string }) => exercise.name
+					) || [];
 				console.log('Loaded exercises:', exerciseNames);
 				setExercises(exerciseNames || []);
 			} catch (error) {
@@ -64,12 +67,12 @@ export default function AddWorkout() {
 		// Calcular la duración total basada en las series, repeticiones y descanso
 		const totalDuration = workout.exercises.reduce((total, exercise) => {
 			// Tiempo por serie (aproximadamente 30 segundos por serie) + tiempo de descanso entre series
-			const exerciseTime = exercise.sets * 30;
-			const restTime = (exercise.sets - 1) * (exercise.rest || 60);
+			const exerciseTime = exercise.sets * exercise.reps * 6;
+			const restTime = exercise.sets * (exercise.rest || 60);
+			console.log(exercise.sets * exercise.reps * 10);
 			return total + exerciseTime + restTime;
 		}, 0);
 
-		// Convertir segundos a minutos redondeando hacia arriba
 		const durationInMinutes = Math.ceil(totalDuration / 60);
 
 		setWorkout((prev) => ({
@@ -153,12 +156,6 @@ export default function AddWorkout() {
 			}
 		}
 
-		// Verificar descripción
-		if (!workout.description.trim()) {
-			setErrorMessage('La descripción es obligatoria');
-			return false;
-		}
-
 		return true;
 	};
 
@@ -192,7 +189,6 @@ export default function AddWorkout() {
 			console.log('Create workout result:', result);
 
 			if (result.success) {
-				alert('Workout guardado con éxito!');
 				router.push('/workouts');
 			} else {
 				setErrorMessage(result.error || 'Error al guardar el workout');
@@ -232,40 +228,7 @@ export default function AddWorkout() {
 
 	return (
 		<div className="min-h-screen bg-background text-white p-4 md:p-8">
-			<button
-				onClick={() => router.back()}
-				className="mb-4 text-primary-400 hover:text-primary-300"
-				disabled={isSubmitting}
-			>
-				← Volver
-			</button>
-
 			<h1 className="text-3xl font-bold mb-6">Añadir Nuevo Workout</h1>
-
-			{/* Debug información */}
-			<div className="mb-4 bg-gray-900 p-3 rounded-lg text-xs">
-				<p className="text-gray-300">
-					Ejercicios disponibles: {exercises.length}
-				</p>
-				<details>
-					<summary className="cursor-pointer text-primary-400">
-						Ver lista de ejercicios
-					</summary>
-					<div className="mt-2 max-h-40 overflow-auto p-2 bg-gray-800 rounded">
-						{exercises.length > 0 ? (
-							exercises.map((ex, i) => (
-								<div key={i} className="text-gray-300 mb-1">
-									{ex}
-								</div>
-							))
-						) : (
-							<p className="text-red-400">
-								No hay ejercicios disponibles
-							</p>
-						)}
-					</div>
-				</details>
-			</div>
 
 			{errorMessage && (
 				<div className="bg-red-900 text-white p-3 rounded-lg mb-4">
@@ -352,66 +315,9 @@ export default function AddWorkout() {
 						onChange={handleChange}
 						rows="4"
 						className="w-full px-3 py-2 bg-background border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white"
-						required
 						disabled={isSubmitting}
 					></textarea>
 				</div>
-
-				{/* Configuración global de descanso */}
-				<div className="mb-6 p-4 bg-background border border-gray-800 rounded-lg">
-					<div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-						<div>
-							<h3 className="font-medium text-primary-300 mb-1">
-								Configuración global de descanso
-							</h3>
-							<p className="text-sm text-gray-400">
-								Establece el tiempo de descanso entre series
-								para todos los ejercicios
-							</p>
-						</div>
-						<div className="flex items-center gap-4">
-							<div className="grid grid-cols-4 gap-2">
-								{[30, 45, 60, 90].map((seconds) => (
-									<button
-										key={seconds}
-										type="button"
-										onClick={() =>
-											handleGlobalRestChange(seconds)
-										}
-										className={`px-3 py-2 rounded-md text-center border ${
-											workout.exercises.every(
-												(ex) =>
-													(ex.rest || 60) === seconds
-											)
-												? 'bg-primary-900 border-primary-700 text-primary-300'
-												: 'bg-surface border-gray-700 text-gray-300 hover:border-primary-700'
-										}`}
-										disabled={isSubmitting}
-									>
-										{seconds}s
-									</button>
-								))}
-							</div>
-							<div className="relative">
-								<input
-									type="number"
-									value={workout.exercises[0]?.rest || 60}
-									onChange={(e) =>
-										handleGlobalRestChange(e.target.value)
-									}
-									className="w-24 px-3 py-2 bg-surface border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 text-white text-sm"
-									min="0"
-									step="5"
-									disabled={isSubmitting}
-								/>
-								<span className="absolute right-3 top-2 text-gray-400">
-									s
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>
-
 				<ExerciseList
 					exercises={workout.exercises}
 					savedExercisesList={exercises}
@@ -430,12 +336,16 @@ export default function AddWorkout() {
 					</button>
 
 					<div className="flex items-center space-x-2">
-						<div className="text-gray-400 text-sm">
-							Duración final:{' '}
-							<span className="font-bold text-white">
-								{workout.duration} minutos
-							</span>
-						</div>
+						{Number.isFinite(workout.duration) &&
+							workout.duration > 0 && (
+								<div className="text-gray-400 text-sm">
+									Duración final:{' '}
+									<span className="font-bold text-white">
+										{workout.duration} minutos
+									</span>
+								</div>
+							)}
+
 						<button
 							type="submit"
 							className={`bg-primary-600 hover:bg-primary-700 text-white font-medium px-6 py-2 rounded 
