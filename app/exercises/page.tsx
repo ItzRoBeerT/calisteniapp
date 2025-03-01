@@ -16,8 +16,6 @@ export default async function ExercisesPage() {
 	return (
 		<>
 			<h1 className="text-4xl text-center font-bold">
-
-
 				Listado De Ejercicios
 			</h1>
 			<section>
