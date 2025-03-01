@@ -9,12 +9,23 @@ interface NavLinkProps extends LinkProps {
 	className?: string;
 }
 
-export default function NavLink({ href, children, className, ...props }: NavLinkProps) {
+export default function NavLink({
+	href,
+	children,
+	className,
+	...props
+}: NavLinkProps) {
 	const path = usePathname();
 	const isActive = path === href || path.startsWith(href + '/');
 
 	return (
-		<Link href={href} className={`${isActive ? 'text-primary' : 'text-white'} ${className || ''}`.trim()} {...props}>
+		<Link
+			href={href}
+			className={`${isActive ? 'text-primary-500' : 'text-white'} ${
+				className || ''
+			}`.trim()}
+			{...props}
+		>
 			{children}
 		</Link>
 	);

@@ -36,6 +36,25 @@ export async function getExercises() {
 	return data;
 }
 
+export async function getExercisesByNames(names: string[]) {
+	if (!names || names.length === 0) return [];
+
+	const supabase = await createClient();
+
+	const { data, error } = await supabase.from('Exercise').select('*');
+	console.log(data);
+
+	if (error) {
+		console.error(
+			'Error al obtener ejercicios por nombres:',
+			error.message
+		);
+		return [];
+	}
+
+	return data;
+}
+
 export async function getExercisesByPage(
 	page: number,
 	filters?: Record<string, string | string[]>
@@ -44,7 +63,7 @@ export async function getExercisesByPage(
 
 	// Configura la consulta inicial con el rango de paginación
 	let query = supabase
-		.from('exercise_list')
+		.from('Exercise')
 		.select('*', { count: 'exact' })
 		.range((page - 1) * EXERCISES_PER_PAGE, page * EXERCISES_PER_PAGE - 1);
 
@@ -76,7 +95,7 @@ export async function getExercisesByPage(
 	if (count && count > 0) {
 		totalPages = Math.ceil(count / EXERCISES_PER_PAGE);
 	}
-	
+
 	return { exercises: data as unknown as Exercise[], totalPages };
 }
 

@@ -27,10 +27,10 @@ const ExerciseCard = React.memo(function ExerciseCard({
 				<h2 className="text-2xl">{exercise.name}</h2>
 			</Link>
 			<div className="flex gap-4 w-full">
-				<button className="bg-primary rounded">
+				<button className="bg-primary-500 rounded">
 					<Image src={ThumbUp} alt="thumb-up" />
 				</button>
-				<button className="bg-primary rounded">
+				<button className="bg-primary-500 rounded">
 					<Image
 						className="rotate-180"
 						src={ThumbUp}
