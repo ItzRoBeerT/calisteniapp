@@ -17,13 +17,13 @@ export default async function Header() {
 				<div className="flex gap-2 items-center">
 					<NavLink
 						href={'/workouts'}
-						className="hover:text-primary transition-colors ease-in"
+						className="hover:text-primary-500 transition-colors ease-in"
 					>
 						Entrenamientos
 					</NavLink>
 					<NavLink
 						href={'/exercises'}
-						className="hover:text-primary transition-colors ease-in"
+						className="hover:text-primary-500 transition-colors ease-in"
 					>
 						Ejercicios
 					</NavLink>
