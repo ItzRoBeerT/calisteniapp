@@ -27,29 +27,10 @@ export async function getExercise(id: number) {
 export async function getExercises() {
 	const supabase = await createClient();
 
-	const { data } = await supabase.from('exercise_list').select('*');
+	const { data } = await supabase.from('Exercise').select('*');
 
 	if (!data) {
 		return null;
-	}
-
-	return data;
-}
-
-export async function getExercisesByNames(names: string[]) {
-	if (!names || names.length === 0) return [];
-
-	const supabase = await createClient();
-
-	const { data, error } = await supabase.from('Exercise').select('*');
-	console.log(data);
-
-	if (error) {
-		console.error(
-			'Error al obtener ejercicios por nombres:',
-			error.message
-		);
-		return [];
 	}
 
 	return data;

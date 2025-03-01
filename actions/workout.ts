@@ -28,7 +28,18 @@ export async function createWorkout(workout: Workout) {
 	const supabase = await createClient();
 
 	try {
-		// 1. Insertar el workout principal
+		// Obtener el usuario actual desde la sesión
+		const {
+			data: { user },
+		} = await supabase.auth.getUser();
+
+		if (!user) {
+			throw new Error('No hay sesión de usuario activa');
+		}
+
+		const userId = user.id;
+
+		// 1. Insertar el workout principal con el user_id
 		const { data: workoutData, error: workoutError } = await supabase
 			.from('Workout')
 			.insert({
@@ -37,6 +48,7 @@ export async function createWorkout(workout: Workout) {
 				duration: workout.duration,
 				description: workout.description,
 				tags: workout.tags,
+				user_id: userId,
 			})
 			.select()
 			.single();
@@ -125,7 +137,6 @@ export async function getWorkouts() {
 	// 2. Para cada workout, obtener sus ejercicios
 	const workoutsWithExercises = await Promise.all(
 		workouts.map(async (workout) => {
-			// Obtener ejercicios del workout
 			const { data: workoutExercises, error: exercisesError } =
 				await supabase
 					.from('WorkoutExercise')

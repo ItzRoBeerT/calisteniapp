@@ -6,9 +6,8 @@ import LogoutButton from './logout-button';
 export default async function Header() {
 	const supabase = await createClient();
 	const {
-		data: { session },
-	} = await supabase.auth.getSession();
-	const user = session?.user;
+		data: { user },
+	} = await supabase.auth.getUser();
 
 	return (
 		<header className="bg-surface backdrop-blur-sm bg-opacity-80 sticky top-0 z-50">
