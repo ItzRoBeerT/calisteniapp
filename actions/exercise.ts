@@ -1,7 +1,6 @@
 'use server';
 import { Exercise, Filter } from '@/types/supabase';
 import { createClient } from '@/utils/supabase/server';
-import { log } from 'console';
 const EXERCISES_PER_PAGE = 12;
 
 export async function getExercise(id: number) {
@@ -52,13 +51,32 @@ export async function getExercisesByPage(
 	if (filters) {
 		for (const [key, value] of Object.entries(filters)) {
 			console.log(`Applying filter: ${key} with value: ${value}`);
-			if (key === 'muscle_groups') {
+			if (key === 'muscle_group') {
 				// Si 'value' es un string, lo convertimos a un array
 				const valueArray = Array.isArray(value) ? value : [value];
 				console.log('Value array:', valueArray);
 
 				// Ahora pasamos el array a la función `.in()`
-				query = query.contains('muscle_groups', valueArray);
+				query = query.contains('muscle_group', valueArray);
+			}
+
+			if (key === 'difficulty') {
+				const valueArray = Array.isArray(value) ? value : [value];
+				console.log('Value array:', valueArray);
+
+				const values = [];
+
+				if (valueArray.includes('beginner')) {
+					values.push([0, 1]);
+				}
+				if (valueArray.includes('intermediate')) {
+					values.push([2, 3]);
+				}
+				if (valueArray.includes('advanced')) {
+					values.push([4, 5]);
+				}
+
+				query = query.in('difficulty', values);
 			}
 		}
 	}
@@ -76,7 +94,7 @@ export async function getExercisesByPage(
 	if (count && count > 0) {
 		totalPages = Math.ceil(count / EXERCISES_PER_PAGE);
 	}
-	
+
 	return { exercises: data as unknown as Exercise[], totalPages };
 }
 
@@ -101,23 +119,15 @@ export async function getExerciseByName(name: string) {
 export async function getFilters() {
 	const supabase = await createClient();
 
-	const muscleGroups =
+	const muscle_group =
 		(await supabase
 			.from('Exercise')
-			.select('muscle_groups')
+			.select('muscle_group')
 			.then(({ data }) => [
-				...new Set(data?.flatMap((item) => item.muscle_groups)),
+				...new Set(data?.flatMap((item) => item.muscle_group)),
 			])) || [];
 
-	const families =
-		(await supabase
-			.from('Exercise')
-			.select('families')
-			.then(({ data }) => [
-				...new Set(data?.flatMap((item) => item.families)),
-			])) || [];
-
-	const difficulties =
+	const difficulty =
 		(await supabase
 			.from('Exercise')
 			.select('difficulty')
@@ -125,7 +135,7 @@ export async function getFilters() {
 				...new Set(data?.map((item) => item.difficulty)),
 			])) || [];
 
-	return { muscleGroups, families, difficulties };
+	return { muscle_group, difficulty };
 }
 
 export async function filter(filters: Filter) {
@@ -134,9 +144,8 @@ export async function filter(filters: Filter) {
 	const { data } = await supabase
 		.from('Exercise')
 		.select('*')
-		.in('difficulty', filters.difficulties)
-		.in('muscle_group', filters.muscleGroups)
-		.in('family', filters.families);
+		.in('difficulty', filters.difficulty)
+		.in('muscle_group', filters.muscle_group);
 
 	if (!data) {
 		return null;
