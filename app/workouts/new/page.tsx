@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import ExerciseList from './ExerciseList';
-import TagInput from './TagInput';
+import TagInput from '@/components/workouts/TagInput';
 import { createWorkout } from '@/actions/workout';
 import { getExercises } from '@/actions/exercise';
 
