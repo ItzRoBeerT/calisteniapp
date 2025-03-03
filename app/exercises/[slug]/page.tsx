@@ -12,7 +12,6 @@ export default async function Page({
 }) {
 	const slug = (await params).slug;
 	const exercise = await getExerciseByName(desSlugify(slug));
-	console.log(exercise);
 	if (!exercise) {
 		return null;
 	}
