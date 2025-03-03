@@ -18,6 +18,17 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  position: relative;
+}
+
+.color {
+  height: 1000px;
+  width: 1000px;
+  background-image: radial-gradient(closest-side, rgba(187, 134, 252, 0.21), var(--background));
+  position: absolute;
+  top: -570px;
+  left: 50%;
+  z-index: -1;
 }
 
 /* HTML: <div class="loader"></div> */
