@@ -26,7 +26,6 @@ export interface Workout{
 }
 
 export interface Filter {
-	difficulties: string[];
-	muscleGroups: string[];
-	families: string[];
+	difficulty: string[];
+	muscle_group: string[];
 }
