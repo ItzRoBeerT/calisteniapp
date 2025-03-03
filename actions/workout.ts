@@ -1,365 +1,344 @@
 'use server';
 import { createClient } from '@/utils/supabase/server';
-import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 
-// Tipo para el workout
-type Exercise = {
-	id?: string;
-	name: string;
-	sets: number;
-	reps: number;
-	rest: number;
-};
-
-type Workout = {
-	name: string;
-	difficulty: string;
-	duration: number;
-	description: string;
-	exercises: Exercise[];
-	tags: string[];
-};
-
-/**
- * Guarda un nuevo workout en Supabase
- */
-export async function createWorkout(workout: Workout) {
+export async function getWorkout(id: string) {
 	const supabase = await createClient();
 
-	try {
-		// Obtener el usuario actual desde la sesión
-		const {
-			data: { user },
-		} = await supabase.auth.getUser();
-
-		if (!user) {
-			throw new Error('No hay sesión de usuario activa');
-		}
-
-		const userId = user.id;
-
-		// 1. Insertar el workout principal con el user_id
-		const { data: workoutData, error: workoutError } = await supabase
-			.from('Workout')
-			.insert({
-				name: workout.name,
-				difficulty: workout.difficulty,
-				duration: workout.duration,
-				description: workout.description,
-				tags: workout.tags,
-				user_id: userId,
-			})
-			.select()
-			.single();
-
-		if (workoutError) throw workoutError;
-
-		// 2. Verificar que todos los ejercicios existen en la tabla Exercise
-		const exerciseNames = workout.exercises.map((ex) => ex.name);
-		const { data: existingExercises, error: exerciseCheckError } =
-			await supabase
-				.from('Exercise')
-				.select('name')
-				.in('name', exerciseNames);
-
-		if (exerciseCheckError) throw exerciseCheckError;
-
-		// Comprobar si hay algún ejercicio que no existe
-		const existingNames = existingExercises.map((ex) => ex.name);
-		const missingExercises = exerciseNames.filter(
-			(name) => !existingNames.includes(name)
-		);
-
-		if (missingExercises.length > 0) {
-			throw new Error(
-				`Los siguientes ejercicios no existen en la base de datos: ${missingExercises.join(
-					', '
-				)}`
-			);
-		}
-
-		// 3. Insertar cada ejercicio relacionado con el workout
-		if (workoutData && workout.exercises.length > 0) {
-			const workoutId = workoutData.id;
-
-			// Preparar ejercicios para inserción con el ID del workout y posición
-			const exercisesToInsert = workout.exercises.map(
-				(exercise, index) => ({
-					workout_id: workoutId,
-					exercise_name: exercise.name, // Referencia a la tabla Exercise
-					sets: exercise.sets,
-					reps: exercise.reps,
-					rest: exercise.rest || 60, // Valor predeterminado de 60 segundos si no se especifica
-					position: index + 1, // Guardar la posición para mantener el orden
-				})
-			);
-
-			const { error: exerciseError } = await supabase
-				.from('WorkoutExercise')
-				.insert(exercisesToInsert);
-
-			if (exerciseError) throw exerciseError;
-		}
-
-		// Revalidar datos y redirigir
-		revalidatePath('/workouts');
-		return { success: true, workoutId: workoutData.id };
-	} catch (error) {
-		console.error('Error al guardar el workout:', error);
-		return {
-			success: false,
-			error:
-				error instanceof Error
-					? error.message
-					: 'Error al guardar el workout',
-		};
-	}
-}
-
-/**
- * Obtiene todos los workouts con sus ejercicios
- */
-export async function getWorkouts() {
-	const supabase = await createClient();
-
-	// 1. Obtener todos los workouts
-	const { data: workouts, error: workoutsError } = await supabase
-		.from('Workout')
-		.select('*')
-		.order('created_at', { ascending: false });
-
-	if (workoutsError) {
-		console.error('Error al obtener workouts:', workoutsError);
-		return [];
-	}
-
-	// 2. Para cada workout, obtener sus ejercicios
-	const workoutsWithExercises = await Promise.all(
-		workouts.map(async (workout) => {
-			const { data: workoutExercises, error: exercisesError } =
-				await supabase
-					.from('WorkoutExercise')
-					.select(
-						`
-          id,
-          exercise_name,
-          sets,
-          reps,
-          rest,
-          position,
-          Exercise (*)
-        `
-					)
-					.eq('workout_id', workout.id)
-					.order('position', { ascending: true });
-
-			if (exercisesError) {
-				console.error(
-					`Error al obtener ejercicios para workout ${workout.id}:`,
-					exercisesError
-				);
-				return { ...workout, exercises: [] };
-			}
-
-			// Transformar datos para incluir información completa del ejercicio
-			const exercises = workoutExercises.map((we) => ({
-				id: we.id,
-				name: we.exercise_name,
-				sets: we.sets,
-				reps: we.reps,
-				rest: we.rest,
-				position: we.position,
-				exerciseDetails: we.Exercise, // Detalles completos del ejercicio
-			}));
-
-			return { ...workout, exercises };
-		})
-	);
-
-	return workoutsWithExercises;
-}
-
-/**
- * Obtiene un workout por su ID con sus ejercicios
- */
-export async function getWorkout(id: number) {
-	const supabase = await createClient();
-
-	// 1. Obtener el workout
+	// Obtener el workout
 	const { data: workout, error: workoutError } = await supabase
 		.from('Workout')
 		.select('*')
 		.eq('id', id)
 		.single();
 
-	if (workoutError || !workout) {
-		console.error(`Error al obtener workout ${id}:`, workoutError);
+	if (workoutError) {
+		console.error('Error fetching workout:', workoutError.message);
 		return null;
 	}
 
-	// 2. Obtener los ejercicios del workout con sus detalles
-	const { data: workoutExercises, error: exercisesError } = await supabase
+	// Obtener los ejercicios del workout
+	const { data: exercises, error: exercisesError } = await supabase
 		.from('WorkoutExercise')
-		.select(
-			`
-      id,
-      exercise_name,
-      sets,
-      reps,
-      rest,
-      position,
-      Exercise (*)
-    `
-		)
-		.eq('workout_id', id)
-		.order('position', { ascending: true });
+		.select('*')
+		.eq('workout_id', id);
 
 	if (exercisesError) {
-		console.error(
-			`Error al obtener ejercicios para workout ${id}:`,
-			exercisesError
-		);
-		return { ...workout, exercises: [] };
+		console.error('Error fetching exercises:', exercisesError.message);
 	}
 
-	// Transformar datos para incluir información completa del ejercicio
-	const exercises = workoutExercises.map((we) => ({
-		id: we.id,
-		name: we.exercise_name,
-		sets: we.sets,
-		reps: we.reps,
-		rest: we.rest,
-		position: we.position,
-		exerciseDetails: we.Exercise, // Detalles completos del ejercicio
-	}));
+	// Obtener los tags del workout
+	const { data: tags, error: tagsError } = await supabase
+		.from('WorkoutTags')
+		.select('*')
+		.eq('workout_id', id);
 
-	return { ...workout, exercises };
+	if (tagsError) {
+		console.error('Error fetching tags:', tagsError.message);
+	}
+
+	// Formatear los ejercicios
+	console.log(exercises);
+	const formattedExercises =
+		exercises?.map((item) => ({
+			id: item.id,
+			name: item.exercise_name,
+			sets: item.sets,
+			reps: item.reps,
+			rest: item.rest,
+		})) || [];
+
+	// Formatear los tags
+	const formattedTags = tags?.map((tag) => tag.tag) || [];
+
+	return {
+		...workout,
+		exercises: formattedExercises,
+		tags: formattedTags,
+	};
 }
 
-/**
- * Actualiza un workout existente
- */
-export async function updateWorkout(id: number, workout: Workout) {
+export async function getWorkoutsByPage(page = 1, limit = 12, filters?: any) {
+	const supabase = await createClient();
+	const startIndex = (page - 1) * limit;
+	const endIndex = startIndex + limit - 1;
+
+	let query = supabase
+		.from('Workout')
+		.select('*')
+		.range(startIndex, endIndex);
+
+	// Aplicar filtros si existen
+	if (filters) {
+		if (filters.difficulty) {
+			query = query.eq('difficulty', filters.difficulty);
+		}
+		if (filters.muscleGroups) {
+			query = query.containsAny('muscle_groups', [filters.muscleGroups]);
+		}
+	}
+
+	const { data, count, error } = await query;
+
+	if (error) {
+		console.error('Error fetching workouts:', error.message);
+		return null;
+	}
+
+	// Calcular total de páginas
+	const totalPages = count ? Math.ceil(count / limit) : 0;
+
+	// Para cada workout, obtener los tags
+	const workoutsWithTags = await Promise.all(
+		data.map(async (workout) => {
+			const { data: tags } = await supabase
+				.from('workout_tags')
+				.select('tag')
+				.eq('workout_id', workout.id);
+
+			return {
+				...workout,
+				tags: tags?.map((t) => t.tag) || [],
+			};
+		})
+	);
+
+	return {
+		workouts: workoutsWithTags,
+		totalPages,
+	};
+}
+
+export async function getFilteredWorkouts(filters: any, page = 1, limit = 12) {
+	// Esta es esencialmente la misma función que getWorkoutsByPage pero con un nombre diferente
+	// para mantener compatibilidad con el código existente
+	return getWorkoutsByPage(page, limit, filters);
+}
+
+export async function getWorkoutFilters() {
 	const supabase = await createClient();
 
-	try {
-		// 1. Verificar que todos los ejercicios existen en la tabla Exercise
-		const exerciseNames = workout.exercises.map((ex) => ex.name);
-		const { data: existingExercises, error: exerciseCheckError } =
-			await supabase
-				.from('Exercise')
-				.select('name')
-				.in('name', exerciseNames);
+	// Obtener diferentes dificultades
+	const { data: difficulties } = await supabase
+		.from('workouts')
+		.select('difficulty')
+		.order('difficulty');
 
-		if (exerciseCheckError) throw exerciseCheckError;
+	const uniqueDifficulties = difficulties
+		? [
+				...new Set(
+					difficulties.map((item) => item.difficulty).filter(Boolean)
+				),
+		  ]
+		: [];
 
-		// Comprobar si hay algún ejercicio que no existe
-		const existingNames = existingExercises.map((ex) => ex.name);
-		const missingExercises = exerciseNames.filter(
-			(name) => !existingNames.includes(name)
-		);
+	// Obtener grupos musculares únicos (asumiendo que están en un array)
+	const { data: muscleGroupsData } = await supabase
+		.from('workouts')
+		.select('muscle_groups');
 
-		if (missingExercises.length > 0) {
-			throw new Error(
-				`Los siguientes ejercicios no existen en la base de datos: ${missingExercises.join(
-					', '
-				)}`
-			);
-		}
+	// Extraer y aplanar todos los grupos musculares de todos los workouts
+	const allMuscleGroups =
+		muscleGroupsData
+			?.flatMap((item) => item.muscle_groups || [])
+			.filter(Boolean) || [];
 
-		// 2. Actualizar datos del workout
-		const { error: workoutError } = await supabase
-			.from('Workout')
-			.update({
-				name: workout.name,
-				difficulty: workout.difficulty,
-				duration: workout.duration,
-				description: workout.description,
-				tags: workout.tags,
+	// Crear un Set para obtener valores únicos
+	const uniqueMuscleGroups = [...new Set(allMuscleGroups)];
+
+	// Obtener duraciones únicas
+	const { data: durationsData } = await supabase
+		.from('workouts')
+		.select('duration')
+		.order('duration');
+
+	const uniqueDurations = durationsData
+		? [
+				...new Set(
+					durationsData.map((item) => item.duration).filter(Boolean)
+				),
+		  ]
+		: [];
+
+	// Obtener tags únicos
+	const { data: tagsData } = await supabase
+		.from('workout_tags')
+		.select('tag');
+
+	const uniqueTags = tagsData
+		? [...new Set(tagsData.map((item) => item.tag))]
+		: [];
+
+	return {
+		difficulties: uniqueDifficulties,
+		muscleGroups: uniqueMuscleGroups,
+		durations: uniqueDurations,
+		tags: uniqueTags,
+	};
+}
+
+export async function createWorkout(workoutData: any, userId: string) {
+	const supabase = await createClient();
+
+	// Insertar el workout
+	const { data: workout, error } = await supabase
+		.from('workouts')
+		.insert({
+			name: workoutData.name,
+			description: workoutData.description,
+			difficulty: workoutData.difficulty,
+			duration: workoutData.duration,
+			muscle_groups: workoutData.muscleGroups,
+			user_id: userId,
+		})
+		.select()
+		.single();
+
+	if (error) {
+		console.error('Error creating workout:', error.message);
+		return null;
+	}
+
+	// Insertar los ejercicios
+	if (workoutData.exercises && workoutData.exercises.length > 0) {
+		const exercisesData = workoutData.exercises.map(
+			(exercise: any, index: number) => ({
+				workout_id: workout.id,
+				exercise_id: exercise.id,
+				sets: exercise.sets,
+				reps: exercise.reps,
+				rest: exercise.rest || 60,
+				order: index,
 			})
-			.eq('id', id);
+		);
 
-		if (workoutError) throw workoutError;
+		const { error: exercisesError } = await supabase
+			.from('workout_exercises')
+			.insert(exercisesData);
 
-		// 3. Eliminar ejercicios antiguos
-		const { error: deleteError } = await supabase
-			.from('WorkoutExercise')
-			.delete()
-			.eq('workout_id', id);
-
-		if (deleteError) throw deleteError;
-
-		// 4. Insertar ejercicios actualizados
-		if (workout.exercises.length > 0) {
-			const exercisesToInsert = workout.exercises.map(
-				(exercise, index) => ({
-					workout_id: id,
-					exercise_name: exercise.name,
-					sets: exercise.sets,
-					reps: exercise.reps,
-					rest: exercise.rest || 60,
-					position: index + 1,
-				})
-			);
-
-			const { error: exerciseError } = await supabase
-				.from('WorkoutExercise')
-				.insert(exercisesToInsert);
-
-			if (exerciseError) throw exerciseError;
+		if (exercisesError) {
+			console.error('Error inserting exercises:', exercisesError.message);
 		}
-
-		// Revalidar datos
-		revalidatePath('/workouts');
-		revalidatePath(`/workouts/${id}`);
-		return { success: true };
-	} catch (error) {
-		console.error(`Error al actualizar workout ${id}:`, error);
-		return {
-			success: false,
-			error:
-				error instanceof Error
-					? error.message
-					: 'Error al actualizar el workout',
-		};
 	}
+
+	// Insertar los tags
+	if (workoutData.tags && workoutData.tags.length > 0) {
+		const tagsData = workoutData.tags.map((tag: string) => ({
+			workout_id: workout.id,
+			tag,
+		}));
+
+		const { error: tagsError } = await supabase
+			.from('workout_tags')
+			.insert(tagsData);
+
+		if (tagsError) {
+			console.error('Error inserting tags:', tagsError.message);
+		}
+	}
+
+	return workout;
 }
 
-/**
- * Elimina un workout por su ID (y sus ejercicios relacionados)
- */
-export async function deleteWorkout(id: number) {
+export async function updateWorkout(id: string, workoutData: any) {
 	const supabase = await createClient();
 
-	try {
-		// 1. Eliminar ejercicios asociados primero (suponiendo que hay restricciones de clave foránea)
-		const { error: exercisesError } = await supabase
-			.from('WorkoutExercise')
-			.delete()
-			.eq('workout_id', id);
+	// Actualizar el workout
+	const { error } = await supabase
+		.from('workouts')
+		.update({
+			name: workoutData.name,
+			description: workoutData.description,
+			difficulty: workoutData.difficulty,
+			duration: workoutData.duration,
+			muscle_groups: workoutData.muscleGroups,
+		})
+		.eq('id', id);
 
-		if (exercisesError) throw exercisesError;
-
-		// 2. Eliminar el workout
-		const { error: workoutError } = await supabase
-			.from('Workout')
-			.delete()
-			.eq('id', id);
-
-		if (workoutError) throw workoutError;
-
-		// Revalidar datos
-		revalidatePath('/workouts');
-		return { success: true };
-	} catch (error) {
-		console.error(`Error al eliminar workout ${id}:`, error);
-		return {
-			success: false,
-			error:
-				error instanceof Error
-					? error.message
-					: 'Error al eliminar el workout',
-		};
+	if (error) {
+		console.error('Error updating workout:', error.message);
+		return false;
 	}
+
+	// Eliminar los ejercicios anteriores
+	const { error: deleteExercisesError } = await supabase
+		.from('workout_exercises')
+		.delete()
+		.eq('workout_id', id);
+
+	if (deleteExercisesError) {
+		console.error(
+			'Error deleting exercises:',
+			deleteExercisesError.message
+		);
+	}
+
+	// Insertar los nuevos ejercicios
+	if (workoutData.exercises && workoutData.exercises.length > 0) {
+		const exercisesData = workoutData.exercises.map(
+			(exercise: any, index: number) => ({
+				workout_id: id,
+				exercise_id: exercise.id,
+				sets: exercise.sets,
+				reps: exercise.reps,
+				rest: exercise.rest || 60,
+				order: index,
+			})
+		);
+
+		const { error: exercisesError } = await supabase
+			.from('workout_exercises')
+			.insert(exercisesData);
+
+		if (exercisesError) {
+			console.error('Error inserting exercises:', exercisesError.message);
+		}
+	}
+
+	// Eliminar los tags anteriores
+	const { error: deleteTagsError } = await supabase
+		.from('workout_tags')
+		.delete()
+		.eq('workout_id', id);
+
+	if (deleteTagsError) {
+		console.error('Error deleting tags:', deleteTagsError.message);
+	}
+
+	// Insertar los nuevos tags
+	if (workoutData.tags && workoutData.tags.length > 0) {
+		const tagsData = workoutData.tags.map((tag: string) => ({
+			workout_id: id,
+			tag,
+		}));
+
+		const { error: tagsError } = await supabase
+			.from('workout_tags')
+			.insert(tagsData);
+
+		if (tagsError) {
+			console.error('Error inserting tags:', tagsError.message);
+		}
+	}
+
+	return true;
+}
+
+export async function deleteWorkout(id: string) {
+	const supabase = await createClient();
+
+	// Eliminar los ejercicios relacionados
+	await supabase.from('workout_exercises').delete().eq('workout_id', id);
+
+	// Eliminar los tags relacionados
+	await supabase.from('workout_tags').delete().eq('workout_id', id);
+
+	// Eliminar el workout
+	const { error } = await supabase.from('workouts').delete().eq('id', id);
+
+	if (error) {
+		console.error('Error deleting workout:', error.message);
+		return false;
+	}
+
+	return true;
 }

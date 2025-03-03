@@ -30,11 +30,15 @@ export default function WorkoutList({
 		// Collect all current URL parameters
 		searchParams.forEach((value, key) => {
 			if (key === 'tags' && value) {
-				updatedFilters[key] = value.split(',');
+				const tagsArray = value.split(',');
+				console.log('Tags from URL params:', tagsArray);
+				updatedFilters[key] = tagsArray;
 			} else {
 				updatedFilters[key] = value;
 			}
 		});
+
+		console.log('Applied filters:', updatedFilters);
 
 		// If we have filters, fetch filtered workouts
 		if (Object.keys(updatedFilters).length > 0) {
@@ -42,6 +46,7 @@ export default function WorkoutList({
 			(async () => {
 				try {
 					const result = await getFilteredWorkouts(1, updatedFilters);
+					console.log('Filtered workout results:', result);
 					if (result) {
 						setWorkouts(result.workouts);
 						setTotalPagesCount(result.totalPages);
