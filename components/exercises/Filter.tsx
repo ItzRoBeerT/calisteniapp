@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 export default function ExerciseFilter(props: { allFilters: Filter }) {
 	const { allFilters } = props;
-	const [filters, setFilter] = useState<Filter>(allFilters);
+
 	const [selectedFilters, setSelectedFilters] = useState<Filter>({
 		difficulties: [],
 		muscleGroups: [],
@@ -51,7 +51,6 @@ export default function ExerciseFilter(props: { allFilters: Filter }) {
 	};
 	//#endregion
 	
-
 	return (
 		<div className="bg-surface w-fit p-4 flex gap-4 rounded-xl">
 			<select
@@ -60,7 +59,7 @@ export default function ExerciseFilter(props: { allFilters: Filter }) {
 				onChange={onFilterChange}
 			>
 				<option value="">Dificultad</option>
-				{filters.difficulties.map((item, index) => (
+				{allFilters.difficulties.map((item, index) => (
 					<option key={index} value={item}>
 						{item}
 					</option>
@@ -75,7 +74,7 @@ export default function ExerciseFilter(props: { allFilters: Filter }) {
 				value={selectedFilters.muscleGroups[0]}
 			>
 				<option value="">Grupo muscular</option>
-				{filters.muscleGroups.map((item, index) => (
+				{allFilters.muscleGroups.map((item, index) => (
 					<option key={index} value={item}>
 						{item}
 					</option>
