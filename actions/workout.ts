@@ -27,17 +27,17 @@ export async function getWorkout(id: string) {
 	}
 
 	// Obtener los tags del workout
-	const { data: tags, error: tagsError } = await supabase
-		.from('WorkoutTags')
-		.select('*')
-		.eq('workout_id', id);
 
+	let { data: tags, error: tagsError } = await supabase
+		.from('WorkoutTags')
+		.select('*');
+
+	console.log(tags);
 	if (tagsError) {
 		console.error('Error fetching tags:', tagsError.message);
 	}
 
 	// Formatear los ejercicios
-	console.log(exercises);
 	const formattedExercises =
 		exercises?.map((item) => ({
 			id: item.id,
@@ -48,7 +48,7 @@ export async function getWorkout(id: string) {
 		})) || [];
 
 	// Formatear los tags
-	const formattedTags = tags?.map((tag) => tag.tag) || [];
+	const formattedTags = tags?.map((tag) => tag.name) || [];
 
 	return {
 		...workout,

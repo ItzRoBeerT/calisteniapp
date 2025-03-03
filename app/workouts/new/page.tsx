@@ -217,7 +217,7 @@ export default function AddWorkout() {
 
 	if (isLoading) {
 		return (
-			<div className="min-h-screen bg-background text-white p-4 md:p-8 flex items-center justify-center">
+			<div className="min-h-screen text-white p-4 md:p-8 flex items-center justify-center">
 				<div className="text-center">
 					<div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary-500 border-r-transparent mb-4"></div>
 					<p className="text-white">Cargando ejercicios...</p>
@@ -227,7 +227,7 @@ export default function AddWorkout() {
 	}
 
 	return (
-		<div className="min-h-screen bg-background text-white p-4 md:p-8">
+		<div className="min-h-screen text-white p-4 md:p-8">
 			<h1 className="text-3xl font-bold mb-6">Añadir Nuevo Workout</h1>
 
 			{errorMessage && (
