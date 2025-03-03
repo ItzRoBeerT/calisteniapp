@@ -20,6 +20,7 @@ export default function RootLayout({
 		<html lang="en" className="min-h-full relative">
 			<body className={inter.className}>
 				<Header />
+				<div className='color'></div>
 				<main className="container mx-auto my-4 px-6 xl:px-0">
 					{children}
 				</main>
