@@ -7,14 +7,10 @@ const EXERCISES_PER_PAGE = 12;
 export async function getExercise(id: number) {
 	const supabase = await createClient();
 
-	const query = {
-		id: id as number,
-	};
-
 	const { data } = await supabase
 		.from('Exercise')
 		.select('*')
-		.eq('id', query.id)
+		.eq('id', id)
 		.single();
 
 	if (!data) {

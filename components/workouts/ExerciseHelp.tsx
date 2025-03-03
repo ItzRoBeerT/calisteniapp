@@ -5,6 +5,7 @@ import { formatTime } from '@/utils/formatters';
 import { createSlug } from '@/utils/slugs';
 import Image from 'next/image';
 import DefaultImage from '@/public/images/default_image.webp';
+import { getExercise } from '@/actions/exercise';
 
 export default function ExerciseHelp({ exercise, index }) {
 	const [isOpen, setIsOpen] = useState(false);
@@ -15,7 +16,8 @@ export default function ExerciseHelp({ exercise, index }) {
 		if (!isOpen && !exerciseDetails) {
 			setLoading(true);
 			try {
-				const response = await fetch(`/api/exercises/${exercise.id}`);
+				const response = await getExercise(exercise.id);
+				console.log(response);
 				if (response.ok) {
 					const data = await response.json();
 					setExerciseDetails(data);
