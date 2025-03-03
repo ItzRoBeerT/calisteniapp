@@ -25,6 +25,8 @@ export default async function Page({
 							<Image
 								alt="Exercise Image"
 								src={exercise.image || DefaultImage}
+								width={600}
+								height={400}
 								className="w-full align-middle rounded-t-lg"
 							/>
 							<blockquote className="relative p-8 mb-4">
