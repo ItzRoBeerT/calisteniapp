@@ -5,11 +5,9 @@ import { useEffect, useState } from 'react';
 
 export default function ExerciseFilter(props: { allFilters: Filter }) {
 	const { allFilters } = props;
-	const [filters, setFilter] = useState<Filter>(allFilters);
 	const [selectedFilters, setSelectedFilters] = useState<Filter>({
-		difficulties: [],
-		muscleGroups: [],
-		families: [],
+		difficulty: [],
+		muscle_group: [],
 	});
 	const router = useRouter();
 	const pathname = usePathname();
@@ -19,17 +17,17 @@ export default function ExerciseFilter(props: { allFilters: Filter }) {
 
 	useEffect(() => {
 		// actualizar selectedFilters con los valores actuales de la URL
-		if (searchParams.has('difficulties')) {
+		if (searchParams.has('difficulty')) {
 			setSelectedFilters((prev) => ({
 				...prev,
-				difficulties: [searchParams.get('difficulties') as string],
+				difficulty: [searchParams.get('difficulty') as string],
 			}));
 		}
 
-		if (searchParams.has('muscle_groups')) {
+		if (searchParams.has('muscle_group')) {
 			setSelectedFilters((prev) => ({
 				...prev,
-				muscleGroups: [searchParams.get('muscle_groups') as string],
+				muscle_group: [searchParams.get('muscle_group') as string],
 			}));
 		}
 	}, []);
@@ -49,33 +47,36 @@ export default function ExerciseFilter(props: { allFilters: Filter }) {
 		const newUrl = `${pathname}?${newSearchParams.toString()}`;
 		router.push(newUrl);
 	};
-	//#endregion
+
+	console.log({selectedFilters});
 	
+
+
+	//#endregion
 
 	return (
 		<div className="bg-surface w-fit p-4 flex gap-4 rounded-xl">
 			<select
 				className="text-black rounded"
-				name="difficulties"
+				name="difficulty"
 				onChange={onFilterChange}
+				value={selectedFilters.difficulty[0]}
 			>
 				<option value="">Dificultad</option>
-				{filters.difficulties.map((item, index) => (
-					<option key={index} value={item}>
-						{item}
-					</option>
-				))}
+				<option value="beginner">Principiante</option>
+				<option value="intermediate">Intermedio</option>
+				<option value="advanced">Avanzado </option>
 			</select>
+			
 
 			<select
 				className="text-black rounded"
-				name="muscle_groups"
+				name="muscle_group"
 				onChange={onFilterChange}
-
-				value={selectedFilters.muscleGroups[0]}
+				value={selectedFilters.muscle_group[0]}
 			>
 				<option value="">Grupo muscular</option>
-				{filters.muscleGroups.map((item, index) => (
+				{allFilters.muscle_group.map((item, index) => (
 					<option key={index} value={item}>
 						{item}
 					</option>
