@@ -3,13 +3,6 @@ export interface Exercise {
 	name: string;
 	description: string;
 	image: string;
-	video?: string;
-	likes?: number[];
-	level: number;
-	family: string[];
-	materials?: string[];
-	muscles: string[];
-	muscle_group?: string[];
 }
 
 export interface User {
@@ -33,7 +26,6 @@ export interface Workout{
 }
 
 export interface Filter {
-	difficulties: string[];
-	muscleGroups: string[];
-	families: string[];
+	difficulty: string[];
+	muscle_group: string[];
 }
