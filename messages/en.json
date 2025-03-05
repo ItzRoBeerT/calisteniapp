@@ -1,0 +1,54 @@
+{
+	"BlogPage": {
+	  "Posts": {
+		"1": {
+		  "title": "Introduction to Calisthenics",
+		  "slug": "introduction-to-calisthenics",
+		  "excerpt": "Discover the fundamentals of calisthenics and how to start your training."
+		},
+		"2": {
+		  "title": "News: AI Integration for Personalized Routines",
+		  "slug": "ai-personalized-routines",
+		  "excerpt": "Now you can generate personalized routines with our new AI feature."
+		},
+		"3": {
+		  "title": "Calisthenic Progressions: From Beginner to Advanced",
+		  "slug": "calisthenic-progressions",
+		  "excerpt": "Learn how to advance your calisthenics exercises with effective progressions."
+		}
+	  },
+	  "title": "Our Blog",
+	  "welcome": "Welcome to the Calisteniapp blog. Here you will find articles, guides, and tips to improve your calisthenics training and get the most out of our app."
+	},
+	"Globals": {
+	  "brand": "Calisteniapp",
+	  "back": "Back",
+	  "cancel": "Cancel",
+	  "close": "Close",
+	  "continue": "Continue",
+	  "loading": "Loading...",
+	  "save": "Save",
+	  "search": "Search",
+	  "submit": "Submit"
+	},
+	"HomePage": {
+	  "about": "Calisthenics is a physical training discipline that uses body weight as resistance. At Calistenia, you will find a variety of workouts and exercises to improve your strength and flexibility.",
+	  "Blog": {
+		"welcome": "Welcome to ",
+		"visit": "Visit our blog"
+	  },
+	  "favourites": "Check out your favorite calisthenics exercises",
+	  "explore": "Explore a variety of exercises designed to improve your strength and flexibility.",
+	  "check": "Review all workouts and rate them",
+	  "comment": "Evaluate and comment on the workouts that help you reach your goals.",
+	  "community": "Build community by commenting and sharing",
+	  "share": "Share your experiences, tips, and progress with other users. Together we can build a supportive and motivating community.",
+	  "share_tips": "Share calisthenics tips and fun facts",
+	  "share_text": "We all have something to contribute. Share your best tips, techniques, and fun facts about calisthenics with the community.",
+	  "title": "Hello world!"
+	},
+	"ExercisesPage": {
+	  "title": "List of exercises"
+	}
+  }
+  

@@ -2,8 +2,8 @@ import { Exercise } from '@/types/supabase';
 import Image from 'next/image';
 import DefaultImage from '@/public/images/default_image.webp';
 import { createSlug } from '@/utils/slugs';
-import Link from 'next/link';
 import React from 'react';
+import { Link } from '@/i18n/navigation';
 
 const ExerciseCard = React.memo(function ExerciseCard({
 	exercise,
