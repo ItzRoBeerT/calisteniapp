@@ -1,9 +1,7 @@
 import Image from 'next/image';
-import NavLink from '@/components/header/NavLink';
 import { getExerciseByName } from '@/actions/exercise';
 import { desSlugify } from '@/utils/slugs';
 import DefaultImage from '@/public/images/default_image.webp';
-import Leg from '@/public/images/icons/pierna.png';
 
 export default async function Page({
 	params,
@@ -24,6 +22,8 @@ export default async function Page({
 							<Image
 								alt="Exercise Image"
 								src={exercise.image || DefaultImage}
+								width={600}
+								height={400}
 								className="w-full align-middle rounded-t-lg"
 							/>
 							<blockquote className="relative p-8 mb-4">
@@ -83,7 +83,6 @@ export default async function Page({
 							</div>
 						</div>
 					</div>
-
 					<div className="w-full md:w-6/12 px-4">
 						<div className="flex flex-wrap">
 							<div className="w-full md:w-6/12 flex">
