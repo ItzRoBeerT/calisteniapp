@@ -1,0 +1,53 @@
+{
+	"BlogPage": {
+		"Posts": {
+			"1": {
+				"title": "Introducción a la Calistenia",
+				"slug": "introduccion-a-la-calistenia",
+				"excerpt": "Descubre los fundamentos de la calistenia y cómo empezar tu entrenamiento."
+			},
+			"2": {
+				"title": "Novedades: Integración de IA para Rutinas Personalizadas",
+				"slug": "ia-rutinas-personalizadas",
+				"excerpt": "Ahora puedes generar rutinas personalizadas con nuestra nueva función de IA."
+			},
+			"3": {
+				"title": "Progresiones Calisténicas: Del Nivel Básico al Avanzado",
+				"slug": "progresiones-calistenicas",
+				"excerpt": "Aprende cómo avanzar en tus ejercicios de calistenia con progresiones efectivas."
+			}
+		},
+		"title": "Nuestro Blog",
+		"welcome": "Bienvenido al blog de Calisteniapp. Aquí encontrarás artículos, guías y consejos para mejorar tu entrenamiento de calistenia y aprovechar al máximo nuestra aplicación."
+	},
+	"Globals": {
+		"brand": "Calisteniapp",
+		"back": "Volver",
+		"cancel": "Cancelar",
+		"close": "Cerrar",
+		"continue": "Continuar",
+		"loading": "Cargando...",
+		"save": "Guardar",
+		"search": "Buscar",
+		"submit": "Enviar"
+	},
+	"HomePage": {
+		"about": "La calistenia es una disciplina de entrenamiento físico que utiliza el peso corporal como resistencia. En Calistenia, encontrarás una variedad de entrenamientos y ejercicios para mejorar tu fuerza y flexibilidad.",
+		"Blog": {
+			"welcome": "Bienvenido a ",
+			"visit": "Visita nuestro blog"
+		},
+		"favourites": "Consulta tus ejercicios de calistenia favoritos",
+		"explore": "Explora una variedad de ejercicios diseñados para mejorar tu fuerza y flexibilidad.",
+		"check": "Revisa todos los entrenamientos y puntúalos",
+		"comment": "Evalúa y comenta sobre los entrenamientos que te ayudan a alcanzar tus metas.",
+		"community": "Genera comunidad comentando y compartiendo",
+		"share": "Comparte tus experiencias, consejos y progresos con otros usuarios. Juntos podemos construir una comunidad de apoyo y motivación",
+		"share_tips": "Comparte consejos y curiosidades de calistenia",
+		"share_text": "Todos tenemos algo que aportar. Comparte tus mejores consejos, técnicas y curiosidades sobre calistenia con la comunidad.",
+		"title": "Hola mundo!"
+	},
+	"ExercisesPage": {
+		"title": "Listado de ejercicios"
+	}
+}
