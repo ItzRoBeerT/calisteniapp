@@ -10,7 +10,7 @@ interface NavLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 }
 
 export default function NavLink({
-	href,
+	href = '',
 	children,
 	className,
 	...props
@@ -21,7 +21,7 @@ export default function NavLink({
 	return (
 		<Link
 			href={href}
-			className={`${isActive ? 'text-primary-500' : 'text-white'} ${
+			className={`${isActive ? 'text-primary' : 'text-white'} ${
 				className || ''
 			}`.trim()}
 			{...props}
