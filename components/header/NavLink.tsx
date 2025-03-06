@@ -1,10 +1,10 @@
 'use client';
 
-import Link, { LinkProps } from 'next/link';
+import { Link } from '@/i18n/navigation';
 import { usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
 
-interface NavLinkProps extends LinkProps {
+interface NavLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 	children: ReactNode;
 	className?: string;
 }
