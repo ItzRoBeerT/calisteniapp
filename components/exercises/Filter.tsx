@@ -47,11 +47,6 @@ export default function ExerciseFilter(props: { allFilters: Filter }) {
 		const newUrl = `${pathname}?${newSearchParams.toString()}`;
 		router.push(newUrl);
 	};
-
-	console.log({selectedFilters});
-	
-
-
 	//#endregion
 
 	return (
@@ -67,7 +62,6 @@ export default function ExerciseFilter(props: { allFilters: Filter }) {
 				<option value="intermediate">Intermedio</option>
 				<option value="advanced">Avanzado </option>
 			</select>
-			
 
 			<select
 				className="text-black rounded"

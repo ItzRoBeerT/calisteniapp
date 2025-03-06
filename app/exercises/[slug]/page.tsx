@@ -40,13 +40,7 @@ export default async function Page({
 											<div
 												key={index}
 												className="bg-primary-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full mr-[5px]"
-											>
-												<Image
-													alt="Leg Icon"
-													src={Leg}
-													className="w-8 h-8"
-												/>
-											</div>
+											></div>
 										);
 									}
 									return null;
@@ -59,13 +53,7 @@ export default async function Page({
 											<div
 												key={index}
 												className="bg-secondary-500 p-3 text-center inline-flex items-center justify-center w-12 h-12 mb-5 shadow-lg rounded-full mr-[5px]"
-											>
-												<Image
-													alt="Leg Icon"
-													src={Leg}
-													className="w-8 h-8"
-												/>
-											</div>
+											></div>
 										);
 									}
 									return null;

@@ -73,7 +73,7 @@ export async function getWorkoutsByPage(page = 1, limit = 12, filters?: any) {
 			query = query.eq('difficulty', filters.difficulty);
 		}
 		if (filters.muscleGroups) {
-			query = query.containsAny('muscle_groups', [filters.muscleGroups]);
+			query = query.contains('muscle_groups', [filters.muscleGroups]);
 		}
 	}
 
