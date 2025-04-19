@@ -8,6 +8,8 @@ import { routing } from '@/i18n/routing';
 import { getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
 import { Locale } from '@/i18n/navigation';
+import ErrorBoundary from './error-boundary';
+import ErrorPage from './error';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -37,12 +39,14 @@ export default async function RootLayout({
 		<html lang="en" className="min-h-full relative">
 			<body className={inter.className}>
 				<NextIntlClientProvider messages={messages}>
-					<Header />
-					<div className="color"></div>
-					<main className="container mx-auto my-4 px-6 xl:px-0">
-						{children}
-					</main>
-					<Footer />
+					<ErrorBoundary fallback={ErrorPage}>
+						<Header />
+						<div className="color"></div>
+						<main className="container mx-auto my-4 px-6 xl:px-0">
+							{children}
+						</main>
+						<Footer />
+					</ErrorBoundary>
 				</NextIntlClientProvider>
 			</body>
 		</html>

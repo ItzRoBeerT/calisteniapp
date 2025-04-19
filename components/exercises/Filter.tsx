@@ -30,7 +30,7 @@ export default function ExerciseFilter(props: { allFilters: Filter }) {
 				muscle_group: [searchParams.get('muscle_group') as string],
 			}));
 		}
-	}, []);
+	}, [searchParams]); // Añadir searchParams como dependencia
 
 	const onFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const { name, value } = e.target;

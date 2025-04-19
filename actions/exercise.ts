@@ -1,6 +1,8 @@
 'use server';
 import { Exercise, Filter } from '@/types/supabase';
 import { createClient } from '@/utils/supabase/server';
+import { NotFoundError, BadRequestError, UnauthorizedError } from '@/utils/errors';
+
 const EXERCISES_PER_PAGE = 12;
 
 export async function getExercise(id: number) {
@@ -148,4 +150,54 @@ export async function filter(filters: Filter) {
 	}
 
 	return data;
+}
+
+// Ejemplo de función que podría lanzar diferentes tipos de errores
+export async function getExerciseById(id: string) {
+  // Validar la entrada
+  if (!id) {
+    throw new BadRequestError('El ID del ejercicio es requerido');
+  }
+
+  try {
+    // Simulando una búsqueda en la base de datos
+    const exercise = await fetchExerciseFromDatabase(id);
+    
+    if (!exercise) {
+      throw new NotFoundError(`No se encontró el ejercicio con ID: ${id}`);
+    }
+    
+    return exercise;
+  } catch (error) {
+    // Manejo del error y relanzamiento como error personalizado
+    if (error instanceof NotFoundError) {
+      throw error; // Ya es un error personalizado, lo relanzamos
+    }
+    
+    // En caso de un error de base de datos u otro error
+    console.error('Error al obtener ejercicio:', error);
+    throw new Error(`Error al obtener el ejercicio: ${(error as Error).message}`);
+  }
+}
+
+// Función simulada para la demostración
+async function fetchExerciseFromDatabase(id: string) {
+  // Simulación de acceso a la base de datos
+  return null; // Simula que no se encontró el ejercicio
+}
+
+// Ejemplo de función que verifica autenticación
+export async function createExercise(exerciseData: any, userId?: string) {
+  // Verificar si el usuario está autenticado
+  if (!userId) {
+    throw new UnauthorizedError('Debes iniciar sesión para crear un ejercicio');
+  }
+  
+  // Validar datos de entrada
+  if (!exerciseData || !exerciseData.name) {
+    throw new BadRequestError('Datos de ejercicio inválidos');
+  }
+  
+  // Resto de la lógica para crear el ejercicio...
+  return { id: 'new-id', ...exerciseData };
 }
