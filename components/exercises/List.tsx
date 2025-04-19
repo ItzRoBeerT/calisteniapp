@@ -40,8 +40,9 @@ export default function ExercisesList(props: {
 			})();
 		} else {
 			setExercises(initalExercises);
+			setPage(1);
 		}
-	}, [searchParams]);
+	}, [searchParams, initalExercises, setPage]);
 
 	const loadMoreExercises = async (newPage: number) => {
 		const newExercises = await getExercisesByPage(newPage);

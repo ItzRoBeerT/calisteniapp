@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { getExerciseByName } from '@/actions/exercise';
 import { desSlugify } from '@/utils/slugs';
 import DefaultImage from '@/public/images/default_image.webp';
+import { NotFoundError } from '@/utils/errors';
 
 export default async function Page({
 	params,
@@ -10,42 +11,89 @@ export default async function Page({
 }) {
 	const slug = (await params).slug;
 	const exercise = await getExerciseByName(desSlugify(slug));
-	console.log(exercise);
+	
 	if (!exercise) {
-		return null;
+		throw new NotFoundError(`No se encontró el ejercicio "${desSlugify(slug)}"`);
 	}
+	
 	return (
-		<section className="relative pt-16 bg-blueGray-50">
-			<div className="container mx-auto">
-				<div className="flex flex-wrap items-center">
-					<div className="w-10/12 md:w-6/12 lg:w-4/12 px-12 md:px-4 mr-auto ml-auto">
-						<div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-primary">
-							<Image
-								alt="Exercise Image"
-								src={exercise.image || DefaultImage}
-								width={600}
-								height={400}
-								className="w-full align-middle rounded-t-lg"
-							/>
-							<blockquote className="relative p-8 mb-4">
-								<h4 className="text-xl font-bold ">
-									{exercise.name}
-								</h4>
-							</blockquote>
+		<div className="mx-auto max-w-4xl py-8">
+			<div className="mb-8">
+				<h1 className="mb-2 text-3xl font-bold text-primary-500">{exercise.name}</h1>
+				<div className="flex flex-wrap gap-2">
+					{exercise.muscle_group?.map((muscle: string, index: number) => (
+						<span 
+							key={index} 
+							className="rounded-full bg-primary-500/10 px-3 py-1 text-sm font-medium text-primary-400"
+						>
+							{muscle}
+						</span>
+					))}
+					
+					<span className="ml-auto rounded-full bg-secondary-500/10 px-3 py-1 text-sm font-medium text-secondary-400">
+						Dificultad: {exercise.difficulty}/5
+					</span>
+				</div>
+			</div>
+
+			<div className="grid gap-8 lg:grid-cols-2">
+				<div>
+					<div className="overflow-hidden rounded-xl bg-surface shadow-lg">
+						<Image
+							alt={`Imagen de ${exercise.name}`}
+							src={exercise.image || DefaultImage}
+							width={600}
+							height={400}
+							className="h-64 w-full object-cover"
+							priority
+						/>
+						
+						<div className="p-6">
+							<h3 className="mb-4 text-xl font-semibold">Sobre este ejercicio</h3>
+							<p className="text-gray-400">
+								{exercise.description || 'No hay descripción disponible para este ejercicio.'}
+							</p>
 						</div>
 					</div>
-					<div className="w-full md:w-6/12 px-4">
-						<div className="flex flex-wrap">
-							<div className="w-full md:w-6/12 flex">
-								<h4 className="text-xl font-bold pb-2">
-									Descripcion
-								</h4>
+				</div>
+
+				<div className="space-y-6">
+					<div className="rounded-xl bg-surface p-6 shadow-lg">
+						<h3 className="mb-4 text-xl font-semibold">Instrucciones</h3>
+						{exercise.instructions ? (
+							<ol className="ml-5 list-decimal space-y-2 text-gray-400">
+								{exercise.instructions.split('\n').map((instruction: string, index: number) => (
+									<li key={index}>{instruction}</li>
+								))}
+							</ol>
+						) : (
+							<p className="text-gray-400">No hay instrucciones disponibles para este ejercicio.</p>
+						)}
+					</div>
+
+					<div className="rounded-xl bg-surface p-6 shadow-lg">
+						<h3 className="mb-4 text-xl font-semibold">Detalles</h3>
+						<div className="grid grid-cols-2 gap-4 text-gray-400">
+							<div>
+								<p className="font-medium text-white">Grupos musculares:</p>
+								<p>{exercise.muscle_group?.join(', ') || 'No especificado'}</p>
 							</div>
-							<p>{exercise.description}</p>
+							<div>
+								<p className="font-medium text-white">Dificultad:</p>
+								<p>{exercise.difficulty}/5</p>
+							</div>
+							<div>
+								<p className="font-medium text-white">Equipamiento:</p>
+								<p>{exercise.equipment || 'Sin equipamiento'}</p>
+							</div>
+							<div>
+								<p className="font-medium text-white">Tipo:</p>
+								<p>{exercise.type || 'No especificado'}</p>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</section>
+		</div>
 	);
 }
