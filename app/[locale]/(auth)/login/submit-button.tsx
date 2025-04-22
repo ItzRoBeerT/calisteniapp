@@ -1,20 +1,68 @@
 'use client';
 
 import { useFormStatus } from 'react-dom';
-import { type ComponentProps } from 'react';
+import { type ComponentProps, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 type Props = ComponentProps<'button'> & {
-	pendingText?: string;
+  pendingText?: string;
 };
 
 export function SubmitButton({ children, pendingText, ...props }: Props) {
-	const { pending, action } = useFormStatus();
+  const { pending, action } = useFormStatus();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const router = useRouter();
+  
+  const isPending = pending && action === props.formAction;
 
-	const isPending = pending && action === props.formAction;
+  const handleClick = async () => {
+    // Clear previous error messages
+    setErrorMessage(null);
+  };
 
-	return (
-		<button {...props} type="submit" aria-disabled={pending}>
-			{isPending ? pendingText : children}
-		</button>
-	);
+  // Modify the formAction to handle errors
+  const wrappedAction = async (formData: FormData) => {
+    try {
+      setErrorMessage(null);
+      
+      const result = await (props.formAction as any)(formData);
+      
+      // Handle errors or success messages
+      if (result?.error) {
+        setErrorMessage(result.error);
+        return;
+      }
+      
+      // Handle success with redirect
+      if (result?.success && result?.redirect) {
+        setErrorMessage(null);
+        setTimeout(() => {
+          router.push(result.redirect);
+        }, 2000);
+        return result.success;
+      }
+    } catch (error) {
+      setErrorMessage('An unexpected error occurred');
+      console.error('Form submission error:', error);
+    }
+  };
+
+  return (
+    <>
+      {errorMessage && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <span className="block sm:inline">{errorMessage}</span>
+        </div>
+      )}
+      <button 
+        {...props} 
+        type="submit" 
+        aria-disabled={isPending}
+        formAction={wrappedAction as any}
+        onClick={handleClick}
+      >
+        {isPending ? pendingText : children}
+      </button>
+    </>
+  );
 }
