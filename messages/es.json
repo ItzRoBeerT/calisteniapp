@@ -37,6 +37,38 @@
 			"welcome": "Bienvenido a ",
 			"visit": "Visita nuestro blog"
 		},
+		"discoverExercises": "Descubre los ejercicios",
+		"featuredSection": {
+			"title": "¿Por qué elegir la calistenia?",
+			"stat1": "de las personas que comienzan calistenia mejoran su fuerza y flexibilidad",
+			"stat2": "dominadas puede hacer un principiante en las primeras sesiones",
+			"stat3": "para sentir mejoras significativas con entrenamiento regular",
+			"stat4": "ejercicios diferentes para trabajar todo el cuerpo",
+			"weeks": "semanas"
+		},
+		"features": {
+			"title": "Lo que ofrecemos",
+			"feature1": {
+				"title": "Ejercicios detallados",
+				"description": "Instrucciones paso a paso para cada ejercicio con variaciones para todos los niveles",
+				"alt": "Icono de documento"
+			},
+			"feature2": {
+				"title": "Entrenamientos personalizados",
+				"description": "Crea y guarda tus propias rutinas adaptadas a tus objetivos y nivel",
+				"alt": "Icono de pulgar arriba"
+			},
+			"feature3": {
+				"title": "Seguimiento de progreso",
+				"description": "Monitorea tu evolución y visualiza tus mejoras con el tiempo",
+				"alt": "Icono de ventana"
+			}
+		},
+		"cta": {
+			"title": "¿Listo para empezar?",
+			"description": "Explora nuestra biblioteca de ejercicios y comienza tu viaje en la calistenia hoy mismo",
+			"button": "Explorar ejercicios"
+		},
 		"favourites": "Consulta tus ejercicios de calistenia favoritos",
 		"explore": "Explora una variedad de ejercicios diseñados para mejorar tu fuerza y flexibilidad.",
 		"check": "Revisa todos los entrenamientos y puntúalos",

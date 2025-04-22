@@ -22,39 +22,39 @@ export default function Home() {
 						href={'/exercises'}
 						className="bg-purple-600 hover:bg-purple-700 transition-colors px-8 py-4 rounded-lg text-white font-bold text-lg mt-4"
 					>
-						Descubre nuestros ejercicios
+						{t('discoverExercises')}
 					</NavLink>
 				</section>
 
 				{/* Featured Section */}
 				<section className="w-full bg-gradient-to-r from-purple-900 to-purple-700 p-10 rounded-2xl text-white shadow-xl">
 					<h2 className="text-3xl md:text-4xl font-extrabold text-center mb-8">
-						¿Y tú, cuántas dominadas puedes hacer?
+						{t('featuredSection.title')}
 					</h2>
 					
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-8">
 						<div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl text-center">
 							<p className="text-4xl font-bold text-yellow-300 mb-2">32%</p>
-							<p className="text-sm">Solo el 32% puede hacer más de 10 dominadas seguidas</p>
+							<p className="text-sm">{t('featuredSection.stat1')}</p>
 						</div>
 						<div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl text-center">
 							<p className="text-4xl font-bold text-yellow-300 mb-2">0-3</p>
-							<p className="text-sm">El promedio inicial es de 0 a 3 dominadas</p>
+							<p className="text-sm">{t('featuredSection.stat2')}</p>
 						</div>
 						<div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl text-center">
-							<p className="text-4xl font-bold text-yellow-300 mb-2">2 semanas</p>
-							<p className="text-sm">Con entrenamiento constante, se pueden lograr 5 en solo 2 semanas</p>
+							<p className="text-4xl font-bold text-yellow-300 mb-2">2 {t('featuredSection.weeks')}</p>
+							<p className="text-sm">{t('featuredSection.stat3')}</p>
 						</div>
 						<div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl text-center">
 							<p className="text-4xl font-bold text-yellow-300 mb-2">564</p>
-							<p className="text-sm">Récord mundial: 564 dominadas en 30 minutos</p>
+							<p className="text-sm">{t('featuredSection.stat4')}</p>
 						</div>
 					</div>
 				</section>
 
 				{/* Features Section */}
 				<section className="w-full">
-					<h2 className="text-3xl font-bold text-center mb-12">Nuestras funcionalidades</h2>
+					<h2 className="text-3xl font-bold text-center mb-12">{t('features.title')}</h2>
 					
 					<div className="grid grid-cols-1 md:grid-cols-3 gap-10">
 						{/* Feature 1 */}
@@ -62,16 +62,16 @@ export default function Home() {
 							<div className="w-16 h-16 flex items-center justify-center bg-purple-100 rounded-full mb-4">
 								<Image
 									src="/file.svg"
-									alt="Crea rutinas personalizadas"
+									alt={t('features.feature1.alt')}
 									width={32}
 									height={32}
 								/>
 							</div>
 							<h3 className="text-xl font-bold mb-2 text-center">
-								Crea tus propias rutinas
+								{t('features.feature1.title')}
 							</h3>
 							<p className="text-center">
-								Diseña rutinas adaptadas a tus objetivos y nivel. Organiza tus ejercicios y establece un plan personalizado.
+								{t('features.feature1.description')}
 							</p>
 						</div>
 
@@ -80,16 +80,16 @@ export default function Home() {
 							<div className="w-16 h-16 flex items-center justify-center bg-purple-100 rounded-full mb-4">
 								<Image
 									src="/thumb-up.svg"
-									alt="Aprende ejercicios correctamente"
+									alt={t('features.feature2.alt')}
 									width={32}
 									height={32}
 								/>
 							</div>
 							<h3 className="text-xl font-bold mb-2 text-center">
-								Aprende ejercicios correctamente
+								{t('features.feature2.title')}
 							</h3>
 							<p className="text-center">
-								Guías detalladas con técnicas correctas para prevenir lesiones y maximizar resultados en cada ejercicio.
+								{t('features.feature2.description')}
 							</p>
 						</div>
 
@@ -98,16 +98,16 @@ export default function Home() {
 							<div className="w-16 h-16 flex items-center justify-center bg-purple-100 rounded-full mb-4">
 								<Image
 									src="/window.svg"
-									alt="IA para crear planes"
+									alt={t('features.feature3.alt')}
 									width={32}
 									height={32}
 								/>
 							</div>
 							<h3 className="text-xl font-bold mb-2 text-center">
-								IA para tu entrenamiento
+								{t('features.feature3.title')}
 							</h3>
 							<p className="text-center">
-								Deja que nuestra inteligencia artificial cree un plan de entrenamiento adaptado a tus objetivos y nivel actual.
+								{t('features.feature3.description')}
 							</p>
 						</div>
 					</div>
@@ -116,16 +116,16 @@ export default function Home() {
 				{/* CTA Section */}
 				<section className="w-full bg-surface p-10 rounded-xl text-center">
 					<h2 className="text-3xl font-bold mb-4">
-						Empieza hoy tu camino en calistenia
+						{t('cta.title')}
 					</h2>
 					<p className="mb-8 max-w-2xl mx-auto">
-						Únete a nuestra comunidad y descubre cómo puedes superar tus límites con programas de entrenamiento progresivos.
+						{t('cta.description')}
 					</p>
 					<NavLink
 						href={'/exercises'}
 						className="inline-block bg-purple-600 hover:bg-purple-700 transition-colors px-8 py-4 rounded-lg text-white font-bold text-lg"
 					>
-						¡Comienza ahora!
+						{t('cta.button')}
 					</NavLink>
 				</section>
 

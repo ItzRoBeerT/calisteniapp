@@ -37,6 +37,38 @@
 		"welcome": "Welcome to ",
 		"visit": "Visit our blog"
 	  },
+	  "discoverExercises": "Discover exercises",
+	  "featuredSection": {
+		"title": "Why choose calisthenics?",
+		"stat1": "of people who start calisthenics improve their strength and flexibility",
+		"stat2": "pull-ups a beginner can do in the first sessions",
+		"stat3": "to feel significant improvements with regular training",
+		"stat4": "different exercises to work your entire body",
+		"weeks": "weeks"
+	  },
+	  "features": {
+		"title": "What we offer",
+		"feature1": {
+		  "title": "Detailed exercises",
+		  "description": "Step-by-step instructions for each exercise with variations for all levels",
+		  "alt": "Document icon"
+		},
+		"feature2": {
+		  "title": "Custom workouts",
+		  "description": "Create and save your own routines tailored to your goals and level",
+		  "alt": "Thumbs up icon"
+		},
+		"feature3": {
+		  "title": "Progress tracking",
+		  "description": "Monitor your evolution and visualize your improvements over time",
+		  "alt": "Window icon"
+		}
+	  },
+	  "cta": {
+		"title": "Ready to start?",
+		"description": "Explore our exercise library and begin your calisthenics journey today",
+		"button": "Explore exercises"
+	  },
 	  "favourites": "Check out your favorite calisthenics exercises",
 	  "explore": "Explore a variety of exercises designed to improve your strength and flexibility.",
 	  "check": "Review all workouts and rate them",
