@@ -106,5 +106,43 @@
 	  "all": "All",
 	  "clear": "Clear",
 	  "apply": "Apply"
+	},
+	"Auth": {
+	  "login": {
+		"title": "Sign In",
+		"description": "Access your account to view your workouts",
+		"emailLabel": "Email",
+		"emailPlaceholder": "your@email.com",
+		"passwordLabel": "Password",
+		"signIn": "Sign In",
+		"signingIn": "Signing in...",
+		"noAccount": "Don't have an account?",
+		"signUp": "Sign up"
+	  },
+	  "register": {
+		"title": "Create Account",
+		"description": "Join our calisthenics community",
+		"emailLabel": "Email",
+		"emailPlaceholder": "your@email.com",
+		"passwordLabel": "Password",
+		"passwordHint": "Password must be at least 6 characters",
+		"confirmPasswordLabel": "Confirm Password",
+		"createAccount": "Create Account",
+		"signingUp": "Creating account...",
+		"haveAccount": "Already have an account?",
+		"signIn": "Sign in"
+	  },
+	  "errors": {
+		"invalidCredentials": "Invalid email or password",
+		"emailRequired": "Email is required",
+		"passwordRequired": "Password is required",
+		"passwordLength": "Password must be at least 6 characters",
+		"passwordsDoNotMatch": "Passwords do not match",
+		"genericError": "An error occurred. Please try again."
+	  },
+	  "success": {
+		"accountCreated": "Account created successfully!",
+		"checkEmail": "Check your email for the confirmation link."
+	  }
 	}
   }

@@ -36,13 +36,12 @@ export default async function RootLayout({
 	const messages = await getMessages();
 
 	return (
-		<html lang="en" className="min-h-full relative">
-			<body className={inter.className}>
+		<html lang="en" className="h-full">
+			<body className={`${inter.className} flex flex-col min-h-screen`}>
 				<NextIntlClientProvider messages={messages}>
 					<ErrorBoundary fallback={ErrorPage}>
 						<Header />
-						{/* Removed the div with inconsistent class names */}
-						<main className="container mx-auto my-4 px-6 xl:px-0">
+						<main className="container mx-auto my-4 px-6 xl:px-0 flex-grow">
 							{children}
 						</main>
 						<Footer />

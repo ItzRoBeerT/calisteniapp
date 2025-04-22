@@ -106,5 +106,43 @@
 		"all": "Todos",
 		"clear": "Limpiar",
 		"apply": "Aplicar"
+	},
+	"Auth": {
+		"login": {
+			"title": "Iniciar Sesión",
+			"description": "Accede a tu cuenta para ver tus entrenamientos",
+			"emailLabel": "Email",
+			"emailPlaceholder": "tu@email.com",
+			"passwordLabel": "Contraseña",
+			"signIn": "Iniciar Sesión",
+			"signingIn": "Iniciando sesión...",
+			"noAccount": "¿No tienes una cuenta?",
+			"signUp": "Regístrate"
+		},
+		"register": {
+			"title": "Crear Cuenta",
+			"description": "Únete a nuestra comunidad de calistenia",
+			"emailLabel": "Email",
+			"emailPlaceholder": "tu@email.com",
+			"passwordLabel": "Contraseña",
+			"passwordHint": "La contraseña debe tener al menos 6 caracteres",
+			"confirmPasswordLabel": "Confirmar Contraseña",
+			"createAccount": "Crear Cuenta",
+			"signingUp": "Creando cuenta...",
+			"haveAccount": "¿Ya tienes una cuenta?",
+			"signIn": "Iniciar Sesión"
+		},
+		"errors": {
+			"invalidCredentials": "Email o contraseña inválidos",
+			"emailRequired": "El email es obligatorio",
+			"passwordRequired": "La contraseña es obligatoria",
+			"passwordLength": "La contraseña debe tener al menos 6 caracteres",
+			"passwordsDoNotMatch": "Las contraseñas no coinciden",
+			"genericError": "Ocurrió un error. Por favor, inténtalo de nuevo."
+		},
+		"success": {
+			"accountCreated": "¡Cuenta creada exitosamente!",
+			"checkEmail": "Revisa tu email para el enlace de confirmación."
+		}
 	}
 }
