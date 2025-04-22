@@ -1,7 +1,7 @@
 import { createClient } from '@/utils/supabase/server';
 import { Link } from '@/i18n/navigation';
 import NavLink from '@/components/header/NavLink';
-import LogoutButton from './logout-button';
+import UserMenu from './UserMenu';
 import { InternalServerError } from '@/utils/errors';
 
 export default async function Header() {
@@ -10,6 +10,23 @@ export default async function Header() {
 		const {
 			data: { user },
 		} = await supabase.auth.getUser();
+
+		// Obtener el nombre del usuario si está autenticado
+		let userName = null;
+		if (user) {
+			const { data: userData, error } = await supabase
+				.from('profiles')
+				.select('full_name, username')
+				.eq('id', user.id)
+				.single();
+			
+			if (userData) {
+				// Usar full_name si está disponible, de lo contrario usar username o el email como última opción
+				userName = userData.full_name || userData.username || user.email;
+			} else {
+				userName = user.email; // Si no hay perfil, usar el email
+			}
+		}
 
 		return (
 			<header className="bg-surface backdrop-blur-sm bg-opacity-80 sticky top-0 z-50">
@@ -29,7 +46,7 @@ export default async function Header() {
 							Ejercicios
 						</NavLink>
 						{user ? (
-							<LogoutButton />
+							<UserMenu userName={userName || 'Usuario'} />
 						) : (
 							<NavLink
 								href="/login"
