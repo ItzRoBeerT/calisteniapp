@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 import NavLink from '@/components/header/NavLink';
 import LogoutButton from './logout-button';
 import { InternalServerError } from '@/utils/errors';
@@ -14,16 +14,16 @@ export default async function Header() {
 		return (
 			<header className="bg-surface backdrop-blur-sm bg-opacity-80 sticky top-0 z-50">
 				<div className="container mx-auto p-4 flex justify-between items-center">
-					<Link href={'/'}>Calistenia</Link>
+					<Link href="/">Calistenia</Link>
 					<div className="flex gap-2 items-center">
 						<NavLink
-							href={'/workouts'}
+							href="/workouts"
 							className="hover:text-primary-500 transition-colors ease-in"
 						>
 							Entrenamientos
 						</NavLink>
 						<NavLink
-							href={'/exercises'}
+							href="/exercises"
 							className="hover:text-primary-500 transition-colors ease-in"
 						>
 							Ejercicios
@@ -32,7 +32,7 @@ export default async function Header() {
 							<LogoutButton />
 						) : (
 							<NavLink
-								href={'/login'}
+								href="/login"
 								className="bg-purple-500 rounded p-2 hover:bg-purple-600 transition text-black"
 							>
 								Login

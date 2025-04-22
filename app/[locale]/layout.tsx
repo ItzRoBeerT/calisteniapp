@@ -41,7 +41,7 @@ export default async function RootLayout({
 				<NextIntlClientProvider messages={messages}>
 					<ErrorBoundary fallback={ErrorPage}>
 						<Header />
-						<div className="color"></div>
+						{/* Removed the div with inconsistent class names */}
 						<main className="container mx-auto my-4 px-6 xl:px-0">
 							{children}
 						</main>

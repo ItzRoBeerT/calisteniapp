@@ -49,5 +49,62 @@
 	},
 	"ExercisesPage": {
 		"title": "Listado de ejercicios"
+	},
+	"WorkoutsPage": {
+		"title": "Entrenamientos",
+		"createWorkout": "Crear Entrenamiento",
+		"noWorkouts": "No se encontraron entrenamientos.",
+		"createNewWorkout": "Crear nuevo entrenamiento"
+	},
+	"WorkoutDetail": {
+		"backToWorkouts": "Volver a Entrenamientos",
+		"description": "Descripción",
+		"difficulty": "Dificultad",
+		"duration": "Duración",
+		"exercises": "Ejercicios",
+		"tags": "Etiquetas",
+		"edit": "Editar",
+		"delete": "Eliminar",
+		"minutes": "minutos",
+		"noDescription": "Sin descripción",
+		"noExercises": "No hay ejercicios en este entrenamiento",
+		"noTags": "No hay etiquetas",
+		"notSpecified": "No especificada"
+	},
+	"NewWorkout": {
+		"title": "Crear Nuevo Entrenamiento",
+		"backToWorkouts": "Volver a Entrenamientos"
+	},
+	"WorkoutForm": {
+		"basicInfo": "Información Básica",
+		"name": "Nombre",
+		"description": "Descripción",
+		"difficulty": "Dificultad",
+		"duration": "Duración (minutos)",
+		"muscleGroups": "Grupos Musculares",
+		"tags": "Etiquetas",
+		"addTagPlaceholder": "Añadir etiqueta...",
+		"add": "Añadir",
+		"exercises": "Ejercicios",
+		"addExercise": "Añadir Ejercicio",
+		"exerciseName": "Nombre del Ejercicio",
+		"sets": "Series",
+		"reps": "Repeticiones",
+		"rest": "Descanso (segundos)",
+		"remove": "Eliminar",
+		"noExercises": "No hay ejercicios agregados aún",
+		"saving": "Guardando...",
+		"createWorkout": "Crear Entrenamiento",
+		"updateWorkout": "Actualizar Entrenamiento",
+		"submitError": "Error al guardar el entrenamiento. Inténtalo de nuevo."
+	},
+	"WorkoutFilter": {
+		"difficulty": "Dificultad",
+		"muscleGroup": "Grupo Muscular",
+		"duration": "Duración",
+		"tag": "Etiqueta",
+		"all": "Todos",
+		"clear": "Limpiar",
+		"apply": "Aplicar"
 	}
 }

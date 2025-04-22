@@ -49,6 +49,62 @@
 	},
 	"ExercisesPage": {
 	  "title": "List of exercises"
+	},
+	"WorkoutsPage": {
+	  "title": "My Workouts",
+	  "createWorkout": "Create Workout",
+	  "noWorkouts": "No workouts found.",
+	  "createNewWorkout": "Create new workout"
+	},
+	"WorkoutDetail": {
+	  "backToWorkouts": "Back to Workouts",
+	  "description": "Description",
+	  "difficulty": "Difficulty",
+	  "duration": "Duration",
+	  "exercises": "Exercises",
+	  "tags": "Tags",
+	  "edit": "Edit",
+	  "delete": "Delete",
+	  "minutes": "minutes",
+	  "noDescription": "No description",
+	  "noExercises": "No exercises in this workout",
+	  "noTags": "No tags",
+	  "notSpecified": "Not specified"
+	},
+	"NewWorkout": {
+	  "title": "Create New Workout",
+	  "backToWorkouts": "Back to Workouts"
+	},
+	"WorkoutForm": {
+	  "basicInfo": "Basic Information",
+	  "name": "Name",
+	  "description": "Description",
+	  "difficulty": "Difficulty",
+	  "duration": "Duration (minutes)",
+	  "muscleGroups": "Muscle Groups",
+	  "tags": "Tags",
+	  "addTagPlaceholder": "Add tag...",
+	  "add": "Add",
+	  "exercises": "Exercises",
+	  "addExercise": "Add Exercise",
+	  "exerciseName": "Exercise Name",
+	  "sets": "Sets",
+	  "reps": "Repetitions",
+	  "rest": "Rest (seconds)",
+	  "remove": "Remove",
+	  "noExercises": "No exercises added yet",
+	  "saving": "Saving...",
+	  "createWorkout": "Create Workout",
+	  "updateWorkout": "Update Workout",
+	  "submitError": "Error saving workout. Please try again."
+	},
+	"WorkoutFilter": {
+	  "difficulty": "Difficulty",
+	  "muscleGroup": "Muscle Group",
+	  "duration": "Duration",
+	  "tag": "Tag",
+	  "all": "All",
+	  "clear": "Clear",
+	  "apply": "Apply"
 	}
   }
-  
