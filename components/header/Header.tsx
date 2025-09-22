@@ -45,6 +45,12 @@ export default async function Header() {
 						>
 							Ejercicios
 						</NavLink>
+				            <NavLink
+				                href="/roadmaps"
+				                className="hover:text-primary-500 transition-colors ease-in"
+				            >
+				                Roadmaps
+				            </NavLink>
 						{user ? (
 							<UserMenu userName={userName || 'Usuario'} />
 						) : (

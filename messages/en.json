@@ -80,7 +80,11 @@
 	  "title": "Hello world!"
 	},
 	"ExercisesPage": {
-	  "title": "List of exercises"
+		"title": "List of exercises"
+	},
+	"RoadmapsPage": {
+		"title": "Roadmaps",
+		"description": "Welcome to the Roadmaps page. Here you can find guides and learning paths for calisthenics."
 	},
 	"WorkoutsPage": {
 	  "title": "My Workouts",
