@@ -1,21 +1,57 @@
 "use client";
 import React, { useState, useCallback, useRef } from "react";
-import ReactFlow, { Background, Controls } from "reactflow";
+import ReactFlow, { Background, Controls, MiniMap, Node } from "reactflow";
+// Nodo personalizado para mostrar color y tamaño de texto
+import { Node as RFNode, NodeChange } from "reactflow";
+
+function CustomNode({ data }: { data: { label: string; color?: string; fontSize?: number } }) {
+  return (
+    <div
+      style={{
+        background: data.color || '#2563eb',
+        color: '#fff',
+        borderRadius: 8,
+        padding: '12px 16px',
+        fontSize: data.fontSize || 16,
+        minWidth: 80,
+        textAlign: 'center',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.07)'
+      }}
+    >
+      {data.label}
+    </div>
+  );
+}
+import { applyNodeChanges } from "reactflow";
 import "reactflow/dist/style.css";
 
 // Ejemplo inicial de nodos y edges
 const initialNodes = [
-  { id: "1", data: { label: "Inicio" }, position: { x: 100, y: 100 } },
-  { id: "2", data: { label: "Fundamentos" }, position: { x: 300, y: 100 } },
+  {
+    id: "1",
+    data: { label: "Inicio", color: "#2563eb", fontSize: 16 },
+    position: { x: 100, y: 100 }
+  },
+  {
+    id: "2",
+    data: { label: "Fundamentos", color: "#2563eb", fontSize: 16 },
+    position: { x: 300, y: 100 }
+  },
 ];
 const initialEdges = [
   { id: "e1-2", source: "1", target: "2", animated: true },
 ];
 
+export default function RoadmapBuilder() {
   const [nodes, setNodes] = useState(initialNodes);
+  // Handler para cambios en los nodos (mover, editar, etc)
+  const onNodesChange = useCallback((changes: NodeChange[]) => {
+    setNodes(nds => applyNodeChanges(changes, nds));
+  }, []);
   const [edges, setEdges] = useState(initialEdges);
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
+  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
   // Componentes disponibles
   const components = [
@@ -67,6 +103,10 @@ const initialEdges = [
     event.preventDefault();
     const type = event.dataTransfer.getData("application/reactflow");
     if (typeof type === "undefined" || !type) return;
+    if (!reactFlowInstance) {
+      alert("El área de trabajo no está lista. Intenta de nuevo.");
+      return;
+    }
     const bounds = reactFlowWrapper.current?.getBoundingClientRect();
     const position = reactFlowInstance.project({
       x: event.clientX - (bounds?.left ?? 0),
@@ -77,9 +117,13 @@ const initialEdges = [
       ...nds,
       {
         id: newId,
-        data: { label: components.find(c => c.type === type)?.label || type },
+        data: {
+          label: components.find(c => c.type === type)?.label || type,
+          color: "#2563eb",
+          fontSize: 16
+        },
         position,
-        type,
+        type: components.find(c => c.type === type)?.type || "default",
       },
     ]);
   }, [reactFlowInstance, components]);
@@ -96,52 +140,142 @@ const initialEdges = [
     URL.revokeObjectURL(url);
   };
 
+  // Selección de nodo
+  const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
+    setSelectedNodeId(node.id);
+  }, []);
+
+  // Configuración del nodo seleccionado
+  const selectedNode = nodes.find((n) => n.id === selectedNodeId);
+
+  const handleNodeConfigChange = (field: string, value: any) => {
+    setNodes((nds) =>
+      nds.map((node) =>
+        node.id === selectedNodeId
+          ? {
+              ...node,
+              data: {
+                ...node.data,
+                [field]: value,
+              },
+            }
+          : node
+      )
+    );
+  };
+
   return (
-    <main className="container mx-auto p-4 flex gap-4">
-      <aside className="react-flow__sidebar components-sidebar flex flex-col gap-1.5 select-none w-56">
-        <h2 className="font-semibold mb-2">Componentes</h2>
-        {components.map((comp) => (
-          <div
-            key={comp.type}
-            className="dndnode flex h-11 cursor-grab items-center rounded-[5px] border border-gray-300 px-4 py-3 mb-1"
-            draggable
-            onDragStart={(event) => {
-              event.dataTransfer.setData("application/reactflow", comp.type);
-              event.dataTransfer.effectAllowed = "move";
-            }}
-          >
-            {comp.icon}
-            {comp.label}
-          </div>
-        ))}
-      </aside>
-      <section className="flex-1">
-        <h1 className="text-2xl font-bold mb-4">Construir Roadmap</h1>
+    <div className="container mx-auto p-4">
+      {/* Barra superior */}
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="text-2xl font-bold">Construir Roadmap</h1>
         <button
-          className="mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
           onClick={handleExport}
         >
           Exportar Roadmap (JSON)
         </button>
-        <div ref={reactFlowWrapper} style={{ width: "100%", height: 500, background: "#fafafa", borderRadius: 8 }}>
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            fitView
-            nodesDraggable={true}
-            nodesConnectable={true}
-            elementsSelectable={true}
-            panOnDrag={true}
-            onInit={setReactFlowInstance}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-            proOptions={{ hideAttribution: true }}
-          >
-            <Background />
-            <Controls />
-          </ReactFlow>
-        </div>
-      </section>
-    </main>
+      </div>
+      {/* Layout principal */}
+      <main className="flex gap-4">
+        <aside className="react-flow__sidebar components-sidebar flex flex-col gap-1.5 select-none w-56">
+          <h2 className="font-semibold mb-2">Componentes</h2>
+          {components.map((comp) => (
+            <div
+              key={comp.type}
+              className="dndnode flex h-11 cursor-grab items-center rounded-[5px] border border-gray-300 px-4 py-3 mb-1"
+              draggable
+              onDragStart={(event) => {
+                event.dataTransfer.setData("application/reactflow", comp.type);
+                event.dataTransfer.effectAllowed = "move";
+              }}
+            >
+              {comp.icon}
+              {comp.label}
+            </div>
+          ))}
+        </aside>
+        <section className="flex-1 flex gap-4">
+          <div ref={reactFlowWrapper} style={{ width: "100%", height: 500, background: "#fafafa", borderRadius: 8 }}>
+            <ReactFlow
+              nodes={nodes}
+              edges={edges}
+              fitView
+              nodesDraggable={true}
+              nodesConnectable={true}
+              elementsSelectable={true}
+              onNodesChange={onNodesChange}
+              onInit={setReactFlowInstance}
+              onDrop={onDrop}
+              onDragOver={onDragOver}
+              onNodeClick={onNodeClick}
+              nodeTypes={{ default: CustomNode }}
+              proOptions={{ hideAttribution: true }}
+            >
+              <MiniMap nodeColor={n => {
+                switch (n.type) {
+                  case "title": return "#2563eb";
+                  case "topic": return "#059669";
+                  case "subtopic": return "#eab308";
+                  case "paragraph": return "#6b7280";
+                  case "label": return "#db2777";
+                  default: return "#64748b";
+                }
+              }} />
+              <Background />
+              <Controls />
+            </ReactFlow>
+          </div>
+          {/* Panel de configuración del nodo seleccionado */}
+          {selectedNode && (
+            <aside className="w-64 bg-gray-50 border border-gray-300 rounded p-4 shadow relative">
+              <button
+                className="absolute top-2 right-2 text-gray-500 hover:text-blue-600 text-xl font-bold focus:outline-none"
+                aria-label="Cerrar panel"
+                onClick={() => setSelectedNodeId(null)}
+              >
+                &times;
+              </button>
+              <h3 className="font-semibold mb-4 text-black">Configurar Nodo</h3>
+              <div className="mb-3">
+                <label className="block text-sm font-medium mb-1 text-black">Texto</label>
+                <input
+                  type="text"
+                  value={selectedNode.data.label || ""}
+                  onChange={e => handleNodeConfigChange("label", e.target.value)}
+                  className="w-full border px-2 py-1 rounded bg-white text-black"
+                />
+              </div>
+              <div className="mb-3">
+                <label className="block text-sm font-medium mb-1 text-black">Color de fondo</label>
+                <div className="flex gap-2">
+                  {['#2563eb', '#059669', '#eab308', '#db2777'].map(color => (
+                    <button
+                      key={color}
+                      type="button"
+                      className={`w-8 h-8 rounded border-2 ${selectedNode.data.color === color ? 'border-black' : 'border-transparent'}`}
+                      style={{ background: color }}
+                      onClick={() => handleNodeConfigChange('color', color)}
+                      aria-label={`Seleccionar color ${color}`}
+                    />
+                  ))}
+                </div>
+              </div>
+              <div className="mb-3">
+                <label className="block text-sm font-medium mb-1 text-black">Tamaño de texto</label>
+                <input
+                  type="number"
+                  min={10}
+                  max={40}
+                  value={selectedNode.data.fontSize || 16}
+                  onChange={e => handleNodeConfigChange("fontSize", Number(e.target.value))}
+                  className="w-full border px-2 py-1 rounded bg-white text-black"
+                />
+              </div>
+            </aside>
+          )}
+        </section>
+      </main>
+    </div>
   );
 }
