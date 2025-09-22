@@ -79,9 +79,13 @@
 		"share_text": "Todos tenemos algo que aportar. Comparte tus mejores consejos, técnicas y curiosidades sobre calistenia con la comunidad.",
 		"title": "Hola mundo!"
 	},
-	"ExercisesPage": {
-		"title": "Listado de ejercicios"
-	},
+		"ExercisesPage": {
+			"title": "Listado de ejercicios"
+		},
+		"RoadmapsPage": {
+			"title": "Roadmaps",
+			"description": "Bienvenido a la página de Roadmaps. Aquí podrás encontrar guías y rutas de aprendizaje para calistenia."
+		},
 	"WorkoutsPage": {
 		"title": "Entrenamientos",
 		"createWorkout": "Crear Entrenamiento",
