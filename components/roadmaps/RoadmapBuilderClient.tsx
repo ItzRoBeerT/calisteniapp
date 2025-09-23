@@ -12,13 +12,13 @@ const nodeTypes = { default: CustomNode };
 const initialNodes = [
   {
     id: "1",
-    data: { label: "Inicio", color: "#2563eb", fontSize: 16 },
+    data: { label: "Inicio", color: "#2563eb", fontSize: 16, width: 160, height: 80 },
     position: { x: 100, y: 100 },
     type: "default"
   },
   {
     id: "2",
-    data: { label: "Fundamentos", color: "#2563eb", fontSize: 16 },
+    data: { label: "Fundamentos", color: "#2563eb", fontSize: 16, width: 160, height: 80 },
     position: { x: 300, y: 100 },
     type: "default"
   },
@@ -42,12 +42,11 @@ export default function RoadmapBuilderClient() {
   const onNodesChange = useCallback((changes: NodeChange[]) => {
     setNodes(nds => applyNodeChanges(changes, nds));
   }, []);
-  const [edges, setEdges] = useState<RFEdge[]>(initialEdges);
-  const [edgeArrowTypes, setEdgeArrowTypes] = useState<Record<string, string>>({ 'e1-2': 'none' });
-  const reactFlowWrapper = useRef<HTMLDivElement>(null);
-  const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+  const [edges, setEdges] = useState<RFEdge[]>(initialEdges.map(e => ({ ...e, arrowHeadType: 'none' })));
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
+  const reactFlowWrapper = useRef<HTMLDivElement>(null);
+  const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
 
   React.useEffect(() => {
     if (selectedNodeId) {
@@ -121,7 +120,9 @@ export default function RoadmapBuilderClient() {
         data: {
           label: components.find(c => c.type === type)?.label || type,
           color: "#2563eb",
-          fontSize: 16
+          fontSize: 16,
+          width: 160,
+          height: 80
         },
         position,
         type: components.find(c => c.type === type)?.type || "default",
@@ -151,42 +152,7 @@ export default function RoadmapBuilderClient() {
     }
   }, [selectedNode]);
 
-  const handleNodeConfigChange = (field: string, value: any) => {
-    setNodes((nds: Node<any>[]) =>
-      nds.map((node: Node<any>) =>
-        node.id === selectedNodeId
-          ? {
-              ...node,
-              data: {
-                ...node.data,
-                [field]: value,
-              },
-            }
-          : node
-      )
-    );
-  };
-
-  const handleEdgeClick = useCallback((event: React.MouseEvent, edge: RFEdge) => {
-    event.stopPropagation();
-    setSelectedEdgeId(edge.id);
-    setSelectedNodeId(null);
-  }, []);
-
-  const handleEdgeConfigChange = (field: string, value: any) => {
-    if (!selectedEdgeId) return;
-    if (field === 'arrowHeadType') {
-      setEdgeArrowTypes((prev: Record<string, string>) => ({ ...prev, [selectedEdgeId]: value }));
-    } else if (field === 'style') {
-      setEdges((eds: RFEdge[]) =>
-        eds.map((edge: RFEdge) =>
-          edge.id === selectedEdgeId
-            ? { ...edge, style: value }
-            : edge
-        )
-      );
-    }
-  };
+  // ...existing code...
 
   const closePanel = () => {
     setSelectedNodeId(null);
@@ -200,11 +166,6 @@ export default function RoadmapBuilderClient() {
     { value: 'both', label: 'Ambos', icon: '<>' },
   ];
   const colorOptions = ["#2563eb", "#059669", "#eab308", "#db2777"];
-  const lineOptions = [
-    { value: 'solid', label: 'Lisa', style: undefined },
-    { value: 'dashed', label: 'Rayada', style: '8 4' },
-    { value: 'dotted', label: 'Puntos', style: '4 2' },
-  ];
 
   const handleNodePanelOpen = (id: string) => {
     setSelectedNodeId(id);
@@ -259,17 +220,26 @@ export default function RoadmapBuilderClient() {
                   onSelect: () => {
                     handleNodePanelOpen(node.id as string);
                   },
-                  selected: node.id === selectedNodeId
+                  selected: node.id === selectedNodeId,
+                  onResize: (size: { width: number; height: number }) => {
+                    setNodes(nds => nds.map(n =>
+                      n.id === node.id
+                        ? { ...n, data: { ...n.data, width: size.width, height: size.height } }
+                        : n
+                    ));
+                  }
                 }
               }))}
               edges={edges.map(edge => {
-                const arrowType = edgeArrowTypes[edge.id] || 'none';
+                const arrowType = (edge as any).arrowHeadType || 'none';
+                let markerStart: string | undefined = undefined;
                 let markerEnd: string | undefined = undefined;
+                if (arrowType === 'left' || arrowType === 'both') markerStart = 'arrow';
                 if (arrowType === 'right' || arrowType === 'both') markerEnd = 'arrow';
-                // markerStart is not supported as a string property in React Flow Edge type
                 return {
                   ...edge,
                   style: getEdgeStyle(edge),
+                  markerStart,
                   markerEnd,
                 };
               })}
@@ -302,19 +272,17 @@ export default function RoadmapBuilderClient() {
           {selectedNode && !selectedEdge && (
             <NodeConfigPanel
               selectedNode={selectedNode}
-              handleNodeConfigChange={handleNodeConfigChange}
+              setNodes={setNodes}
               setSelectedNodeId={setSelectedNodeId}
             />
           )}
           {selectedEdge && !selectedNode && (
             <EdgeConfigPanel
-              selectedEdge={{
-                ...selectedEdge,
-                arrowHeadType: edgeArrowTypes[selectedEdge.id] || 'none',
-              }}
+              key={selectedEdge.id}
+              selectedEdge={selectedEdge}
               colorOptions={colorOptions}
               arrowOptions={arrowOptions}
-              handleEdgeConfigChange={handleEdgeConfigChange}
+              setEdges={setEdges}
               closePanel={closePanel}
             />
           )}

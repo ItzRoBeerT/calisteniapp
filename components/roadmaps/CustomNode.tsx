@@ -1,13 +1,16 @@
 import React from "react";
-import { Handle, Position } from "reactflow";
+import { Handle, Position, NodeResizeControl } from "reactflow";
 
 export type CustomNodeProps = {
   data: {
     label: string;
     color?: string;
     fontSize?: number;
+    width?: number;
+    height?: number;
     onSelect?: () => void;
     selected?: boolean;
+    onResize?: (size: { width: number; height: number }) => void;
   };
 };
 
@@ -24,36 +27,29 @@ function darkenColor(hex: string, amount = 0.15) {
   return `#${(r << 16 | g << 8 | b).toString(16).padStart(6, '0')}`;
 }
 
+const controlStyle = {
+  background: 'transparent',
+  border: 'none',
+};
+
 export const CustomNode: React.FC<CustomNodeProps> = ({ data }) => {
-  const [hover, setHover] = React.useState(false);
-  const baseColor = data.color || '#2563eb';
-  const nodeColor = data.selected || hover
-    ? darkenColor(baseColor, 0.25)
-    : baseColor;
-  const fontSize = data.fontSize || 16;
-  const minWidth = Math.max(80, fontSize * 5);
+  // Evitar que el doble clic en el resizer abra el menú
+  const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    // Si el click viene del resizer, no abrir menú
+    if ((e.target as HTMLElement).closest('.react-flow__resize-control')) return;
+    if (data.onSelect) data.onSelect();
+  };
   return (
     <div
-      style={{
-        background: nodeColor,
-        color: '#fff',
-        borderRadius: 8,
-        padding: '20px 16px',
-        fontSize,
-        minWidth,
-        textAlign: 'center',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.07)',
-        cursor: 'pointer',
-      }}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      onClick={data.onSelect}
+      style={{ position: 'relative', minWidth: 100, minHeight: 50, width: data.width, height: data.height, background: data.color || '#2563eb', borderRadius: 8, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: data.fontSize || 16 }}
+      onClick={handleClick}
     >
-      {data.label}
-      <Handle type="target" position={Position.Top} id="top" />
-      <Handle type="source" position={Position.Bottom} id="bottom" />
-      <Handle type="target" position={Position.Left} id="left" />
-      <Handle type="source" position={Position.Right} id="right" />
+      <NodeResizeControl style={controlStyle} minWidth={100} minHeight={50} className="react-flow__resize-control" />
+      <Handle type="target" position={Position.Top} />
+      <Handle type="target" position={Position.Left} />
+      <div>{data.label}</div>
+      <Handle type="source" position={Position.Right} />
+      <Handle type="source" position={Position.Bottom} />
     </div>
   );
 };
