@@ -1,55 +1,13 @@
 "use client";
 import React, { useState, useCallback, useRef } from "react";
-import ReactFlow, { Background, Controls, MiniMap, Node, applyNodeChanges, NodeChange, ReactFlowInstance, Handle, Position } from "reactflow";
+
+import ReactFlow, { Background, Controls, MiniMap, Node, applyNodeChanges, NodeChange, ReactFlowInstance } from "reactflow";
+import "reactflow/dist/style.css";
+import { CustomNode } from "./CustomNode";
+import { NodeConfigPanel } from "./NodeConfigPanel";
+import { EdgeConfigPanel } from "./EdgeConfigPanel";
 
 const nodeTypes = { default: CustomNode };
-import "reactflow/dist/style.css";
-
-function CustomNode({ data }: { data: { label: string; color?: string; fontSize?: number; onSelect?: () => void; selected?: boolean } }) {
-  function darkenColor(hex: string, amount = 0.15) {
-    let c = hex.replace('#', '');
-    if (c.length === 3) c = c.split('').map(x => x + x).join('');
-    const num = parseInt(c, 16);
-    let r = (num >> 16) & 0xff;
-    let g = (num >> 8) & 0xff;
-    let b = num & 0xff;
-    r = Math.max(0, Math.floor(r * (1 - amount)));
-    g = Math.max(0, Math.floor(g * (1 - amount)));
-    b = Math.max(0, Math.floor(b * (1 - amount)));
-    return `#${(r << 16 | g << 8 | b).toString(16).padStart(6, '0')}`;
-  }
-  const [hover, setHover] = React.useState(false);
-  const baseColor = data.color || '#2563eb';
-  // If selected, use a more intense color
-  const nodeColor = data.selected || hover
-    ? darkenColor(baseColor, 0.25)
-     : baseColor;
-  // Responsive minWidth based on fontSize
-  const fontSize = data.fontSize || 16;
-  const minWidth = Math.max(80, fontSize * 5); // 5 is a reasonable multiplier for label length
-  return (
-    <div
-      style={{
-        background: nodeColor,
-        color: '#fff',
-        borderRadius: 8,
-        padding: '20px 16px',
-        fontSize,
-        minWidth,
-        textAlign: 'center',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.07)',
-        cursor: 'pointer',
-      }}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      onClick={data.onSelect}
-    >
-      {data.label}
-      <Handle type="target" position={Position.Top} />
-      <Handle type="source" position={Position.Bottom} />
-    </div>
-  );
-}
 
 const initialNodes = [
   {
@@ -65,8 +23,18 @@ const initialNodes = [
     type: "default"
   },
 ];
-const initialEdges = [
-  { id: "e1-2", source: "1", target: "2", animated: true },
+
+// Edge type compatible with React Flow
+import type { Edge as RFEdge } from 'reactflow';
+
+const initialEdges: RFEdge[] = [
+  {
+    id: "e1-2",
+    source: "1",
+    target: "2",
+    animated: true,
+    style: { stroke: "#2563eb" },
+  },
 ];
 
 export default function RoadmapBuilderClient() {
@@ -74,12 +42,13 @@ export default function RoadmapBuilderClient() {
   const onNodesChange = useCallback((changes: NodeChange[]) => {
     setNodes(nds => applyNodeChanges(changes, nds));
   }, []);
-  const [edges, setEdges] = useState<typeof initialEdges>(initialEdges);
+  const [edges, setEdges] = useState<RFEdge[]>(initialEdges);
+  const [edgeArrowTypes, setEdgeArrowTypes] = useState<Record<string, string>>({ 'e1-2': 'none' });
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+  const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
 
-  // Debug: log when selectedNodeId changes
   React.useEffect(() => {
     if (selectedNodeId) {
       console.log("Nodo seleccionado:", selectedNodeId);
@@ -126,12 +95,12 @@ export default function RoadmapBuilderClient() {
     },
   ];
 
-  const onDragOver = useCallback((event: React.DragEvent) => {
+  const onDragOver = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = "move";
   }, []);
 
-  const onDrop = useCallback((event: React.DragEvent) => {
+  const onDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     const type = event.dataTransfer.getData("application/reactflow");
     if (typeof type === "undefined" || !type) return;
@@ -145,7 +114,7 @@ export default function RoadmapBuilderClient() {
       y: event.clientY - (bounds?.top ?? 0),
     });
     const newId = `${type}-${Date.now()}`;
-    setNodes((nds) => [
+    setNodes((nds: Node<any>[]) => [
       ...nds,
       {
         id: newId,
@@ -171,7 +140,9 @@ export default function RoadmapBuilderClient() {
     URL.revokeObjectURL(url);
   };
 
-  const selectedNode = nodes.find((n) => n.id === selectedNodeId);
+  const selectedNode = nodes.find((n: Node<any>) => n.id === selectedNodeId);
+  const selectedEdge = edges.find((e: RFEdge) => e.id === selectedEdgeId);
+
   React.useEffect(() => {
     if (selectedNode) {
       console.log("Panel de configuración visible para nodo:", selectedNode.id);
@@ -181,8 +152,8 @@ export default function RoadmapBuilderClient() {
   }, [selectedNode]);
 
   const handleNodeConfigChange = (field: string, value: any) => {
-    setNodes((nds) =>
-      nds.map((node) =>
+    setNodes((nds: Node<any>[]) =>
+      nds.map((node: Node<any>) =>
         node.id === selectedNodeId
           ? {
               ...node,
@@ -194,6 +165,59 @@ export default function RoadmapBuilderClient() {
           : node
       )
     );
+  };
+
+  const handleEdgeClick = useCallback((event: React.MouseEvent, edge: RFEdge) => {
+    event.stopPropagation();
+    setSelectedEdgeId(edge.id);
+    setSelectedNodeId(null);
+  }, []);
+
+  const handleEdgeConfigChange = (field: string, value: any) => {
+    if (!selectedEdgeId) return;
+    if (field === 'arrowHeadType') {
+      setEdgeArrowTypes((prev: Record<string, string>) => ({ ...prev, [selectedEdgeId]: value }));
+    } else if (field === 'style') {
+      setEdges((eds: RFEdge[]) =>
+        eds.map((edge: RFEdge) =>
+          edge.id === selectedEdgeId
+            ? { ...edge, style: value }
+            : edge
+        )
+      );
+    }
+  };
+
+  const closePanel = () => {
+    setSelectedNodeId(null);
+    setSelectedEdgeId(null);
+  };
+
+  const arrowOptions = [
+    { value: 'none', label: 'Sin flecha', icon: '' },
+    { value: 'left', label: 'Izquierda', icon: '<' },
+    { value: 'right', label: 'Derecha', icon: '>' },
+    { value: 'both', label: 'Ambos', icon: '<>' },
+  ];
+  const colorOptions = ["#2563eb", "#059669", "#eab308", "#db2777"];
+  const lineOptions = [
+    { value: 'solid', label: 'Lisa', style: undefined },
+    { value: 'dashed', label: 'Rayada', style: '8 4' },
+    { value: 'dotted', label: 'Puntos', style: '4 2' },
+  ];
+
+  const handleNodePanelOpen = (id: string) => {
+    setSelectedNodeId(id);
+    setSelectedEdgeId(null);
+  };
+  const handleEdgePanelOpen = (id: string) => {
+    setSelectedEdgeId(id);
+    setSelectedNodeId(null);
+  };
+
+  // Ajuste para strokeDasharray y flechas
+  const getEdgeStyle = (edge: RFEdge) => {
+    return { stroke: edge.style?.stroke || '#2563eb' };
   };
 
   return (
@@ -233,13 +257,22 @@ export default function RoadmapBuilderClient() {
                 data: {
                   ...node.data,
                   onSelect: () => {
-                    console.log("Click en nodo:", node.id);
-                    setSelectedNodeId(node.id as string);
+                    handleNodePanelOpen(node.id as string);
                   },
                   selected: node.id === selectedNodeId
                 }
               }))}
-              edges={edges}
+              edges={edges.map(edge => {
+                const arrowType = edgeArrowTypes[edge.id] || 'none';
+                let markerEnd: string | undefined = undefined;
+                if (arrowType === 'right' || arrowType === 'both') markerEnd = 'arrow';
+                // markerStart is not supported as a string property in React Flow Edge type
+                return {
+                  ...edge,
+                  style: getEdgeStyle(edge),
+                  markerEnd,
+                };
+              })}
               fitView
               nodesDraggable={true}
               nodesConnectable={true}
@@ -248,6 +281,7 @@ export default function RoadmapBuilderClient() {
               onInit={instance => setReactFlowInstance(instance)}
               onDrop={onDrop}
               onDragOver={onDragOver}
+              onEdgeClick={(event, edge) => { event.stopPropagation(); handleEdgePanelOpen(edge.id); }}
               nodeTypes={nodeTypes}
               proOptions={{ hideAttribution: true }}
             >
@@ -265,52 +299,24 @@ export default function RoadmapBuilderClient() {
               <Controls />
             </ReactFlow>
           </div>
-          {selectedNode && (
-            <aside className="w-64 bg-gray-50 border border-gray-300 rounded p-4 shadow relative">
-              <button
-                className="absolute top-2 right-2 text-gray-500 hover:text-blue-600 text-xl font-bold focus:outline-none"
-                aria-label="Cerrar panel"
-                onClick={() => setSelectedNodeId(null)}
-              >
-                &times;
-              </button>
-              <h3 className="font-semibold mb-4 text-black">Configurar Nodo</h3>
-              <div className="mb-3">
-                <label className="block text-sm font-medium mb-1 text-black">Texto</label>
-                <input
-                  type="text"
-                  value={selectedNode.data.label || ""}
-                  onChange={e => handleNodeConfigChange("label", e.target.value)}
-                  className="w-full border px-2 py-1 rounded bg-white text-black"
-                />
-              </div>
-              <div className="mb-3">
-                <label className="block text-sm font-medium mb-1 text-black">Color de fondo</label>
-                <div className="flex gap-2">
-                  {["#2563eb", "#059669", "#eab308", "#db2777"].map(color => (
-                    <button
-                      key={color}
-                      type="button"
-                      className={`w-8 h-8 rounded ${selectedNode.data.color === color ? 'border-black' : 'border-transparent'}`}
-                      style={{ background: color }}
-                      onClick={() => handleNodeConfigChange('color', color)}
-                      aria-label={`Seleccionar color ${color}`}
-                    />
-                  ))}
-                </div>
-              </div>
-              <div className="mb-3">
-                <label className="block text-sm font-medium mb-1 text-black">Tamaño de texto</label>
-                <input
-                  type="number"
-                  min={10}
-                  max={40}
-                  value={selectedNode.data.fontSize || 16}
-                  onChange={e => handleNodeConfigChange("fontSize", Number(e.target.value))}
-                  className="w-full border px-2 py-1 rounded bg-white text-black"
-                />
-              </div>
-            </aside>
+          {selectedNode && !selectedEdge && (
+            <NodeConfigPanel
+              selectedNode={selectedNode}
+              handleNodeConfigChange={handleNodeConfigChange}
+              setSelectedNodeId={setSelectedNodeId}
+            />
+          )}
+          {selectedEdge && !selectedNode && (
+            <EdgeConfigPanel
+              selectedEdge={{
+                ...selectedEdge,
+                arrowHeadType: edgeArrowTypes[selectedEdge.id] || 'none',
+              }}
+              colorOptions={colorOptions}
+              arrowOptions={arrowOptions}
+              handleEdgeConfigChange={handleEdgeConfigChange}
+              closePanel={closePanel}
+            />
           )}
         </section>
       </main>
