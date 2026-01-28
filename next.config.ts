@@ -2,11 +2,9 @@ import type { NextConfig } from 'next'
 import createNextIntlPlugin from 'next-intl/plugin'
 
 const nextConfig: NextConfig = {
-  // TODO: - Cambiar esto para cuando tengamos imagenes
   images: {
-    domains: ['nachogst.com', 'rjcaojecsabejmtnkidn.supabase.co'],
+    domains: ['nachogst.com', 'rjcaojecsabejmtnkidn.supabase.co', 'images.unsplash.com'],
   },
-  /* config options here */
 }
 
 const withNextIntl = createNextIntlPlugin();

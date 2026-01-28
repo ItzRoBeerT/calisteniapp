@@ -3,6 +3,8 @@ export interface Exercise {
 	name: string;
 	description: string;
 	image: string;
+	muscle_group?: string[];
+	difficulty?: number;
 }
 
 export interface User {

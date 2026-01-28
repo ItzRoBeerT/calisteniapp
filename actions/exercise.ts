@@ -1,12 +1,17 @@
 'use server';
 import { Exercise, Filter } from '@/types/supabase';
 import { createClient } from '@/utils/supabase/server';
+import { mockExercises, mockFilters } from '@/utils/mock-data';
 import { NotFoundError, BadRequestError, UnauthorizedError } from '@/utils/errors';
 
 const EXERCISES_PER_PAGE = 12;
 
 export async function getExercise(id: number) {
 	const supabase = await createClient();
+
+	if (!supabase) {
+		return mockExercises.find((e) => e.id === id) || null;
+	}
 
 	const { data } = await supabase
 		.from('Exercise')
@@ -24,6 +29,10 @@ export async function getExercise(id: number) {
 export async function getExercises() {
 	const supabase = await createClient();
 
+	if (!supabase) {
+		return mockExercises;
+	}
+
 	const { data } = await supabase.from('Exercise').select('*');
 
 	if (!data) {
@@ -39,22 +48,57 @@ export async function getExercisesByPage(
 ) {
 	const supabase = await createClient();
 
-	// Configura la consulta inicial con el rango de paginación
+	if (!supabase) {
+		let filtered = [...mockExercises];
+
+		if (filters) {
+			for (const [key, value] of Object.entries(filters)) {
+				if (key === 'muscle_group') {
+					const valueArray = Array.isArray(value) ? value : [value];
+					filtered = filtered.filter((e) =>
+						valueArray.some((mg) => e.muscle_group.includes(mg))
+					);
+				}
+				if (key === 'difficulty') {
+					const valueArray = Array.isArray(value) ? value : [value];
+					const difficultyRanges: number[] = [];
+
+					if (valueArray.includes('beginner')) {
+						difficultyRanges.push(0, 1);
+					}
+					if (valueArray.includes('intermediate')) {
+						difficultyRanges.push(2, 3);
+					}
+					if (valueArray.includes('advanced')) {
+						difficultyRanges.push(4, 5);
+					}
+
+					filtered = filtered.filter((e) =>
+						difficultyRanges.includes(e.difficulty)
+					);
+				}
+			}
+		}
+
+		const start = (page - 1) * EXERCISES_PER_PAGE;
+		const end = start + EXERCISES_PER_PAGE;
+		const paginatedExercises = filtered.slice(start, end);
+		const totalPages = Math.ceil(filtered.length / EXERCISES_PER_PAGE);
+
+		return { exercises: paginatedExercises as Exercise[], totalPages };
+	}
+
 	let query = supabase
 		.from('Exercise')
 		.select('*', { count: 'exact' })
 		.range((page - 1) * EXERCISES_PER_PAGE, page * EXERCISES_PER_PAGE - 1);
 
-	// Aplica los filtros dinámicamente
 	if (filters) {
 		for (const [key, value] of Object.entries(filters)) {
 			console.log(`Applying filter: ${key} with value: ${value}`);
 			if (key === 'muscle_group') {
-				// Si 'value' es un string, lo convertimos a un array
 				const valueArray = Array.isArray(value) ? value : [value];
 				console.log('Value array:', valueArray);
-
-				// Ahora pasamos el array a la función `.in()`
 				query = query.contains('muscle_group', valueArray);
 			}
 
@@ -99,6 +143,14 @@ export async function getExercisesByPage(
 export async function getExerciseByName(name: string) {
 	const supabase = await createClient();
 
+	if (!supabase) {
+		return (
+			mockExercises.find(
+				(e) => e.name.toLowerCase() === name.toLowerCase()
+			) || null
+		);
+	}
+
 	console.log(`Searching in column name data: ${name}}`);
 	const { data } = await supabase
 		.from('Exercise')
@@ -116,6 +168,10 @@ export async function getExerciseByName(name: string) {
 
 export async function getFilters() {
 	const supabase = await createClient();
+
+	if (!supabase) {
+		return mockFilters;
+	}
 
 	const muscle_group =
 		(await supabase
@@ -138,6 +194,14 @@ export async function getFilters() {
 
 export async function filter(filters: Filter) {
 	const supabase = await createClient();
+
+	if (!supabase) {
+		return mockExercises.filter(
+			(e) =>
+				filters.difficulty.includes(String(e.difficulty)) &&
+				filters.muscle_group.some((mg) => e.muscle_group.includes(mg))
+		);
+	}
 
 	const { data } = await supabase
 		.from('Exercise')

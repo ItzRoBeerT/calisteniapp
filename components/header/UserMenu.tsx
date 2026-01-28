@@ -14,7 +14,9 @@ export default function UserMenu({ userName }: UserMenuProps) {
   const supabase = createClient();
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
     setIsOpen(false);
     router.refresh();
   };

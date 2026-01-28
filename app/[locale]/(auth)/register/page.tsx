@@ -5,6 +5,7 @@ import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
+import { isSupabaseConfigured } from '@/utils/mock-data';
 
 export const metadata: Metadata = {
   title: 'Registro',
@@ -13,15 +14,37 @@ export const metadata: Metadata = {
 
 export default async function Register() {
   const t = await getTranslations('Auth');
-  
-  // Check if user is already logged in
+
   const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
-  
-  if (session) {
-    redirect('/');
+
+  if (supabase) {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      redirect('/');
+    }
   }
-  
+
+  if (!isSupabaseConfigured()) {
+    return (
+      <div className="mx-auto max-w-md w-full py-8">
+        <div className="bg-surface rounded-lg shadow-lg p-8">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold mb-4">{t('register.title', 'Crear Cuenta')}</h1>
+            <p className="text-gray-500 mb-6">
+              El registro no está disponible en este momento. La aplicación está funcionando en modo demo.
+            </p>
+            <Link
+              href="/"
+              className="inline-block bg-purple-600 hover:bg-purple-700 rounded-md px-4 py-3 text-white font-medium transition-colors"
+            >
+              Volver al inicio
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto max-w-md w-full py-8">
       <div className="bg-surface rounded-lg shadow-lg p-8">
