@@ -8,15 +8,17 @@ import { notFound } from 'next/navigation';
 import BackButton from '@/components/ui/BackButton';
 import { createClient } from '@/utils/supabase/server';
 import { Link } from '@/i18n/navigation';
+import { getDifficultyColor } from '@/utils/difficultyColors';
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const workout = await getWorkout(params.id);
+  const { id } = await params;
+  const workout = await getWorkout(id);
 
   if (!workout) {
     return {
@@ -31,8 +33,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function WorkoutDetailPage({ params }: Props) {
+  const { id } = await params;
   const t = await getTranslations('WorkoutDetail');
-  const workout = await getWorkout(params.id);
+  const workout = await getWorkout(id);
   const supabase = await createClient();
   let userId: string | undefined;
 
@@ -47,9 +50,10 @@ export default async function WorkoutDetailPage({ params }: Props) {
 
   const isOwner = workout.user_id === userId;
 
+  const difficultyClass = getDifficultyColor(workout.difficulty);
+
   return (
     <div className="max-w-4xl mx-auto">
-      <BackButton href="/workouts" label={t('backToWorkouts')} />
 
       <div className="bg-surface rounded-xl p-6 mt-4">
         <div className="flex justify-between items-center mb-6">
@@ -58,7 +62,7 @@ export default async function WorkoutDetailPage({ params }: Props) {
           {isOwner && (
             <div className="flex gap-2">
               <Link
-                href={`/workouts/${params.id}/edit`}
+                href={`/workouts/${id}/edit`}
                 className="bg-tertiary-500/20 hover:bg-tertiary-500/30 text-tertiary-400 px-4 py-2 rounded-lg border border-tertiary-500/30 transition-colors"
               >
                 {t('edit')}
@@ -69,13 +73,12 @@ export default async function WorkoutDetailPage({ params }: Props) {
         </div>
 
         <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-2 text-foreground">{t('description')}</h2>
           <p className="text-foreground/70">{workout.description || t('noDescription')}</p>
         </div>
 
         <div className="mb-6 flex justify-between items-start gap-6">
           <div className="flex gap-4">
-            <span className="px-3 py-1 bg-primary-500/20 text-primary-400 rounded-full border border-primary-500/30">
+            <span className={`px-3 py-1 rounded-full border ${difficultyClass}`}>
               {workout.difficulty || t('notSpecified')}
             </span>
             {workout.duration && (
@@ -102,6 +105,7 @@ export default async function WorkoutDetailPage({ params }: Props) {
             <p className="text-foreground/40">{t('noExercises')}</p>
           )}
         </div>
+      <BackButton href="/workouts" label={t('backToWorkouts')} />
       </div>
     </div>
   );

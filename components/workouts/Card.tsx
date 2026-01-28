@@ -3,6 +3,7 @@
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import TagList from './TagList';
+import { difficultyColors } from '@/utils/difficultyColors';
 
 type WorkoutCardProps = {
   workout: {
@@ -15,17 +16,6 @@ type WorkoutCardProps = {
     user_id: string;
   };
   isOwner: boolean;
-};
-
-const difficultyColors: Record<string, string> = {
-  'Principiante': 'bg-secondary-500/20 text-secondary-400 border-secondary-500/30',
-  'Beginner': 'bg-secondary-500/20 text-secondary-400 border-secondary-500/30',
-  'Intermedio': 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-  'Intermediate': 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-  'Avanzado': 'bg-orange-500/20 text-orange-400 border-orange-500/30',
-  'Advanced': 'bg-orange-500/20 text-orange-400 border-orange-500/30',
-  'Experto': 'bg-red-500/20 text-red-400 border-red-500/30',
-  'Expert': 'bg-red-500/20 text-red-400 border-red-500/30',
 };
 
 export default function WorkoutCard({ workout, isOwner }: WorkoutCardProps) {
@@ -67,7 +57,7 @@ export default function WorkoutCard({ workout, isOwner }: WorkoutCardProps) {
 
       {/* Description */}
       {workout.description && (
-        <p className="text-foreground/60 text-sm line-clamp-2">
+        <p className="text-foreground/60 text-sm line-clamp-1">
           {workout.description}
         </p>
       )}

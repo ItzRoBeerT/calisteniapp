@@ -24,7 +24,7 @@ export default function WorkoutForm({ userId, existingWorkout, availableExercise
   const [formState, setFormState] = useState({
     name: existingWorkout?.name || '',
     description: existingWorkout?.description || '',
-    difficulty: existingWorkout?.difficulty || 'Principiante',
+    difficulty: existingWorkout?.difficulty || 'Beginner',
     tags: existingWorkout?.tags || [],
     exercises: existingWorkout?.exercises || [] as ExerciseWorkout[],
     isSubmitting: false,
@@ -201,7 +201,7 @@ export default function WorkoutForm({ userId, existingWorkout, availableExercise
     }
   };
 
-  const difficultyLevels = ['Principiante', 'Intermedio', 'Avanzado', 'Experto'];
+  const difficultyLevels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
