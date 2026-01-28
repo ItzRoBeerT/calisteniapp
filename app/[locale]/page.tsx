@@ -7,8 +7,8 @@ export default function Home() {
 	const tGlobal = useTranslations('Globals');
 
 	return (
-		<div className="grid grid-rows-[auto_1fr_auto] items-center min-h-screen px-8 py-8 gap-16 sm:px-20 font-[family-name:var(--font-geist-sans)]">
-			<main className="flex flex-col gap-16 items-center w-full max-w-7xl mx-auto">
+		<div className="w-full">
+			<main className="flex flex-col gap-16 items-center w-full py-8">
 				{/* Hero Section */}
 				<section className="flex flex-col items-center w-full gap-6 bg-surface p-8 rounded-lg shadow-lg border-l-4 border-purple-600">
 					<h1 className="text-5xl font-bold text-center">

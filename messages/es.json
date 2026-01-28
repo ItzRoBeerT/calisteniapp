@@ -164,6 +164,11 @@
 		"apply": "Aplicar"
 	},
 	"Auth": {
+		"demoMode": {
+			"title": "Autenticación no disponible",
+			"message": "La autenticación no está disponible en este momento. La aplicación está funcionando en modo demo.",
+			"backHome": "Volver al inicio"
+		},
 		"login": {
 			"title": "Iniciar Sesión",
 			"description": "Accede a tu cuenta para ver tus entrenamientos",

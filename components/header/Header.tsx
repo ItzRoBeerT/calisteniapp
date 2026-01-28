@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/server';
 import { Link } from '@/i18n/navigation';
 import NavLink from '@/components/header/NavLink';
 import UserMenu from './UserMenu';
+import MobileMenu from './MobileMenu';
 
 export default async function Header() {
 	const supabase = await createClient();
@@ -32,7 +33,9 @@ export default async function Header() {
 		<header className="bg-surface backdrop-blur-sm bg-opacity-80 sticky top-0 z-50">
 			<div className="container mx-auto p-4 flex justify-between items-center">
 				<Link href="/">Calistenia</Link>
-				<div className="flex gap-2 items-center">
+				
+				{/* Desktop navigation */}
+				<div className="hidden md:flex gap-2 items-center">
 					<NavLink
 						href="/workouts"
 						className="hover:text-primary-500 transition-colors ease-in"
@@ -62,6 +65,9 @@ export default async function Header() {
 						</NavLink>
 					)}
 				</div>
+
+				{/* Mobile navigation */}
+				<MobileMenu user={user} userName={userName} />
 			</div>
 		</header>
 	);
