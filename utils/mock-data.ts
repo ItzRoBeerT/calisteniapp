@@ -190,13 +190,13 @@ export const mockWorkouts: Workout[] = [
 export const mockWorkoutDetails: WorkoutDetail[] = [
 	{
 		id: 1,
-		name: 'Rutina de Principiante',
-		description: 'Rutina básica para empezar en calistenia. Ideal para quienes dan sus primeros pasos en el entrenamiento con peso corporal.',
-		difficulty: 'Principiante',
+		name: 'Beginner Routine',
+		description: 'Basic routine to start in calisthenics. Ideal for those taking their first steps in bodyweight training.',
+		difficulty: 'Beginner',
 		duration: 25,
 		muscle_groups: ['chest', 'back', 'legs', 'core'],
 		user_id: 'mock-user-1',
-		tags: ['full-body', 'básico'],
+		tags: ['full-body', 'basic'],
 		exercises: [
 			{
 				id: 'ex-1',
@@ -238,13 +238,13 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 	},
 	{
 		id: 2,
-		name: 'Full Body Intermedio',
-		description: 'Entrenamiento completo de cuerpo para nivel intermedio. Incluye ejercicios más desafiantes para seguir progresando.',
-		difficulty: 'Intermedio',
+		name: 'Full Body Intermediate',
+		description: 'Complete body workout for intermediate level. Includes more challenging exercises to keep progressing.',
+		difficulty: 'Intermediate',
 		duration: 40,
 		muscle_groups: ['chest', 'back', 'triceps', 'biceps', 'legs', 'core'],
 		user_id: 'mock-user-1',
-		tags: ['full-body', 'fuerza'],
+		tags: ['full-body', 'strength'],
 		exercises: [
 			{
 				id: 'ex-5',
@@ -304,9 +304,9 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 	},
 	{
 		id: 3,
-		name: 'Push Day Avanzado',
-		description: 'Día de empuje para atletas avanzados. Enfocado en pecho, hombros y tríceps con ejercicios de alta intensidad.',
-		difficulty: 'Avanzado',
+		name: 'Advanced Push Day',
+		description: 'Push day for advanced athletes. Focused on chest, shoulders and triceps with high intensity exercises.',
+		difficulty: 'Advanced',
 		duration: 50,
 		muscle_groups: ['chest', 'shoulders', 'triceps', 'core'],
 		user_id: 'mock-user-1',
@@ -361,13 +361,13 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 	},
 	{
 		id: 4,
-		name: 'Pull Day Avanzado',
-		description: 'Día de tirón para atletas avanzados. Trabaja espalda y bíceps con movimientos compuestos de alta demanda.',
-		difficulty: 'Avanzado',
+		name: 'Advanced Pull Day',
+		description: 'Pull day for advanced athletes. Works back and biceps with high demand compound movements.',
+		difficulty: 'Advanced',
 		duration: 45,
 		muscle_groups: ['back', 'biceps', 'core', 'shoulders'],
 		user_id: 'mock-user-1',
-		tags: ['pull', 'espalda'],
+		tags: ['pull', 'back'],
 		exercises: [
 			{
 				id: 'ex-16',
@@ -410,12 +410,12 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 	{
 		id: 5,
 		name: 'Core Destroyer',
-		description: 'Rutina intensiva de core. Fortalece tu zona media con ejercicios progresivos desde intermedio hasta avanzado.',
-		difficulty: 'Intermedio',
+		description: 'Intensive core routine. Strengthen your core with progressive exercises from intermediate to advanced.',
+		difficulty: 'Intermediate',
 		duration: 30,
 		muscle_groups: ['core', 'shoulders'],
 		user_id: 'mock-user-2',
-		tags: ['core', 'abdominales'],
+		tags: ['core', 'abs'],
 		exercises: [
 			{
 				id: 'ex-20',
@@ -457,13 +457,13 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 	},
 	{
 		id: 6,
-		name: 'Leg Day Completo',
-		description: 'Rutina completa para piernas usando solo peso corporal. Desde sentadillas básicas hasta pistol squats.',
-		difficulty: 'Intermedio',
+		name: 'Complete Leg Day',
+		description: 'Complete leg routine using only bodyweight. From basic squats to pistol squats.',
+		difficulty: 'Intermediate',
 		duration: 35,
 		muscle_groups: ['legs', 'glutes', 'core'],
 		user_id: 'mock-user-2',
-		tags: ['piernas', 'lower-body'],
+		tags: ['legs', 'lower-body'],
 		exercises: [
 			{
 				id: 'ex-24',
@@ -506,12 +506,12 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 	{
 		id: 7,
 		name: 'Skills Workout',
-		description: 'Entrenamiento enfocado en habilidades avanzadas de calistenia. Para atletas que buscan dominar movimientos estáticos.',
-		difficulty: 'Experto',
+		description: 'Workout focused on advanced calisthenics skills. For athletes who want to master static movements.',
+		difficulty: 'Expert',
 		duration: 60,
 		muscle_groups: ['back', 'shoulders', 'core', 'chest'],
 		user_id: 'mock-user-1',
-		tags: ['skills', 'estáticos'],
+		tags: ['skills', 'static'],
 		exercises: [
 			{
 				id: 'ex-28',
@@ -568,10 +568,10 @@ export const mockFilters = {
 };
 
 export const mockWorkoutFilters = {
-	difficulties: ['Principiante', 'Intermedio', 'Avanzado', 'Experto'],
+	difficulties: ['Beginner', 'Intermediate', 'Advanced', 'Expert'],
 	muscleGroups: ['chest', 'back', 'shoulders', 'triceps', 'biceps', 'core', 'legs', 'glutes'],
 	durations: [25, 30, 35, 40, 45, 50, 60],
-	tags: ['full-body', 'push', 'pull', 'core', 'piernas', 'skills', 'básico', 'fuerza', 'upper-body', 'espalda', 'abdominales', 'lower-body', 'estáticos'],
+	tags: ['full-body', 'push', 'pull', 'core', 'legs', 'skills', 'basic', 'strength', 'upper-body', 'back', 'abs', 'lower-body', 'static'],
 };
 
 export function isSupabaseConfigured(): boolean {
