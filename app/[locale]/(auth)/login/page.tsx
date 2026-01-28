@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
-import Image from 'next/image';
+import { isSupabaseConfigured } from '@/utils/mock-data';
 
 export const metadata: Metadata = {
   title: 'Login',
@@ -14,15 +14,40 @@ export const metadata: Metadata = {
 
 export default async function Login() {
   const t = await getTranslations('Auth');
-  
+
   // Check if user is already logged in
   const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
-  
-  if (session) {
-    redirect('/');
+
+  if (supabase) {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      redirect('/');
+    }
   }
-  
+
+  const authDisabled = !isSupabaseConfigured();
+
+  if (authDisabled) {
+    return (
+      <div className="mx-auto max-w-md w-full py-8">
+        <div className="bg-surface rounded-lg shadow-lg p-8">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold mb-4">{t('login.title', 'Iniciar Sesión')}</h1>
+            <p className="text-gray-500 mb-6">
+              La autenticación no está disponible en este momento. La aplicación está funcionando en modo demo.
+            </p>
+            <Link
+              href="/"
+              className="inline-block bg-purple-600 hover:bg-purple-700 rounded-md px-4 py-3 text-white font-medium transition-colors"
+            >
+              Volver al inicio
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto max-w-md w-full py-8">
       <div className="bg-surface rounded-lg shadow-lg p-8">
@@ -32,7 +57,7 @@ export default async function Login() {
             {t('login.description', 'Accede a tu cuenta para ver tus entrenamientos')}
           </p>
         </div>
-        
+
         <form className="flex flex-col gap-4">
           <div>
             <label className="block text-sm font-medium mb-1" htmlFor="email">
@@ -46,7 +71,7 @@ export default async function Login() {
               required
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-1" htmlFor="password">
               {t('login.passwordLabel', 'Contraseña')}
@@ -59,7 +84,7 @@ export default async function Login() {
               required
             />
           </div>
-          
+
           <SubmitButton
             formAction={signIn}
             className="w-full bg-purple-600 hover:bg-purple-700 rounded-md px-4 py-3 text-white font-medium transition-colors mt-4"
@@ -67,7 +92,7 @@ export default async function Login() {
           >
             {t('login.signIn', 'Iniciar Sesión')}
           </SubmitButton>
-          
+
           <div className="text-center mt-4">
             <p className="text-sm">
               {t('login.noAccount', '¿No tienes una cuenta?')}{' '}

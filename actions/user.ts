@@ -4,6 +4,10 @@ import { createClient } from '@/utils/supabase/server';
 export async function getUserById(userId: string) {
 	const supabase = await createClient();
 
+	if (!supabase) {
+		return null;
+	}
+
 	let { data, error } = await supabase
 		.from('Profile')
 		.select('*')
@@ -20,6 +24,10 @@ export async function getUserById(userId: string) {
 
 export async function getUserByUsername(username: string) {
 	const supabase = await createClient();
+
+	if (!supabase) {
+		return null;
+	}
 
 	const { data, error } = await supabase
 		.from('profiles')

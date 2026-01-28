@@ -1,11 +1,13 @@
 import { getWorkout } from '@/actions/workout';
 import ExerciseList from '@/components/workouts/ExerciseList';
 import TagList from '@/components/workouts/TagList';
+import DeleteWorkoutButton from '@/components/workouts/DeleteWorkoutButton';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import BackButton from '@/components/ui/BackButton';
 import { createClient } from '@/utils/supabase/server';
+import { Link } from '@/i18n/navigation';
 
 type Props = {
   params: {
@@ -15,7 +17,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const workout = await getWorkout(params.id);
-  
+
   if (!workout) {
     return {
       title: 'Entrenamiento no encontrado',
@@ -32,74 +34,72 @@ export default async function WorkoutDetailPage({ params }: Props) {
   const t = await getTranslations('WorkoutDetail');
   const workout = await getWorkout(params.id);
   const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
-  const userId = session?.user.id;
-  
+  let userId: string | undefined;
+
+  if (supabase) {
+    const { data: { session } } = await supabase.auth.getSession();
+    userId = session?.user.id;
+  }
+
   if (!workout) {
     notFound();
   }
-  
+
   const isOwner = workout.user_id === userId;
 
   return (
     <div className="max-w-4xl mx-auto">
-      <BackButton href="/workouts" label={t('backToWorkouts', 'Volver a Entrenamientos')} />
-      
-      <div className="bg-surface rounded-lg shadow-md p-6 mt-4">
+      <BackButton href="/workouts" label={t('backToWorkouts')} />
+
+      <div className="bg-surface rounded-xl p-6 mt-4">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold">{workout.name}</h1>
-          
+          <h1 className="text-3xl font-bold text-foreground">{workout.name}</h1>
+
           {isOwner && (
             <div className="flex gap-2">
-              <a 
+              <Link
                 href={`/workouts/${params.id}/edit`}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors"
+                className="bg-tertiary-500/20 hover:bg-tertiary-500/30 text-tertiary-400 px-4 py-2 rounded-lg border border-tertiary-500/30 transition-colors"
               >
-                {t('edit', 'Editar')}
-              </a>
-              <button 
-                className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition-colors"
-              >
-                {t('delete', 'Eliminar')}
-              </button>
+                {t('edit')}
+              </Link>
+              <DeleteWorkoutButton workoutId={workout.id} workoutName={workout.name} />
             </div>
           )}
         </div>
 
         <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">{t('description', 'Descripción')}</h2>
-          <p className="text-gray-700">{workout.description || t('noDescription', 'Sin descripción')}</p>
+          <h2 className="text-xl font-semibold mb-2 text-foreground">{t('description')}</h2>
+          <p className="text-foreground/70">{workout.description || t('noDescription')}</p>
         </div>
 
-        <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">{t('difficulty', 'Dificultad')}</h2>
-          <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full">
-            {workout.difficulty || t('notSpecified', 'No especificada')}
-          </span>
-        </div>
-        
-        {workout.duration && (
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold mb-2">{t('duration', 'Duración')}</h2>
-            <p>{workout.duration} {t('minutes', 'minutos')}</p>
+        <div className="mb-6 flex justify-between items-start gap-6">
+          <div className="flex gap-4">
+            <span className="px-3 py-1 bg-primary-500/20 text-primary-400 rounded-full border border-primary-500/30">
+              {workout.difficulty || t('notSpecified')}
+            </span>
+            {workout.duration && (
+              <span className="px-3 py-1 bg-tertiary-500/20 text-tertiary-400 rounded-full border border-tertiary-500/30">
+                {workout.duration} {t('minutes')}
+              </span>
+            )}
           </div>
-        )}
+
+          <div>
+            {workout.tags && workout.tags.length > 0 ? (
+              <TagList tags={workout.tags} />
+            ) : (
+              <p className="text-foreground/40">{t('noTags')}</p>
+            )}
+          </div>
+        </div>
 
         <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-2">{t('exercises', 'Ejercicios')}</h2>
+          <h2 className="text-xl font-semibold mb-2 text-foreground">{t('exercises')}</h2>
           {workout.exercises && workout.exercises.length > 0 ? (
             <ExerciseList exercises={workout.exercises} />
           ) : (
-            <p className="text-gray-500">{t('noExercises', 'No hay ejercicios en este entrenamiento')}</p>
-          )}
-        </div>
-
-        <div>
-          <h2 className="text-xl font-semibold mb-2">{t('tags', 'Etiquetas')}</h2>
-          {workout.tags && workout.tags.length > 0 ? (
-            <TagList tags={workout.tags} />
-          ) : (
-            <p className="text-gray-500">{t('noTags', 'No hay etiquetas')}</p>
+            <p className="text-foreground/40">{t('noExercises')}</p>
           )}
         </div>
       </div>

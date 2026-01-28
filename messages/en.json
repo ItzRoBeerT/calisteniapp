@@ -92,6 +92,11 @@
 	  "noWorkouts": "No workouts found.",
 	  "createNewWorkout": "Create new workout"
 	},
+	"WorkoutCard": {
+	  "yours": "Yours",
+	  "edit": "Edit",
+	  "viewDetails": "View details"
+	},
 	"WorkoutDetail": {
 	  "backToWorkouts": "Back to Workouts",
 	  "description": "Description",
@@ -105,7 +110,15 @@
 	  "noDescription": "No description",
 	  "noExercises": "No exercises in this workout",
 	  "noTags": "No tags",
-	  "notSpecified": "Not specified"
+	  "notSpecified": "Not specified",
+	  "confirmDelete": "Confirm deletion",
+	  "confirmDeleteMessage": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
+	  "cancel": "Cancel",
+	  "deleting": "Deleting..."
+	},
+	"EditWorkout": {
+	  "title": "Edit Workout",
+	  "backToWorkout": "Back to Workout"
 	},
 	"NewWorkout": {
 	  "title": "Create New Workout",
@@ -132,7 +145,14 @@
 	  "saving": "Saving...",
 	  "createWorkout": "Create Workout",
 	  "updateWorkout": "Update Workout",
-	  "submitError": "Error saving workout. Please try again."
+	  "submitError": "Error saving workout. Please try again.",
+	  "searchExercise": "Search exercise",
+	  "searchExercisePlaceholder": "Type to search exercises...",
+	  "noExercisesFound": "No exercises found",
+	  "calculatedStats": "Calculated stats",
+	  "estimatedDuration": "Estimated duration",
+	  "noMuscleGroups": "No muscle groups",
+	  "addExercisesToSave": "Add exercises to save"
 	},
 	"WorkoutFilter": {
 	  "difficulty": "Difficulty",

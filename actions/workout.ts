@@ -1,8 +1,15 @@
 'use server';
 import { createClient } from '@/utils/supabase/server';
+import { mockWorkoutDetails, mockWorkoutFilters } from '@/utils/mock-data';
 
 export async function getWorkout(id: string) {
 	const supabase = await createClient();
+
+	if (!supabase) {
+		const workout = mockWorkoutDetails.find((w) => w.id === Number(id));
+		if (!workout) return null;
+		return workout;
+	}
 
 	// Obtener el workout
 	const { data: workout, error: workoutError } = await supabase
@@ -59,6 +66,45 @@ export async function getWorkout(id: string) {
 
 export async function getWorkoutsByPage(page = 1, limit = 12, filters?: any) {
 	const supabase = await createClient();
+
+	if (!supabase) {
+		let filteredWorkouts = [...mockWorkoutDetails];
+
+		// Apply filters if provided
+		if (filters) {
+			if (filters.difficulty) {
+				filteredWorkouts = filteredWorkouts.filter(
+					(w) => w.difficulty === filters.difficulty
+				);
+			}
+			if (filters.muscleGroup) {
+				filteredWorkouts = filteredWorkouts.filter(
+					(w) => w.muscle_groups?.includes(filters.muscleGroup)
+				);
+			}
+			if (filters.duration) {
+				filteredWorkouts = filteredWorkouts.filter(
+					(w) => w.duration === Number(filters.duration)
+				);
+			}
+			if (filters.tag) {
+				filteredWorkouts = filteredWorkouts.filter(
+					(w) => w.tags?.includes(filters.tag)
+				);
+			}
+		}
+
+		const startIndex = (page - 1) * limit;
+		const endIndex = startIndex + limit;
+		const paginatedWorkouts = filteredWorkouts.slice(startIndex, endIndex);
+		const totalPages = Math.ceil(filteredWorkouts.length / limit);
+
+		return {
+			workouts: paginatedWorkouts,
+			totalPages,
+		};
+	}
+
 	const startIndex = (page - 1) * limit;
 	const endIndex = startIndex + limit - 1;
 
@@ -116,6 +162,10 @@ export async function getFilteredWorkouts(filters: any, page = 1, limit = 12) {
 
 export async function getWorkoutFilters() {
 	const supabase = await createClient();
+
+	if (!supabase) {
+		return mockWorkoutFilters;
+	}
 
 	// Obtener diferentes dificultades
 	const { data: difficulties } = await supabase
@@ -179,6 +229,11 @@ export async function getWorkoutFilters() {
 export async function createWorkout(workoutData: any, userId: string) {
 	const supabase = await createClient();
 
+	if (!supabase) {
+		console.warn('Supabase not configured. Cannot create workout.');
+		return null;
+	}
+
 	// Insertar el workout
 	const { data: workout, error } = await supabase
 		.from('workouts')
@@ -241,6 +296,11 @@ export async function createWorkout(workoutData: any, userId: string) {
 
 export async function updateWorkout(id: string, workoutData: any) {
 	const supabase = await createClient();
+
+	if (!supabase) {
+		console.warn('Supabase not configured. Cannot update workout.');
+		return false;
+	}
 
 	// Actualizar el workout
 	const { error } = await supabase
@@ -325,6 +385,11 @@ export async function updateWorkout(id: string, workoutData: any) {
 
 export async function deleteWorkout(id: string) {
 	const supabase = await createClient();
+
+	if (!supabase) {
+		console.warn('Supabase not configured. Cannot delete workout.');
+		return false;
+	}
 
 	// Eliminar los ejercicios relacionados
 	await supabase.from('workout_exercises').delete().eq('workout_id', id);

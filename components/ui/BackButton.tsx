@@ -10,7 +10,7 @@ export default function BackButton({ href, label = 'Volver' }: BackButtonProps) 
   return (
     <Link
       href={href}
-      className="inline-flex items-center text-purple-600 hover:text-purple-800 transition-colors"
+      className="inline-flex items-center text-primary-400 hover:text-primary-300 transition-colors"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

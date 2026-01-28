@@ -13,8 +13,12 @@ export const metadata: Metadata = {
 
 export default async function WorkoutsPage() {
   const supabase = await createClient();
-  const { data: { session } } = await supabase.auth.getSession();
-  const userId = session?.user.id;
+  let userId: string | undefined;
+
+  if (supabase) {
+    const { data: { session } } = await supabase.auth.getSession();
+    userId = session?.user.id;
+  }
   
   const data = await getWorkoutsByPage(1);
   const filters = await getWorkoutFilters();
@@ -23,15 +27,12 @@ export default async function WorkoutsPage() {
 
   return (
     <>
-      <h1 className="text-4xl text-center font-bold">
-        {t('title')}
-      </h1>
       <div className="flex justify-end my-4">
-        <Link 
-          href="/workouts/new" 
-          className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md transition-colors"
+        <Link
+          href="/workouts/new"
+          className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-xl transition-colors"
         >
-          {t('createWorkout', 'Crear Entrenamiento')}
+          {t('createWorkout')}
         </Link>
       </div>
       <section>

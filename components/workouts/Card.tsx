@@ -1,4 +1,7 @@
-import { Link } from '@/i18n/navigation';
+'use client';
+
+import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import TagList from './TagList';
 
 type WorkoutCardProps = {
@@ -14,56 +17,107 @@ type WorkoutCardProps = {
   isOwner: boolean;
 };
 
+const difficultyColors: Record<string, string> = {
+  'Principiante': 'bg-secondary-500/20 text-secondary-400 border-secondary-500/30',
+  'Beginner': 'bg-secondary-500/20 text-secondary-400 border-secondary-500/30',
+  'Intermedio': 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
+  'Intermediate': 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
+  'Avanzado': 'bg-orange-500/20 text-orange-400 border-orange-500/30',
+  'Advanced': 'bg-orange-500/20 text-orange-400 border-orange-500/30',
+  'Experto': 'bg-red-500/20 text-red-400 border-red-500/30',
+  'Expert': 'bg-red-500/20 text-red-400 border-red-500/30',
+};
+
 export default function WorkoutCard({ workout, isOwner }: WorkoutCardProps) {
+  const t = useTranslations('WorkoutCard');
+  const router = useRouter();
+  const params = useParams();
+  const locale = params.locale as string;
+
+  const difficultyClass = workout.difficulty
+    ? difficultyColors[workout.difficulty] || 'bg-primary-500/20 text-primary-400 border-primary-500/30'
+    : '';
+
+  const handleCardClick = () => {
+    router.push(`/${locale}/workouts/${workout.id}`);
+  };
+
+  const handleEditClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    router.push(`/${locale}/workouts/${workout.id}/edit`);
+  };
+
   return (
-    <div className="bg-surface rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
-      <Link href={`/workouts/${workout.id}`} className="group">
-        <h3 className="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
+    <article
+      onClick={handleCardClick}
+      className="flex flex-col gap-2 rounded-xl p-4 bg-surface hover:bg-surface/80 transition-colors cursor-pointer"
+    >
+      {/* Header */}
+      <div className="flex items-start justify-between gap-3">
+        <h2 className="text-xl font-bold text-foreground group-hover:text-primary-500 transition-colors line-clamp-2">
           {workout.name}
-        </h3>
-      </Link>
-      
-      {workout.description && (
-        <p className="text-gray-600 line-clamp-2 mb-4">
-          {workout.description}
-        </p>
-      )}
-      
-      <div className="flex flex-wrap gap-2 mb-4">
-        {workout.difficulty && (
-          <span className="px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-sm">
-            {workout.difficulty}
-          </span>
-        )}
-        
-        {workout.duration && (
-          <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-            {workout.duration} min
+        </h2>
+
+        {isOwner && (
+          <span className="shrink-0 px-2 py-0.5 text-xs bg-primary-500/20 text-primary-400 rounded-full border border-primary-500/30">
+            {t('yours')}
           </span>
         )}
       </div>
-      
-      {workout.tags && workout.tags.length > 0 && (
-        <div className="mt-3">
-          <TagList tags={workout.tags} />
-        </div>
+
+      {/* Description */}
+      {workout.description && (
+        <p className="text-foreground/60 text-sm line-clamp-2">
+          {workout.description}
+        </p>
       )}
-      
+
+      {/* Stats and Tags */}
+      <div className="flex justify-between items-start gap-2 mt-3">
+        <div className="flex flex-wrap gap-2">
+          {workout.difficulty && (
+            <span className={`px-3 py-1 text-xs font-medium rounded-lg border ${difficultyClass}`}>
+              {workout.difficulty}
+            </span>
+          )}
+
+          {workout.duration && (
+            <span className="px-3 py-1 text-xs font-medium rounded-lg bg-tertiary-500/20 text-tertiary-400 border border-tertiary-500/30">
+              <svg className="w-3.5 h-3.5 inline-block mr-1 -mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {workout.duration} min
+            </span>
+          )}
+        </div>
+
+        {workout.tags && workout.tags.length > 0 && (
+          <div className="flex-1 flex justify-end">
+            <div className="flex flex-wrap-reverse gap-2">
+              {workout.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="px-2 py-1 bg-primary-500/10 text-primary-400 text-xs rounded-full border border-primary-500/20"
+                >
+                  #{tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Edit button - only for owners */}
       {isOwner && (
-        <div className="flex gap-2 mt-4 pt-3 border-t border-gray-200">
-          <Link 
-            href={`/workouts/${workout.id}/edit`}
-            className="text-blue-600 hover:text-blue-800 text-sm"
+        <div className="mt-4 pt-4 border-t border-foreground/10">
+          <button
+            onClick={handleEditClick}
+            className="w-full text-center py-2 px-3 text-sm font-medium text-tertiary-400 hover:text-tertiary-300 hover:bg-tertiary-500/10 rounded-lg transition-colors"
           >
-            Editar
-          </Link>
-          <button 
-            className="text-red-600 hover:text-red-800 text-sm"
-          >
-            Eliminar
+            {t('edit')}
           </button>
         </div>
       )}
-    </div>
+    </article>
   );
 }

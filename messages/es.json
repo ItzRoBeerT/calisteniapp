@@ -92,6 +92,11 @@
 		"noWorkouts": "No se encontraron entrenamientos.",
 		"createNewWorkout": "Crear nuevo entrenamiento"
 	},
+	"WorkoutCard": {
+		"yours": "Tuyo",
+		"edit": "Editar",
+		"viewDetails": "Ver detalles"
+	},
 	"WorkoutDetail": {
 		"backToWorkouts": "Volver a Entrenamientos",
 		"description": "Descripción",
@@ -105,7 +110,15 @@
 		"noDescription": "Sin descripción",
 		"noExercises": "No hay ejercicios en este entrenamiento",
 		"noTags": "No hay etiquetas",
-		"notSpecified": "No especificada"
+		"notSpecified": "No especificada",
+		"confirmDelete": "Confirmar eliminación",
+		"confirmDeleteMessage": "¿Estás seguro de que quieres eliminar \"{name}\"? Esta acción no se puede deshacer.",
+		"cancel": "Cancelar",
+		"deleting": "Eliminando..."
+	},
+	"EditWorkout": {
+		"title": "Editar Entrenamiento",
+		"backToWorkout": "Volver al Entrenamiento"
 	},
 	"NewWorkout": {
 		"title": "Crear Nuevo Entrenamiento",
@@ -132,7 +145,14 @@
 		"saving": "Guardando...",
 		"createWorkout": "Crear Entrenamiento",
 		"updateWorkout": "Actualizar Entrenamiento",
-		"submitError": "Error al guardar el entrenamiento. Inténtalo de nuevo."
+		"submitError": "Error al guardar el entrenamiento. Inténtalo de nuevo.",
+		"searchExercise": "Buscar ejercicio",
+		"searchExercisePlaceholder": "Escribe para buscar ejercicios...",
+		"noExercisesFound": "No se encontraron ejercicios",
+		"calculatedStats": "Estadísticas calculadas",
+		"estimatedDuration": "Duración estimada",
+		"noMuscleGroups": "Sin grupos musculares",
+		"addExercisesToSave": "Añade ejercicios para poder guardar"
 	},
 	"WorkoutFilter": {
 		"difficulty": "Dificultad",

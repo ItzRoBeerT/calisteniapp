@@ -57,19 +57,19 @@ export default function WorkoutFilter({ allFilters }: WorkoutFilterProps) {
   };
 
   return (
-    <div className="bg-surface p-4 rounded-md shadow-sm mb-6">
+    <div className="bg-surface p-4 rounded-xl mb-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {/* Difficulty Filter */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            {t('difficulty', 'Dificultad')}
+          <label className="block text-sm font-medium text-foreground/80 mb-1">
+            {t('difficulty')}
           </label>
           <select
             value={filters.difficulty}
             onChange={(e) => handleFilterChange('difficulty', e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            className="w-full p-2 border border-foreground/20 bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           >
-            <option value="">{t('all', 'Todos')}</option>
+            <option value="">{t('all')}</option>
             {allFilters.difficulties.map((difficulty) => (
               <option key={difficulty} value={difficulty}>
                 {difficulty}
@@ -80,15 +80,15 @@ export default function WorkoutFilter({ allFilters }: WorkoutFilterProps) {
 
         {/* Muscle Group Filter */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            {t('muscleGroup', 'Grupo Muscular')}
+          <label className="block text-sm font-medium text-foreground/80 mb-1">
+            {t('muscleGroup')}
           </label>
           <select
             value={filters.muscleGroup}
             onChange={(e) => handleFilterChange('muscleGroup', e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            className="w-full p-2 border border-foreground/20 bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           >
-            <option value="">{t('all', 'Todos')}</option>
+            <option value="">{t('all')}</option>
             {allFilters.muscleGroups.map((group) => (
               <option key={group} value={group}>
                 {group}
@@ -99,15 +99,15 @@ export default function WorkoutFilter({ allFilters }: WorkoutFilterProps) {
 
         {/* Duration Filter */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            {t('duration', 'Duración')}
+          <label className="block text-sm font-medium text-foreground/80 mb-1">
+            {t('duration')}
           </label>
           <select
             value={filters.duration}
             onChange={(e) => handleFilterChange('duration', e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            className="w-full p-2 border border-foreground/20 bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           >
-            <option value="">{t('all', 'Todos')}</option>
+            <option value="">{t('all')}</option>
             {allFilters.durations.map((duration) => (
               <option key={duration} value={duration.toString()}>
                 {duration} min
@@ -118,15 +118,15 @@ export default function WorkoutFilter({ allFilters }: WorkoutFilterProps) {
 
         {/* Tags Filter */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            {t('tag', 'Etiqueta')}
+          <label className="block text-sm font-medium text-foreground/80 mb-1">
+            {t('tag')}
           </label>
           <select
             value={filters.tag}
             onChange={(e) => handleFilterChange('tag', e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+            className="w-full p-2 border border-foreground/20 bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           >
-            <option value="">{t('all', 'Todos')}</option>
+            <option value="">{t('all')}</option>
             {allFilters.tags.map((tag) => (
               <option key={tag} value={tag}>
                 {tag}
@@ -139,15 +139,15 @@ export default function WorkoutFilter({ allFilters }: WorkoutFilterProps) {
       <div className="flex justify-end mt-4 gap-2">
         <button
           onClick={clearFilters}
-          className="px-4 py-2 bg-gray-100 text-gray-800 rounded-md hover:bg-gray-200 transition-colors"
+          className="px-4 py-2 bg-foreground/10 text-foreground rounded-lg hover:bg-foreground/20 transition-colors"
         >
-          {t('clear', 'Limpiar')}
+          {t('clear')}
         </button>
         <button
           onClick={applyFilters}
-          className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition-colors"
+          className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
         >
-          {t('apply', 'Aplicar')}
+          {t('apply')}
         </button>
       </div>
     </div>
