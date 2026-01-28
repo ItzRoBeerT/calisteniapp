@@ -98,7 +98,6 @@ export default async function WorkoutDetailPage({ params }: Props) {
         </div>
 
         <div className="mb-6">
-          <h2 className="text-xl font-semibold mb-2 text-foreground">{t('exercises')}</h2>
           {workout.exercises && workout.exercises.length > 0 ? (
             <ExerciseList exercises={workout.exercises} />
           ) : (

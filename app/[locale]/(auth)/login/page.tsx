@@ -32,15 +32,15 @@ export default async function Login() {
       <div className="mx-auto max-w-md w-full py-8">
         <div className="bg-surface rounded-lg shadow-lg p-8">
           <div className="text-center">
-            <h1 className="text-3xl font-bold mb-4">{t('login.title', 'Iniciar Sesión')}</h1>
+            <h1 className="text-3xl font-bold mb-4">{t('demoMode.title')}</h1>
             <p className="text-gray-500 mb-6">
-              La autenticación no está disponible en este momento. La aplicación está funcionando en modo demo.
+              {t('demoMode.message')}
             </p>
             <Link
               href="/"
               className="inline-block bg-purple-600 hover:bg-purple-700 rounded-md px-4 py-3 text-white font-medium transition-colors"
             >
-              Volver al inicio
+              {t('demoMode.backHome')}
             </Link>
           </div>
         </div>

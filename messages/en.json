@@ -164,6 +164,11 @@
 	  "apply": "Apply"
 	},
 	"Auth": {
+	  "demoMode": {
+		"title": "Authentication unavailable",
+		"message": "Authentication is not available at the moment. The app is running in demo mode.",
+		"backHome": "Back to home"
+	  },
 	  "login": {
 		"title": "Sign In",
 		"description": "Access your account to view your workouts",

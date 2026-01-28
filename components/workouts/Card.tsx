@@ -1,20 +1,15 @@
 'use client';
 
+import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import TagList from './TagList';
-import { difficultyColors } from '@/utils/difficultyColors';
+import WorkoutDetailModal from './WorkoutDetailModal';
+import { getDifficultyColor } from '@/utils/difficultyColors';
+import { WorkoutDetail } from '@/types/Workout';
 
 type WorkoutCardProps = {
-  workout: {
-    id: string;
-    name: string;
-    description?: string;
-    difficulty?: string;
-    duration?: number;
-    tags?: string[];
-    user_id: string;
-  };
+  workout: WorkoutDetail;
   isOwner: boolean;
 };
 
@@ -23,13 +18,12 @@ export default function WorkoutCard({ workout, isOwner }: WorkoutCardProps) {
   const router = useRouter();
   const params = useParams();
   const locale = params.locale as string;
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const difficultyClass = workout.difficulty
-    ? difficultyColors[workout.difficulty] || 'bg-primary-500/20 text-primary-400 border-primary-500/30'
-    : '';
+  const difficultyClass = getDifficultyColor(workout.difficulty);
 
   const handleCardClick = () => {
-    router.push(`/${locale}/workouts/${workout.id}`);
+    setIsModalOpen(true);
   };
 
   const handleEditClick = (e: React.MouseEvent) => {
@@ -83,7 +77,7 @@ export default function WorkoutCard({ workout, isOwner }: WorkoutCardProps) {
 
         {workout.tags && workout.tags.length > 0 && (
           <div className="flex-1 flex justify-end">
-            <div className="flex flex-wrap-reverse gap-2">
+            <div className="flex flex-wrap-reverse gap-2 justify-end">
               {workout.tags.map((tag) => (
                 <span
                   key={tag}
@@ -108,6 +102,14 @@ export default function WorkoutCard({ workout, isOwner }: WorkoutCardProps) {
           </button>
         </div>
       )}
+
+      {/* Modal */}
+      <WorkoutDetailModal
+        workout={workout}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        isOwner={isOwner}
+      />
     </article>
   );
 }
