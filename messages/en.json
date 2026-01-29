@@ -237,5 +237,11 @@
 		"accountCreated": "Account created successfully!",
 		"checkEmail": "Check your email for the confirmation link."
 	  }
+	},
+	"NotFound": {
+		"title": "Page not found",
+		"subtitle": "Sorry, the page you're looking for doesn't exist or has been moved.",
+		"backHome": "Back to home",
+		"explore": "Explore roadmaps"
 	}
   }
