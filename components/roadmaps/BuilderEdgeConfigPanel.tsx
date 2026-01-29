@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import type { Edge, MarkerType } from 'reactflow';
+import { type Edge, MarkerType } from 'reactflow';
 
 // Tipos de línea disponibles
 export type EdgeLineStyle = 'solid' | 'dashed' | 'dotted' | 'longDash';

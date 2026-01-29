@@ -20,23 +20,14 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-import BuilderNode, { type BuilderNodeData } from './BuilderNode';
-import BuilderConfigPanel from './BuilderConfigPanel';
+import type { AnyNodeData, NodeTemplate } from '@/types/RoadmapNodes';
+import { builderNodeTypes } from './nodes';
+import { NodeConfigRouter } from './config';
+import { ComponentsListSidebar, NodeTemplatesSidebar } from './sidebar';
 import BuilderEdgeConfigPanel, { type BuilderEdgeData } from './BuilderEdgeConfigPanel';
-import { CalistenicsIcons, type CalistenicsIconType } from './CalistenicsIcons';
 
-// Tipos de nodos personalizados
-const nodeTypes = {
-  builder: BuilderNode,
-};
-
-// Plantilla única de nodo básico
-const nodeTemplate = {
-  type: 'basic',
-  label: 'Básico',
-  icon: 'none' as CalistenicsIconType,
-  color: '#BB86FC',
-};
+// Tipos de nodos personalizados para el builder
+const nodeTypes = builderNodeTypes;
 
 // Iconos SVG
 const SaveIcon = () => (
@@ -47,7 +38,7 @@ const SaveIcon = () => (
 
 const ImportIcon = () => (
   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
   </svg>
 );
 
@@ -67,10 +58,9 @@ const LoadingSpinner = () => (
 function RoadmapBuilder() {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Estados de nodos y edges
-  const [nodes, setNodes, onNodesChange] = useNodesState<BuilderNodeData>([]);
+  const [nodes, setNodes, onNodesChange] = useNodesState<AnyNodeData>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<BuilderEdgeData>([]);
 
   // Estado de selección
@@ -80,6 +70,11 @@ function RoadmapBuilder() {
   // Estado de guardado
   const [isSaving, setIsSaving] = useState(false);
   const [roadmapId, setRoadmapId] = useState<string | null>(null);
+
+  // Estado de importación
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [availableRoadmaps, setAvailableRoadmaps] = useState<any[]>([]);
+  const [isLoadingRoadmaps, setIsLoadingRoadmaps] = useState(false);
 
   // Nodo seleccionado
   const selectedNode = useMemo(
@@ -123,7 +118,7 @@ function RoadmapBuilder() {
     event.dataTransfer.dropEffect = 'move';
   }, []);
 
-  // Manejar drop de nodo
+  // Manejar drop de nodo desde template
   const onDrop = useCallback(
     (event: React.DragEvent) => {
       event.preventDefault();
@@ -131,7 +126,7 @@ function RoadmapBuilder() {
       const dataStr = event.dataTransfer.getData('application/reactflow');
       if (!dataStr || !reactFlowInstance) return;
 
-      const template = JSON.parse(dataStr);
+      const template: NodeTemplate = JSON.parse(dataStr);
       const bounds = reactFlowWrapper.current?.getBoundingClientRect();
 
       if (!bounds) return;
@@ -141,18 +136,29 @@ function RoadmapBuilder() {
         y: event.clientY - bounds.top,
       });
 
-      const newNode: Node<BuilderNodeData> = {
+      // Tipos de nodos de texto que no necesitan width/height en data
+      // (su tamaño se controla solo con NodeResizer)
+      const textNodeTypes = ['title', 'paragraph', 'label'];
+      const isTextNode = textNodeTypes.includes(template.type);
+
+      const newNode: Node<AnyNodeData> = {
         id: `node-${Date.now()}`,
-        type: 'builder',
+        type: template.type,
         position,
-        data: {
-          label: template.label,
-          icon: template.icon,
-          color: template.color,
-          description: '',
-          tips: '',
-          resources: [],
+        style: {
+          width: template.defaultSize.width,
+          height: template.defaultSize.height,
         },
+        data: {
+          ...template.defaultData,
+          label: template.label,
+          // Solo agregar width/height a data para nodos que no son de texto
+          ...(isTextNode ? {} : {
+            width: template.defaultSize.width,
+            height: template.defaultSize.height,
+          }),
+          mode: 'builder',
+        } as AnyNodeData,
       };
 
       setNodes((nds) => [...nds, newNode]);
@@ -160,13 +166,19 @@ function RoadmapBuilder() {
     [reactFlowInstance, setNodes]
   );
 
+  // Manejar drag start desde template sidebar
+  const handleTemplateDragStart = useCallback((event: React.DragEvent, template: NodeTemplate) => {
+    event.dataTransfer.setData('application/reactflow', JSON.stringify(template));
+    event.dataTransfer.effectAllowed = 'move';
+  }, []);
+
   // Actualizar datos de un nodo
   const handleUpdateNode = useCallback(
-    (nodeId: string, updates: Partial<BuilderNodeData>) => {
+    (nodeId: string, updates: Partial<AnyNodeData>) => {
       setNodes((nds) =>
         nds.map((node) =>
           node.id === nodeId
-            ? { ...node, data: { ...node.data, ...updates } }
+            ? { ...node, data: { ...node.data, ...updates } as AnyNodeData }
             : node
         )
       );
@@ -271,6 +283,21 @@ function RoadmapBuilder() {
     setIsSaving(true);
 
     try {
+      // Preparar nodos para guardar (sin callbacks ni estado temporal)
+      const nodesToSave = nodes.map((node) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { onSelect, selected, mode, ...dataWithoutCallbacks } = node.data;
+        return {
+          id: node.id,
+          type: node.type,
+          position: node.position,
+          style: node.style,
+          parentId: node.parentId,
+          extent: node.extent,
+          data: dataWithoutCallbacks,
+        };
+      });
+
       const roadmapData = {
         id: sanitizedName,
         title: name,
@@ -278,30 +305,13 @@ function RoadmapBuilder() {
         isPublic: true,
         totalNodes: nodes.length,
         completedNodes: 0,
-        nodes: nodes.map((node) => ({
-          id: node.id,
-          type: 'topic',
-          position: node.position,
-          data: {
-            label: node.data.label,
-            nodeType: 'topic' as const,
-            color: node.data.color,
-            fontSize: 14,
-            width: 160,
-            height: 60,
-            content: {
-              title: node.data.label,
-              description: node.data.description || '',
-              tips: node.data.tips || '',
-              progress: 'not_started' as const,
-              resources: node.data.resources || [],
-            },
-          },
-        })),
+        nodes: nodesToSave,
         edges: edges.map((edge) => ({
           id: edge.id,
           source: edge.source,
           target: edge.target,
+          sourceHandle: edge.sourceHandle,
+          targetHandle: edge.targetHandle,
           type: edge.type || 'default',
           animated: edge.animated ?? false,
           style: edge.style,
@@ -334,63 +344,80 @@ function RoadmapBuilder() {
     }
   }, [nodes, edges, roadmapId]);
 
-  // Importar roadmap desde JSON
-  const handleImport = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (!file) return;
+  // Cargar lista de roadmaps disponibles
+  const loadAvailableRoadmaps = useCallback(async () => {
+    setIsLoadingRoadmaps(true);
+    try {
+      const response = await fetch('/api/roadmaps');
+      const roadmaps = await response.json();
+      setAvailableRoadmaps(roadmaps);
+    } catch (error) {
+      console.error('Error loading roadmaps:', error);
+      alert('Error al cargar la lista de roadmaps.');
+    } finally {
+      setIsLoadingRoadmaps(false);
+    }
+  }, []);
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const data = JSON.parse(e.target?.result as string);
+  // Abrir modal de importación
+  const handleOpenImport = useCallback(async () => {
+    setShowImportModal(true);
+    await loadAvailableRoadmaps();
+  }, [loadAvailableRoadmaps]);
 
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const importedNodes: Node<BuilderNodeData>[] = data.nodes.map((n: any) => ({
-            id: n.id,
-            type: 'builder',
-            position: n.position,
-            data: {
-              label: n.data?.label || n.data?.content?.title || 'Sin nombre',
-              icon: 'none' as CalistenicsIconType,
-              color: n.data?.color || '#BB86FC',
-              description: n.data?.content?.description || '',
-              tips: n.data?.content?.tips || '',
-              resources: n.data?.content?.resources || [],
-            },
-          }));
+  // Importar roadmap desde el servidor
+  const handleImportRoadmap = useCallback(
+    async (roadmapId: string) => {
+      try {
+        const response = await fetch(`/api/roadmaps?id=${roadmapId}`);
+        const data = await response.json();
 
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const importedEdges: Edge<BuilderEdgeData>[] = data.edges.map((e: any) => ({
-            id: e.id,
-            source: e.source,
-            target: e.target,
-            type: e.type || 'default',
-            animated: e.animated ?? false,
-            style: e.style || { stroke: '#BB86FC', strokeWidth: 2 },
-            markerStart: e.markerStart,
-            markerEnd: e.markerEnd || { type: MarkerType.ArrowClosed, color: '#BB86FC' },
-            data: e.data || {
-              lineStyle: 'solid' as const,
-              arrowStyle: 'forward' as const,
-              pathStyle: 'bezier' as const,
-            },
-            label: e.label,
-          }));
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const importedNodes: Node<AnyNodeData>[] = data.nodes.map((n: any) => ({
+          id: n.id,
+          type: n.type || n.data?.nodeType || 'topic',
+          position: n.position,
+          style: n.style,
+          parentId: n.parentId,
+          extent: n.extent,
+          data: {
+            ...n.data,
+            // Fallback para datos legacy
+            label: n.data?.label || n.data?.content?.title || 'Sin nombre',
+            nodeType: n.data?.nodeType || 'topic',
+          } as AnyNodeData,
+        }));
 
-          setNodes(importedNodes);
-          setEdges(importedEdges);
-          setSelectedNodeId(null);
-          setSelectedEdgeId(null);
-          setRoadmapId(data.id || null);
-        } catch {
-          alert('Error al importar el archivo. Asegúrate de que sea un JSON válido.');
-        }
-      };
-      reader.readAsText(file);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const importedEdges: Edge<BuilderEdgeData>[] = data.edges.map((e: any) => ({
+          id: e.id,
+          source: e.source,
+          target: e.target,
+          sourceHandle: e.sourceHandle,
+          targetHandle: e.targetHandle,
+          type: e.type || 'default',
+          animated: e.animated ?? false,
+          style: e.style || { stroke: '#BB86FC', strokeWidth: 2 },
+          markerStart: e.markerStart,
+          markerEnd: e.markerEnd || { type: MarkerType.ArrowClosed, color: '#BB86FC' },
+          data: e.data || {
+            lineStyle: 'solid' as const,
+            arrowStyle: 'forward' as const,
+            pathStyle: 'bezier' as const,
+          },
+          label: e.label,
+        }));
 
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
+        setNodes(importedNodes);
+        setEdges(importedEdges);
+        setSelectedNodeId(null);
+        setSelectedEdgeId(null);
+        setRoadmapId(data.id || null);
+        setShowImportModal(false);
+        alert(`Roadmap "${data.title}" cargado correctamente.`);
+      } catch (error) {
+        console.error('Error importing roadmap:', error);
+        alert('Error al importar el roadmap.');
       }
     },
     [setNodes, setEdges]
@@ -407,13 +434,14 @@ function RoadmapBuilder() {
     }
   }, [setNodes, setEdges]);
 
-  // Nodos con callbacks inyectados
+  // Nodos con callbacks inyectados y modo builder
   const nodesWithCallbacks = useMemo(
     () =>
       nodes.map((node) => ({
         ...node,
         data: {
           ...node.data,
+          mode: 'builder' as const,
           onSelect: () => handleNodeClick(node.id),
           selected: node.id === selectedNodeId,
         },
@@ -434,7 +462,8 @@ function RoadmapBuilder() {
     [edges, selectedEdgeId]
   );
 
-  const IconComponent = CalistenicsIcons[nodeTemplate.icon];
+  // Estado del sidebar activo
+  const [activeSidebarTab, setActiveSidebarTab] = useState<'components' | 'templates'>('templates');
 
   return (
     <div className="h-[calc(100vh-120px)] flex flex-col">
@@ -448,16 +477,8 @@ function RoadmapBuilder() {
         </h1>
 
         <div className="flex items-center gap-2">
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept=".json"
-            onChange={handleImport}
-            className="hidden"
-          />
-
           <button
-            onClick={() => fileInputRef.current?.click()}
+            onClick={handleOpenImport}
             className="flex items-center gap-2 px-3 py-2 bg-foreground/10 hover:bg-foreground/20
                        text-foreground/70 rounded-lg transition-colors text-sm"
           >
@@ -489,61 +510,49 @@ function RoadmapBuilder() {
 
       {/* Main content */}
       <div className="flex-1 flex overflow-hidden">
-        {/* Sidebar - Componentes */}
-        <aside className="w-64 bg-surface border-r border-foreground/10 overflow-y-auto p-4">
-          <h2
-            className="text-sm font-semibold text-foreground/70 uppercase tracking-wider mb-4"
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-          >
-            Componentes
-          </h2>
-
-          <p className="text-xs text-foreground/50 mb-4">
-            Arrastra el componente al canvas para crear tu roadmap
-          </p>
-
-          {/* Nodo básico */}
-          <div
-            draggable
-            onDragStart={(event) => {
-              event.dataTransfer.setData(
-                'application/reactflow',
-                JSON.stringify(nodeTemplate)
-              );
-              event.dataTransfer.effectAllowed = 'move';
-            }}
-            className="flex items-center gap-3 p-3 rounded-lg border border-foreground/20
-                       bg-background hover:border-primary-500/50 hover:bg-primary-500/5
-                       cursor-grab active:cursor-grabbing transition-colors"
-          >
-            <div
-              className="w-10 h-10 rounded-lg flex items-center justify-center text-white"
-              style={{ backgroundColor: nodeTemplate.color }}
+        {/* Sidebar izquierdo */}
+        <aside className="w-72 bg-surface border-r border-foreground/10 flex flex-col">
+          {/* Tabs del sidebar */}
+          <div className="flex border-b border-foreground/10">
+            <button
+              onClick={() => setActiveSidebarTab('components')}
+              className={`flex-1 px-4 py-2.5 text-sm font-medium transition-colors
+                ${activeSidebarTab === 'components'
+                  ? 'text-primary-400 border-b-2 border-primary-500 bg-primary-500/5'
+                  : 'text-foreground/60 hover:text-foreground hover:bg-foreground/5'
+                }`}
             >
-              <IconComponent size={20} />
-            </div>
-            <div>
-              <span className="text-sm font-medium text-foreground/80 block">{nodeTemplate.label}</span>
-              <span className="text-xs text-foreground/50">Nodo personalizable</span>
-            </div>
+              Componentes
+            </button>
+            <button
+              onClick={() => setActiveSidebarTab('templates')}
+              className={`flex-1 px-4 py-2.5 text-sm font-medium transition-colors
+                ${activeSidebarTab === 'templates'
+                  ? 'text-primary-400 border-b-2 border-primary-500 bg-primary-500/5'
+                  : 'text-foreground/60 hover:text-foreground hover:bg-foreground/5'
+                }`}
+            >
+              Templates
+            </button>
           </div>
 
-          {/* Instrucciones */}
-          <div className="mt-6 p-3 bg-tertiary-500/10 border border-tertiary-500/30 rounded-lg">
-            <h3 className="text-xs font-semibold text-tertiary-400 mb-2">Instrucciones</h3>
-            <ul className="text-xs text-foreground/60 space-y-1">
-              <li>• Arrastra el nodo al canvas</li>
-              <li>• Conecta nodos desde los puntos</li>
-              <li>• Clic en un nodo para editarlo</li>
-              <li>• Clic en una línea para editarla</li>
-              <li>• Arrastra en vacío para selección múltiple</li>
-              <li>• Suprimir para eliminar selección</li>
-            </ul>
+          {/* Contenido del sidebar */}
+          <div className="flex-1 overflow-hidden">
+            {activeSidebarTab === 'components' ? (
+              <ComponentsListSidebar
+                nodes={nodes}
+                selectedNodeId={selectedNodeId}
+                onSelectNode={handleNodeClick}
+                onDeleteNode={handleDeleteNode}
+              />
+            ) : (
+              <NodeTemplatesSidebar onDragStart={handleTemplateDragStart} />
+            )}
           </div>
 
           {/* Info del roadmap actual */}
           {roadmapId && (
-            <div className="mt-4 p-3 bg-primary-500/10 border border-primary-500/30 rounded-lg">
+            <div className="p-3 border-t border-foreground/10 bg-primary-500/5">
               <p className="text-xs text-primary-400">
                 <strong>Editando:</strong> {roadmapId}
               </p>
@@ -585,7 +594,13 @@ function RoadmapBuilder() {
               className="!bg-surface/80 !backdrop-blur-md !border-foreground/10 !rounded-xl"
             />
             <MiniMap
-              nodeColor={(n) => (n.data as BuilderNodeData)?.color || '#64748b'}
+              nodeColor={(n) => {
+                const data = n.data as AnyNodeData;
+                // Obtener color según el tipo de nodo
+                if ('color' in data && data.color) return data.color;
+                if (data.nodeType === 'section') return 'rgba(187, 134, 252, 0.3)';
+                return '#64748b';
+              }}
               maskColor="rgba(18, 18, 18, 0.85)"
               className="!bg-surface/80 !backdrop-blur-md !border-foreground/10 !rounded-xl"
             />
@@ -594,8 +609,8 @@ function RoadmapBuilder() {
 
         {/* Node Config Panel */}
         {selectedNode && (
-          <BuilderConfigPanel
-            selectedNode={selectedNode}
+          <NodeConfigRouter
+            node={selectedNode}
             onUpdateNode={handleUpdateNode}
             onDeleteNode={handleDeleteNode}
             onClose={handleClosePanel}
@@ -612,6 +627,62 @@ function RoadmapBuilder() {
           />
         )}
       </div>
+
+      {/* Import Modal */}
+      {showImportModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-surface border border-foreground/10 rounded-xl shadow-2xl max-w-2xl w-full max-h-[80vh] flex flex-col">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-foreground/10">
+              <h2 className="text-xl font-bold text-foreground">Importar Roadmap</h2>
+              <button
+                onClick={() => setShowImportModal(false)}
+                className="text-foreground/50 hover:text-foreground transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto p-6">
+              {isLoadingRoadmaps ? (
+                <div className="flex items-center justify-center py-12">
+                  <LoadingSpinner />
+                  <span className="ml-2 text-foreground/60">Cargando roadmaps...</span>
+                </div>
+              ) : availableRoadmaps.length === 0 ? (
+                <div className="text-center py-12 text-foreground/50">
+                  <p>No hay roadmaps disponibles para importar.</p>
+                  <p className="text-sm mt-2">Guarda un roadmap primero para poder importarlo.</p>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {availableRoadmaps.map((roadmap) => (
+                    <button
+                      key={roadmap.id}
+                      onClick={() => handleImportRoadmap(roadmap.id)}
+                      className="w-full text-left p-4 rounded-lg border border-foreground/20
+                                 bg-background hover:border-primary-500/50 hover:bg-primary-500/5
+                                 transition-colors"
+                    >
+                      <h3 className="font-semibold text-foreground mb-1">{roadmap.title}</h3>
+                      <p className="text-sm text-foreground/60 mb-2">{roadmap.description}</p>
+                      <div className="flex items-center gap-4 text-xs text-foreground/50">
+                        <span>{roadmap.totalNodes} nodos</span>
+                        {roadmap.updatedAt && (
+                          <span>Actualizado: {new Date(roadmap.updatedAt).toLocaleDateString()}</span>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -12,6 +12,8 @@ import ReactFlow, {
 import 'reactflow/dist/style.css';
 
 import ViewerNode from './ViewerNode';
+import { viewerNodeTypes } from './nodes';
+import type { AnyNodeData } from '@/types/RoadmapNodes';
 
 // Estilos CSS específicos para React Flow en el visor de roadmaps
 const roadmapFlowStyles = `
@@ -87,28 +89,44 @@ import RoadmapProgress from './RoadmapProgress';
 import { useRoadmapProgress } from '@/hooks/useRoadmapProgress';
 import type { RoadmapViewerProps, RoadmapNodeData, NodeProgress } from '@/types/Roadmap';
 
-// Registro de tipos de nodos personalizados
+// Registro de tipos de nodos personalizados - combina nuevos tipos con fallback
 const nodeTypes = {
+  ...viewerNodeTypes,
+  // Fallbacks para compatibilidad con roadmaps legacy
   default: ViewerNode,
-  title: ViewerNode,
-  topic: ViewerNode,
-  subtopic: ViewerNode,
   milestone: ViewerNode,
 };
 
 // Estilos personalizados para el MiniMap
-const miniMapNodeColor = (node: { data?: RoadmapNodeData }) => {
-  const progress = node.data?.progress || node.data?.content?.progress || 'not_started';
-  switch (progress) {
-    case 'completed':
-      return '#32D74B'; // Verde
-    case 'in_progress':
-      return '#BB86FC'; // Púrpura
-    case 'skipped':
-      return '#444';
-    default:
-      return '#64748b'; // Gris
+const miniMapNodeColor = (node: { data?: RoadmapNodeData | AnyNodeData }) => {
+  const data = node.data;
+  if (!data) return '#64748b';
+
+  // Primero verificar progreso (para nodos interactivos)
+  const progress = (data as RoadmapNodeData)?.progress ||
+    (data as RoadmapNodeData)?.content?.progress;
+  if (progress) {
+    switch (progress) {
+      case 'completed':
+        return '#32D74B'; // Verde
+      case 'in_progress':
+        return '#BB86FC'; // Púrpura
+      case 'skipped':
+        return '#444';
+    }
   }
+
+  // Si tiene color, usarlo
+  if ('color' in data && data.color) {
+    return data.color as string;
+  }
+
+  // Color por tipo de nodo
+  const nodeType = data.nodeType;
+  if (nodeType === 'section') return 'rgba(187, 134, 252, 0.3)';
+  if (nodeType === 'horizontalLine' || nodeType === 'verticalLine') return '#8E8E93';
+
+  return '#64748b'; // Gris por defecto
 };
 
 export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapViewerProps) {
@@ -166,7 +184,7 @@ export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapVi
     setSelectedNodeId(null);
   }, []);
 
-  // Nodos con callbacks y estado de progreso inyectados
+  // Nodos con callbacks, modo viewer y estado de progreso inyectados
   const nodesWithCallbacks = useMemo(
     () =>
       nodes.map((node) => {
@@ -175,6 +193,7 @@ export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapVi
           ...node,
           data: {
             ...node.data,
+            mode: 'viewer' as const,
             onSelect: () => handleNodeClick(node.id),
             selected: node.id === selectedNodeId,
             progress: nodeProgress,

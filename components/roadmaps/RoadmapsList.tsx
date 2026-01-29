@@ -17,6 +17,7 @@ export default function RoadmapsList() {
   const [roadmaps, setRoadmaps] = useState<RoadmapSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isDebug = process.env.NODE_ENV === 'development';
 
   useEffect(() => {
     const fetchRoadmaps = async () => {
@@ -66,15 +67,17 @@ export default function RoadmapsList() {
         {roadmaps.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-foreground/60 mb-4">No hay roadmaps disponibles.</p>
-            <Link
-              href="/roadmaps/build"
-              className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition"
-            >
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-              </svg>
-              Crear primer roadmap
-            </Link>
+            {isDebug && (
+              <Link
+                href="/roadmaps/build"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                Crear primer roadmap
+              </Link>
+            )}
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -142,25 +145,27 @@ export default function RoadmapsList() {
             ))}
 
             {/* Create new roadmap card */}
-            <Link
-              href="/roadmaps/build"
-              className="group flex flex-col items-center justify-center border-2 border-dashed border-white/20
-                       rounded-xl p-5 min-h-[160px] transition-all duration-300
-                       hover:border-primary-500/50 hover:bg-primary-500/5"
-            >
-              <div className="w-12 h-12 rounded-full bg-primary-500/20 flex items-center justify-center
-                            mb-3 group-hover:bg-primary-500/30 transition-colors">
-                <svg className="w-6 h-6 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                </svg>
-              </div>
-              <span
-                className="text-sm font-medium text-foreground/60 group-hover:text-primary-400 transition-colors"
-                style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+            {isDebug && (
+              <Link
+                href="/roadmaps/build"
+                className="group flex flex-col items-center justify-center border-2 border-dashed border-white/20
+                         rounded-xl p-5 min-h-[160px] transition-all duration-300
+                         hover:border-primary-500/50 hover:bg-primary-500/5"
               >
-                Crear nuevo roadmap
-              </span>
-            </Link>
+                <div className="w-12 h-12 rounded-full bg-primary-500/20 flex items-center justify-center
+                              mb-3 group-hover:bg-primary-500/30 transition-colors">
+                  <svg className="w-6 h-6 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                </div>
+                <span
+                  className="text-sm font-medium text-foreground/60 group-hover:text-primary-400 transition-colors"
+                  style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                >
+                  Crear nuevo roadmap
+                </span>
+              </Link>
+            )}
           </div>
         )}
       </section>
