@@ -1,0 +1,36 @@
+{
+  "id": "mi-roadmap",
+  "title": "mi-roadmap",
+  "description": "Roadmap creado con el builder",
+  "isPublic": true,
+  "totalNodes": 1,
+  "completedNodes": 0,
+  "nodes": [
+    {
+      "id": "node-1769680627487",
+      "type": "topic",
+      "position": {
+        "x": -80,
+        "y": -160
+      },
+      "data": {
+        "label": "Básico",
+        "nodeType": "topic",
+        "color": "#BB86FC",
+        "fontSize": 14,
+        "width": 160,
+        "height": 60,
+        "content": {
+          "title": "Básico",
+          "description": "",
+          "tips": "",
+          "progress": "not_started",
+          "resources": []
+        }
+      }
+    }
+  ],
+  "edges": [],
+  "updatedAt": "2026-01-29T09:57:34.767Z",
+  "createdAt": "2026-01-29T09:57:34.767Z"
+}

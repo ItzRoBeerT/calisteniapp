@@ -86,6 +86,38 @@
 		"title": "Roadmaps",
 		"description": "Welcome to the Roadmaps page. Here you can find guides and learning paths for calisthenics."
 	},
+	"RoadmapViewer": {
+		"close": "Close",
+		"progress": "Your Progress",
+		"description": "Description",
+		"tips": "Tip",
+		"resources": "Resources",
+		"by": "By",
+		"noTitle": "No title",
+		"noContent": "Select a node to view its content",
+		"noResources": "No resources available",
+		"free": "Free",
+		"status": {
+			"not_started": "Pending",
+			"in_progress": "In Progress",
+			"completed": "Completed",
+			"skipped": "Skipped"
+		},
+		"progressBar": {
+			"title": "Roadmap Progress",
+			"completed": "{count} of {total} completed",
+			"percentage": "{percent}% completed",
+			"complete": "Roadmap completed! Congratulations!"
+		},
+		"resourceTypes": {
+			"video": "Video",
+			"article": "Article",
+			"documentation": "Documentation",
+			"course": "Course",
+			"tool": "Tool",
+			"github": "Repository"
+		}
+	},
 	"WorkoutsPage": {
 	  "title": "My Workouts",
 	  "createWorkout": "Create Workout",

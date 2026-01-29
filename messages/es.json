@@ -86,6 +86,38 @@
 			"title": "Roadmaps",
 			"description": "Bienvenido a la página de Roadmaps. Aquí podrás encontrar guías y rutas de aprendizaje para calistenia."
 		},
+	"RoadmapViewer": {
+		"close": "Cerrar",
+		"progress": "Tu Progreso",
+		"description": "Descripción",
+		"tips": "Consejo",
+		"resources": "Recursos",
+		"by": "Por",
+		"noTitle": "Sin título",
+		"noContent": "Selecciona un nodo para ver su contenido",
+		"noResources": "No hay recursos disponibles",
+		"free": "Gratis",
+		"status": {
+			"not_started": "Pendiente",
+			"in_progress": "En Progreso",
+			"completed": "Completado",
+			"skipped": "Omitido"
+		},
+		"progressBar": {
+			"title": "Progreso del Roadmap",
+			"completed": "{count} de {total} completados",
+			"percentage": "{percent}% completado",
+			"complete": "¡Roadmap completado! ¡Felicidades!"
+		},
+		"resourceTypes": {
+			"video": "Video",
+			"article": "Artículo",
+			"documentation": "Documentación",
+			"course": "Curso",
+			"tool": "Herramienta",
+			"github": "Repositorio"
+		}
+	},
 	"WorkoutsPage": {
 		"title": "Entrenamientos",
 		"createWorkout": "Crear Entrenamiento",
