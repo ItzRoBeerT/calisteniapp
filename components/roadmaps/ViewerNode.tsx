@@ -103,8 +103,8 @@ const StatusBadge = ({ progress }: { progress: NodeProgress }) => {
   );
 };
 
-// Handle personalizado con estilo cyberpunk
-const StyledHandle = ({
+// Handle invisible para mantener las conexiones sin mostrar los puntos
+const InvisibleHandle = ({
   type,
   position,
   id,
@@ -117,9 +117,7 @@ const StyledHandle = ({
     type={type}
     position={position}
     id={id}
-    className="!w-2.5 !h-2.5 !bg-primary-500/60 !border-2 !border-primary-400
-               hover:!bg-primary-400 hover:!scale-125 transition-all duration-200
-               !rounded-full"
+    className="!w-0 !h-0 !min-w-0 !min-h-0 !border-0 !bg-transparent !opacity-0 !pointer-events-none"
   />
 );
 
@@ -145,11 +143,11 @@ const ViewerNode: React.FC<ViewerNodeProps> = ({ data, selected = false }) => {
         fontSize,
       }}
     >
-      {/* Handles de conexión */}
-      <StyledHandle type="target" position={Position.Top} id="top" />
-      <StyledHandle type="target" position={Position.Left} id="left" />
-      <StyledHandle type="source" position={Position.Right} id="right" />
-      <StyledHandle type="source" position={Position.Bottom} id="bottom" />
+      {/* Handles invisibles para mantener conexiones */}
+      <InvisibleHandle type="target" position={Position.Top} id="top" />
+      <InvisibleHandle type="target" position={Position.Left} id="left" />
+      <InvisibleHandle type="source" position={Position.Right} id="right" />
+      <InvisibleHandle type="source" position={Position.Bottom} id="bottom" />
 
       {/* Badge de estado */}
       <StatusBadge progress={progress} />

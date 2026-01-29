@@ -30,6 +30,14 @@ export type CalistenicsIconType =
   | 'shoulders'
   | 'none';
 
+// Array de nombres de iconos para usar en selects
+export const calistenicsIconNames: CalistenicsIconType[] = [
+  'pushup', 'pullup', 'squat', 'dip', 'plank', 'lunge', 'burpee',
+  'muscleup', 'handstand', 'pistol', 'lever', 'flag',
+  'start', 'finish', 'rest', 'warmup', 'stretch', 'cardio',
+  'core', 'arms', 'legs', 'back', 'chest', 'shoulders', 'none',
+];
+
 interface IconProps {
   className?: string;
   size?: number;
