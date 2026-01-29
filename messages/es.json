@@ -237,5 +237,11 @@
 			"accountCreated": "¡Cuenta creada exitosamente!",
 			"checkEmail": "Revisa tu email para el enlace de confirmación."
 		}
+	},
+	"NotFound": {
+		"title": "Página no encontrada",
+		"subtitle": "Lo sentimos, la página que buscas no existe o ha sido movida.",
+		"backHome": "Volver al inicio",
+		"explore": "Explorar roadmaps"
 	}
 }
