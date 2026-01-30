@@ -99,6 +99,25 @@ const NodeTemplatesSidebar: React.FC<NodeTemplatesSidebarProps> = ({ onDragStart
     section: t('nodeTypes.section'),
   };
 
+  // Iconos específicos para cada tipo de template
+  const templateIcons: Record<string, string> = {
+    title: 'H1',
+    paragraph: 'p',
+    label: 'L',
+    topic: '■',
+    subtopic: '□',
+    image: '🖼️',
+    button: '🔘',
+    resourceButton: '↗',
+    todo: '✓',
+    checklist: '☑',
+    legend: '⚖️',
+    linksGroup: '🔗',
+    horizontalLine: '─',
+    verticalLine: '│',
+    section: '▢',
+  };
+
   return (
     <div className="flex flex-col h-full">
 
@@ -146,32 +165,27 @@ const NodeTemplatesSidebar: React.FC<NodeTemplatesSidebarProps> = ({ onDragStart
 
               {/* Templates de la categoría */}
               {!isCollapsed && (
-                <div className="px-3 pb-3 grid grid-cols-2 gap-2">
+                <div className="px-2 pb-2 flex flex-col gap-1">
                   {templates.map((template) => (
                     <div
                       key={template.type}
                       draggable
                       onDragStart={(e) => onDragStart(e, template)}
-                      className="group flex flex-col items-center justify-center gap-1.5 p-3
-                               bg-foreground/5 hover:bg-foreground/10 rounded-lg cursor-grab
-                               border border-transparent hover:border-primary-500/30
+                      className="group flex items-center gap-3 px-3 py-2
+                               hover:bg-foreground/5 rounded-md cursor-grab
                                transition-all duration-150 active:cursor-grabbing"
                     >
-                      {/* Preview de color */}
-                      <div
-                        className="w-8 h-8 rounded-md flex items-center justify-center
-                                 group-hover:scale-110 transition-transform"
-                        style={{ backgroundColor: template.previewColor + '30' }}
+                      {/* Icono del template */}
+                      <span
+                        className="w-6 text-center flex-shrink-0 text-foreground/60 group-hover:text-foreground/80"
+                        style={{ fontFamily: "monospace" }}
                       >
-                        <div
-                          className="w-4 h-4 rounded"
-                          style={{ backgroundColor: template.previewColor }}
-                        />
-                      </div>
+                        {templateIcons[template.type] || '•'}
+                      </span>
 
                       {/* Nombre del template */}
                       <span
-                        className="text-xs text-foreground/70 text-center leading-tight"
+                        className="text-sm text-foreground/70 group-hover:text-foreground/90 transition-colors"
                         style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                       >
                         {templateLabels[template.type] || template.label}
