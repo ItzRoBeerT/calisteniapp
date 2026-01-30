@@ -4,16 +4,17 @@ import { useFormStatus } from 'react-dom';
 import { type ComponentProps, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-type Props = ComponentProps<'button'> & {
+type Props = Omit<ComponentProps<'button'>, 'formAction'> & {
   pendingText?: string;
+  formAction?: (formData: FormData) => Promise<{ error?: string; success?: string | boolean; redirect?: string }>;
 };
 
-export function SubmitButton({ children, pendingText, ...props }: Props) {
-  const { pending, action } = useFormStatus();
+export function SubmitButton({ children, pendingText, formAction, ...props }: Props) {
+  const { pending } = useFormStatus();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
   
-  const isPending = pending && action === props.formAction;
+  const isPending = pending;
 
   const handleClick = async () => {
     // Clear previous error messages
@@ -21,11 +22,12 @@ export function SubmitButton({ children, pendingText, ...props }: Props) {
   };
 
   // Modify the formAction to handle errors
-  const wrappedAction = async (formData: FormData) => {
+  const wrappedAction = async (fd: FormData) => {
+    if (!formAction) return;
     try {
       setErrorMessage(null);
       
-      const result = await (props.formAction as unknown as (formData: FormData) => Promise<{error?: string; success?: boolean; redirect?: string}>)(formData);
+      const result = await formAction(fd);
       
       // Handle errors or success messages
       if (result?.error) {
@@ -37,7 +39,7 @@ export function SubmitButton({ children, pendingText, ...props }: Props) {
       if (result?.success && result?.redirect) {
         setErrorMessage(null);
         setTimeout(() => {
-          router.push(result.redirect);
+          router.push(result.redirect as string);
         }, 2000);
         return result.success;
       }

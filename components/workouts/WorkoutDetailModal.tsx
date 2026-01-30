@@ -119,7 +119,15 @@ export default function WorkoutDetailModal({
         <div className="mb-4 sm:mb-6">
           <h2 className="text-lg sm:text-xl font-semibold mb-2 text-foreground">{t('exercises')}</h2>
           {workout.exercises && workout.exercises.length > 0 ? (
-            <ExerciseList exercises={workout.exercises} />
+            <ExerciseList exercises={workout.exercises.map(ex => ({
+              id: String(ex.id),
+              name: ex.name,
+              sets: ex.sets,
+              reps: ex.reps,
+              rest: ex.rest,
+              muscle_group: ex.muscle_group,
+              exercise_id: ex.exercise_id,
+            }))} />
           ) : (
             <p className="text-foreground/40 text-sm">{t('noExercises')}</p>
           )}

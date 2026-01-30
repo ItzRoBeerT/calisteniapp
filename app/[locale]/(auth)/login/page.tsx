@@ -52,29 +52,29 @@ export default async function Login() {
     <div className="mx-auto max-w-md w-full py-8">
       <div className="bg-surface rounded-lg shadow-lg p-8">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold">{t('login.title', 'Iniciar Sesión')}</h1>
+          <h1 className="text-3xl font-bold">{t('login.title')}</h1>
           <p className="text-gray-500 mt-2">
-            {t('login.description', 'Accede a tu cuenta para ver tus entrenamientos')}
+            {t('login.description')}
           </p>
         </div>
 
         <form className="flex flex-col gap-4">
           <div>
             <label className="block text-sm font-medium mb-1" htmlFor="email">
-              {t('login.emailLabel', 'Email')}
+              {t('login.emailLabel')}
             </label>
             <input
               className="w-full rounded-md px-4 py-2 bg-inherit border focus:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:outline-none transition-colors"
               name="email"
               type="email"
-              placeholder={t('login.emailPlaceholder', 'tu@email.com')}
+              placeholder={t('login.emailPlaceholder')}
               required
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium mb-1" htmlFor="password">
-              {t('login.passwordLabel', 'Contraseña')}
+              {t('login.passwordLabel')}
             </label>
             <input
               className="w-full rounded-md px-4 py-2 bg-inherit border focus:border-purple-500 focus:ring-2 focus:ring-purple-500 focus:outline-none transition-colors"
@@ -88,16 +88,16 @@ export default async function Login() {
           <SubmitButton
             formAction={signIn}
             className="w-full bg-purple-600 hover:bg-purple-700 rounded-md px-4 py-3 text-white font-medium transition-colors mt-4"
-            pendingText={t('login.signingIn', 'Iniciando sesión...')}
+            pendingText={t('login.signingIn')}
           >
-            {t('login.signIn', 'Iniciar Sesión')}
+            {t('login.signIn')}
           </SubmitButton>
 
           <div className="text-center mt-4">
             <p className="text-sm">
-              {t('login.noAccount', '¿No tienes una cuenta?')}{' '}
+              {t('login.noAccount')}{' '}
               <Link href="/register" className="text-purple-500 hover:text-purple-700 font-medium">
-                {t('login.signUp', 'Regístrate')}
+                {t('login.signUp')}
               </Link>
             </p>
           </div>
