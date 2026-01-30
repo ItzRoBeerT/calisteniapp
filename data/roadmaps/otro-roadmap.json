@@ -1,0 +1,48 @@
+{
+  "id": "otro-roadmap",
+  "title": "otro-roadmap",
+  "description": "Roadmap creado con el builder",
+  "isPublic": true,
+  "totalNodes": 1,
+  "completedNodes": 0,
+  "nodes": [
+    {
+      "id": "node-1769762276383",
+      "type": "topic",
+      "position": {
+        "x": -40,
+        "y": 160
+      },
+      "style": {
+        "width": 180,
+        "height": 50
+      },
+      "data": {
+        "nodeType": "topic",
+        "label": "Prueba importante",
+        "color": "#2563eb",
+        "icon": "none",
+        "handles": {
+          "top": true,
+          "bottom": true,
+          "left": true,
+          "right": true
+        },
+        "width": 160,
+        "height": 60,
+        "description": "Tiene que salir esto en el detalle",
+        "resources": [
+          {
+            "id": "resource-1769765392695-8v0lw4p",
+            "title": "Hola",
+            "url": "google.es",
+            "type": "video"
+          }
+        ]
+      }
+    }
+  ],
+  "edges": [],
+  "updatedAt": "2026-01-30T09:33:08.133Z",
+  "createdAt": "2026-01-30T09:33:08.133Z"
+}

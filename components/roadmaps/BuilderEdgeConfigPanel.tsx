@@ -120,11 +120,22 @@ export default function BuilderEdgeConfigPanel({
 
   const [customColor, setCustomColor] = useState(currentColor);
 
-  // Actualizar color
+  // Actualizar color (línea y flechas)
   const handleColorChange = (color: string) => {
     setCustomColor(color);
+
+    // Actualizar también el color de las flechas si existen
+    const updatedMarkerStart = selectedEdge.markerStart && typeof selectedEdge.markerStart === 'object'
+      ? { ...selectedEdge.markerStart, color }
+      : undefined;
+    const updatedMarkerEnd = selectedEdge.markerEnd && typeof selectedEdge.markerEnd === 'object'
+      ? { ...selectedEdge.markerEnd, color }
+      : undefined;
+
     onUpdateEdge(selectedEdge.id, {
       style: { ...selectedEdge.style, stroke: color },
+      markerStart: updatedMarkerStart,
+      markerEnd: updatedMarkerEnd,
     });
   };
 

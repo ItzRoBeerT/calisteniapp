@@ -118,6 +118,9 @@
 			"github": "Repository"
 		}
 	},
+	"RoadmapBuilder": {
+		"components": "Components"
+	},
 	"WorkoutsPage": {
 	  "title": "My Workouts",
 	  "createWorkout": "Create Workout",
