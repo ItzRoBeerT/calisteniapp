@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import ReactFlow, {
   Background,
   Controls,
@@ -56,6 +57,7 @@ const LoadingSpinner = () => (
 );
 
 function RoadmapBuilder() {
+  const t = useTranslations('RoadmapBuilder');
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
 
@@ -142,7 +144,7 @@ function RoadmapBuilder() {
       const isTextNode = textNodeTypes.includes(template.type);
 
       const newNode: Node<AnyNodeData> = {
-        id: `node-${Date.now()}`,
+        id: `node-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
         type: template.type,
         position,
         style: {
@@ -388,25 +390,44 @@ function RoadmapBuilder() {
           } as AnyNodeData,
         }));
 
+        // Mapa de lineStyle a strokeDasharray
+        const lineStyleToDasharray: Record<string, string | undefined> = {
+          solid: undefined,
+          dashed: '8 4',
+          dotted: '2 4',
+          longDash: '16 6',
+        };
+
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const importedEdges: Edge<BuilderEdgeData>[] = data.edges.map((e: any) => ({
-          id: e.id,
-          source: e.source,
-          target: e.target,
-          sourceHandle: e.sourceHandle,
-          targetHandle: e.targetHandle,
-          type: e.type || 'default',
-          animated: e.animated ?? false,
-          style: e.style || { stroke: '#BB86FC', strokeWidth: 2 },
-          markerStart: e.markerStart,
-          markerEnd: e.markerEnd || { type: MarkerType.ArrowClosed, color: '#BB86FC' },
-          data: e.data || {
-            lineStyle: 'solid' as const,
-            arrowStyle: 'forward' as const,
-            pathStyle: 'bezier' as const,
-          },
-          label: e.label,
-        }));
+        const importedEdges: Edge<BuilderEdgeData>[] = data.edges.map((e: any) => {
+          const lineStyle = e.data?.lineStyle || 'solid';
+          const strokeDasharray = lineStyleToDasharray[lineStyle];
+
+          return {
+            id: e.id,
+            source: e.source,
+            target: e.target,
+            sourceHandle: e.sourceHandle,
+            targetHandle: e.targetHandle,
+            type: e.type || 'default',
+            animated: e.animated ?? false,
+            style: {
+              stroke: '#BB86FC',
+              strokeWidth: 2,
+              ...e.style,
+              // Restaurar strokeDasharray basado en lineStyle guardado
+              strokeDasharray: e.style?.strokeDasharray || strokeDasharray,
+            },
+            markerStart: e.markerStart,
+            markerEnd: e.markerEnd || { type: MarkerType.ArrowClosed, color: '#BB86FC' },
+            data: e.data || {
+              lineStyle: 'solid' as const,
+              arrowStyle: 'forward' as const,
+              pathStyle: 'bezier' as const,
+            },
+            label: e.label,
+          };
+        });
 
         setNodes(importedNodes);
         setEdges(importedEdges);
@@ -522,7 +543,7 @@ function RoadmapBuilder() {
                   : 'text-foreground/60 hover:text-foreground hover:bg-foreground/5'
                 }`}
             >
-              Componentes
+              {t('components')}
             </button>
             <button
               onClick={() => setActiveSidebarTab('templates')}

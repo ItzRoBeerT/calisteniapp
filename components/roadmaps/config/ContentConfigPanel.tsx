@@ -108,36 +108,70 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
             <label className="block text-sm font-medium text-foreground/70 mb-2">
               Recursos
             </label>
-            <div className="space-y-2 max-h-40 overflow-y-auto">
+            <div className="space-y-3 max-h-60 overflow-y-auto">
               {((data as TopicNodeData).resources || []).map((resource, index) => (
                 <div
-                  key={resource.id || index}
-                  className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"
+                  key={resource.id || `resource-${index}`}
+                  className="p-3 bg-background/50 rounded-lg space-y-2"
                 >
+                  {/* Header con título y botón eliminar */}
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={resource.title}
+                      onChange={(e) => {
+                        const newResources = [...((data as TopicNodeData).resources || [])];
+                        newResources[index] = { ...resource, title: e.target.value };
+                        handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
+                      }}
+                      className="flex-1 px-2 py-1 bg-background border border-foreground/20 rounded text-sm text-foreground"
+                      placeholder="Título del recurso"
+                    />
+                    <button
+                      onClick={() => {
+                        const newResources = ((data as TopicNodeData).resources || []).filter(
+                          (_, i) => i !== index
+                        );
+                        handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
+                      }}
+                      className="p-1 text-red-400 hover:text-red-300 shrink-0"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+
+                  {/* URL */}
                   <input
-                    type="text"
-                    value={resource.title}
+                    type="url"
+                    value={resource.url}
                     onChange={(e) => {
                       const newResources = [...((data as TopicNodeData).resources || [])];
-                      newResources[index] = { ...resource, title: e.target.value };
+                      newResources[index] = { ...resource, url: e.target.value };
                       handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
                     }}
-                    className="flex-1 px-2 py-1 bg-background border border-foreground/20 rounded text-sm text-foreground"
-                    placeholder="Título"
+                    className="w-full px-2 py-1 bg-background border border-foreground/20 rounded text-sm text-foreground"
+                    placeholder="https://ejemplo.com/recurso"
                   />
-                  <button
-                    onClick={() => {
-                      const newResources = ((data as TopicNodeData).resources || []).filter(
-                        (_, i) => i !== index
-                      );
+
+                  {/* Tipo de recurso */}
+                  <select
+                    value={resource.type}
+                    onChange={(e) => {
+                      const newResources = [...((data as TopicNodeData).resources || [])];
+                      newResources[index] = { ...resource, type: e.target.value as 'video' | 'article' | 'documentation' | 'course' | 'tool' | 'github' };
                       handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
                     }}
-                    className="p-1 text-red-400 hover:text-red-300"
+                    className="w-full px-2 py-1 bg-background border border-foreground/20 rounded text-xs text-foreground"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
+                    <option value="article">Artículo</option>
+                    <option value="video">Video</option>
+                    <option value="documentation">Documentación</option>
+                    <option value="course">Curso</option>
+                    <option value="tool">Herramienta</option>
+                    <option value="github">GitHub</option>
+                  </select>
                 </div>
               ))}
             </div>
@@ -145,7 +179,7 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
               onClick={() => {
                 const newResources = [
                   ...((data as TopicNodeData).resources || []),
-                  { id: Date.now().toString(), title: '', url: '', type: 'article' as const },
+                  { id: `resource-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`, title: '', url: '', type: 'article' as const },
                 ];
                 handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
               }}

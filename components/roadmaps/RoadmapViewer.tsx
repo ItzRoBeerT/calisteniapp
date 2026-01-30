@@ -87,7 +87,7 @@ const roadmapFlowStyles = `
 import NodeDetailPanel from './NodeDetailPanel';
 import RoadmapProgress from './RoadmapProgress';
 import { useRoadmapProgress } from '@/hooks/useRoadmapProgress';
-import type { RoadmapViewerProps, RoadmapNodeData, NodeProgress } from '@/types/Roadmap';
+import type { RoadmapViewerProps, RoadmapNodeData, NodeProgress, RoadmapResource } from '@/types/Roadmap';
 
 // Registro de tipos de nodos personalizados - combina nuevos tipos con fallback
 const nodeTypes = {
@@ -129,6 +129,9 @@ const miniMapNodeColor = (node: { data?: RoadmapNodeData | AnyNodeData }) => {
   return '#64748b'; // Gris por defecto
 };
 
+// Tipos de nodos que NO deben mostrar detalles ni contarse en progreso
+const nonProgressNodeTypes = ['title', 'paragraph', 'label', 'horizontalLine', 'verticalLine', 'section', 'image'];
+
 export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapViewerProps) {
   // Estado de nodos y edges
   const [nodes, setNodes, onNodesChange] = useNodesState(roadmap.nodes);
@@ -137,16 +140,54 @@ export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapVi
   // Estado de selección
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
 
-  // Hook de progreso con localStorage
-  const { progress, updateNodeProgress, completedCount, completionPercentage, isLoaded } =
-    useRoadmapProgress(roadmap.id, roadmap.totalNodes);
+  // Calcular el número real de nodos que cuentan para el progreso (excluyendo texto, líneas, etc.)
+  const trackableNodesCount = useMemo(() => {
+    return nodes.filter((node) => {
+      const nodeType = (node.data as { nodeType?: string })?.nodeType;
+      return nodeType && !nonProgressNodeTypes.includes(nodeType);
+    }).length;
+  }, [nodes]);
 
-  // Obtener nodo seleccionado con sus datos
+  // Hook de progreso con localStorage - usa el conteo de nodos rastreables
+  const { progress, updateNodeProgress, completedCount, completionPercentage, isLoaded } =
+    useRoadmapProgress(roadmap.id, trackableNodesCount);
+
+  // Obtener nodo seleccionado con sus datos - crea content object para nuevos tipos
   const selectedNode = useMemo(() => {
     if (!selectedNodeId) return null;
     const node = nodes.find((n) => n.id === selectedNodeId);
-    return node?.data || null;
-  }, [nodes, selectedNodeId]);
+    if (!node?.data) return null;
+
+    const data = node.data;
+    const nodeType = (data as { nodeType?: string })?.nodeType;
+
+    // Si es un nodo que no debe mostrar detalles, retornar null
+    if (nodeType && nonProgressNodeTypes.includes(nodeType)) {
+      return null;
+    }
+
+    // Si ya tiene content, usarlo
+    if (data.content) {
+      return data;
+    }
+
+    // Para TopicNodeData y SubTopicNodeData, crear content desde los datos directos
+    if (nodeType === 'topic' || nodeType === 'subtopic') {
+      const typedData = data as { description?: string; tips?: string; resources?: RoadmapResource[]; label?: string; progress?: NodeProgress };
+      return {
+        ...data,
+        content: {
+          title: typedData.label || 'Sin título',
+          description: typedData.description || '',
+          tips: typedData.tips,
+          resources: typedData.resources || [],
+          progress: progress[selectedNodeId] || typedData.progress || 'not_started',
+        },
+      } as RoadmapNodeData;
+    }
+
+    return data;
+  }, [nodes, selectedNodeId, progress]);
 
   // Handler para click en nodo
   const handleNodeClick = useCallback((nodeId: string) => {
@@ -188,7 +229,23 @@ export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapVi
   const nodesWithCallbacks = useMemo(
     () =>
       nodes.map((node) => {
-        const nodeProgress = progress[node.id] || node.data.content?.progress || 'not_started';
+        const nodeType = (node.data as { nodeType?: string })?.nodeType;
+        const directProgress = (node.data as { progress?: NodeProgress })?.progress;
+        const nodeProgress = progress[node.id] || node.data.content?.progress || directProgress || 'not_started';
+
+        // Crear content para topic/subtopic si no existe
+        let content = node.data.content;
+        if (!content && (nodeType === 'topic' || nodeType === 'subtopic')) {
+          const typedData = node.data as { description?: string; tips?: string; resources?: RoadmapResource[]; label?: string };
+          content = {
+            title: typedData.label || 'Sin título',
+            description: typedData.description || '',
+            tips: typedData.tips,
+            resources: typedData.resources || [],
+            progress: nodeProgress,
+          };
+        }
+
         return {
           ...node,
           data: {
@@ -197,8 +254,8 @@ export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapVi
             onSelect: () => handleNodeClick(node.id),
             selected: node.id === selectedNodeId,
             progress: nodeProgress,
-            content: node.data.content
-              ? { ...node.data.content, progress: nodeProgress }
+            content: content
+              ? { ...content, progress: nodeProgress }
               : undefined,
           },
         };
@@ -206,18 +263,41 @@ export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapVi
     [nodes, selectedNodeId, progress, handleNodeClick]
   );
 
-  // Estilos personalizados para edges
+  // Mapa de lineStyle a strokeDasharray para restaurar estilos
+  const lineStyleToDasharray: Record<string, string | undefined> = {
+    solid: undefined,
+    dashed: '8 4',
+    dotted: '2 4',
+    longDash: '16 6',
+  };
+
+  // Estilos personalizados para edges - preserva configuración guardada
   const styledEdges = useMemo(
     () =>
-      edges.map((edge) => ({
-        ...edge,
-        style: {
-          stroke: '#BB86FC',
-          strokeWidth: 2,
-          ...edge.style,
-        },
-        animated: true,
-      })),
+      edges.map((edge) => {
+        // Obtener strokeDasharray del estilo guardado o calcularlo desde lineStyle
+        const lineStyle = (edge.data as { lineStyle?: string })?.lineStyle || 'solid';
+        const strokeDasharray = edge.style?.strokeDasharray || lineStyleToDasharray[lineStyle];
+
+        return {
+          ...edge,
+          // Preservar el tipo de edge guardado (bezier, straight, step, smoothstep)
+          type: edge.type || 'default',
+          // Preservar configuración de animación guardada
+          animated: edge.animated ?? false,
+          // Preservar estilos guardados con fallbacks
+          style: {
+            stroke: '#BB86FC',
+            strokeWidth: 2,
+            ...edge.style,
+            // Asegurar que strokeDasharray se restaure correctamente
+            strokeDasharray,
+          },
+          // Preservar marcadores de flecha
+          markerStart: edge.markerStart,
+          markerEnd: edge.markerEnd,
+        };
+      }),
     [edges]
   );
 
@@ -227,10 +307,10 @@ export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapVi
       <style>{roadmapFlowStyles}</style>
 
       {/* Barra de progreso global */}
-      {isLoaded && (
+      {isLoaded && trackableNodesCount > 0 && (
         <RoadmapProgress
           completedNodes={completedCount}
-          totalNodes={roadmap.totalNodes}
+          totalNodes={trackableNodesCount}
           percentage={completionPercentage}
         />
       )}

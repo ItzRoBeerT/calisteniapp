@@ -178,7 +178,7 @@ const InteractiveConfigPanel: React.FC<InteractiveConfigPanelProps> = ({
           <div className="space-y-2 max-h-60 overflow-y-auto">
             {((data as ChecklistNodeData).items || []).map((item, index) => (
               <div
-                key={item.id}
+                key={item.id || `checklist-item-${index}`}
                 className="flex items-center gap-2 p-2 bg-background/50 rounded-lg"
               >
                 <input
@@ -227,7 +227,7 @@ const InteractiveConfigPanel: React.FC<InteractiveConfigPanelProps> = ({
             onClick={() => {
               const newItems = [
                 ...((data as ChecklistNodeData).items || []),
-                { id: Date.now().toString(), text: '', checked: false },
+                { id: `check-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`, text: '', checked: false },
               ];
               handleUpdate({ items: newItems } as Partial<ChecklistNodeData>);
             }}

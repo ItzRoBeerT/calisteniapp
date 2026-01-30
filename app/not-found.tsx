@@ -2,21 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import esMessages from '@/messages/es.json';
+import enMessages from '@/messages/en.json';
 
-// Traducciones para la página 404
 const translations = {
-  es: {
-    title: 'Página no encontrada',
-    subtitle: 'Lo sentimos, la página que buscas no existe o ha sido movida.',
-    backHome: 'Volver al inicio',
-    explore: 'Explorar roadmaps',
-  },
-  en: {
-    title: 'Page not found',
-    subtitle: "Sorry, the page you're looking for doesn't exist or has been moved.",
-    backHome: 'Back to home',
-    explore: 'Explore roadmaps',
-  },
+  es: esMessages.NotFound,
+  en: enMessages.NotFound,
 } as const;
 
 type Locale = keyof typeof translations;
@@ -27,7 +18,7 @@ export default function GlobalNotFound() {
   // Detectar locale desde la URL
   const pathLocale = pathname?.split('/')[1] as Locale;
   const locale: Locale = pathLocale && translations[pathLocale] ? pathLocale : 'es';
-  const t = translations[locale];
+  const t = (key: keyof (typeof translations)['es']) => translations[locale][key];
 
   return (
     <html lang={locale}>
@@ -101,10 +92,10 @@ export default function GlobalNotFound() {
                 marginBottom: '1rem',
               }}
             >
-              {t.title}
+              {t('title')}
             </h2>
             <p style={{ color: 'rgba(237, 237, 237, 0.6)', marginBottom: '2rem' }}>
-              {t.subtitle}
+              {t('subtitle')}
             </p>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
@@ -120,7 +111,7 @@ export default function GlobalNotFound() {
                   textDecoration: 'none',
                 }}
               >
-                {t.backHome}
+                {t('backHome')}
               </Link>
 
               <Link
@@ -135,7 +126,7 @@ export default function GlobalNotFound() {
                   textDecoration: 'none',
                 }}
               >
-                {t.explore}
+                {t('explore')}
               </Link>
             </div>
           </div>

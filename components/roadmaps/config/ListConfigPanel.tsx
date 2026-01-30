@@ -72,7 +72,7 @@ const ListConfigPanel: React.FC<ListConfigPanelProps> = ({
           <label className="block text-sm font-medium text-foreground/70 mb-2">Items</label>
           <div className="space-y-3 max-h-60 overflow-y-auto">
             {((data as LegendNodeData).items || []).map((item, index) => (
-              <div key={item.id} className="p-3 bg-background/50 rounded-lg space-y-2">
+              <div key={item.id || `legend-item-${index}`} className="p-3 bg-background/50 rounded-lg space-y-2">
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
@@ -139,7 +139,7 @@ const ListConfigPanel: React.FC<ListConfigPanelProps> = ({
             onClick={() => {
               const newItems = [
                 ...((data as LegendNodeData).items || []),
-                { id: Date.now().toString(), icon: 'none' as const, label: '', color: '#BB86FC' },
+                { id: `legend-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`, icon: 'none' as const, label: '', color: '#BB86FC' },
               ];
               handleUpdate({ items: newItems } as Partial<LegendNodeData>);
             }}
@@ -158,7 +158,7 @@ const ListConfigPanel: React.FC<ListConfigPanelProps> = ({
           <label className="block text-sm font-medium text-foreground/70 mb-2">Enlaces</label>
           <div className="space-y-3 max-h-60 overflow-y-auto">
             {((data as LinksGroupNodeData).items || []).map((item, index) => (
-              <div key={item.id} className="p-3 bg-background/50 rounded-lg space-y-2">
+              <div key={item.id || `link-item-${index}`} className="p-3 bg-background/50 rounded-lg space-y-2">
                 <div className="flex items-center gap-2">
                   <input
                     type="text"
@@ -226,7 +226,7 @@ const ListConfigPanel: React.FC<ListConfigPanelProps> = ({
             onClick={() => {
               const newItems = [
                 ...((data as LinksGroupNodeData).items || []),
-                { id: Date.now().toString(), label: '', url: '' },
+                { id: `link-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`, label: '', url: '' },
               ];
               handleUpdate({ items: newItems } as Partial<LinksGroupNodeData>);
             }}
