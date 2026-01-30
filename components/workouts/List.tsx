@@ -7,6 +7,7 @@ import { getWorkoutsByPage } from '@/actions/workout';
 import Loader from '@/components/styles/Loader';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
+import { WorkoutDetail } from '@/types/Workout';
 
 type WorkoutsListProps = {
   initialWorkouts: unknown[];
@@ -69,13 +70,16 @@ export default function WorkoutsList({ initialWorkouts, totalPages, userId }: Wo
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
-            {workouts.map((workout) => (
-              <WorkoutCard 
-                key={workout.id} 
-                workout={workout} 
-                isOwner={userId === workout.user_id}
-              />
-            ))}
+            {workouts.map((workout) => {
+              const w = workout as unknown as WorkoutDetail;
+              return (
+                <WorkoutCard 
+                  key={w.id} 
+                  workout={w} 
+                  isOwner={userId === (w as unknown as { user_id?: string }).user_id}
+                />
+              );
+            })}
           </div>
           
           {totalPagesState > 1 && (

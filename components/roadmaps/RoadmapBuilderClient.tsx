@@ -697,24 +697,27 @@ function RoadmapBuilder() {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {availableRoadmaps.map((roadmap) => (
-                    <button
-                      key={roadmap.id}
-                      onClick={() => handleImportRoadmap(roadmap.id)}
-                      className="w-full text-left p-4 rounded-lg border border-foreground/20
-                                 bg-background hover:border-primary-500/50 hover:bg-primary-500/5
-                                 transition-colors"
-                    >
-                      <h3 className="font-semibold text-foreground mb-1">{roadmap.title}</h3>
-                      <p className="text-sm text-foreground/60 mb-2">{roadmap.description}</p>
-                      <div className="flex items-center gap-4 text-xs text-foreground/50">
-                        <span>{t('nodesCount', { count: roadmap.totalNodes })}</span>
-                        {roadmap.updatedAt && (
-                          <span>{t('updatedAt', { date: new Date(roadmap.updatedAt).toLocaleDateString() })}</span>
-                        )}
-                      </div>
-                    </button>
-                  ))}
+                  {availableRoadmaps.map((roadmap: unknown) => {
+                    const r = roadmap as { id: string; title?: string; description?: string; totalNodes?: number; updatedAt?: string };
+                    return (
+                      <button
+                        key={r.id}
+                        onClick={() => handleImportRoadmap(r.id)}
+                        className="w-full text-left p-4 rounded-lg border border-foreground/20
+                                   bg-background hover:border-primary-500/50 hover:bg-primary-500/5
+                                   transition-colors"
+                      >
+                        <h3 className="font-semibold text-foreground mb-1">{r.title}</h3>
+                        <p className="text-sm text-foreground/60 mb-2">{r.description}</p>
+                        <div className="flex items-center gap-4 text-xs text-foreground/50">
+                          <span>{t('nodesCount', { count: r.totalNodes })}</span>
+                          {r.updatedAt && (
+                            <span>{t('updatedAt', { date: new Date(r.updatedAt).toLocaleDateString() })}</span>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               )}
             </div>
