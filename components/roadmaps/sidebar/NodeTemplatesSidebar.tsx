@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import type { NodeTemplate, RoadmapNodeCategory } from '@/types/RoadmapNodes';
 import { templateCategories, getTemplatesByCategory } from './templates';
+import { useTranslations } from 'next-intl';
 
 interface NodeTemplatesSidebarProps {
   onDragStart: (event: React.DragEvent, template: NodeTemplate) => void;
@@ -49,6 +50,8 @@ const categoryIcons: Record<RoadmapNodeCategory, React.ReactNode> = {
 };
 
 const NodeTemplatesSidebar: React.FC<NodeTemplatesSidebarProps> = ({ onDragStart }) => {
+  const t = useTranslations('RoadmapBuilder');
+
   // Estado para categorías colapsadas
   const [collapsedCategories, setCollapsedCategories] = useState<Record<string, boolean>>(
     () => {
@@ -67,6 +70,35 @@ const NodeTemplatesSidebar: React.FC<NodeTemplatesSidebarProps> = ({ onDragStart
     }));
   };
 
+  // Mapeo de categorías a traducciones
+  const categoryLabels: Record<RoadmapNodeCategory, string> = {
+    text: t('categories.text'),
+    content: t('categories.content'),
+    interactive: t('categories.interactive'),
+    list: t('categories.list'),
+    decorative: t('categories.decorative'),
+    container: t('categories.container'),
+  };
+
+  // Mapeo de tipos de nodo a traducciones
+  const templateLabels: Record<string, string> = {
+    title: t('nodeTypes.title'),
+    paragraph: t('nodeTypes.paragraph'),
+    label: t('nodeTypes.label'),
+    topic: t('nodeTypes.topic'),
+    subtopic: t('nodeTypes.subtopic'),
+    image: t('nodeTypes.image'),
+    button: t('nodeTypes.button'),
+    resourceButton: t('nodeTypes.resourceButton'),
+    todo: t('nodeTypes.todo'),
+    checklist: t('nodeTypes.checklist'),
+    legend: t('nodeTypes.legend'),
+    linksGroup: t('nodeTypes.linksGroup'),
+    horizontalLine: t('nodeTypes.horizontalLine'),
+    verticalLine: t('nodeTypes.verticalLine'),
+    section: t('nodeTypes.section'),
+  };
+
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
@@ -80,7 +112,7 @@ const NodeTemplatesSidebar: React.FC<NodeTemplatesSidebarProps> = ({ onDragStart
             className="text-sm font-semibold text-foreground/90"
             style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
-            Templates
+            {t('components')}
           </span>
         </div>
       </div>
@@ -118,7 +150,7 @@ const NodeTemplatesSidebar: React.FC<NodeTemplatesSidebarProps> = ({ onDragStart
                   className="flex-1 text-left text-sm text-foreground/80"
                   style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                 >
-                  {category.label}
+                  {categoryLabels[category.id]}
                 </span>
 
                 {/* Contador */}
@@ -157,7 +189,7 @@ const NodeTemplatesSidebar: React.FC<NodeTemplatesSidebarProps> = ({ onDragStart
                         className="text-xs text-foreground/70 text-center leading-tight"
                         style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                       >
-                        {template.label}
+                        {templateLabels[template.type] || template.label}
                       </span>
                     </div>
                   ))}
@@ -171,7 +203,7 @@ const NodeTemplatesSidebar: React.FC<NodeTemplatesSidebarProps> = ({ onDragStart
       {/* Footer con instrucción */}
       <div className="px-4 py-3 border-t border-foreground/10 bg-foreground/5">
         <p className="text-xs text-foreground/40 text-center">
-          Arrastra al canvas para agregar
+          {t('sidebar.dragToAdd')}
         </p>
       </div>
     </div>

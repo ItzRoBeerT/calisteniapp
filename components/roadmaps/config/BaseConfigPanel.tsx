@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import type { Node } from 'reactflow';
 import type { AnyNodeData } from '@/types/RoadmapNodes';
+import { useTranslations } from 'next-intl';
 
 export interface BaseConfigPanelProps {
   children?: React.ReactNode;
@@ -28,20 +29,19 @@ const BaseConfigPanel: React.FC<BaseConfigPanelProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState('basic');
   const nodeData = node.data;
+  const t = useTranslations('RoadmapBuilder');
 
   const handleUpdate = (updates: Partial<AnyNodeData>) => {
     onUpdateNode(node.id, updates);
   };
 
   const handleDelete = () => {
-    if (confirm('¿Estás seguro de que quieres eliminar este elemento?')) {
-      onDeleteNode(node.id);
-      onClose();
-    }
+    onDeleteNode(node.id);
+    onClose();
   };
 
   // Tabs disponibles: siempre incluye "Básico"
-  const allTabs = [{ id: 'basic', label: 'Básico' }, ...tabs];
+  const allTabs = [{ id: 'basic', label: t('tabs.basic') }, ...tabs];
 
   return (
     <div
@@ -93,7 +93,7 @@ const BaseConfigPanel: React.FC<BaseConfigPanelProps> = ({
             {/* Label */}
             <div>
               <label className="block text-sm font-medium text-foreground/70 mb-1.5">
-                Nombre
+                {t('fields.label')}
               </label>
               <input
                 type="text"
@@ -103,7 +103,7 @@ const BaseConfigPanel: React.FC<BaseConfigPanelProps> = ({
                          text-foreground placeholder-foreground/40
                          focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500/50
                          transition-colors"
-                placeholder="Nombre del elemento"
+                placeholder={t('fields.label')}
               />
             </div>
 
@@ -111,11 +111,11 @@ const BaseConfigPanel: React.FC<BaseConfigPanelProps> = ({
             {!hideSizeControls && (
               <div>
                 <label className="block text-sm font-medium text-foreground/70 mb-1.5">
-                  Tamaño
+                  {t('fields.size')}
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-xs text-foreground/50 mb-1">Ancho</label>
+                    <label className="block text-xs text-foreground/50 mb-1">{t('fields.width')}</label>
                     <input
                       type="number"
                       value={nodeData.width || ''}
@@ -129,7 +129,7 @@ const BaseConfigPanel: React.FC<BaseConfigPanelProps> = ({
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-foreground/50 mb-1">Alto</label>
+                    <label className="block text-xs text-foreground/50 mb-1">{t('fields.height')}</label>
                     <input
                       type="number"
                       value={nodeData.height || ''}
@@ -149,7 +149,7 @@ const BaseConfigPanel: React.FC<BaseConfigPanelProps> = ({
             {/* Handles */}
             <div>
               <label className="block text-sm font-medium text-foreground/70 mb-1.5">
-                Puntos de conexión
+                {t('handles.title')}
               </label>
               <div className="grid grid-cols-2 gap-2">
                 {(['top', 'bottom', 'left', 'right'] as const).map((position) => (
@@ -173,9 +173,7 @@ const BaseConfigPanel: React.FC<BaseConfigPanelProps> = ({
                                focus:ring-primary-500/50 bg-background"
                     />
                     <span className="text-sm text-foreground/70 capitalize">
-                      {position === 'top' ? 'Arriba' :
-                       position === 'bottom' ? 'Abajo' :
-                       position === 'left' ? 'Izquierda' : 'Derecha'}
+                      {t(`handles.${position}`)}
                     </span>
                   </label>
                 ))}
@@ -207,7 +205,7 @@ const BaseConfigPanel: React.FC<BaseConfigPanelProps> = ({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                   d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
           </svg>
-          Eliminar
+          {t('actions.delete')}
         </button>
       </div>
     </div>

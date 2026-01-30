@@ -3,9 +3,7 @@
 import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
-import { useParams } from 'next/navigation';
 import ExerciseList from './ExerciseList';
-import TagList from './TagList';
 import DeleteWorkoutButton from './DeleteWorkoutButton';
 import { getDifficultyColor } from '@/utils/difficultyColors';
 import { WorkoutDetail } from '@/types/Workout';
@@ -24,8 +22,6 @@ export default function WorkoutDetailModal({
   isOwner,
 }: WorkoutDetailModalProps) {
   const t = useTranslations('WorkoutDetail');
-  const params = useParams();
-  const locale = params.locale as string;
 
   const difficultyClass = getDifficultyColor(workout.difficulty);
 

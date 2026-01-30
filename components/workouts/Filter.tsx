@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { useParams } from 'next/navigation';
 
 type WorkoutFilterProps = {
   allFilters: {
@@ -18,8 +17,6 @@ export default function WorkoutFilter({ allFilters }: WorkoutFilterProps) {
   const t = useTranslations('WorkoutFilter');
   const router = useRouter();
   const pathname = usePathname();
-  const params = useParams();
-  const locale = params.locale as string;
   
   const [filters, setFilters] = useState({
     difficulty: '',

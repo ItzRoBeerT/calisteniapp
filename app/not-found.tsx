@@ -1,7 +1,7 @@
 'use client';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import esMessages from '@/messages/es.json';
 import enMessages from '@/messages/en.json';
 

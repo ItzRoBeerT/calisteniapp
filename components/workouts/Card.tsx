@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import TagList from './TagList';
 import WorkoutDetailModal from './WorkoutDetailModal';
 import { getDifficultyColor } from '@/utils/difficultyColors';
 import { WorkoutDetail } from '@/types/Workout';

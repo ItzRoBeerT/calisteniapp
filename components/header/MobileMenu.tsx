@@ -1,11 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Link } from '@/i18n/navigation';
 import NavLink from './NavLink';
 
 type MobileMenuProps = {
-	user: any;
+	user: unknown;
 	userName: string | null;
 };
 
