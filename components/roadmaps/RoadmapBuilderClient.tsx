@@ -75,7 +75,7 @@ function RoadmapBuilder() {
 
   // Estado de importación
   const [showImportModal, setShowImportModal] = useState(false);
-  const [availableRoadmaps, setAvailableRoadmaps] = useState<any[]>([]);
+  const [availableRoadmaps, setAvailableRoadmaps] = useState<unknown[]>([]);
   const [isLoadingRoadmaps, setIsLoadingRoadmaps] = useState(false);
 
   // Nodo seleccionado
@@ -254,30 +254,47 @@ function RoadmapBuilder() {
           return;
         }
 
-        if (selectedNodeId) {
+        // Obtener nodos y edges seleccionados (por selección múltiple con drag)
+        const selectedNodes = nodes.filter((n) => n.selected);
+        const selectedEdges = edges.filter((e) => e.selected);
+
+        // Si hay nodos seleccionados (uno o múltiples), eliminarlos
+        if (selectedNodes.length > 0) {
           event.preventDefault();
-          if (confirm('¿Seguro que quieres eliminar este nodo?')) {
-            setNodes((nds) => nds.filter((n) => n.id !== selectedNodeId));
-            setEdges((eds) => eds.filter((e) => e.source !== selectedNodeId && e.target !== selectedNodeId));
-            setSelectedNodeId(null);
-          }
+          const selectedNodeIds = selectedNodes.map((n) => n.id);
+          setNodes((nds) => nds.filter((n) => !selectedNodeIds.includes(n.id)));
+          setEdges((eds) => eds.filter((e) => !selectedNodeIds.includes(e.source) && !selectedNodeIds.includes(e.target)));
+          setSelectedNodeId(null);
+        }
+        // Si hay edges seleccionados, eliminarlos
+        else if (selectedEdges.length > 0) {
+          event.preventDefault();
+          const selectedEdgeIds = selectedEdges.map((e) => e.id);
+          setEdges((eds) => eds.filter((e) => !selectedEdgeIds.includes(e.id)));
+          setSelectedEdgeId(null);
+        }
+        // Fallback: eliminar nodo/edge seleccionado individualmente (desde el panel)
+        else if (selectedNodeId) {
+          event.preventDefault();
+          setNodes((nds) => nds.filter((n) => n.id !== selectedNodeId));
+          setEdges((eds) => eds.filter((e) => e.source !== selectedNodeId && e.target !== selectedNodeId));
+          setSelectedNodeId(null);
         } else if (selectedEdgeId) {
           event.preventDefault();
-          if (confirm('¿Seguro que quieres eliminar esta conexión?')) {
-            setEdges((eds) => eds.filter((e) => e.id !== selectedEdgeId));
-            setSelectedEdgeId(null);
-          }
+          setEdges((eds) => eds.filter((e) => e.id !== selectedEdgeId));
+          setSelectedEdgeId(null);
         }
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedNodeId, selectedEdgeId, setNodes, setEdges]);
+  }, [nodes, edges, selectedNodeId, selectedEdgeId, setNodes, setEdges]);
 
   // Guardar roadmap en el servidor
   const handleSave = useCallback(async () => {
-    const name = prompt('Nombre del roadmap:', roadmapId || 'mi-roadmap');
+    const defaultName = roadmapId || t('defaultName');
+    const name = prompt(t('savePrompt'), defaultName);
     if (!name) return;
 
     const sanitizedName = name.toLowerCase().replace(/[^a-z0-9-_]/g, '-').replace(/-+/g, '-');
@@ -303,7 +320,7 @@ function RoadmapBuilder() {
       const roadmapData = {
         id: sanitizedName,
         title: name,
-        description: 'Roadmap creado con el builder',
+        description: t('defaultDescription'),
         isPublic: true,
         totalNodes: nodes.length,
         completedNodes: 0,
@@ -334,17 +351,17 @@ function RoadmapBuilder() {
 
       if (result.success) {
         setRoadmapId(result.id);
-        alert(`Roadmap "${name}" guardado correctamente.`);
+        alert(t('saveSuccess', { name }));
       } else {
-        alert(`Error al guardar: ${result.error}`);
+        alert(t('saveError', { error: result.error }));
       }
     } catch (error) {
       console.error('Error saving roadmap:', error);
-      alert('Error al guardar el roadmap. Revisa la consola para más detalles.');
+      alert(t('saveErrorFallback'));
     } finally {
       setIsSaving(false);
     }
-  }, [nodes, edges, roadmapId]);
+  }, [nodes, edges, roadmapId, t]);
 
   // Cargar lista de roadmaps disponibles
   const loadAvailableRoadmaps = useCallback(async () => {
@@ -355,11 +372,11 @@ function RoadmapBuilder() {
       setAvailableRoadmaps(roadmaps);
     } catch (error) {
       console.error('Error loading roadmaps:', error);
-      alert('Error al cargar la lista de roadmaps.');
+      alert(t('loadError'));
     } finally {
       setIsLoadingRoadmaps(false);
     }
-  }, []);
+  }, [t]);
 
   // Abrir modal de importación
   const handleOpenImport = useCallback(async () => {
@@ -385,7 +402,7 @@ function RoadmapBuilder() {
           data: {
             ...n.data,
             // Fallback para datos legacy
-            label: n.data?.label || n.data?.content?.title || 'Sin nombre',
+            label: n.data?.label || n.data?.content?.title || t('untitledNode'),
             nodeType: n.data?.nodeType || 'topic',
           } as AnyNodeData,
         }));
@@ -435,25 +452,25 @@ function RoadmapBuilder() {
         setSelectedEdgeId(null);
         setRoadmapId(data.id || null);
         setShowImportModal(false);
-        alert(`Roadmap "${data.title}" cargado correctamente.`);
+        alert(t('importSuccess', { title: data.title ?? t('untitledRoadmap') }));
       } catch (error) {
         console.error('Error importing roadmap:', error);
-        alert('Error al importar el roadmap.');
+        alert(t('importError'));
       }
     },
-    [setNodes, setEdges]
+    [setNodes, setEdges, t]
   );
 
   // Limpiar canvas
   const handleClear = useCallback(() => {
-    if (confirm('¿Seguro que quieres limpiar todo el canvas?')) {
+    if (confirm(t('confirmClear'))) {
       setNodes([]);
       setEdges([]);
       setSelectedNodeId(null);
       setSelectedEdgeId(null);
       setRoadmapId(null);
     }
-  }, [setNodes, setEdges]);
+  }, [setNodes, setEdges, t]);
 
   // Nodos con callbacks inyectados y modo builder
   const nodesWithCallbacks = useMemo(
@@ -494,7 +511,7 @@ function RoadmapBuilder() {
           className="text-xl font-bold text-foreground"
           style={{ fontFamily: "'Orbitron', sans-serif" }}
         >
-          Constructor de Roadmap
+          {t('title')}
         </h1>
 
         <div className="flex items-center gap-2">
@@ -504,7 +521,7 @@ function RoadmapBuilder() {
                        text-foreground/70 rounded-lg transition-colors text-sm"
           >
             <ImportIcon />
-            Importar
+            {t('import')}
           </button>
 
           <button
@@ -513,7 +530,7 @@ function RoadmapBuilder() {
                        text-red-400 border border-red-500/30 rounded-lg transition-colors text-sm"
           >
             <ClearIcon />
-            Limpiar
+            {t('clear')}
           </button>
 
           <button
@@ -524,7 +541,7 @@ function RoadmapBuilder() {
                        disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSaving ? <LoadingSpinner /> : <SaveIcon />}
-            {isSaving ? 'Guardando...' : 'Guardar'}
+            {isSaving ? t('saving') : t('save')}
           </button>
         </div>
       </div>
@@ -553,7 +570,7 @@ function RoadmapBuilder() {
                   : 'text-foreground/60 hover:text-foreground hover:bg-foreground/5'
                 }`}
             >
-              Templates
+              {t('templates')}
             </button>
           </div>
 
@@ -575,7 +592,7 @@ function RoadmapBuilder() {
           {roadmapId && (
             <div className="p-3 border-t border-foreground/10 bg-primary-500/5">
               <p className="text-xs text-primary-400">
-                <strong>Editando:</strong> {roadmapId}
+                <strong>{t('editingLabel')}</strong> {roadmapId}
               </p>
             </div>
           )}
@@ -655,7 +672,7 @@ function RoadmapBuilder() {
           <div className="bg-surface border border-foreground/10 rounded-xl shadow-2xl max-w-2xl w-full max-h-[80vh] flex flex-col">
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-foreground/10">
-              <h2 className="text-xl font-bold text-foreground">Importar Roadmap</h2>
+              <h2 className="text-xl font-bold text-foreground">{t('importTitle')}</h2>
               <button
                 onClick={() => setShowImportModal(false)}
                 className="text-foreground/50 hover:text-foreground transition-colors"
@@ -671,12 +688,12 @@ function RoadmapBuilder() {
               {isLoadingRoadmaps ? (
                 <div className="flex items-center justify-center py-12">
                   <LoadingSpinner />
-                  <span className="ml-2 text-foreground/60">Cargando roadmaps...</span>
+                  <span className="ml-2 text-foreground/60">{t('loadingRoadmaps')}</span>
                 </div>
               ) : availableRoadmaps.length === 0 ? (
                 <div className="text-center py-12 text-foreground/50">
-                  <p>No hay roadmaps disponibles para importar.</p>
-                  <p className="text-sm mt-2">Guarda un roadmap primero para poder importarlo.</p>
+                  <p>{t('noRoadmaps')}</p>
+                  <p className="text-sm mt-2">{t('noRoadmapsHint')}</p>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -691,9 +708,9 @@ function RoadmapBuilder() {
                       <h3 className="font-semibold text-foreground mb-1">{roadmap.title}</h3>
                       <p className="text-sm text-foreground/60 mb-2">{roadmap.description}</p>
                       <div className="flex items-center gap-4 text-xs text-foreground/50">
-                        <span>{roadmap.totalNodes} nodos</span>
+                        <span>{t('nodesCount', { count: roadmap.totalNodes })}</span>
                         {roadmap.updatedAt && (
-                          <span>Actualizado: {new Date(roadmap.updatedAt).toLocaleDateString()}</span>
+                          <span>{t('updatedAt', { date: new Date(roadmap.updatedAt).toLocaleDateString() })}</span>
                         )}
                       </div>
                     </button>

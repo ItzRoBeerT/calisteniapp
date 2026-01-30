@@ -263,18 +263,18 @@ export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapVi
     [nodes, selectedNodeId, progress, handleNodeClick]
   );
 
-  // Mapa de lineStyle a strokeDasharray para restaurar estilos
-  const lineStyleToDasharray: Record<string, string | undefined> = {
-    solid: undefined,
-    dashed: '8 4',
-    dotted: '2 4',
-    longDash: '16 6',
-  };
-
   // Estilos personalizados para edges - preserva configuración guardada
   const styledEdges = useMemo(
-    () =>
-      edges.map((edge) => {
+    () => {
+      // Mapa de lineStyle a strokeDasharray para restaurar estilos
+      const lineStyleToDasharray: Record<string, string | undefined> = {
+        solid: undefined,
+        dashed: '8 4',
+        dotted: '2 4',
+        longDash: '16 6',
+      };
+
+      return edges.map((edge) => {
         // Obtener strokeDasharray del estilo guardado o calcularlo desde lineStyle
         const lineStyle = (edge.data as { lineStyle?: string })?.lineStyle || 'solid';
         const strokeDasharray = edge.style?.strokeDasharray || lineStyleToDasharray[lineStyle];
@@ -297,7 +297,8 @@ export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapVi
           markerStart: edge.markerStart,
           markerEnd: edge.markerEnd,
         };
-      }),
+      });
+    },
     [edges]
   );
 

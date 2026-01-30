@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import WorkoutCard from './Card';
 import Paginator from '@/components/pagination/Paginator';
 import { getWorkoutsByPage } from '@/actions/workout';
@@ -9,14 +9,14 @@ import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 
 type WorkoutsListProps = {
-  initialWorkouts: any[];
+  initialWorkouts: unknown[];
   totalPages: number;
   userId?: string;
 };
 
 export default function WorkoutsList({ initialWorkouts, totalPages, userId }: WorkoutsListProps) {
   const t = useTranslations('WorkoutsPage');
-  const [workouts, setWorkouts] = useState<any[]>(initialWorkouts);
+  const [workouts, setWorkouts] = useState<unknown[]>(initialWorkouts);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [totalPagesState, setTotalPagesState] = useState(totalPages);

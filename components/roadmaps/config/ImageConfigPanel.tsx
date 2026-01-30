@@ -47,6 +47,7 @@ const ImageConfigPanel: React.FC<ImageConfigPanelProps> = ({
         {/* Preview de imagen */}
         {data.imageUrl && (
           <div className="rounded-lg overflow-hidden border border-foreground/20">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={data.imageUrl}
               alt={data.alt || 'Preview'}

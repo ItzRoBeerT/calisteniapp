@@ -16,6 +16,7 @@ import BaseConfigPanel, {
   ConfigCheckbox,
 } from './BaseConfigPanel';
 import { calistenicsIconNames } from '@/components/roadmaps/CalistenicsIcons';
+import { useTranslations } from 'next-intl';
 
 type InteractiveNodeData = ButtonNodeData | ResourceButtonNodeData | TodoNodeData | ChecklistNodeData;
 
@@ -26,13 +27,6 @@ interface InteractiveConfigPanelProps {
   onClose: () => void;
 }
 
-const nodeTypeLabels: Record<string, string> = {
-  button: 'Botón',
-  resourceButton: 'Recurso',
-  todo: 'Tarea',
-  checklist: 'Checklist',
-};
-
 const InteractiveConfigPanel: React.FC<InteractiveConfigPanelProps> = ({
   node,
   onUpdateNode,
@@ -41,13 +35,21 @@ const InteractiveConfigPanel: React.FC<InteractiveConfigPanelProps> = ({
 }) => {
   const data = node.data as InteractiveNodeData;
   const nodeType = data.nodeType;
+  const t = useTranslations('RoadmapBuilder');
+
+  const nodeTypeLabels: Record<string, string> = {
+    button: t('nodeTypes.button'),
+    resourceButton: t('nodeTypes.resourceButton'),
+    todo: t('nodeTypes.todo'),
+    checklist: t('nodeTypes.checklist'),
+  };
 
   const handleUpdate = (updates: Partial<InteractiveNodeData>) => {
     onUpdateNode(node.id, updates);
   };
 
   const iconOptions = [
-    { value: 'none', label: 'Sin icono' },
+    { value: 'none', label: t('fields.noIcon') },
     ...calistenicsIconNames.map((name) => ({
       value: name,
       label: name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, ' '),
@@ -56,10 +58,10 @@ const InteractiveConfigPanel: React.FC<InteractiveConfigPanelProps> = ({
 
   const getTabs = () => {
     if (nodeType === 'checklist') {
-      return [{ id: 'items', label: 'Items' }];
+      return [{ id: 'items', label: t('tabs.items') }];
     }
     if (nodeType === 'button' || nodeType === 'resourceButton') {
-      return [{ id: 'style', label: 'Estilo' }];
+      return [{ id: 'style', label: t('tabs.style') }];
     }
     return [];
   };
@@ -70,44 +72,44 @@ const InteractiveConfigPanel: React.FC<InteractiveConfigPanelProps> = ({
       onUpdateNode={onUpdateNode}
       onDeleteNode={onDeleteNode}
       onClose={onClose}
-      title={nodeTypeLabels[nodeType] || 'Interactivo'}
+      title={nodeTypeLabels[nodeType] || t('categories.interactive')}
       tabs={getTabs()}
     >
       {/* Configuración de Button */}
       {nodeType === 'button' && (
         <div data-tab="style" className="space-y-4">
           <ConfigInput
-            label="URL"
+            label={t('fields.url')}
             value={(data as ButtonNodeData).url}
             onChange={(v) => handleUpdate({ url: v } as Partial<ButtonNodeData>)}
             type="url"
-            placeholder="https://ejemplo.com"
+            placeholder={t('fields.urlPlaceholder')}
           />
           <ConfigSelect
-            label="Variante"
+            label={t('fields.variant')}
             value={(data as ButtonNodeData).variant || 'solid'}
             onChange={(v) =>
               handleUpdate({ variant: v as ButtonNodeData['variant'] } as Partial<ButtonNodeData>)
             }
             options={[
-              { value: 'solid', label: 'Sólido' },
-              { value: 'outline', label: 'Contorno' },
-              { value: 'ghost', label: 'Fantasma' },
+              { value: 'solid', label: t('fields.variantSolid') },
+              { value: 'outline', label: t('fields.variantOutline') },
+              { value: 'ghost', label: t('fields.variantGhost') },
             ]}
           />
           <ConfigColorPicker
-            label="Color de fondo"
+            label={t('fields.backgroundColor')}
             value={(data as ButtonNodeData).backgroundColor}
             onChange={(v) => handleUpdate({ backgroundColor: v } as Partial<ButtonNodeData>)}
           />
           <ConfigColorPicker
-            label="Color de texto"
+            label={t('fields.textColor')}
             value={(data as ButtonNodeData).textColor}
             onChange={(v) => handleUpdate({ textColor: v } as Partial<ButtonNodeData>)}
             colors={['#ffffff', '#000000', '#e0e0e0', '#1a1a1a']}
           />
           <ConfigSelect
-            label="Icono"
+            label={t('fields.icon')}
             value={(data as ButtonNodeData).icon || 'none'}
             onChange={(v) =>
               handleUpdate({ icon: v as ButtonNodeData['icon'] } as Partial<ButtonNodeData>)
@@ -121,20 +123,20 @@ const InteractiveConfigPanel: React.FC<InteractiveConfigPanelProps> = ({
       {nodeType === 'resourceButton' && (
         <div data-tab="style" className="space-y-4">
           <ConfigInput
-            label="URL"
+            label={t('fields.url')}
             value={(data as ResourceButtonNodeData).url}
             onChange={(v) => handleUpdate({ url: v } as Partial<ResourceButtonNodeData>)}
             type="url"
-            placeholder="https://ejemplo.com"
+            placeholder={t('fields.urlPlaceholder')}
           />
           <ConfigInput
-            label="Texto del badge"
+            label={t('fields.badgeText')}
             value={(data as ResourceButtonNodeData).badgeText}
             onChange={(v) => handleUpdate({ badgeText: v } as Partial<ResourceButtonNodeData>)}
             placeholder="FREE"
           />
           <ConfigColorPicker
-            label="Color del badge"
+            label={t('fields.badgeColor')}
             value={(data as ResourceButtonNodeData).badgeBackgroundColor}
             onChange={(v) =>
               handleUpdate({ badgeBackgroundColor: v } as Partial<ResourceButtonNodeData>)
@@ -142,12 +144,12 @@ const InteractiveConfigPanel: React.FC<InteractiveConfigPanelProps> = ({
             colors={['#32D74B', '#FF9F0A', '#FF453A', '#64D2FF', '#BB86FC']}
           />
           <ConfigColorPicker
-            label="Color de fondo"
+            label={t('fields.backgroundColor')}
             value={(data as ResourceButtonNodeData).backgroundColor}
             onChange={(v) => handleUpdate({ backgroundColor: v } as Partial<ResourceButtonNodeData>)}
           />
           <ConfigSelect
-            label="Icono"
+            label={t('fields.icon')}
             value={(data as ResourceButtonNodeData).icon || 'none'}
             onChange={(v) =>
               handleUpdate({
@@ -163,10 +165,9 @@ const InteractiveConfigPanel: React.FC<InteractiveConfigPanelProps> = ({
       {nodeType === 'todo' && (
         <div className="space-y-4">
           <ConfigCheckbox
-            label="Completado"
+            label={t('fields.checked')}
             checked={(data as TodoNodeData).checked}
             onChange={(v) => handleUpdate({ checked: v } as Partial<TodoNodeData>)}
-            description="Estado inicial de la tarea"
           />
         </div>
       )}
@@ -174,7 +175,7 @@ const InteractiveConfigPanel: React.FC<InteractiveConfigPanelProps> = ({
       {/* Configuración de Checklist */}
       {nodeType === 'checklist' && (
         <div data-tab="items" className="space-y-4">
-          <label className="block text-sm font-medium text-foreground/70 mb-2">Items</label>
+          <label className="block text-sm font-medium text-foreground/70 mb-2">{t('tabs.items')}</label>
           <div className="space-y-2 max-h-60 overflow-y-auto">
             {((data as ChecklistNodeData).items || []).map((item, index) => (
               <div
@@ -200,7 +201,7 @@ const InteractiveConfigPanel: React.FC<InteractiveConfigPanelProps> = ({
                     handleUpdate({ items: newItems } as Partial<ChecklistNodeData>);
                   }}
                   className="flex-1 px-2 py-1 bg-background border border-foreground/20 rounded text-sm text-foreground"
-                  placeholder="Texto del item"
+                  placeholder={t('items.itemTextPlaceholder')}
                 />
                 <button
                   onClick={() => {
@@ -235,7 +236,7 @@ const InteractiveConfigPanel: React.FC<InteractiveConfigPanelProps> = ({
                      text-foreground/60 hover:text-foreground hover:border-primary-500/50
                      rounded-lg text-sm transition-colors"
           >
-            + Agregar item
+            + {t('items.addItem')}
           </button>
         </div>
       )}

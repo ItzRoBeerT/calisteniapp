@@ -5,6 +5,7 @@ import type { Node } from 'reactflow';
 import type { AnyNodeData, LegendNodeData, LinksGroupNodeData } from '@/types/RoadmapNodes';
 import BaseConfigPanel, { ConfigSelect } from './BaseConfigPanel';
 import { calistenicsIconNames } from '@/components/roadmaps/CalistenicsIcons';
+import { useTranslations } from 'next-intl';
 
 type ListNodeData = LegendNodeData | LinksGroupNodeData;
 
@@ -15,11 +16,6 @@ interface ListConfigPanelProps {
   onClose: () => void;
 }
 
-const nodeTypeLabels: Record<string, string> = {
-  legend: 'Leyenda',
-  linksGroup: 'Enlaces',
-};
-
 const ListConfigPanel: React.FC<ListConfigPanelProps> = ({
   node,
   onUpdateNode,
@@ -28,13 +24,19 @@ const ListConfigPanel: React.FC<ListConfigPanelProps> = ({
 }) => {
   const data = node.data as ListNodeData;
   const nodeType = data.nodeType;
+  const t = useTranslations('RoadmapBuilder');
+
+  const nodeTypeLabels: Record<string, string> = {
+    legend: t('nodeTypes.legend'),
+    linksGroup: t('nodeTypes.linksGroup'),
+  };
 
   const handleUpdate = (updates: Partial<ListNodeData>) => {
     onUpdateNode(node.id, updates);
   };
 
   const iconOptions = [
-    { value: 'none', label: 'Sin icono' },
+    { value: 'none', label: t('fields.noIcon') },
     ...calistenicsIconNames.map((name) => ({
       value: name,
       label: name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, ' '),
@@ -47,15 +49,15 @@ const ListConfigPanel: React.FC<ListConfigPanelProps> = ({
       onUpdateNode={onUpdateNode}
       onDeleteNode={onDeleteNode}
       onClose={onClose}
-      title={nodeTypeLabels[nodeType] || 'Lista'}
-      tabs={[{ id: 'items', label: 'Items' }]}
+      title={nodeTypeLabels[nodeType] || t('categories.list')}
+      tabs={[{ id: 'items', label: t('tabs.items') }]}
     >
       {/* Configuración de Legend */}
       {nodeType === 'legend' && (
         <div data-tab="items" className="space-y-4">
           {/* Orientación */}
           <ConfigSelect
-            label="Orientación"
+            label={t('fields.textAlign')}
             value={(data as LegendNodeData).orientation || 'vertical'}
             onChange={(v) =>
               handleUpdate({
@@ -69,7 +71,7 @@ const ListConfigPanel: React.FC<ListConfigPanelProps> = ({
           />
 
           {/* Items */}
-          <label className="block text-sm font-medium text-foreground/70 mb-2">Items</label>
+          <label className="block text-sm font-medium text-foreground/70 mb-2">{t('tabs.items')}</label>
           <div className="space-y-3 max-h-60 overflow-y-auto">
             {((data as LegendNodeData).items || []).map((item, index) => (
               <div key={item.id || `legend-item-${index}`} className="p-3 bg-background/50 rounded-lg space-y-2">
@@ -83,7 +85,7 @@ const ListConfigPanel: React.FC<ListConfigPanelProps> = ({
                       handleUpdate({ items: newItems } as Partial<LegendNodeData>);
                     }}
                     className="flex-1 px-2 py-1 bg-background border border-foreground/20 rounded text-sm text-foreground"
-                    placeholder="Etiqueta"
+                    placeholder={t('items.itemTextPlaceholder')}
                   />
                   <button
                     onClick={() => {
@@ -147,7 +149,7 @@ const ListConfigPanel: React.FC<ListConfigPanelProps> = ({
                      text-foreground/60 hover:text-foreground hover:border-primary-500/50
                      rounded-lg text-sm transition-colors"
           >
-            + Agregar item
+            + {t('items.addItem')}
           </button>
         </div>
       )}
@@ -155,7 +157,7 @@ const ListConfigPanel: React.FC<ListConfigPanelProps> = ({
       {/* Configuración de LinksGroup */}
       {nodeType === 'linksGroup' && (
         <div data-tab="items" className="space-y-4">
-          <label className="block text-sm font-medium text-foreground/70 mb-2">Enlaces</label>
+          <label className="block text-sm font-medium text-foreground/70 mb-2">{t('items.linkLabel')}</label>
           <div className="space-y-3 max-h-60 overflow-y-auto">
             {((data as LinksGroupNodeData).items || []).map((item, index) => (
               <div key={item.id || `link-item-${index}`} className="p-3 bg-background/50 rounded-lg space-y-2">
@@ -169,7 +171,7 @@ const ListConfigPanel: React.FC<ListConfigPanelProps> = ({
                       handleUpdate({ items: newItems } as Partial<LinksGroupNodeData>);
                     }}
                     className="flex-1 px-2 py-1 bg-background border border-foreground/20 rounded text-sm text-foreground"
-                    placeholder="Etiqueta"
+                    placeholder={t('items.linkLabelPlaceholder')}
                   />
                   <button
                     onClick={() => {
@@ -199,7 +201,7 @@ const ListConfigPanel: React.FC<ListConfigPanelProps> = ({
                     handleUpdate({ items: newItems } as Partial<LinksGroupNodeData>);
                   }}
                   className="w-full px-2 py-1 bg-background border border-foreground/20 rounded text-sm text-foreground"
-                  placeholder="https://ejemplo.com"
+                  placeholder={t('items.linkUrlPlaceholder')}
                 />
                 <select
                   value={item.icon || 'none'}
@@ -234,7 +236,7 @@ const ListConfigPanel: React.FC<ListConfigPanelProps> = ({
                      text-foreground/60 hover:text-foreground hover:border-primary-500/50
                      rounded-lg text-sm transition-colors"
           >
-            + Agregar enlace
+            + {t('items.addLink')}
           </button>
         </div>
       )}

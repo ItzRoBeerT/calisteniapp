@@ -25,7 +25,7 @@ export function SubmitButton({ children, pendingText, ...props }: Props) {
     try {
       setErrorMessage(null);
       
-      const result = await (props.formAction as any)(formData);
+      const result = await (props.formAction as unknown as (formData: FormData) => Promise<{error?: string; success?: boolean; redirect?: string}>)(formData);
       
       // Handle errors or success messages
       if (result?.error) {
@@ -58,7 +58,7 @@ export function SubmitButton({ children, pendingText, ...props }: Props) {
         {...props} 
         type="submit" 
         aria-disabled={isPending}
-        formAction={wrappedAction as any}
+        formAction={wrappedAction as unknown as (formData: FormData) => void | Promise<void>}
         onClick={handleClick}
       >
         {isPending ? pendingText : children}

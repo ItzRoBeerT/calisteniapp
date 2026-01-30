@@ -9,6 +9,7 @@ import BaseConfigPanel, {
   ConfigSelect,
 } from './BaseConfigPanel';
 import { calistenicsIconNames } from '@/components/roadmaps/CalistenicsIcons';
+import { useTranslations } from 'next-intl';
 
 type ContentNodeData = TopicNodeData | SubTopicNodeData;
 
@@ -19,11 +20,6 @@ interface ContentConfigPanelProps {
   onClose: () => void;
 }
 
-const nodeTypeLabels: Record<string, string> = {
-  topic: 'Tema',
-  subtopic: 'Subtema',
-};
-
 const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
   node,
   onUpdateNode,
@@ -32,6 +28,12 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
 }) => {
   const data = node.data as ContentNodeData;
   const nodeType = data.nodeType;
+  const t = useTranslations('RoadmapBuilder');
+
+  const nodeTypeLabels: Record<string, string> = {
+    topic: t('nodeTypes.topic'),
+    subtopic: t('nodeTypes.subtopic'),
+  };
 
   const handleUpdate = (updates: Partial<ContentNodeData>) => {
     onUpdateNode(node.id, updates);
@@ -39,7 +41,7 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
 
   // Opciones de iconos
   const iconOptions = [
-    { value: 'none', label: 'Sin icono' },
+    { value: 'none', label: t('fields.noIcon') },
     ...calistenicsIconNames.map((name) => ({
       value: name,
       label: name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, ' '),
@@ -52,17 +54,17 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
       onUpdateNode={onUpdateNode}
       onDeleteNode={onDeleteNode}
       onClose={onClose}
-      title={nodeTypeLabels[nodeType] || 'Contenido'}
+      title={nodeTypeLabels[nodeType] || t('categories.content')}
       tabs={[
-        { id: 'style', label: 'Estilo' },
-        { id: 'content', label: 'Contenido' },
+        { id: 'style', label: t('tabs.style') },
+        { id: 'content', label: t('tabs.content') },
       ]}
     >
       {/* Tab de Estilo */}
       <div data-tab="style" className="space-y-4">
         {/* Color */}
         <ConfigColorPicker
-          label="Color de fondo"
+          label={t('fields.backgroundColor')}
           value={data.color}
           onChange={(v) => handleUpdate({ color: v })}
           colors={[
@@ -73,7 +75,7 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
 
         {/* Icono */}
         <ConfigSelect
-          label="Icono"
+          label={t('fields.icon')}
           value={data.icon || 'none'}
           onChange={(v) => handleUpdate({ icon: v as ContentNodeData['icon'] })}
           options={iconOptions}
@@ -84,20 +86,20 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
       <div data-tab="content" className="space-y-4">
         {/* Descripción */}
         <ConfigTextarea
-          label="Descripción"
+          label={t('fields.description')}
           value={data.description}
           onChange={(v) => handleUpdate({ description: v })}
-          placeholder="Describe este tema..."
+          placeholder={t('fields.descriptionPlaceholder')}
           rows={4}
         />
 
         {/* Tips (solo para Topic) */}
         {nodeType === 'topic' && (
           <ConfigTextarea
-            label="Tips"
+            label={t('fields.tips')}
             value={(data as TopicNodeData).tips}
             onChange={(v) => handleUpdate({ tips: v } as Partial<TopicNodeData>)}
-            placeholder="Consejos adicionales..."
+            placeholder={t('fields.tipsPlaceholder')}
             rows={3}
           />
         )}
@@ -106,7 +108,7 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
         {nodeType === 'topic' && (
           <div>
             <label className="block text-sm font-medium text-foreground/70 mb-2">
-              Recursos
+              {t('resources.title')}
             </label>
             <div className="space-y-3 max-h-60 overflow-y-auto">
               {((data as TopicNodeData).resources || []).map((resource, index) => (
@@ -125,7 +127,7 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
                         handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
                       }}
                       className="flex-1 px-2 py-1 bg-background border border-foreground/20 rounded text-sm text-foreground"
-                      placeholder="Título del recurso"
+                      placeholder={t('resources.resourceTitlePlaceholder')}
                     />
                     <button
                       onClick={() => {
@@ -152,7 +154,7 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
                       handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
                     }}
                     className="w-full px-2 py-1 bg-background border border-foreground/20 rounded text-sm text-foreground"
-                    placeholder="https://ejemplo.com/recurso"
+                    placeholder={t('fields.urlPlaceholder')}
                   />
 
                   {/* Tipo de recurso */}
@@ -165,12 +167,12 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
                     }}
                     className="w-full px-2 py-1 bg-background border border-foreground/20 rounded text-xs text-foreground"
                   >
-                    <option value="article">Artículo</option>
-                    <option value="video">Video</option>
-                    <option value="documentation">Documentación</option>
-                    <option value="course">Curso</option>
-                    <option value="tool">Herramienta</option>
-                    <option value="github">GitHub</option>
+                    <option value="article">{t('resources.types.article')}</option>
+                    <option value="video">{t('resources.types.video')}</option>
+                    <option value="documentation">{t('resources.types.documentation')}</option>
+                    <option value="course">{t('resources.types.course')}</option>
+                    <option value="tool">{t('resources.types.tool')}</option>
+                    <option value="github">{t('resources.types.github')}</option>
                   </select>
                 </div>
               ))}
@@ -187,7 +189,7 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
                        text-foreground/60 hover:text-foreground hover:border-primary-500/50
                        rounded-lg text-sm transition-colors"
             >
-              + Agregar recurso
+              + {t('resources.add')}
             </button>
           </div>
         )}
