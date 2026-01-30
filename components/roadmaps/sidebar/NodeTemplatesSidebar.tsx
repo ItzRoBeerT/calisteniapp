@@ -101,21 +101,6 @@ const NodeTemplatesSidebar: React.FC<NodeTemplatesSidebarProps> = ({ onDragStart
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-foreground/10">
-        <div className="flex items-center gap-2">
-          <svg className="w-4 h-4 text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-                  d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-          </svg>
-          <span
-            className="text-sm font-semibold text-foreground/90"
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-          >
-            {t('components')}
-          </span>
-        </div>
-      </div>
 
       {/* Categorías */}
       <div className="flex-1 overflow-y-auto">
