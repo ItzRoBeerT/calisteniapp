@@ -1,0 +1,82 @@
+{
+  "id": "my-roadmap",
+  "title": "my-roadmap",
+  "description": "Roadmap created with the builder",
+  "isPublic": true,
+  "totalNodes": 2,
+  "completedNodes": 0,
+  "nodes": [
+    {
+      "id": "node-1769789192778-me1lgxk",
+      "type": "title",
+      "position": {
+        "x": -40,
+        "y": -60
+      },
+      "style": {
+        "width": 220,
+        "height": 70
+      },
+      "data": {
+        "nodeType": "title",
+        "label": "Título",
+        "fontSize": 42,
+        "fontWeight": 700,
+        "textAlign": "center",
+        "handles": {
+          "top": true,
+          "bottom": true,
+          "left": false,
+          "right": false
+        }
+      }
+    },
+    {
+      "id": "node-1769789215328-gm3x1g4",
+      "type": "paragraph",
+      "position": {
+        "x": -160,
+        "y": 140
+      },
+      "style": {
+        "width": 200,
+        "height": 80
+      },
+      "data": {
+        "nodeType": "paragraph",
+        "label": "Párrafo",
+        "fontSize": 14,
+        "textAlign": "left",
+        "handles": {
+          "top": true,
+          "bottom": true,
+          "left": false,
+          "right": false
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "reactflow__edge-node-1769789192778-me1lgxkbottom-node-1769789215328-gm3x1g4top",
+      "source": "node-1769789192778-me1lgxk",
+      "target": "node-1769789215328-gm3x1g4",
+      "sourceHandle": "bottom",
+      "targetHandle": "top",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#BF5AF2",
+        "strokeWidth": 2,
+        "strokeDasharray": "8 4"
+      },
+      "data": {
+        "lineStyle": "dashed",
+        "arrowStyle": "none",
+        "pathStyle": "bezier"
+      }
+    }
+  ],
+  "updatedAt": "2026-01-30T16:07:28.523Z",
+  "createdAt": "2026-01-30T16:07:28.523Z"
+}
