@@ -39,60 +39,56 @@ export default async function Page({
 			</div>
 
 			<div className="grid gap-8 lg:grid-cols-[1fr,380px]">
-				{/* Columna izquierda: Imagen + Descripción + Instrucciones + Detalles */}
-				<div className="space-y-6">
-					{/* Imagen y descripción */}
-					<div className="overflow-hidden rounded-xl bg-surface shadow-lg">
-						<Image
-							alt={`Imagen de ${exercise.name}`}
-							src={exercise.image || DefaultImage}
-							width={600}
-							height={400}
-							className="h-64 w-full object-cover"
-							priority
-						/>
+				{/* Columna izquierda: Todo en una sola card */}
+				<div className="overflow-hidden rounded-xl bg-surface shadow-lg">
+					<Image
+						alt={`Imagen de ${exercise.name}`}
+						src={exercise.image || DefaultImage}
+						width={600}
+						height={400}
+						className="h-64 w-full object-cover"
+						priority
+					/>
 
-						<div className="p-6">
+					<div className="p-6 space-y-6">
+						{/* Descripción */}
+						<div>
 							<h3 className="mb-4 text-xl font-semibold">Sobre este ejercicio</h3>
 							<p className="text-gray-400">
 								{exercise.description || 'No hay descripción disponible para este ejercicio.'}
 							</p>
 						</div>
-					</div>
 
-					{/* Instrucciones */}
-					<div className="rounded-xl bg-surface p-6 shadow-lg">
-						<h3 className="mb-4 text-xl font-semibold">Instrucciones</h3>
-						{exercise.instructions ? (
-							<ol className="ml-5 list-decimal space-y-2 text-gray-400">
-								{exercise.instructions.split('\n').map((instruction: string, index: number) => (
-									<li key={index}>{instruction}</li>
-								))}
-							</ol>
-						) : (
-							<p className="text-gray-400">No hay instrucciones disponibles para este ejercicio.</p>
-						)}
-					</div>
+						{/* Instrucciones */}
+						<div>
+							<h3 className="mb-4 text-xl font-semibold">Instrucciones</h3>
+							{exercise.instructions ? (
+								<ol className="ml-5 list-decimal space-y-2 text-gray-400">
+									{exercise.instructions.split('\n').map((instruction: string, index: number) => (
+										<li key={index}>{instruction}</li>
+									))}
+								</ol>
+							) : (
+								<p className="text-gray-400">No hay instrucciones disponibles para este ejercicio.</p>
+							)}
+						</div>
 
-					{/* Detalles */}
-					<div className="rounded-xl bg-surface p-6 shadow-lg">
-						<h3 className="mb-4 text-xl font-semibold">Detalles</h3>
-						<div className="grid grid-cols-2 gap-4 text-gray-400">
-							<div>
-								<p className="font-medium text-white">Grupos musculares:</p>
-								<p>{exercise.muscle_group?.join(', ') || 'No especificado'}</p>
-							</div>
-							<div>
-								<p className="font-medium text-white">Dificultad:</p>
-								<p>{exercise.difficulty}/5</p>
-							</div>
-							<div>
-								<p className="font-medium text-white">Equipamiento:</p>
-								<p>{exercise.equipment || 'Sin equipamiento'}</p>
-							</div>
-							<div>
-								<p className="font-medium text-white">Tipo:</p>
-								<p>{exercise.type || 'No especificado'}</p>
+						{/* Detalles */}
+						<div>
+							<h3 className="mb-4 text-xl font-semibold">Detalles</h3>
+							<div className="grid grid-cols-2 gap-4 text-gray-400">
+								<div>
+									<p className="font-medium text-white">Grupos musculares:</p>
+									<p>{exercise.muscle_group?.join(', ') || 'No especificado'}</p>
+								</div>
+								<div>
+									<p className="font-medium text-white">Equipamiento:</p>
+									<p>{exercise.equipment || 'Sin equipamiento'}</p>
+								</div>
+								<div>
+									<p className="font-medium text-white">Tipo:</p>
+									<p>{exercise.type || 'No especificado'}</p>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -100,11 +96,7 @@ export default async function Page({
 
 				{/* Columna derecha: Árbol de Progresión */}
 				<div className="lg:sticky lg:top-4 lg:self-start">
-					<div className="rounded-xl bg-surface p-6 shadow-lg">
-						<h3 className="mb-2 text-xl font-semibold">Árbol de Progresión</h3>
-						<p className="mb-4 text-sm text-gray-400">
-							Ejercicios relacionados por dificultad. Haz clic para ver detalles.
-						</p>
+					<div className="rounded-xl bg-surface p-4 shadow-lg">
 						<ExerciseProgressionTree exerciseId={exercise.id} exerciseName={exercise.name} />
 					</div>
 				</div>
