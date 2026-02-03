@@ -1,230 +1,282 @@
 'use client';
 
-import { useMemo, useCallback } from 'react';
-import ReactFlow, {
-	Background,
-	BackgroundVariant,
-	Node,
-	Edge,
-	Position,
-} from 'reactflow';
-import 'reactflow/dist/style.css';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useEffect, useRef, useMemo } from 'react';
+import cytoscape from 'cytoscape';
+import { useRouter, useParams } from 'next/navigation';
 import { getExerciseProgressionData, getDifficultyColor } from '@/utils/exerciseProgressionUtils';
 import { createSlug } from '@/utils/slugs';
-import type { Exercise } from '@/types/supabase';
 
 interface ExerciseProgressionTreeProps {
 	exerciseId: number;
 	exerciseName: string;
 }
 
-interface ExerciseNodeData {
-	exercise: Exercise & { difficulty?: number };
-	isCurrent: boolean;
-	type: 'prerequisite' | 'current' | 'variation' | 'progression';
-}
-
-const NODE_WIDTH = 140;
-const NODE_HEIGHT = 50;
-const VERTICAL_GAP = 65;
-const HORIZONTAL_GAP = 155;
-
-function ExerciseNode({ data }: { data: ExerciseNodeData }) {
-	const params = useParams();
-	const locale = (params.locale as string) || 'es';
-	const { exercise, isCurrent, type } = data;
-	const difficultyColor = getDifficultyColor(exercise.difficulty ?? 0);
-
-	const getBorderStyle = () => {
-		if (isCurrent) {
-			return 'ring-2 ring-primary-500 ring-offset-2 ring-offset-background';
-		}
-		return '';
-	};
-
-	const getTypeLabel = () => {
-		switch (type) {
-			case 'prerequisite':
-				return '↑ Prerreq.';
-			case 'progression':
-				return '↓ Progr.';
-			case 'variation':
-				return '↔ Var.';
-			default:
-				return '';
-		}
-	};
-
-	return (
-		<Link
-			href={`/${locale}/exercises/${createSlug(exercise.name)}`}
-			className={`
-				block w-full h-full p-2 rounded-lg bg-surface border border-foreground/10
-				hover:border-primary-500/50 hover:bg-surface-hover transition-all
-				${getBorderStyle()}
-				${isCurrent ? 'shadow-lg shadow-primary-500/20' : ''}
-			`}
-		>
-			<div className="flex flex-col h-full justify-center">
-				<span
-					className={`text-xs font-semibold truncate ${isCurrent ? 'text-primary-400' : 'text-foreground'}`}
-					title={exercise.name}
-				>
-					{exercise.name}
-				</span>
-				<div className="flex items-center justify-between mt-1">
-					<span
-						className="text-[10px] px-1.5 py-0.5 rounded-full"
-						style={{ backgroundColor: `${difficultyColor}20`, color: difficultyColor }}
-					>
-						{exercise.difficulty}/5
-					</span>
-					{!isCurrent && <span className="text-[9px] text-foreground/50">{getTypeLabel()}</span>}
-					{isCurrent && <span className="text-[9px] text-primary-400 font-medium">★ Actual</span>}
-				</div>
-			</div>
-		</Link>
-	);
-}
-
-const nodeTypes = {
-	exercise: ExerciseNode,
-};
+const VERTICAL_GAP = 80;
+const HORIZONTAL_GAP = 160;
 
 export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgressionTreeProps) {
+	const containerRef = useRef<HTMLDivElement>(null);
+	const cyRef = useRef<cytoscape.Core | null>(null);
+	const router = useRouter();
+	const params = useParams();
+	const locale = (params.locale as string) || 'es';
+
 	const progressionData = useMemo(() => getExerciseProgressionData(exerciseId), [exerciseId]);
 
-	const { nodes, edges } = useMemo(() => {
+	const { elements, hasAnyProgression } = useMemo(() => {
 		if (!progressionData) {
-			return { nodes: [], edges: [] };
+			return { elements: [], hasAnyProgression: false };
 		}
 
-		const nodes: Node<ExerciseNodeData>[] = [];
-		const edges: Edge[] = [];
+		const nodes: cytoscape.ElementDefinition[] = [];
+		const edges: cytoscape.ElementDefinition[] = [];
 
 		const { prerequisites, current, variations, progressions } = progressionData;
 
-		// Layout vertical:
-		// Prerrequisitos arriba → Actual en el centro → Progresiones abajo
-		// Variaciones a los lados del actual
+		const hasAny =
+			prerequisites.length > 0 || variations.length > 0 || progressions.length > 0;
 
 		const prereqCount = prerequisites.length;
 		const varCount = variations.length;
-
-		// Posición Y del ejercicio actual (centro vertical)
-		const currentY = prereqCount * VERTICAL_GAP;
-		// Centro horizontal para el nodo actual
 		const centerX = varCount > 0 ? HORIZONTAL_GAP / 2 : 0;
+		const currentY = prereqCount * VERTICAL_GAP;
 
-		// Agregar prerrequisitos arriba (de más fácil a más difícil, de arriba a abajo)
+		// Agregar nodos de prerrequisitos con posiciones
 		prerequisites.forEach((exercise, index) => {
-			const y = index * VERTICAL_GAP;
 			nodes.push({
-				id: `prereq-${exercise.id}`,
-				type: 'exercise',
-				position: { x: centerX, y },
-				data: { exercise, isCurrent: false, type: 'prerequisite' },
-				style: { width: NODE_WIDTH, height: NODE_HEIGHT },
-				sourcePosition: Position.Bottom,
-				targetPosition: Position.Top,
+				data: {
+					id: `prereq-${exercise.id}`,
+					label: exercise.name,
+					difficulty: exercise.difficulty ?? 0,
+					color: getDifficultyColor(exercise.difficulty ?? 0),
+					type: 'prerequisite',
+					exerciseId: exercise.id,
+					exerciseName: exercise.name,
+				},
+				position: { x: centerX, y: index * VERTICAL_GAP },
 			});
 
-			// Edge al siguiente prerrequisito o al actual
-			if (index < prereqCount - 1) {
+			if (index < prerequisites.length - 1) {
 				edges.push({
-					id: `edge-prereq-${index}`,
-					source: `prereq-${exercise.id}`,
-					target: `prereq-${prerequisites[index + 1].id}`,
-					type: 'smoothstep',
-					animated: false,
-					style: { stroke: '#64748b', strokeWidth: 2 },
+					data: {
+						id: `edge-prereq-${index}`,
+						source: `prereq-${exercise.id}`,
+						target: `prereq-${prerequisites[index + 1].id}`,
+						type: 'progression',
+					},
 				});
 			} else {
-				// Último prerrequisito conecta al actual
 				edges.push({
-					id: `edge-prereq-to-current`,
-					source: `prereq-${exercise.id}`,
-					target: 'current',
-					type: 'smoothstep',
-					animated: true,
-					style: { stroke: '#BB86FC', strokeWidth: 2 },
+					data: {
+						id: `edge-prereq-to-current`,
+						source: `prereq-${exercise.id}`,
+						target: 'current',
+						type: 'progression-current',
+					},
 				});
 			}
 		});
 
-		// Agregar nodo actual en el centro
+		// Agregar nodo actual con posición
 		nodes.push({
-			id: 'current',
-			type: 'exercise',
+			data: {
+				id: 'current',
+				label: current.name,
+				difficulty: current.difficulty ?? 0,
+				color: getDifficultyColor(current.difficulty ?? 0),
+				type: 'current',
+				exerciseId: current.id,
+				exerciseName: current.name,
+			},
 			position: { x: centerX, y: currentY },
-			data: { exercise: current, isCurrent: true, type: 'current' },
-			style: { width: NODE_WIDTH, height: NODE_HEIGHT },
-			sourcePosition: Position.Bottom,
-			targetPosition: Position.Top,
 		});
 
-		// Agregar variaciones a los lados del actual
+		// Agregar variaciones con posiciones
 		variations.forEach((exercise, index) => {
 			const xOffset = (index % 2 === 0 ? 1 : -1) * HORIZONTAL_GAP;
-			const yOffset = Math.floor(index / 2) * (NODE_HEIGHT + 10);
+			const yOffset = Math.floor(index / 2) * 60;
 
 			nodes.push({
-				id: `var-${exercise.id}`,
-				type: 'exercise',
+				data: {
+					id: `var-${exercise.id}`,
+					label: exercise.name,
+					difficulty: exercise.difficulty ?? 0,
+					color: getDifficultyColor(exercise.difficulty ?? 0),
+					type: 'variation',
+					exerciseId: exercise.id,
+					exerciseName: exercise.name,
+				},
 				position: { x: centerX + xOffset, y: currentY + yOffset },
-				data: { exercise, isCurrent: false, type: 'variation' },
-				style: { width: NODE_WIDTH, height: NODE_HEIGHT },
-				sourcePosition: Position.Bottom,
-				targetPosition: Position.Top,
 			});
 
-			// Edge horizontal al actual
 			edges.push({
-				id: `edge-var-${exercise.id}`,
-				source: 'current',
-				target: `var-${exercise.id}`,
-				type: 'straight',
-				animated: false,
-				style: { stroke: '#64748b', strokeWidth: 1, strokeDasharray: '4 4' },
+				data: {
+					id: `edge-var-${exercise.id}`,
+					source: 'current',
+					target: `var-${exercise.id}`,
+					type: 'variation',
+				},
 			});
 		});
 
-		// Agregar progresiones abajo (de más fácil a más difícil)
+		// Agregar progresiones con posiciones
 		progressions.forEach((exercise, index) => {
-			const y = currentY + VERTICAL_GAP + index * VERTICAL_GAP;
-
 			nodes.push({
-				id: `prog-${exercise.id}`,
-				type: 'exercise',
-				position: { x: centerX, y },
-				data: { exercise, isCurrent: false, type: 'progression' },
-				style: { width: NODE_WIDTH, height: NODE_HEIGHT },
-				sourcePosition: Position.Bottom,
-				targetPosition: Position.Top,
+				data: {
+					id: `prog-${exercise.id}`,
+					label: exercise.name,
+					difficulty: exercise.difficulty ?? 0,
+					color: getDifficultyColor(exercise.difficulty ?? 0),
+					type: 'progression',
+					exerciseId: exercise.id,
+					exerciseName: exercise.name,
+				},
+				position: { x: centerX, y: currentY + VERTICAL_GAP + index * VERTICAL_GAP },
 			});
 
-			// Edge desde el anterior
 			const sourceId = index === 0 ? 'current' : `prog-${progressions[index - 1].id}`;
 			edges.push({
-				id: `edge-prog-${index}`,
-				source: sourceId,
-				target: `prog-${exercise.id}`,
-				type: 'smoothstep',
-				animated: false,
-				style: { stroke: '#64748b', strokeWidth: 2 },
+				data: {
+					id: `edge-prog-${index}`,
+					source: sourceId,
+					target: `prog-${exercise.id}`,
+					type: 'progression',
+				},
 			});
 		});
 
-		return { nodes, edges };
+		return { elements: [...nodes, ...edges], hasAnyProgression: hasAny };
 	}, [progressionData]);
 
-	const onInit = useCallback((reactFlowInstance: { fitView: () => void }) => {
+	useEffect(() => {
+		if (!containerRef.current || !progressionData || !hasAnyProgression) return;
+
+		if (cyRef.current) {
+			cyRef.current.destroy();
+		}
+
+		const cy = cytoscape({
+			container: containerRef.current,
+			elements,
+			style: [
+				{
+					selector: 'node',
+					style: {
+						'background-color': '#1e1e1e',
+						'border-width': 2,
+						'border-color': 'data(color)',
+						label: 'data(label)',
+						'text-valign': 'center',
+						'text-halign': 'center',
+						'font-size': 11,
+						'font-weight': 500,
+						color: '#e0e0e0',
+						'text-wrap': 'wrap',
+						'text-max-width': '100px',
+						width: 120,
+						height: 45,
+						shape: 'round-rectangle',
+						'text-outline-color': '#1e1e1e',
+						'text-outline-width': 2,
+					},
+				},
+				{
+					selector: 'node[type="current"]',
+					style: {
+						'background-color': '#2d1f4e',
+						'border-width': 3,
+						'border-color': '#BB86FC',
+						color: '#BB86FC',
+						'font-weight': 600,
+						width: 130,
+						height: 50,
+					},
+				},
+				{
+					selector: 'node[type="variation"]',
+					style: {
+						'border-style': 'dashed',
+					},
+				},
+				{
+					selector: 'node:active, node:grabbed',
+					style: {
+						'border-width': 4,
+						'background-color': '#2a2a2a',
+					},
+				},
+				{
+					selector: 'edge',
+					style: {
+						width: 2,
+						'line-color': '#64748b',
+						'target-arrow-color': '#64748b',
+						'target-arrow-shape': 'triangle',
+						'curve-style': 'bezier',
+						'arrow-scale': 0.8,
+					},
+				},
+				{
+					selector: 'edge[type="progression-current"]',
+					style: {
+						'line-color': '#BB86FC',
+						'target-arrow-color': '#BB86FC',
+						width: 3,
+					},
+				},
+				{
+					selector: 'edge[type="variation"]',
+					style: {
+						'line-style': 'dashed',
+						'line-color': '#64748b',
+						width: 1.5,
+					},
+				},
+			],
+			layout: {
+				name: 'preset',
+			},
+			userZoomingEnabled: false,
+			userPanningEnabled: false,
+			boxSelectionEnabled: false,
+			autoungrabify: true,
+		});
+
+		cy.on('tap', 'node', (event) => {
+			const node = event.target;
+			const data = node.data();
+			if (data.type !== 'current' && data.exerciseName) {
+				router.push(`/${locale}/exercises/${createSlug(data.exerciseName)}`);
+			}
+		});
+
+		cy.on('mouseover', 'node', (event) => {
+			const node = event.target;
+			if (node.data('type') !== 'current' && containerRef.current) {
+				containerRef.current.style.cursor = 'pointer';
+			}
+		});
+
+		cy.on('mouseout', 'node', () => {
+			if (containerRef.current) {
+				containerRef.current.style.cursor = 'default';
+			}
+		});
+
 		setTimeout(() => {
-			reactFlowInstance.fitView();
-		}, 100);
-	}, []);
+			cy.fit(undefined, 30);
+			cy.center();
+		}, 50);
+
+		cyRef.current = cy;
+
+		return () => {
+			if (cyRef.current) {
+				cyRef.current.destroy();
+				cyRef.current = null;
+			}
+		};
+	}, [elements, hasAnyProgression, progressionData, router, locale]);
 
 	if (!progressionData) {
 		return (
@@ -234,11 +286,6 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 		);
 	}
 
-	const hasAnyProgression =
-		progressionData.prerequisites.length > 0 ||
-		progressionData.variations.length > 0 ||
-		progressionData.progressions.length > 0;
-
 	if (!hasAnyProgression) {
 		return (
 			<div className="flex items-center justify-center h-32 text-foreground/50 text-sm">
@@ -247,37 +294,52 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 		);
 	}
 
-	// Calcular altura dinámica basada en el contenido
-	const prereqHeight = progressionData.prerequisites.length * VERTICAL_GAP;
-	const progHeight = progressionData.progressions.length * VERTICAL_GAP;
-	const totalHeight = Math.max(280, prereqHeight + NODE_HEIGHT + progHeight + 80);
+	const prereqCount = progressionData.prerequisites.length;
+	const progCount = progressionData.progressions.length;
+	const prereqHeight = prereqCount * VERTICAL_GAP;
+	const progHeight = progCount * VERTICAL_GAP;
+	const currentHeight = VERTICAL_GAP;
+	const totalHeight = Math.max(300, prereqHeight + currentHeight + progHeight + 60);
+
+	// Calcular proporciones para el gradiente de fondo centrado con los nodos
+	const padding = 30;
+	const totalSlots = prereqCount + 1 + progCount;
+	const paddingPct = (padding / totalHeight) * 100;
+	const contentPct = 100 - 2 * paddingPct;
+	const slotPct = contentPct / totalSlots;
+
+	const prereqEndPct = paddingPct + prereqCount * slotPct;
+	const currentEndPct = prereqEndPct + slotPct;
+
+	// Crear gradiente de fondo con las zonas centradas
+	const gradientStops: string[] = [];
+
+	if (prereqCount > 0) {
+		gradientStops.push(`rgba(34, 197, 94, 0.08) ${paddingPct}%`);
+		gradientStops.push(`rgba(34, 197, 94, 0.08) ${prereqEndPct}%`);
+	}
+
+	const currentStart = prereqCount > 0 ? prereqEndPct : paddingPct;
+	gradientStops.push(`rgba(187, 134, 252, 0.12) ${currentStart}%`);
+	gradientStops.push(`rgba(187, 134, 252, 0.12) ${currentEndPct}%`);
+
+	if (progCount > 0) {
+		gradientStops.push(`rgba(239, 68, 68, 0.08) ${currentEndPct}%`);
+		gradientStops.push(`rgba(239, 68, 68, 0.08) ${100 - paddingPct}%`);
+	}
+
+	const backgroundGradient = `linear-gradient(to bottom, ${gradientStops.join(', ')})`;
 
 	return (
-		<div
-			className="w-full rounded-lg overflow-hidden border border-foreground/10"
-			style={{ height: totalHeight }}
-		>
-			<ReactFlow
-				nodes={nodes}
-				edges={edges}
-				nodeTypes={nodeTypes}
-				onInit={onInit}
-				fitView
-				fitViewOptions={{ padding: 0.2 }}
-				nodesDraggable={false}
-				nodesConnectable={false}
-				elementsSelectable={false}
-				zoomOnScroll={false}
-				zoomOnPinch={false}
-				panOnDrag={true}
-				panOnScroll={true}
-				preventScrolling={false}
-				minZoom={0.4}
-				maxZoom={1}
-				proOptions={{ hideAttribution: true }}
-			>
-				<Background variant={BackgroundVariant.Dots} gap={20} size={1} color="rgba(100, 116, 139, 0.2)" />
-			</ReactFlow>
+		<div className="relative w-full rounded-lg border border-foreground/10 overflow-hidden">
+			<div
+				ref={containerRef}
+				className="w-full"
+				style={{
+					height: totalHeight,
+					background: backgroundGradient,
+				}}
+			/>
 		</div>
 	);
 }
