@@ -29,11 +29,11 @@ const baseNodeStyles = `
 }
 
 .base-node-handle-hidden {
-  width: 0 !important;
-  height: 0 !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  border: 0 !important;
+  width: 8px !important;
+  height: 8px !important;
+  min-width: 8px !important;
+  min-height: 8px !important;
+  border: none !important;
   background: transparent !important;
   opacity: 0 !important;
   pointer-events: none !important;
