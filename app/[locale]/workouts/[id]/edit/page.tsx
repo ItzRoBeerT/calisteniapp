@@ -8,14 +8,15 @@ import { getWorkout } from '@/actions/workout';
 import { getExercises } from '@/actions/exercise';
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string;
     locale: string;
-  };
+  }>;
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const workout = await getWorkout(params.id);
+  const { id } = await params;
+  const workout = await getWorkout(id);
 
   if (!workout) {
     return {
@@ -30,6 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function EditWorkoutPage({ params }: Props) {
+  const { id, locale } = await params;
   const t = await getTranslations('EditWorkout');
   const supabase = await createClient();
   let userId: string | undefined;
@@ -39,7 +41,7 @@ export default async function EditWorkoutPage({ params }: Props) {
     userId = session?.user.id;
   }
 
-  const workout = await getWorkout(params.id);
+  const workout = await getWorkout(id);
 
   if (!workout) {
     notFound();
@@ -47,14 +49,14 @@ export default async function EditWorkoutPage({ params }: Props) {
 
   // Verify ownership
   if (workout.user_id !== userId) {
-    redirect(`/${params.locale}/workouts/${params.id}`);
+    redirect(`/${locale}/workouts/${id}`);
   }
 
   const exercises = await getExercises() || [];
 
   return (
     <div className="max-w-4xl mx-auto">
-      <BackButton href={`/workouts/${params.id}`} label={t('backToWorkout')} />
+      <BackButton href={`/workouts/${id}`} label={t('backToWorkout')} />
 
       <div className="mt-4">
         <h1 className="text-3xl font-bold mb-6 text-foreground">{t('title')}</h1>
