@@ -458,5 +458,9 @@
 		"57": { "name": "Planche Lean", "description": "Inclinacion de planche en posicion de flexion. Desarrolla fuerza de empuje." },
 		"58": { "name": "Straddle Planche", "description": "Planche con piernas abiertas. Progresion avanzada hacia el full planche." },
 		"59": { "name": "Full Planche", "description": "Planche completa con piernas juntas y extendidas. Uno de los ejercicios mas dificiles." }
+	},
+	"Footer": {
+		"copyright": "Todos los derechos reservados.",
+		"madeWith": "Hecho con {heart} para la comunidad de calistenia"
 	}
 }

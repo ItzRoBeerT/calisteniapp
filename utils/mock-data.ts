@@ -5,9 +5,14 @@ import { WorkoutDetail } from '@/types/Workout';
 const exercisesBase: ExerciseBase[] = require('@/data/exercises.json');
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const esMessages = require('@/messages/es.json');
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const enMessages = require('@/messages/en.json');
 
-// Traducciones en español por defecto para fallback
-const defaultTranslations: Record<string, ExerciseTranslation> = esMessages.Exercises;
+// Traducciones por locale
+const translationsByLocale: Record<string, Record<string, ExerciseTranslation>> = {
+	es: esMessages.Exercises,
+	en: enMessages.Exercises,
+};
 
 // Combinar datos base con traducciones
 function combineWithTranslations(
@@ -27,8 +32,14 @@ function combineWithTranslations(
 	});
 }
 
+// Obtener ejercicios traducidos por locale
+export function getMockExercises(locale: string = 'es'): Exercise[] {
+	const translations = translationsByLocale[locale] || translationsByLocale.es;
+	return combineWithTranslations(exercisesBase, translations);
+}
+
 // Ejercicios con traducciones en español (fallback para modo sin i18n)
-export const mockExercises: Exercise[] = combineWithTranslations(exercisesBase, defaultTranslations);
+export const mockExercises: Exercise[] = getMockExercises('es');
 
 // Exportar datos base para sincronización con Supabase
 export const exercisesBaseData: ExerciseBase[] = exercisesBase;

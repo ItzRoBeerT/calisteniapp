@@ -8,10 +8,10 @@ import ExerciseProgressionTree from '@/components/exercises/ExerciseProgressionT
 export default async function Page({
 	params,
 }: {
-	params: Promise<{ slug: string }>;
+	params: Promise<{ slug: string; locale: string }>;
 }) {
-	const slug = (await params).slug;
-	const exercise = await getExerciseByName(desSlugify(slug));
+	const { slug, locale } = await params;
+	const exercise = await getExerciseByName(desSlugify(slug), locale);
 
 	if (!exercise) {
 		throw new NotFoundError(`No se encontró el ejercicio "${desSlugify(slug)}"`);

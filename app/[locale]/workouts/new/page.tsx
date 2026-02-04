@@ -10,7 +10,12 @@ export const metadata: Metadata = {
   description: 'Crea un nuevo entrenamiento personalizado para tu rutina',
 };
 
-export default async function NewWorkoutPage() {
+type Props = {
+  params: Promise<{ locale: string }>;
+};
+
+export default async function NewWorkoutPage({ params }: Props) {
+  const { locale } = await params;
   const t = await getTranslations('NewWorkout');
   const supabase = await createClient();
   let userId: string | undefined;
@@ -20,7 +25,7 @@ export default async function NewWorkoutPage() {
     userId = session?.user.id;
   }
 
-  const exercises = await getExercises() || [];
+  const exercises = await getExercises(locale) || [];
 
   return (
     <div className="max-w-4xl mx-auto">
