@@ -11,6 +11,7 @@ export { default as LabelNode } from './text/LabelNode';
 export { default as TopicNode } from './content/TopicNode';
 export { default as SubTopicNode } from './content/SubTopicNode';
 export { default as ImageNode } from './content/ImageNode';
+export { default as VideoNode } from './content/VideoNode';
 
 // Interactive nodes
 export { default as ButtonNode } from './interactive/ButtonNode';

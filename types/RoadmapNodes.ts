@@ -13,6 +13,7 @@ export type RoadmapNodeType =
   | 'topic'
   | 'subtopic'
   | 'image'
+  | 'video'
   | 'button'
   | 'resourceButton'
   | 'todo'
@@ -111,6 +112,17 @@ export interface ImageNodeData extends BaseNodeData {
   linkUrl?: string; // Optional click destination
   alt?: string;
   objectFit?: 'cover' | 'contain' | 'fill';
+  borderRadius?: number;
+}
+
+export interface VideoNodeData extends BaseNodeData {
+  nodeType: 'video';
+  videoUrl: string;
+  videoType?: 'youtube' | 'vimeo' | 'direct';
+  autoplay?: boolean;
+  muted?: boolean;
+  loop?: boolean;
+  controls?: boolean;
   borderRadius?: number;
 }
 
@@ -226,6 +238,7 @@ export type AnyNodeData =
   | TopicNodeData
   | SubTopicNodeData
   | ImageNodeData
+  | VideoNodeData
   | ButtonNodeData
   | ResourceButtonNodeData
   | TodoNodeData
@@ -269,8 +282,8 @@ export function isTextNode(
 
 export function isContentNode(
   data: AnyNodeData
-): data is TopicNodeData | SubTopicNodeData | ImageNodeData {
-  return ['topic', 'subtopic', 'image'].includes(data.nodeType);
+): data is TopicNodeData | SubTopicNodeData | ImageNodeData | VideoNodeData {
+  return ['topic', 'subtopic', 'image', 'video'].includes(data.nodeType);
 }
 
 export function isInteractiveNode(
@@ -320,6 +333,7 @@ export const nodeTypeToCategory: Record<RoadmapNodeType, RoadmapNodeCategory> = 
   topic: 'content',
   subtopic: 'content',
   image: 'content',
+  video: 'content',
   button: 'interactive',
   resourceButton: 'interactive',
   todo: 'interactive',

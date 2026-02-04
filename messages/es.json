@@ -135,6 +135,7 @@
 			"topic": "Tema",
 			"subtopic": "Subtema",
 			"image": "Imagen",
+			"video": "Video",
 			"button": "Botón",
 			"resourceButton": "Botón de recurso",
 			"todo": "Tarea",
@@ -197,6 +198,14 @@
 		"resources": {
 			"title": "Recursos",
 			"add": "Agregar recurso",
+			"addExternal": "Externo",
+			"addExercise": "Ejercicio",
+			"addWorkout": "Rutina",
+			"local": "Local",
+			"external": "Externo",
+			"loading": "Cargando...",
+			"selectExercise": "Seleccionar ejercicio",
+			"selectWorkout": "Seleccionar rutina",
 			"resourceTitle": "Título del recurso",
 			"resourceTitlePlaceholder": "Título del recurso",
 			"resourceUrl": "URL del recurso",
@@ -207,7 +216,9 @@
 				"documentation": "Documentación",
 				"course": "Curso",
 				"tool": "Herramienta",
-				"github": "GitHub"
+				"github": "GitHub",
+				"exercise": "Ejercicio",
+				"workout": "Rutina"
 			}
 		},
 		"items": {

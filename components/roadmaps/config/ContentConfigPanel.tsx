@@ -1,15 +1,21 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Node } from 'reactflow';
 import type { AnyNodeData, TopicNodeData, SubTopicNodeData } from '@/types/RoadmapNodes';
+import type { ResourceType, RoadmapResource } from '@/types/Roadmap';
+import type { Exercise } from '@/types/supabase';
+import type { WorkoutDetail } from '@/types/Workout';
 import BaseConfigPanel, {
   ConfigTextarea,
   ConfigColorPicker,
   ConfigSelect,
 } from './BaseConfigPanel';
 import { calistenicsIconNames } from '@/components/roadmaps/CalistenicsIcons';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
+import { getExercises } from '@/actions/exercise';
+import { mockWorkoutDetails } from '@/utils/mock-data';
+import { createSlug } from '@/utils/slugs';
 
 type ContentNodeData = TopicNodeData | SubTopicNodeData;
 
@@ -20,6 +26,9 @@ interface ContentConfigPanelProps {
   onClose: () => void;
 }
 
+// Tipos de recursos locales
+const LOCAL_RESOURCE_TYPES: ResourceType[] = ['exercise', 'workout'];
+
 const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
   node,
   onUpdateNode,
@@ -29,6 +38,30 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
   const data = node.data as ContentNodeData;
   const nodeType = data.nodeType;
   const t = useTranslations('RoadmapBuilder');
+  const locale = useLocale();
+
+  // Estados para recursos locales
+  const [exercises, setExercises] = useState<Exercise[]>([]);
+  const [workouts] = useState<WorkoutDetail[]>(mockWorkoutDetails);
+  const [loadingExercises, setLoadingExercises] = useState(false);
+
+  // Cargar ejercicios al montar
+  useEffect(() => {
+    const loadExercises = async () => {
+      setLoadingExercises(true);
+      try {
+        const data = await getExercises(locale);
+        if (data) {
+          setExercises(data);
+        }
+      } catch (error) {
+        console.error('Error loading exercises:', error);
+      } finally {
+        setLoadingExercises(false);
+      }
+    };
+    loadExercises();
+  }, [locale]);
 
   const nodeTypeLabels: Record<string, string> = {
     topic: t('nodeTypes.topic'),
@@ -37,6 +70,73 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
 
   const handleUpdate = (updates: Partial<ContentNodeData>) => {
     onUpdateNode(node.id, updates);
+  };
+
+  // Función para verificar si es un tipo de recurso local
+  const isLocalResource = (type: ResourceType) => LOCAL_RESOURCE_TYPES.includes(type);
+
+  // Función para manejar la selección de recurso local
+  const handleLocalResourceSelect = (
+    index: number,
+    resourceType: 'exercise' | 'workout',
+    localId: number
+  ) => {
+    const newResources = [...((data as TopicNodeData).resources || [])];
+
+    if (resourceType === 'exercise') {
+      const exercise = exercises.find(e => e.id === localId);
+      if (exercise) {
+        newResources[index] = {
+          ...newResources[index],
+          type: 'exercise',
+          title: exercise.name,
+          url: `/exercises/${createSlug(exercise.name)}`,
+          localId: exercise.id,
+        };
+      }
+    } else if (resourceType === 'workout') {
+      const workout = workouts.find(w => w.id === localId);
+      if (workout) {
+        newResources[index] = {
+          ...newResources[index],
+          type: 'workout',
+          title: workout.name,
+          url: `/workouts/${workout.id}`,
+          localId: workout.id,
+        };
+      }
+    }
+
+    handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
+  };
+
+  // Función para añadir recurso externo
+  const handleAddExternalResource = () => {
+    const newResources: RoadmapResource[] = [
+      ...((data as TopicNodeData).resources || []),
+      {
+        id: `resource-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+        title: '',
+        url: '',
+        type: 'article'
+      },
+    ];
+    handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
+  };
+
+  // Función para añadir recurso local (ejercicio o workout)
+  const handleAddLocalResource = (type: 'exercise' | 'workout') => {
+    const newResources: RoadmapResource[] = [
+      ...((data as TopicNodeData).resources || []),
+      {
+        id: `resource-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+        title: '',
+        url: '',
+        type: type,
+        localId: undefined,
+      },
+    ];
+    handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
   };
 
   // Opciones de iconos
@@ -110,25 +210,23 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
             <label className="block text-sm font-medium text-foreground/70 mb-2">
               {t('resources.title')}
             </label>
-            <div className="space-y-3 max-h-60 overflow-y-auto">
+            <div className="space-y-3">
               {((data as TopicNodeData).resources || []).map((resource, index) => (
                 <div
                   key={resource.id || `resource-${index}`}
                   className="p-3 bg-background/50 rounded-lg space-y-2"
                 >
-                  {/* Header con título y botón eliminar */}
+                  {/* Header con tipo y botón eliminar */}
                   <div className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      value={resource.title}
-                      onChange={(e) => {
-                        const newResources = [...((data as TopicNodeData).resources || [])];
-                        newResources[index] = { ...resource, title: e.target.value };
-                        handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
-                      }}
-                      className="flex-1 px-2 py-1 bg-background border border-foreground/20 rounded text-sm text-foreground"
-                      placeholder={t('resources.resourceTitlePlaceholder')}
-                    />
+                    {/* Badge de tipo */}
+                    <span className={`px-2 py-0.5 text-xs rounded-full ${
+                      isLocalResource(resource.type)
+                        ? 'bg-primary-500/20 text-primary-400'
+                        : 'bg-foreground/10 text-foreground/60'
+                    }`}>
+                      {isLocalResource(resource.type) ? t('resources.local') : t('resources.external')}
+                    </span>
+                    <span className="flex-1" />
                     <button
                       onClick={() => {
                         const newResources = ((data as TopicNodeData).resources || []).filter(
@@ -144,53 +242,154 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
                     </button>
                   </div>
 
-                  {/* URL */}
-                  <input
-                    type="url"
-                    value={resource.url}
-                    onChange={(e) => {
-                      const newResources = [...((data as TopicNodeData).resources || [])];
-                      newResources[index] = { ...resource, url: e.target.value };
-                      handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
-                    }}
-                    className="w-full px-2 py-1 bg-background border border-foreground/20 rounded text-sm text-foreground"
-                    placeholder={t('fields.urlPlaceholder')}
-                  />
+                  {/* Contenido según tipo de recurso */}
+                  {isLocalResource(resource.type) ? (
+                    <>
+                      {/* Selector de tipo local */}
+                      <select
+                        value={resource.type}
+                        onChange={(e) => {
+                          const newResources = [...((data as TopicNodeData).resources || [])];
+                          newResources[index] = {
+                            ...resource,
+                            type: e.target.value as 'exercise' | 'workout',
+                            title: '',
+                            url: '',
+                            localId: undefined,
+                          };
+                          handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
+                        }}
+                        className="w-full px-2 py-1 bg-background border border-foreground/20 rounded text-xs text-foreground"
+                      >
+                        <option value="exercise">{t('resources.types.exercise')}</option>
+                        <option value="workout">{t('resources.types.workout')}</option>
+                      </select>
 
-                  {/* Tipo de recurso */}
-                  <select
-                    value={resource.type}
-                    onChange={(e) => {
-                      const newResources = [...((data as TopicNodeData).resources || [])];
-                      newResources[index] = { ...resource, type: e.target.value as 'video' | 'article' | 'documentation' | 'course' | 'tool' | 'github' };
-                      handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
-                    }}
-                    className="w-full px-2 py-1 bg-background border border-foreground/20 rounded text-xs text-foreground"
-                  >
-                    <option value="article">{t('resources.types.article')}</option>
-                    <option value="video">{t('resources.types.video')}</option>
-                    <option value="documentation">{t('resources.types.documentation')}</option>
-                    <option value="course">{t('resources.types.course')}</option>
-                    <option value="tool">{t('resources.types.tool')}</option>
-                    <option value="github">{t('resources.types.github')}</option>
-                  </select>
+                      {/* Selector de ejercicio o workout */}
+                      {resource.type === 'exercise' ? (
+                        <select
+                          value={resource.localId || ''}
+                          onChange={(e) => {
+                            const localId = parseInt(e.target.value, 10);
+                            if (!isNaN(localId)) {
+                              handleLocalResourceSelect(index, 'exercise', localId);
+                            }
+                          }}
+                          className="w-full px-2 py-1 bg-background border border-foreground/20 rounded text-sm text-foreground"
+                          disabled={loadingExercises}
+                        >
+                          <option value="">{loadingExercises ? t('resources.loading') : t('resources.selectExercise')}</option>
+                          {exercises.map((ex) => (
+                            <option key={ex.id} value={ex.id}>
+                              {ex.name}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <select
+                          value={resource.localId || ''}
+                          onChange={(e) => {
+                            const localId = parseInt(e.target.value, 10);
+                            if (!isNaN(localId)) {
+                              handleLocalResourceSelect(index, 'workout', localId);
+                            }
+                          }}
+                          className="w-full px-2 py-1 bg-background border border-foreground/20 rounded text-sm text-foreground"
+                        >
+                          <option value="">{t('resources.selectWorkout')}</option>
+                          {workouts.map((w) => (
+                            <option key={w.id} value={w.id}>
+                              {w.name}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+
+                      {/* Mostrar título seleccionado */}
+                      {resource.title && (
+                        <div className="px-2 py-1 bg-primary-500/10 border border-primary-500/20 rounded text-sm text-primary-400">
+                          {resource.title}
+                        </div>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      {/* Título para recurso externo */}
+                      <input
+                        type="text"
+                        value={resource.title}
+                        onChange={(e) => {
+                          const newResources = [...((data as TopicNodeData).resources || [])];
+                          newResources[index] = { ...resource, title: e.target.value };
+                          handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
+                        }}
+                        className="w-full px-2 py-1 bg-background border border-foreground/20 rounded text-sm text-foreground"
+                        placeholder={t('resources.resourceTitlePlaceholder')}
+                      />
+
+                      {/* URL */}
+                      <input
+                        type="url"
+                        value={resource.url}
+                        onChange={(e) => {
+                          const newResources = [...((data as TopicNodeData).resources || [])];
+                          newResources[index] = { ...resource, url: e.target.value };
+                          handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
+                        }}
+                        className="w-full px-2 py-1 bg-background border border-foreground/20 rounded text-sm text-foreground"
+                        placeholder={t('fields.urlPlaceholder')}
+                      />
+
+                      {/* Tipo de recurso externo */}
+                      <select
+                        value={resource.type}
+                        onChange={(e) => {
+                          const newResources = [...((data as TopicNodeData).resources || [])];
+                          newResources[index] = { ...resource, type: e.target.value as ResourceType };
+                          handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
+                        }}
+                        className="w-full px-2 py-1 bg-background border border-foreground/20 rounded text-xs text-foreground"
+                      >
+                        <option value="article">{t('resources.types.article')}</option>
+                        <option value="video">{t('resources.types.video')}</option>
+                        <option value="documentation">{t('resources.types.documentation')}</option>
+                        <option value="course">{t('resources.types.course')}</option>
+                        <option value="tool">{t('resources.types.tool')}</option>
+                        <option value="github">{t('resources.types.github')}</option>
+                      </select>
+                    </>
+                  )}
                 </div>
               ))}
             </div>
-            <button
-              onClick={() => {
-                const newResources = [
-                  ...((data as TopicNodeData).resources || []),
-                  { id: `resource-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`, title: '', url: '', type: 'article' as const },
-                ];
-                handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
-              }}
-              className="mt-2 w-full px-3 py-2 border border-dashed border-foreground/20
-                       text-foreground/60 hover:text-foreground hover:border-primary-500/50
-                       rounded-lg text-sm transition-colors"
-            >
-              + {t('resources.add')}
-            </button>
+
+            {/* Botones para añadir recursos */}
+            <div className="mt-2 flex gap-2">
+              <button
+                onClick={handleAddExternalResource}
+                className="flex-1 px-3 py-2 border border-dashed border-foreground/20
+                         text-foreground/60 hover:text-foreground hover:border-foreground/40
+                         rounded-lg text-xs transition-colors"
+              >
+                + {t('resources.addExternal')}
+              </button>
+              <button
+                onClick={() => handleAddLocalResource('exercise')}
+                className="flex-1 px-3 py-2 border border-dashed border-primary-500/30
+                         text-primary-400/70 hover:text-primary-400 hover:border-primary-500/50
+                         rounded-lg text-xs transition-colors"
+              >
+                + {t('resources.addExercise')}
+              </button>
+              <button
+                onClick={() => handleAddLocalResource('workout')}
+                className="flex-1 px-3 py-2 border border-dashed border-secondary-500/30
+                         text-secondary-400/70 hover:text-secondary-400 hover:border-secondary-500/50
+                         rounded-lg text-xs transition-colors"
+              >
+                + {t('resources.addWorkout')}
+              </button>
+            </div>
           </div>
         )}
       </div>
