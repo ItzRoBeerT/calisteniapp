@@ -3,7 +3,7 @@
   "title": "my-roadmap",
   "description": "Roadmap creado con el builder",
   "isPublic": true,
-  "totalNodes": 4,
+  "totalNodes": 5,
   "completedNodes": 0,
   "nodes": [
     {
@@ -78,15 +78,38 @@
           "right": true
         },
         "width": 160,
-        "height": 60
+        "height": 60,
+        "resources": [
+          {
+            "id": "resource-1770230264546-bx2kpyt",
+            "title": "Straddle Planche",
+            "url": "/exercises/straddle-planche",
+            "type": "exercise",
+            "localId": 58
+          },
+          {
+            "id": "resource-1770230278194-jdppouq",
+            "title": "Advanced Pull Day",
+            "url": "/workouts/4",
+            "type": "workout",
+            "localId": 4
+          },
+          {
+            "id": "resource-1770230283078-dradake",
+            "title": "Dominada con Banda",
+            "url": "/exercises/dominada-con-banda",
+            "type": "exercise",
+            "localId": 28
+          }
+        ]
       }
     },
     {
       "id": "node-1770203191766-4wnn9e1",
       "type": "image",
       "position": {
-        "x": -20,
-        "y": 240
+        "x": -320,
+        "y": -40
       },
       "style": {
         "width": 200,
@@ -106,6 +129,33 @@
         "width": 200,
         "height": 150,
         "alt": "Imagen preciosa"
+      }
+    },
+    {
+      "id": "node-1770235147987-xwni58l",
+      "type": "video",
+      "position": {
+        "x": -380,
+        "y": 200
+      },
+      "style": {
+        "width": 340,
+        "height": 200
+      },
+      "data": {
+        "nodeType": "video",
+        "label": "Video",
+        "videoUrl": "https://www.youtube.com/watch?v=zQ0XL496MPI",
+        "videoType": "youtube",
+        "controls": true,
+        "handles": {
+          "top": true,
+          "bottom": true,
+          "left": true,
+          "right": true
+        },
+        "width": 320,
+        "height": 180
       }
     }
   ],
@@ -134,6 +184,6 @@
       }
     }
   ],
-  "updatedAt": "2026-02-04T11:17:02.281Z",
-  "createdAt": "2026-02-04T11:17:02.281Z"
+  "updatedAt": "2026-02-04T20:00:01.942Z",
+  "createdAt": "2026-02-04T20:00:01.942Z"
 }

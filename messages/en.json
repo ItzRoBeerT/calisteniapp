@@ -167,6 +167,7 @@
 			"topic": "Topic",
 			"subtopic": "Subtopic",
 			"image": "Image",
+			"video": "Video",
 			"button": "Button",
 			"resourceButton": "Resource Button",
 			"todo": "Todo",
@@ -229,6 +230,14 @@
 		"resources": {
 			"title": "Resources",
 			"add": "Add resource",
+			"addExternal": "External",
+			"addExercise": "Exercise",
+			"addWorkout": "Workout",
+			"local": "Local",
+			"external": "External",
+			"loading": "Loading...",
+			"selectExercise": "Select exercise",
+			"selectWorkout": "Select workout",
 			"resourceTitle": "Resource title",
 			"resourceTitlePlaceholder": "Resource title",
 			"resourceUrl": "Resource URL",
@@ -239,7 +248,9 @@
 				"documentation": "Documentation",
 				"course": "Course",
 				"tool": "Tool",
-				"github": "GitHub"
+				"github": "GitHub",
+				"exercise": "Exercise",
+				"workout": "Workout"
 			}
 		},
 		"items": {

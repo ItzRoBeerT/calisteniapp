@@ -4,6 +4,7 @@ import LabelNode from './text/LabelNode';
 import TopicNode from './content/TopicNode';
 import SubTopicNode from './content/SubTopicNode';
 import ImageNode from './content/ImageNode';
+import VideoNode from './content/VideoNode';
 import ButtonNode from './interactive/ButtonNode';
 import ResourceButtonNode from './interactive/ResourceButtonNode';
 import TodoNode from './interactive/TodoNode';
@@ -25,6 +26,7 @@ export const viewerNodeTypes = {
   topic: TopicNode,
   subtopic: SubTopicNode,
   image: ImageNode,
+  video: VideoNode,
   // Interactivos
   button: ButtonNode,
   resourceButton: ResourceButtonNode,

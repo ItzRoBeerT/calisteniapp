@@ -8,6 +8,7 @@ import type { AnyNodeData } from '@/types/RoadmapNodes';
 import TextConfigPanel from './TextConfigPanel';
 import ContentConfigPanel from './ContentConfigPanel';
 import ImageConfigPanel from './ImageConfigPanel';
+import VideoConfigPanel from './VideoConfigPanel';
 import InteractiveConfigPanel from './InteractiveConfigPanel';
 import ListConfigPanel from './ListConfigPanel';
 import LineConfigPanel from './LineConfigPanel';
@@ -59,6 +60,17 @@ const NodeConfigRouter: React.FC<NodeConfigRouterProps> = ({
     case 'image':
       return (
         <ImageConfigPanel
+          node={node as Node<AnyNodeData>}
+          onUpdateNode={onUpdateNode}
+          onDeleteNode={onDeleteNode}
+          onClose={onClose}
+        />
+      );
+
+    // Nodo de video
+    case 'video':
+      return (
+        <VideoConfigPanel
           node={node as Node<AnyNodeData>}
           onUpdateNode={onUpdateNode}
           onDeleteNode={onDeleteNode}

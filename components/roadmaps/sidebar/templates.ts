@@ -119,6 +119,23 @@ export const nodeTemplates: NodeTemplate[] = [
     },
     defaultSize: { width: 200, height: 150 },
   },
+  {
+    type: 'video',
+    category: 'content',
+    label: 'Video',
+    description: 'Video de YouTube, Vimeo o directo',
+    icon: 'none',
+    previewColor: '#FF3B30',
+    defaultData: {
+      nodeType: 'video',
+      label: 'Video',
+      videoUrl: '',
+      videoType: 'youtube',
+      controls: true,
+      handles: { top: true, bottom: true, left: true, right: true },
+    },
+    defaultSize: { width: 320, height: 180 },
+  },
 
   // ============================================
   // INTERACTIVOS

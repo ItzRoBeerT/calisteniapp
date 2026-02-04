@@ -1,7 +1,7 @@
 import type { Node, Edge } from 'reactflow';
 
 // Tipos de recursos disponibles
-export type ResourceType = 'video' | 'article' | 'documentation' | 'course' | 'tool' | 'github';
+export type ResourceType = 'video' | 'article' | 'documentation' | 'course' | 'tool' | 'github' | 'exercise' | 'workout';
 
 // Estados de progreso de un nodo
 export type NodeProgress = 'not_started' | 'in_progress' | 'completed' | 'skipped';
@@ -19,6 +19,7 @@ export interface RoadmapResource {
   duration?: string;      // Para videos: "15 min"
   provider?: string;      // YouTube, MDN, Udemy, etc.
   isFree?: boolean;
+  localId?: number;       // Para recursos locales: ID del ejercicio o workout
 }
 
 // Contenido extendido de un nodo
@@ -126,6 +127,8 @@ export const resourceTypeConfig: Record<ResourceType, { label: string; color: st
   course: { label: 'Curso', color: 'text-purple-400 bg-purple-500/10 border-purple-500/20' },
   tool: { label: 'Herramienta', color: 'text-yellow-400 bg-yellow-500/10 border-yellow-500/20' },
   github: { label: 'GitHub', color: 'text-gray-400 bg-gray-500/10 border-gray-500/20' },
+  exercise: { label: 'Ejercicio', color: 'text-primary-400 bg-primary-500/10 border-primary-500/20' },
+  workout: { label: 'Rutina', color: 'text-secondary-400 bg-secondary-500/10 border-secondary-500/20' },
 };
 
 // Configuración de colores por estado de progreso
