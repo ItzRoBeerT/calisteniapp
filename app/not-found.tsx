@@ -2,8 +2,21 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { Orbitron, Space_Grotesk } from 'next/font/google';
 import esMessages from '@/messages/es.json';
 import enMessages from '@/messages/en.json';
+
+const orbitron = Orbitron({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  display: 'swap',
+});
 
 const translations = {
   es: esMessages.NotFound,
@@ -26,16 +39,12 @@ export default function GlobalNotFound() {
         <title>404 - Calisteniapp</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600&display=swap"
-          rel="stylesheet"
-        />
       </head>
       <body
+        className={spaceGrotesk.className}
         style={{
           margin: 0,
           padding: 0,
-          fontFamily: "'Space Grotesk', sans-serif",
           background: '#121212',
           color: '#ededed',
         }}
@@ -67,8 +76,8 @@ export default function GlobalNotFound() {
 
           {/* 404 Text */}
           <h1
+            className={orbitron.className}
             style={{
-              fontFamily: "'Orbitron', sans-serif",
               fontSize: 'clamp(8rem, 20vw, 16rem)',
               fontWeight: 900,
               lineHeight: 1,
@@ -86,7 +95,6 @@ export default function GlobalNotFound() {
           <div style={{ textAlign: 'center', maxWidth: '28rem', zIndex: 10 }}>
             <h2
               style={{
-                fontFamily: "'Space Grotesk', sans-serif",
                 fontSize: '1.5rem',
                 fontWeight: 700,
                 marginBottom: '1rem',
