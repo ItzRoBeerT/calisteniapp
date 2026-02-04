@@ -1,37 +1,17 @@
-'use client';
-
-import { usePathname } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
-import { Orbitron, Space_Grotesk } from 'next/font/google';
-import esMessages from '@/messages/es.json';
-import enMessages from '@/messages/en.json';
-
-const orbitron = Orbitron({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-});
+import { Space_Grotesk } from 'next/font/google';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   weight: ['700'],
 });
 
-const translations = {
-  es: esMessages.NotFound,
-  en: enMessages.NotFound,
-} as const;
-
-type Locale = keyof typeof translations;
-
-export default function GlobalNotFound() {
-  const pathname = usePathname();
-  const pathLocale = pathname?.split('/')[1] as Locale;
-  const locale: Locale = pathLocale && translations[pathLocale] ? pathLocale : 'es';
-  const t = (key: keyof (typeof translations)['es']) => translations[locale][key];
+export default async function NotFound() {
+  const t = await getTranslations('NotFound');
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-[calc(100vh-200px)] flex flex-col items-center justify-center p-4 relative overflow-hidden">
       {/* Background gradient */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -45,10 +25,10 @@ export default function GlobalNotFound() {
 
       {/* 404 Text */}
       <h1
-        className={orbitron.className}
+        className={spaceGrotesk.className}
         style={{
           fontSize: 'clamp(8rem, 20vw, 16rem)',
-          fontWeight: 900,
+          fontWeight: 700,
           lineHeight: 1,
           margin: 0,
           marginBottom: '2rem',
@@ -71,14 +51,14 @@ export default function GlobalNotFound() {
 
         <div className="flex flex-col gap-4 items-center">
           <Link
-            href={`/${locale}`}
+            href="/"
             className="inline-block px-8 py-3 bg-gradient-to-r from-[#BB86FC] to-[#9D4EDD] text-white font-semibold rounded-xl hover:opacity-90 transition-opacity"
           >
             {t('backHome')}
           </Link>
 
           <Link
-            href={`/${locale}/roadmaps`}
+            href="/roadmaps"
             className="inline-block px-8 py-3 border-2 border-border text-foreground font-semibold rounded-xl hover:bg-accent transition-colors"
           >
             {t('explore')}
