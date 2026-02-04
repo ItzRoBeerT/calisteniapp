@@ -1,10 +1,21 @@
-export interface Exercise {
+// Datos base del ejercicio (sin traducciones)
+export interface ExerciseBase {
 	id: number;
+	image: string;
+	muscle_group: string[];
+	difficulty: number;
+}
+
+// Traducciones de un ejercicio
+export interface ExerciseTranslation {
 	name: string;
 	description: string;
-	image: string;
-	muscle_group?: string[];
-	difficulty?: number;
+}
+
+// Ejercicio completo con traducciones aplicadas
+export interface Exercise extends ExerciseBase {
+	name: string;
+	description: string;
 }
 
 export interface User {
