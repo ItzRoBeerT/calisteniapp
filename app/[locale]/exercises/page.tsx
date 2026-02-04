@@ -10,8 +10,13 @@ export const metadata: Metadata = {
 		'Busca y encuentra los ejercicios que necesitas para mejorar tu fuerza y flexibilidad',
 };
 
-export default async function ExercisesPage() {
-	const data = await getExercisesByPage(1);
+interface Props {
+	params: Promise<{ locale: string }>;
+}
+
+export default async function ExercisesPage({ params }: Props) {
+	const { locale } = await params;
+	const data = await getExercisesByPage(1, undefined, locale);
 	const filters = await getFilters();
 
 	const t = await getTranslations('ExercisesPage')
@@ -28,6 +33,7 @@ export default async function ExercisesPage() {
 				<ExercisesList
 					totalPages={data?.totalPages || 0}
 					initalExercises={data?.exercises || []}
+					locale={locale}
 				/>
 			</section>
 		</>

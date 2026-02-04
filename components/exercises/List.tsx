@@ -10,8 +10,9 @@ import Paginator from '../pagination/Paginator';
 export default function ExercisesList(props: {
 	initalExercises: Exercise[];
 	totalPages: number;
+	locale: string;
 }) {
-	const { initalExercises } = props;
+	const { initalExercises, locale } = props;
 	const { page, setPage } = useExerciseStore();
 	const [exercises, setExercises] = useState<Exercise[]>(initalExercises);
 	const searchParams = useSearchParams();
@@ -30,7 +31,8 @@ export default function ExercisesList(props: {
 			(async () => {
 				const newExercises = await getExercisesByPage(
 					1,
-					updatedFilters
+					updatedFilters,
+					locale
 				);
 
 				if (newExercises?.exercises) {
@@ -42,10 +44,10 @@ export default function ExercisesList(props: {
 			setExercises(initalExercises);
 			setPage(1);
 		}
-	}, [searchParams, initalExercises, setPage]);
+	}, [searchParams, initalExercises, setPage, locale]);
 
 	const loadMoreExercises = async (newPage: number) => {
-		const newExercises = await getExercisesByPage(newPage);
+		const newExercises = await getExercisesByPage(newPage, undefined, locale);
 		if (newExercises) {
 			setPage(newPage);
 			setExercises(newExercises.exercises);

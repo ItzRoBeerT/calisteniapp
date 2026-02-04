@@ -1,16 +1,16 @@
 'use server';
 import { Exercise, Filter } from '@/types/supabase';
 import { createClient } from '@/utils/supabase/server';
-import { mockExercises, mockFilters } from '@/utils/mock-data';
+import { getMockExercises, mockFilters } from '@/utils/mock-data';
 import { NotFoundError, BadRequestError, UnauthorizedError } from '@/utils/errors';
 
 const EXERCISES_PER_PAGE = 12;
 
-export async function getExercise(id: number) {
+export async function getExercise(id: number, locale: string = 'es') {
 	const supabase = await createClient();
 
 	if (!supabase) {
-		return mockExercises.find((e) => e.id === id) || null;
+		return getMockExercises(locale).find((e) => e.id === id) || null;
 	}
 
 	const { data } = await supabase
@@ -26,11 +26,11 @@ export async function getExercise(id: number) {
 	return data;
 }
 
-export async function getExercises() {
+export async function getExercises(locale: string = 'es') {
 	const supabase = await createClient();
 
 	if (!supabase) {
-		return mockExercises;
+		return getMockExercises(locale);
 	}
 
 	const { data } = await supabase.from('Exercise').select('*');
@@ -44,12 +44,13 @@ export async function getExercises() {
 
 export async function getExercisesByPage(
 	page: number,
-	filters?: Record<string, string | string[]>
+	filters?: Record<string, string | string[]>,
+	locale: string = 'es'
 ) {
 	const supabase = await createClient();
 
 	if (!supabase) {
-		let filtered = [...mockExercises];
+		let filtered = [...getMockExercises(locale)];
 
 		if (filters) {
 			for (const [key, value] of Object.entries(filters)) {
@@ -140,12 +141,12 @@ export async function getExercisesByPage(
 	return { exercises: data as unknown as Exercise[], totalPages };
 }
 
-export async function getExerciseByName(name: string) {
+export async function getExerciseByName(name: string, locale: string = 'es') {
 	const supabase = await createClient();
 
 	if (!supabase) {
 		return (
-			mockExercises.find(
+			getMockExercises(locale).find(
 				(e) => e.name.toLowerCase() === name.toLowerCase()
 			) || null
 		);
@@ -192,11 +193,11 @@ export async function getFilters() {
 	return { muscle_group, difficulty };
 }
 
-export async function filter(filters: Filter) {
+export async function filter(filters: Filter, locale: string = 'es') {
 	const supabase = await createClient();
 
 	if (!supabase) {
-		return mockExercises.filter(
+		return getMockExercises(locale).filter(
 			(e) =>
 				filters.difficulty.includes(String(e.difficulty)) &&
 				filters.muscle_group.some((mg) => e.muscle_group.includes(mg))
