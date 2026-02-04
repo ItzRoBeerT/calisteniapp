@@ -531,6 +531,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 10,
 				rest: 60,
 				muscle_group: ['chest', 'shoulders', 'triceps'],
+				image: 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80',
 			},
 			{
 				id: 'ex-2',
@@ -540,6 +541,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 10,
 				rest: 60,
 				muscle_group: ['back', 'biceps'],
+				image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80',
 			},
 			{
 				id: 'ex-3',
@@ -549,6 +551,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 15,
 				rest: 45,
 				muscle_group: ['legs', 'glutes'],
+				image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80',
 			},
 			{
 				id: 'ex-4',
@@ -558,6 +561,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 30,
 				rest: 30,
 				muscle_group: ['core', 'shoulders'],
+				image: 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80',
 			},
 		],
 	},
@@ -579,6 +583,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 12,
 				rest: 60,
 				muscle_group: ['triceps', 'chest'],
+				image: 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80',
 			},
 			{
 				id: 'ex-6',
@@ -588,6 +593,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 8,
 				rest: 90,
 				muscle_group: ['back', 'biceps'],
+				image: 'https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80',
 			},
 			{
 				id: 'ex-7',
@@ -597,6 +603,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 10,
 				rest: 60,
 				muscle_group: ['triceps', 'chest', 'shoulders'],
+				image: 'https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80',
 			},
 			{
 				id: 'ex-8',
@@ -606,6 +613,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 8,
 				rest: 90,
 				muscle_group: ['biceps', 'back'],
+				image: 'https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80',
 			},
 			{
 				id: 'ex-9',
@@ -615,6 +623,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 20,
 				rest: 45,
 				muscle_group: ['legs', 'glutes'],
+				image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80',
 			},
 			{
 				id: 'ex-10',
@@ -624,6 +633,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 12,
 				rest: 45,
 				muscle_group: ['core'],
+				image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80',
 			},
 		],
 	},
@@ -645,6 +655,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 6,
 				rest: 120,
 				muscle_group: ['shoulders', 'triceps', 'core'],
+				image: 'https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=800&q=80',
 			},
 			{
 				id: 'ex-12',
@@ -654,6 +665,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 8,
 				rest: 90,
 				muscle_group: ['chest', 'triceps', 'shoulders'],
+				image: 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80',
 			},
 			{
 				id: 'ex-13',
@@ -663,6 +675,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 15,
 				rest: 60,
 				muscle_group: ['triceps', 'chest', 'shoulders'],
+				image: 'https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80',
 			},
 			{
 				id: 'ex-14',
@@ -672,6 +685,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 15,
 				rest: 45,
 				muscle_group: ['triceps', 'chest'],
+				image: 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80',
 			},
 			{
 				id: 'ex-15',
@@ -681,6 +695,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 15,
 				rest: 90,
 				muscle_group: ['shoulders', 'chest', 'core'],
+				image: 'https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=800&q=80',
 			},
 		],
 	},
@@ -702,6 +717,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 5,
 				rest: 150,
 				muscle_group: ['back', 'chest', 'triceps', 'shoulders'],
+				image: 'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=800&q=80',
 			},
 			{
 				id: 'ex-17',
@@ -711,6 +727,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 12,
 				rest: 90,
 				muscle_group: ['back', 'biceps'],
+				image: 'https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80',
 			},
 			{
 				id: 'ex-18',
@@ -720,6 +737,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 10,
 				rest: 60,
 				muscle_group: ['biceps', 'back'],
+				image: 'https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80',
 			},
 			{
 				id: 'ex-19',
@@ -729,6 +747,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 10,
 				rest: 120,
 				muscle_group: ['back', 'core', 'shoulders'],
+				image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80',
 			},
 		],
 	},
@@ -750,6 +769,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 15,
 				rest: 45,
 				muscle_group: ['core'],
+				image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80',
 			},
 			{
 				id: 'ex-21',
@@ -759,6 +779,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 20,
 				rest: 60,
 				muscle_group: ['core', 'triceps', 'shoulders'],
+				image: 'https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80',
 			},
 			{
 				id: 'ex-22',
@@ -768,6 +789,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 60,
 				rest: 30,
 				muscle_group: ['core', 'shoulders'],
+				image: 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80',
 			},
 			{
 				id: 'ex-23',
@@ -777,6 +799,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 8,
 				rest: 90,
 				muscle_group: ['core'],
+				image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80',
 			},
 		],
 	},
@@ -798,6 +821,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 20,
 				rest: 45,
 				muscle_group: ['legs', 'glutes'],
+				image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80',
 			},
 			{
 				id: 'ex-25',
@@ -807,6 +831,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 5,
 				rest: 90,
 				muscle_group: ['legs', 'glutes', 'core'],
+				image: 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80',
 			},
 			{
 				id: 'ex-26',
@@ -816,6 +841,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 10,
 				rest: 60,
 				muscle_group: ['legs', 'chest', 'core', 'shoulders'],
+				image: 'https://images.unsplash.com/photo-1601422407692-ec4eeec1d9b3?w=800&q=80',
 			},
 			{
 				id: 'ex-27',
@@ -825,6 +851,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 45,
 				rest: 30,
 				muscle_group: ['core', 'shoulders'],
+				image: 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80',
 			},
 		],
 	},
@@ -846,6 +873,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 15,
 				rest: 150,
 				muscle_group: ['back', 'core', 'shoulders'],
+				image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80',
 			},
 			{
 				id: 'ex-29',
@@ -855,6 +883,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 15,
 				rest: 120,
 				muscle_group: ['shoulders', 'back', 'core'],
+				image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80',
 			},
 			{
 				id: 'ex-30',
@@ -864,6 +893,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 15,
 				rest: 120,
 				muscle_group: ['shoulders', 'chest', 'core'],
+				image: 'https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=800&q=80',
 			},
 			{
 				id: 'ex-31',
@@ -873,6 +903,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 10,
 				rest: 150,
 				muscle_group: ['core', 'shoulders', 'back'],
+				image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80',
 			},
 			{
 				id: 'ex-32',
@@ -882,6 +913,7 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 				reps: 30,
 				rest: 60,
 				muscle_group: ['core', 'triceps', 'shoulders'],
+				image: 'https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80',
 			},
 		],
 	},

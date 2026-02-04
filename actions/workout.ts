@@ -1,6 +1,6 @@
 'use server';
 import { createClient } from '@/utils/supabase/server';
-import { mockWorkoutDetails, mockWorkoutFilters } from '@/utils/mock-data';
+import { mockWorkoutDetails, mockWorkoutFilters, mockExercises } from '@/utils/mock-data';
 
 export async function getWorkout(id: string) {
 	const supabase = await createClient();
@@ -8,7 +8,20 @@ export async function getWorkout(id: string) {
 	if (!supabase) {
 		const workout = mockWorkoutDetails.find((w) => w.id === Number(id));
 		if (!workout) return null;
-		return workout;
+
+		// Enrich exercises with images from mockExercises
+		const exercisesWithImages = workout.exercises.map((ex) => {
+			const exerciseData = mockExercises.find((e) => e.id === ex.exercise_id);
+			return {
+				...ex,
+				image: exerciseData?.image,
+			};
+		});
+
+		return {
+			...workout,
+			exercises: exercisesWithImages,
+		};
 	}
 
 	// Obtener el workout
@@ -99,8 +112,20 @@ export async function getWorkoutsByPage(page = 1, limit = 12, filters?: any) {
 		const paginatedWorkouts = filteredWorkouts.slice(startIndex, endIndex);
 		const totalPages = Math.ceil(filteredWorkouts.length / limit);
 
+		// Enrich exercises with images
+		const workoutsWithImages = paginatedWorkouts.map((workout) => ({
+			...workout,
+			exercises: workout.exercises.map((ex) => {
+				const exerciseData = mockExercises.find((e) => e.id === ex.exercise_id);
+				return {
+					...ex,
+					image: exerciseData?.image,
+				};
+			}),
+		}));
+
 		return {
-			workouts: paginatedWorkouts,
+			workouts: workoutsWithImages,
 			totalPages,
 		};
 	}

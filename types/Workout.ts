@@ -6,6 +6,7 @@ export interface ExerciseWorkout {
 	reps: number;
 	rest: number;
 	muscle_group?: string[];
+	image?: string;
 }
 
 export interface WorkoutFormData {

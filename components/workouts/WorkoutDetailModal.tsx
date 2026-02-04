@@ -125,8 +125,7 @@ export default function WorkoutDetailModal({
               sets: ex.sets,
               reps: ex.reps,
               rest: ex.rest,
-              muscle_group: ex.muscle_group,
-              exercise_id: ex.exercise_id,
+              image: ex.image,
             }))} />
           ) : (
             <p className="text-foreground/40 text-sm">{t('noExercises')}</p>
