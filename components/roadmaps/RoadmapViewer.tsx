@@ -135,7 +135,7 @@ const miniMapNodeColor = (node: { data?: RoadmapNodeData | AnyNodeData }) => {
 };
 
 // Tipos de nodos que NO deben mostrar detalles ni contarse en progreso
-const nonProgressNodeTypes = ['title', 'paragraph', 'label', 'horizontalLine', 'verticalLine', 'section', 'image'];
+const nonProgressNodeTypes = ['title', 'paragraph', 'label', 'horizontalLine', 'verticalLine', 'section', 'image', 'video'];
 
 export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapViewerProps) {
   // Estado de nodos y edges

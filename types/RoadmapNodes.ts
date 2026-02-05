@@ -103,6 +103,8 @@ export interface SubTopicNodeData extends BaseNodeData {
   icon?: CalistenicsIconType;
   color: string; // Lighter/softer variant
   description?: string;
+  tips?: string;
+  resources?: RoadmapResource[];
   progress?: NodeProgress;
 }
 
