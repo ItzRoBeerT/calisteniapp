@@ -360,6 +360,16 @@
 	  "clear": "Clear",
 	  "apply": "Apply"
 	},
+	"ExerciseFilter": {
+	  "difficulty": "Difficulty",
+	  "muscleGroup": "Muscle Group",
+	  "all": "All",
+	  "clear": "Clear",
+	  "apply": "Apply",
+	  "beginner": "Beginner",
+	  "intermediate": "Intermediate",
+	  "advanced": "Advanced"
+	},
 	"Auth": {
 	  "demoMode": {
 		"title": "Authentication unavailable",
