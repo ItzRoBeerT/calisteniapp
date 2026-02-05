@@ -46,6 +46,15 @@ export default {
 					900: '#006256',
 				},
 			},
+			keyframes: {
+				'fade-in': {
+					'0%': { opacity: '0', transform: 'scaleX(0)' },
+					'100%': { opacity: '1', transform: 'scaleX(1)' },
+				},
+			},
+			animation: {
+				'fade-in': 'fade-in 0.5s ease-out forwards',
+			},
 		},
 	},
 	plugins: [],

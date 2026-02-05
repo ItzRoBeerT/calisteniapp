@@ -9,6 +9,7 @@ interface UseRoadmapProgressReturn {
   progress: ProgressState;
   updateNodeProgress: (nodeId: string, status: NodeProgress) => void;
   completedCount: number;
+  inProgressCount: number;
   completionPercentage: number;
   isLoaded: boolean;
   resetProgress: () => void;
@@ -71,13 +72,15 @@ export function useRoadmapProgress(
   }, [storageKey]);
 
   // Calcular estadísticas de progreso
-  const { completedCount, completionPercentage } = useMemo(() => {
+  const { completedCount, inProgressCount, completionPercentage } = useMemo(() => {
     const completed = Object.values(progress).filter((status) => status === 'completed').length;
+    const inProgress = Object.values(progress).filter((status) => status === 'in_progress').length;
     const total = totalNodes > 0 ? totalNodes : Math.max(Object.keys(progress).length, 1);
     const percentage = Math.round((completed / total) * 100);
 
     return {
       completedCount: completed,
+      inProgressCount: inProgress,
       completionPercentage: Math.min(percentage, 100),
     };
   }, [progress, totalNodes]);
@@ -86,6 +89,7 @@ export function useRoadmapProgress(
     progress,
     updateNodeProgress,
     completedCount,
+    inProgressCount,
     completionPercentage,
     isLoaded,
     resetProgress,

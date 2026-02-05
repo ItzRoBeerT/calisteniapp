@@ -168,20 +168,22 @@ export default function NodeDetailPanel({
               </section>
 
               {/* Descripción */}
-              <section className="space-y-3">
-                <h3
-                  className="text-sm font-semibold text-foreground/60 uppercase tracking-wider"
-                  style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-                >
-                  {t('description')}
-                </h3>
-                <p
-                  className="text-foreground/80 leading-relaxed"
-                  style={{ fontFamily: "'Space Grotesk', sans-serif" }}
-                >
-                  {content.description}
-                </p>
-              </section>
+              {content.description && (
+                <section className="space-y-3">
+                  <h3
+                    className="text-sm font-semibold text-foreground/60 uppercase tracking-wider"
+                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                  >
+                    {t('description')}
+                  </h3>
+                  <p
+                    className="text-foreground/80 leading-relaxed"
+                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
+                  >
+                    {content.description}
+                  </p>
+                </section>
+              )}
 
               {/* Tips/Consejos */}
               {content.tips && (
