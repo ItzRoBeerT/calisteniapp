@@ -5,10 +5,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-npm run dev          # Start development server at localhost:3000
-npm run build        # Production build
-npm run lint         # Run ESLint
-npm run sync-exercises  # Sync exercises from external source (tsx scripts/sync-exercises.ts)
+pnpm run dev          # Start development server at localhost:3000
+pnpm run build        # Production build
+pnpm run lint         # Run ESLint
+pnpm run sync-exercises  # Sync exercises from external source (tsx scripts/sync-exercises.ts)
 npx tsc --noEmit     # Type check without emitting
 ```
 
@@ -104,6 +104,9 @@ components/roadmaps/
 - Browser client: `utils/supabase/client.ts`
 - Both return `null` if Supabase is not configured, enabling mock data fallback
 - Environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- **When modifying TypeScript interfaces/types**, also update:
+  - `supabase/schema.sql` - Database schema definitions
+  - `supabase/seed.sql` - Seed data for development
 
 ### Styling Conventions
 
