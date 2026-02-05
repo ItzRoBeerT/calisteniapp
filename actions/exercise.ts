@@ -126,8 +126,6 @@ export async function getExercisesByPage(
 
 	const { data, count, error } = await query;
 
-	console.log('count:', count);
-
 	if (error) {
 		console.error('Error fetching exercises:', error.message);
 		return null;
