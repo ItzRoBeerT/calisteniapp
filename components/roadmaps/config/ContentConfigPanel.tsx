@@ -81,7 +81,7 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
     resourceType: 'exercise' | 'workout',
     localId: number
   ) => {
-    const newResources = [...((data as TopicNodeData).resources || [])];
+    const newResources = [...(data.resources || [])];
 
     if (resourceType === 'exercise') {
       const exercise = exercises.find(e => e.id === localId);
@@ -107,13 +107,13 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
       }
     }
 
-    handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
+    handleUpdate({ resources: newResources } as Partial<ContentNodeData>);
   };
 
   // Función para añadir recurso externo
   const handleAddExternalResource = () => {
     const newResources: RoadmapResource[] = [
-      ...((data as TopicNodeData).resources || []),
+      ...(data.resources || []),
       {
         id: `resource-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
         title: '',
@@ -121,13 +121,13 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
         type: 'article'
       },
     ];
-    handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
+    handleUpdate({ resources: newResources } as Partial<ContentNodeData>);
   };
 
   // Función para añadir recurso local (ejercicio o workout)
   const handleAddLocalResource = (type: 'exercise' | 'workout') => {
     const newResources: RoadmapResource[] = [
-      ...((data as TopicNodeData).resources || []),
+      ...(data.resources || []),
       {
         id: `resource-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
         title: '',
@@ -136,16 +136,18 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
         localId: undefined,
       },
     ];
-    handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
+    handleUpdate({ resources: newResources } as Partial<ContentNodeData>);
   };
 
-  // Opciones de iconos
+  // Opciones de iconos (filtramos 'none' del array para evitar duplicado)
   const iconOptions = [
     { value: 'none', label: t('fields.noIcon') },
-    ...calistenicsIconNames.map((name) => ({
-      value: name,
-      label: name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, ' '),
-    })),
+    ...calistenicsIconNames
+      .filter((name) => name !== 'none')
+      .map((name) => ({
+        value: name,
+        label: name.charAt(0).toUpperCase() + name.slice(1).replace(/-/g, ' '),
+      })),
   ];
 
   return (
@@ -161,7 +163,7 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
       ]}
     >
       {/* Tab de Estilo */}
-      <div data-tab="style" className="space-y-4">
+      <div key="style" data-tab="style" className="space-y-4">
         {/* Color */}
         <ConfigColorPicker
           label={t('fields.backgroundColor')}
@@ -183,7 +185,7 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
       </div>
 
       {/* Tab de Contenido */}
-      <div data-tab="content" className="space-y-4">
+      <div key="content" data-tab="content" className="space-y-4">
         {/* Descripción */}
         <ConfigTextarea
           label={t('fields.description')}
@@ -193,25 +195,23 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
           rows={4}
         />
 
-        {/* Tips (solo para Topic) */}
-        {nodeType === 'topic' && (
-          <ConfigTextarea
-            label={t('fields.tips')}
-            value={(data as TopicNodeData).tips}
-            onChange={(v) => handleUpdate({ tips: v } as Partial<TopicNodeData>)}
-            placeholder={t('fields.tipsPlaceholder')}
-            rows={3}
-          />
-        )}
+        {/* Tips */}
+        <ConfigTextarea
+          label={t('fields.tips')}
+          value={data.tips}
+          onChange={(v) => handleUpdate({ tips: v })}
+          placeholder={t('fields.tipsPlaceholder')}
+          rows={3}
+        />
 
-        {/* Sección de recursos (solo para Topic) */}
-        {nodeType === 'topic' && (
+        {/* Sección de recursos */}
+        {(nodeType === 'topic' || nodeType === 'subtopic') && (
           <div>
             <label className="block text-sm font-medium text-foreground/70 mb-2">
               {t('resources.title')}
             </label>
             <div className="space-y-3">
-              {((data as TopicNodeData).resources || []).map((resource, index) => (
+              {(data.resources || []).map((resource, index) => (
                 <div
                   key={resource.id || `resource-${index}`}
                   className="p-3 bg-background/50 rounded-lg space-y-2"
@@ -229,10 +229,10 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
                     <span className="flex-1" />
                     <button
                       onClick={() => {
-                        const newResources = ((data as TopicNodeData).resources || []).filter(
+                        const newResources = (data.resources || []).filter(
                           (_, i) => i !== index
                         );
-                        handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
+                        handleUpdate({ resources: newResources } as Partial<ContentNodeData>);
                       }}
                       className="p-1 text-red-400 hover:text-red-300 shrink-0"
                     >
@@ -249,7 +249,7 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
                       <select
                         value={resource.type}
                         onChange={(e) => {
-                          const newResources = [...((data as TopicNodeData).resources || [])];
+                          const newResources = [...(data.resources || [])];
                           newResources[index] = {
                             ...resource,
                             type: e.target.value as 'exercise' | 'workout',
@@ -257,7 +257,7 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
                             url: '',
                             localId: undefined,
                           };
-                          handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
+                          handleUpdate({ resources: newResources } as Partial<ContentNodeData>);
                         }}
                         className="w-full px-2 py-1 bg-background border border-foreground/20 rounded text-xs text-foreground"
                       >
@@ -319,9 +319,9 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
                         type="text"
                         value={resource.title}
                         onChange={(e) => {
-                          const newResources = [...((data as TopicNodeData).resources || [])];
+                          const newResources = [...(data.resources || [])];
                           newResources[index] = { ...resource, title: e.target.value };
-                          handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
+                          handleUpdate({ resources: newResources } as Partial<ContentNodeData>);
                         }}
                         className="w-full px-2 py-1 bg-background border border-foreground/20 rounded text-sm text-foreground"
                         placeholder={t('resources.resourceTitlePlaceholder')}
@@ -332,9 +332,9 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
                         type="url"
                         value={resource.url}
                         onChange={(e) => {
-                          const newResources = [...((data as TopicNodeData).resources || [])];
+                          const newResources = [...(data.resources || [])];
                           newResources[index] = { ...resource, url: e.target.value };
-                          handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
+                          handleUpdate({ resources: newResources } as Partial<ContentNodeData>);
                         }}
                         className="w-full px-2 py-1 bg-background border border-foreground/20 rounded text-sm text-foreground"
                         placeholder={t('fields.urlPlaceholder')}
@@ -344,9 +344,9 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
                       <select
                         value={resource.type}
                         onChange={(e) => {
-                          const newResources = [...((data as TopicNodeData).resources || [])];
+                          const newResources = [...(data.resources || [])];
                           newResources[index] = { ...resource, type: e.target.value as ResourceType };
-                          handleUpdate({ resources: newResources } as Partial<TopicNodeData>);
+                          handleUpdate({ resources: newResources } as Partial<ContentNodeData>);
                         }}
                         className="w-full px-2 py-1 bg-background border border-foreground/20 rounded text-xs text-foreground"
                       >

@@ -180,7 +180,7 @@
       "data": {
         "nodeType": "subtopic",
         "label": "Subtema",
-        "color": "#9A64D6",
+        "color": "#2563eb",
         "icon": "none",
         "handles": {
           "top": true,
@@ -244,6 +244,6 @@
       }
     }
   ],
-  "updatedAt": "2026-02-05T14:49:41.298Z",
-  "createdAt": "2026-02-05T14:49:41.298Z"
+  "updatedAt": "2026-02-05T16:00:36.300Z",
+  "createdAt": "2026-02-05T16:00:36.300Z"
 }
