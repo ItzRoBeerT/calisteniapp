@@ -1,7 +1,16 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import type { NodeResourceListProps, RoadmapResource, ResourceType } from '@/types/Roadmap';
+
+// Helper para añadir locale a URLs internas
+const getLocalizedUrl = (url: string, locale: string): string => {
+  const isInternal = url.startsWith('/') && !url.startsWith('//');
+  if (isInternal) {
+    return `/${locale}${url}`;
+  }
+  return url;
+};
 
 // Iconos SVG por tipo de recurso
 const ResourceIcons: Record<ResourceType, React.FC<{ className?: string }>> = {
@@ -105,12 +114,13 @@ const resourceColors: Record<ResourceType, { bg: string; border: string; text: s
 // Componente de tarjeta de recurso individual
 const ResourceCard = ({ resource }: { resource: RoadmapResource }) => {
   const t = useTranslations('RoadmapViewer');
+  const locale = useLocale();
   const colors = resourceColors[resource.type];
   const IconComponent = ResourceIcons[resource.type];
 
   return (
     <a
-      href={resource.url}
+      href={getLocalizedUrl(resource.url, locale)}
       target="_blank"
       rel="noopener noreferrer"
       className={`
