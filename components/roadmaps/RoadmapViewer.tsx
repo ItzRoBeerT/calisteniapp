@@ -154,7 +154,7 @@ export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapVi
   }, [nodes]);
 
   // Hook de progreso con localStorage - usa el conteo de nodos rastreables
-  const { progress, updateNodeProgress, completedCount, completionPercentage, isLoaded } =
+  const { progress, updateNodeProgress, completedCount, inProgressCount, completionPercentage, isLoaded } =
     useRoadmapProgress(roadmap.id, trackableNodesCount);
 
   // Obtener nodo seleccionado con sus datos - crea content object para nuevos tipos
@@ -316,6 +316,7 @@ export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapVi
       {isLoaded && trackableNodesCount > 0 && (
         <RoadmapProgress
           completedNodes={completedCount}
+          inProgressNodes={inProgressCount}
           totalNodes={trackableNodesCount}
           percentage={completionPercentage}
         />

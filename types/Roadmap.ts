@@ -109,6 +109,7 @@ export interface NodeResourceListProps {
 // Props para la barra de progreso
 export interface RoadmapProgressProps {
   completedNodes: number;
+  inProgressNodes: number;
   totalNodes: number;
   percentage: number;
 }

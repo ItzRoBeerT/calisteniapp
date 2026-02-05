@@ -5,6 +5,7 @@ import type { RoadmapProgressProps } from '@/types/Roadmap';
 
 export default function RoadmapProgress({
   completedNodes,
+  inProgressNodes,
   totalNodes,
   percentage,
 }: RoadmapProgressProps) {
@@ -26,6 +27,13 @@ export default function RoadmapProgress({
 
   return (
     <div className="bg-surface/80 backdrop-blur-md rounded-2xl p-5 border border-foreground/10">
+      {/* Animación para las rayas de progreso */}
+      <style>{`
+        @keyframes progressStripes {
+          from { background-position: 0 0; }
+          to { background-position: 17px 17px; }
+        }
+      `}</style>
       {/* Header con stats */}
       <div className="flex items-center justify-between mb-4">
         <div>
@@ -61,17 +69,51 @@ export default function RoadmapProgress({
       <div className="relative">
         {/* Track de fondo */}
         <div className="h-3 bg-foreground/10 rounded-full overflow-hidden">
-          {/* Barra de progreso animada */}
-          <div
-            className={`
-              h-full rounded-full transition-all duration-700 ease-out
-              bg-gradient-to-r ${getProgressColor()}
-              ${getGlowColor()}
-            `}
-            style={{ width: `${Math.min(percentage, 100)}%` }}
-          >
-            {/* Efecto de brillo interno */}
-            <div className="h-full w-full bg-gradient-to-b from-white/20 to-transparent rounded-full" />
+          {/* Contenedor flex para las barras */}
+          <div className="h-full flex">
+            {/* Barra de completados */}
+            <div
+              className={`
+                h-full transition-all duration-700 ease-out
+                bg-gradient-to-r ${getProgressColor()}
+                ${getGlowColor()}
+                ${percentage > 0 ? 'rounded-l-full' : ''}
+                ${inProgressNodes === 0 ? 'rounded-r-full' : ''}
+              `}
+              style={{ width: `${Math.min(percentage, 100)}%` }}
+            >
+              {/* Efecto de brillo interno */}
+              <div className="h-full w-full bg-gradient-to-b from-white/20 to-transparent" />
+            </div>
+            {/* Barra de en progreso (con rayas animadas) */}
+            {inProgressNodes > 0 && (
+              <div
+                className={`
+                  h-full overflow-hidden relative animate-fade-in origin-left
+                  ${percentage === 0 ? 'rounded-l-full' : ''}
+                  rounded-r-full
+                  bg-primary-500/30
+                `}
+                style={{
+                  width: `${Math.min((inProgressNodes / totalNodes) * 100, 100 - percentage)}%`,
+                }}
+              >
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background: `repeating-linear-gradient(
+                      -45deg,
+                      transparent,
+                      transparent 6px,
+                      rgba(255, 255, 255, 0.2) 6px,
+                      rgba(255, 255, 255, 0.2) 12px
+                    )`,
+                    backgroundSize: '17px 17px',
+                    animation: 'progressStripes 1.0s linear infinite',
+                  }}
+                />
+              </div>
+            )}
           </div>
         </div>
 
