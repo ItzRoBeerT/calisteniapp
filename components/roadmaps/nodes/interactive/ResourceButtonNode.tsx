@@ -1,6 +1,7 @@
 'use client';
 
 import React, { memo } from 'react';
+import { useLocale } from 'next-intl';
 import BaseNode from '../BaseNode';
 import { CalistenicsIcons } from '../../CalistenicsIcons';
 import type { ResourceButtonNodeData } from '@/types/RoadmapNodes';
@@ -11,6 +12,7 @@ interface ResourceButtonNodeProps {
 }
 
 const ResourceButtonNode: React.FC<ResourceButtonNodeProps> = ({ data, selected = false }) => {
+  const locale = useLocale();
   const backgroundColor = data.backgroundColor || '#32D74B';
   const textColor = data.textColor || '#ffffff';
   const badgeText = data.badgeText || '';
@@ -21,11 +23,19 @@ const ResourceButtonNode: React.FC<ResourceButtonNodeProps> = ({ data, selected 
     ? CalistenicsIcons[data.icon]
     : null;
 
+  const getLocalizedUrl = (url: string): string => {
+    const isInternal = url.startsWith('/') && !url.startsWith('//');
+    if (isInternal) {
+      return `/${locale}${url}`;
+    }
+    return url;
+  };
+
   const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation();
 
     if (data.mode === 'viewer' && data.url) {
-      window.open(data.url, '_blank', 'noopener,noreferrer');
+      window.open(getLocalizedUrl(data.url), '_blank', 'noopener,noreferrer');
     } else {
       data.onSelect?.();
     }

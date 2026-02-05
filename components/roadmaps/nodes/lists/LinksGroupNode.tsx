@@ -1,6 +1,7 @@
 'use client';
 
 import React, { memo } from 'react';
+import { useLocale } from 'next-intl';
 import BaseNode from '../BaseNode';
 import { CalistenicsIcons } from '../../CalistenicsIcons';
 import type { LinksGroupNodeData } from '@/types/RoadmapNodes';
@@ -11,13 +12,22 @@ interface LinksGroupNodeProps {
 }
 
 const LinksGroupNode: React.FC<LinksGroupNodeProps> = ({ data, selected = false }) => {
+  const locale = useLocale();
   const items = data.items || [];
   const isViewer = data.mode === 'viewer';
+
+  const getLocalizedUrl = (url: string): string => {
+    const isInternal = url.startsWith('/') && !url.startsWith('//');
+    if (isInternal) {
+      return `/${locale}${url}`;
+    }
+    return url;
+  };
 
   const handleLinkClick = (url: string, e: React.MouseEvent) => {
     e.stopPropagation();
     if (isViewer && url) {
-      window.open(url, '_blank', 'noopener,noreferrer');
+      window.open(getLocalizedUrl(url), '_blank', 'noopener,noreferrer');
     }
   };
 

@@ -3,7 +3,7 @@
   "title": "my-roadmap",
   "description": "Roadmap creado con el builder",
   "isPublic": true,
-  "totalNodes": 5,
+  "totalNodes": 6,
   "completedNodes": 0,
   "nodes": [
     {
@@ -59,8 +59,8 @@
       "id": "node-1770203189277-udi05lw",
       "type": "topic",
       "position": {
-        "x": 40,
-        "y": 120
+        "x": 20,
+        "y": 100
       },
       "style": {
         "width": 160,
@@ -100,8 +100,16 @@
             "url": "/exercises/dominada-con-banda",
             "type": "exercise",
             "localId": 28
+          },
+          {
+            "id": "resource-1770302964300-da9wa1m",
+            "title": "Prueba",
+            "url": "https://steamcommunity.com/sharedfiles/filedetails/?id=2631527741",
+            "type": "documentation"
           }
-        ]
+        ],
+        "description": "Prueba un dos tres cuatro",
+        "tips": "Consejito del dia"
       }
     },
     {
@@ -157,6 +165,32 @@
         "width": 320,
         "height": 180
       }
+    },
+    {
+      "id": "node-1770302191175-tc97upf",
+      "type": "subtopic",
+      "position": {
+        "x": 320,
+        "y": 120
+      },
+      "style": {
+        "width": 140,
+        "height": 50
+      },
+      "data": {
+        "nodeType": "subtopic",
+        "label": "Subtema",
+        "color": "#9A64D6",
+        "icon": "none",
+        "handles": {
+          "top": true,
+          "bottom": true,
+          "left": true,
+          "right": true
+        },
+        "width": 140,
+        "height": 50
+      }
     }
   ],
   "edges": [
@@ -182,8 +216,34 @@
         "arrowStyle": "none",
         "pathStyle": "bezier"
       }
+    },
+    {
+      "id": "reactflow__edge-node-1770203189277-udi05lwright-node-1770302191175-tc97upfleft",
+      "source": "node-1770203189277-udi05lw",
+      "target": "node-1770302191175-tc97upf",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#64D2FF",
+        "strokeWidth": 2
+      },
+      "markerStart": {
+        "type": "arrowclosed",
+        "color": "#64D2FF"
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#64D2FF"
+      },
+      "data": {
+        "lineStyle": "solid",
+        "arrowStyle": "both",
+        "pathStyle": "bezier"
+      }
     }
   ],
-  "updatedAt": "2026-02-04T20:00:01.942Z",
-  "createdAt": "2026-02-04T20:00:01.942Z"
+  "updatedAt": "2026-02-05T14:49:41.298Z",
+  "createdAt": "2026-02-05T14:49:41.298Z"
 }

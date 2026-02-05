@@ -1,6 +1,7 @@
 'use client';
 
 import React, { memo } from 'react';
+import { useLocale } from 'next-intl';
 import BaseNode from '../BaseNode';
 import { CalistenicsIcons } from '../../CalistenicsIcons';
 import type { ButtonNodeData } from '@/types/RoadmapNodes';
@@ -11,6 +12,7 @@ interface ButtonNodeProps {
 }
 
 const ButtonNode: React.FC<ButtonNodeProps> = ({ data, selected = false }) => {
+  const locale = useLocale();
   const backgroundColor = data.backgroundColor || '#BB86FC';
   const textColor = data.textColor || '#ffffff';
   const variant = data.variant || 'solid';
@@ -19,12 +21,26 @@ const ButtonNode: React.FC<ButtonNodeProps> = ({ data, selected = false }) => {
     ? CalistenicsIcons[data.icon]
     : null;
 
+  const getLocalizedUrl = (url: string): string => {
+    const isInternal = url.startsWith('/') && !url.startsWith('//');
+    if (isInternal) {
+      return `/${locale}${url}`;
+    }
+    return url;
+  };
+
   const handleClick = (e: React.MouseEvent) => {
+
+    console.log('ButtonNode clicked:', {
+      label: data.label,
+      mode: data.mode,
+      url: data.url,
+    });
     e.stopPropagation();
 
     // En modo viewer, abrir URL
     if (data.mode === 'viewer' && data.url) {
-      window.open(data.url, '_blank', 'noopener,noreferrer');
+      window.open(getLocalizedUrl(data.url), '_blank', 'noopener,noreferrer');
     } else {
       // En modo builder, seleccionar el nodo
       data.onSelect?.();
