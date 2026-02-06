@@ -1,10 +1,52 @@
 'use server';
-import { Exercise, Filter } from '@/types/supabase';
+import { Exercise, ExerciseTranslation, Filter } from '@/types/supabase';
 import { createClient } from '@/utils/supabase/server';
 import { getMockExercises, mockFilters } from '@/utils/mock-data';
 import { NotFoundError, BadRequestError, UnauthorizedError } from '@/utils/errors';
 
 const EXERCISES_PER_PAGE = 12;
+
+// Load translations dynamically
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const esMessages = require('@/messages/es.json');
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const enMessages = require('@/messages/en.json');
+
+const translationsByLocale: Record<string, Record<string, ExerciseTranslation>> = {
+	es: esMessages.Exercises,
+	en: enMessages.Exercises,
+};
+
+// Apply translations to exercises from database
+function applyTranslations(exercises: Exercise[], locale: string): Exercise[] {
+	const translations = translationsByLocale[locale] || translationsByLocale.es;
+	return exercises.map((exercise) => {
+		const translation = translations[String(exercise.id)];
+		if (translation) {
+			return {
+				...exercise,
+				name: translation.name,
+				description: translation.description,
+				...(translation.instructions && { instructions: translation.instructions }),
+			};
+		}
+		return exercise;
+	});
+}
+
+function applyTranslationSingle(exercise: Exercise, locale: string): Exercise {
+	const translations = translationsByLocale[locale] || translationsByLocale.es;
+	const translation = translations[String(exercise.id)];
+	if (translation) {
+		return {
+			...exercise,
+			name: translation.name,
+			description: translation.description,
+			...(translation.instructions && { instructions: translation.instructions }),
+		};
+	}
+	return exercise;
+}
 
 export async function getExercise(id: number, locale: string = 'es') {
 	const supabase = await createClient();
@@ -23,7 +65,7 @@ export async function getExercise(id: number, locale: string = 'es') {
 		return null;
 	}
 
-	return data;
+	return applyTranslationSingle(data as Exercise, locale);
 }
 
 export async function getExercises(locale: string = 'es') {
@@ -39,7 +81,7 @@ export async function getExercises(locale: string = 'es') {
 		return null;
 	}
 
-	return data;
+	return applyTranslations(data as Exercise[], locale);
 }
 
 export async function getExercisesByPage(
@@ -136,7 +178,8 @@ export async function getExercisesByPage(
 		totalPages = Math.ceil(count / EXERCISES_PER_PAGE);
 	}
 
-	return { exercises: data as unknown as Exercise[], totalPages };
+	const translatedExercises = applyTranslations(data as Exercise[], locale);
+	return { exercises: translatedExercises, totalPages };
 }
 
 export async function getExerciseByName(name: string, locale: string = 'es') {
@@ -150,7 +193,26 @@ export async function getExerciseByName(name: string, locale: string = 'es') {
 		);
 	}
 
-	console.log(`Searching in column name data: ${name}}`);
+	// Find the exercise ID by translated name
+	const translations = translationsByLocale[locale] || translationsByLocale.es;
+	const exerciseId = Object.entries(translations).find(
+		([, translation]) => translation.name.toLowerCase() === name.toLowerCase()
+	)?.[0];
+
+	if (exerciseId) {
+		// Found by translation, fetch by ID
+		const { data } = await supabase
+			.from('Exercise')
+			.select('*')
+			.eq('id', parseInt(exerciseId))
+			.single();
+
+		if (data) {
+			return applyTranslationSingle(data as Exercise, locale);
+		}
+	}
+
+	// Fallback: try to find by Spanish name (database default)
 	const { data } = await supabase
 		.from('Exercise')
 		.select('*')
@@ -160,9 +222,8 @@ export async function getExerciseByName(name: string, locale: string = 'es') {
 	if (!data) {
 		return null;
 	}
-	console.log(data);
 
-	return data;
+	return applyTranslationSingle(data as Exercise, locale);
 }
 
 export async function getFilters() {
@@ -212,7 +273,7 @@ export async function filter(filters: Filter, locale: string = 'es') {
 		return null;
 	}
 
-	return data;
+	return applyTranslations(data as Exercise[], locale);
 }
 
 // Ejemplo de función que podría lanzar diferentes tipos de errores

@@ -1,8 +1,10 @@
 import { Link } from '@/i18n/navigation';
-import React from 'react';
+import React, { ComponentProps } from 'react';
+
+type LinkProps = ComponentProps<typeof Link>;
 
 type BackButtonProps = {
-  href: string;
+  href: LinkProps['href'];
   label?: string;
 };
 

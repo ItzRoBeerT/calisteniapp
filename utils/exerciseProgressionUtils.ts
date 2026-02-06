@@ -2,9 +2,60 @@ import { mockExercises } from './mock-data';
 import { getProgressionByExerciseId } from '@/data/exerciseProgressions';
 import type { Exercise } from '@/types/supabase';
 
+// A group of exercises that can be variations of each other at the same level
+export type PrerequisiteGroup = Exercise[];
+
+/**
+ * Groups prerequisites that are variations of each other.
+ * For example, if prerequisites are [26, 10, 27, 28] and 27 and 28 are variations,
+ * returns [[26], [10], [27, 28]] so they can be displayed side by side.
+ */
+function groupPrerequisitesByVariations(prerequisiteIds: number[]): PrerequisiteGroup[] {
+	const groups: PrerequisiteGroup[] = [];
+	const processed = new Set<number>();
+
+	for (const id of prerequisiteIds) {
+		if (processed.has(id)) continue;
+
+		const exercise = mockExercises.find((e) => e.id === id);
+		if (!exercise) continue;
+
+		// Check if this exercise has variations that are also in the prerequisites
+		const progression = getProgressionByExerciseId(id);
+		const variationIds = progression?.variations || [];
+
+		// Find which variations are also in the prerequisites and haven't been processed
+		const variationsInPrereqs = variationIds.filter(
+			(varId) => prerequisiteIds.includes(varId) && !processed.has(varId)
+		);
+
+		if (variationsInPrereqs.length > 0) {
+			// Group this exercise with its variations
+			const group: Exercise[] = [exercise];
+			processed.add(id);
+
+			for (const varId of variationsInPrereqs) {
+				const varExercise = mockExercises.find((e) => e.id === varId);
+				if (varExercise) {
+					group.push(varExercise);
+					processed.add(varId);
+				}
+			}
+			groups.push(group);
+		} else {
+			// Single exercise, no variations in prerequisites
+			groups.push([exercise]);
+			processed.add(id);
+		}
+	}
+
+	return groups;
+}
+
 export interface ExerciseProgressionData {
 	current: Exercise;
 	prerequisites: Exercise[];
+	prerequisiteGroups: PrerequisiteGroup[]; // Grouped by variations
 	variations: Exercise[];
 	progressions: Exercise[];
 }
@@ -23,6 +74,7 @@ export function getExerciseProgressionData(exerciseId: number): ExerciseProgress
 		return {
 			current: currentExercise,
 			prerequisites: [],
+			prerequisiteGroups: [],
 			variations: [],
 			progressions: [],
 		};
@@ -35,9 +87,13 @@ export function getExerciseProgressionData(exerciseId: number): ExerciseProgress
 			.filter((e): e is Exercise & { difficulty: number; muscle_group: string[] } => e !== undefined);
 	};
 
+	const prerequisites = getExercisesByIds(progression.prerequisites);
+	const prerequisiteGroups = groupPrerequisitesByVariations(progression.prerequisites);
+
 	return {
 		current: currentExercise,
-		prerequisites: getExercisesByIds(progression.prerequisites),
+		prerequisites,
+		prerequisiteGroups,
 		variations: getExercisesByIds(progression.variations),
 		progressions: getExercisesByIds(progression.progressions),
 	};

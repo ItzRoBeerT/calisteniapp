@@ -23,56 +23,94 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 
 	const progressionData = useMemo(() => getExerciseProgressionData(exerciseId), [exerciseId]);
 
-	const { elements, hasAnyProgression } = useMemo(() => {
+	const { elements, hasAnyProgression, prereqGroupCount } = useMemo(() => {
 		if (!progressionData) {
-			return { elements: [], hasAnyProgression: false };
+			return { elements: [], hasAnyProgression: false, prereqGroupCount: 0 };
 		}
 
 		const nodes: cytoscape.ElementDefinition[] = [];
 		const edges: cytoscape.ElementDefinition[] = [];
 
-		const { prerequisites, current, variations, progressions } = progressionData;
+		const { prerequisiteGroups, current, variations, progressions } = progressionData;
 
 		const hasAny =
-			prerequisites.length > 0 || variations.length > 0 || progressions.length > 0;
+			prerequisiteGroups.length > 0 || variations.length > 0 || progressions.length > 0;
 
-		const prereqCount = prerequisites.length;
+		const prereqGroupCount = prerequisiteGroups.length;
 		const varCount = variations.length;
-		const centerX = varCount > 0 ? HORIZONTAL_GAP / 2 : 0;
-		const currentY = prereqCount * VERTICAL_GAP;
+		// Check if any prerequisite group has more than 1 item (variations)
+		const hasPrereqVariations = prerequisiteGroups.some((g) => g.length > 1);
+		const centerX = varCount > 0 || hasPrereqVariations ? HORIZONTAL_GAP / 2 : 0;
+		const currentY = prereqGroupCount * VERTICAL_GAP;
 
-		// Agregar nodos de prerrequisitos con posiciones
-		prerequisites.forEach((exercise, index) => {
-			nodes.push({
-				data: {
-					id: `prereq-${exercise.id}`,
-					label: exercise.name,
-					difficulty: exercise.difficulty ?? 0,
-					color: getDifficultyColor(exercise.difficulty ?? 0),
-					type: 'prerequisite',
-					exerciseId: exercise.id,
-					exerciseName: exercise.name,
-				},
-				position: { x: centerX, y: index * VERTICAL_GAP },
+		// Agregar nodos de prerrequisitos agrupados por variaciones
+		prerequisiteGroups.forEach((group, groupIndex) => {
+			const groupY = groupIndex * VERTICAL_GAP;
+
+			group.forEach((exercise, exerciseIndex) => {
+				// If there are multiple exercises in the group, spread them horizontally
+				const xOffset = group.length > 1
+					? (exerciseIndex - (group.length - 1) / 2) * HORIZONTAL_GAP
+					: 0;
+
+				nodes.push({
+					data: {
+						id: `prereq-${exercise.id}`,
+						label: exercise.name,
+						difficulty: exercise.difficulty ?? 0,
+						color: getDifficultyColor(exercise.difficulty ?? 0),
+						type: group.length > 1 ? 'prerequisite-variation' : 'prerequisite',
+						exerciseId: exercise.id,
+						exerciseName: exercise.name,
+					},
+					position: { x: centerX + xOffset, y: groupY },
+				});
 			});
 
-			if (index < prerequisites.length - 1) {
-				edges.push({
-					data: {
-						id: `edge-prereq-${index}`,
-						source: `prereq-${exercise.id}`,
-						target: `prereq-${prerequisites[index + 1].id}`,
-						type: 'progression',
-					},
+			// Add edges between variation nodes in the same group
+			if (group.length > 1) {
+				for (let i = 0; i < group.length - 1; i++) {
+					edges.push({
+						data: {
+							id: `edge-prereq-var-${groupIndex}-${i}`,
+							source: `prereq-${group[i].id}`,
+							target: `prereq-${group[i + 1].id}`,
+							type: 'prereq-variation',
+						},
+					});
+				}
+			}
+
+			// Add edges to next group or to current node
+			const isLastGroup = groupIndex === prerequisiteGroups.length - 1;
+			const sourceIds = group.map((e) => `prereq-${e.id}`);
+
+			if (isLastGroup) {
+				// Connect all exercises in last group to current
+				sourceIds.forEach((sourceId, idx) => {
+					edges.push({
+						data: {
+							id: `edge-prereq-to-current-${idx}`,
+							source: sourceId,
+							target: 'current',
+							type: 'progression-current',
+						},
+					});
 				});
 			} else {
-				edges.push({
-					data: {
-						id: `edge-prereq-to-current`,
-						source: `prereq-${exercise.id}`,
-						target: 'current',
-						type: 'progression-current',
-					},
+				// Connect to the next group (from center of current group to center of next)
+				const nextGroup = prerequisiteGroups[groupIndex + 1];
+				// Connect from each node in current group to each node in next group would be messy
+				// Instead, connect from each node to the first node of the next group
+				sourceIds.forEach((sourceId, idx) => {
+					edges.push({
+						data: {
+							id: `edge-prereq-${groupIndex}-${idx}`,
+							source: sourceId,
+							target: `prereq-${nextGroup[0].id}`,
+							type: 'progression',
+						},
+					});
 				});
 			}
 		});
@@ -145,7 +183,7 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 			});
 		});
 
-		return { elements: [...nodes, ...edges], hasAnyProgression: hasAny };
+		return { elements: [...nodes, ...edges], hasAnyProgression: hasAny, prereqGroupCount };
 	}, [progressionData]);
 
 	useEffect(() => {
@@ -199,6 +237,12 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 					},
 				},
 				{
+					selector: 'node[type="prerequisite-variation"]',
+					style: {
+						'border-style': 'dashed',
+					},
+				},
+				{
 					selector: 'node:active, node:grabbed',
 					style: {
 						'border-width': 4,
@@ -230,6 +274,15 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 						'line-style': 'dashed',
 						'line-color': '#64748b',
 						width: 1.5,
+					},
+				},
+				{
+					selector: 'edge[type="prereq-variation"]',
+					style: {
+						'line-style': 'dashed',
+						'line-color': '#64748b',
+						width: 1.5,
+						'target-arrow-shape': 'none',
 					},
 				},
 			],
@@ -294,32 +347,31 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 		);
 	}
 
-	const prereqCount = progressionData.prerequisites.length;
 	const progCount = progressionData.progressions.length;
-	const prereqHeight = prereqCount * VERTICAL_GAP;
+	const prereqHeight = prereqGroupCount * VERTICAL_GAP;
 	const progHeight = progCount * VERTICAL_GAP;
 	const currentHeight = VERTICAL_GAP;
 	const totalHeight = Math.max(300, prereqHeight + currentHeight + progHeight + 60);
 
 	// Calcular proporciones para el gradiente de fondo centrado con los nodos
 	const padding = 30;
-	const totalSlots = prereqCount + 1 + progCount;
+	const totalSlots = prereqGroupCount + 1 + progCount;
 	const paddingPct = (padding / totalHeight) * 100;
 	const contentPct = 100 - 2 * paddingPct;
 	const slotPct = contentPct / totalSlots;
 
-	const prereqEndPct = paddingPct + prereqCount * slotPct;
+	const prereqEndPct = paddingPct + prereqGroupCount * slotPct;
 	const currentEndPct = prereqEndPct + slotPct;
 
 	// Crear gradiente de fondo con las zonas centradas
 	const gradientStops: string[] = [];
 
-	if (prereqCount > 0) {
+	if (prereqGroupCount > 0) {
 		gradientStops.push(`rgba(34, 197, 94, 0.08) ${paddingPct}%`);
 		gradientStops.push(`rgba(34, 197, 94, 0.08) ${prereqEndPct}%`);
 	}
 
-	const currentStart = prereqCount > 0 ? prereqEndPct : paddingPct;
+	const currentStart = prereqGroupCount > 0 ? prereqEndPct : paddingPct;
 	gradientStops.push(`rgba(187, 134, 252, 0.12) ${currentStart}%`);
 	gradientStops.push(`rgba(187, 134, 252, 0.12) ${currentEndPct}%`);
 

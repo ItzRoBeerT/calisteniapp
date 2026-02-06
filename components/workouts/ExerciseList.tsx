@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import { useParams } from 'next/navigation';
 import { Link } from '@/i18n/navigation';
 import { createSlug } from '@/utils/slugs';
 import DefaultImage from '@/public/images/default_image.webp';
@@ -20,16 +19,12 @@ type ExerciseListProps = {
 };
 
 export default function ExerciseList({ exercises }: ExerciseListProps) {
-  const params = useParams();
-  const locale = (params.locale as string) || 'es';
-
   return (
     <div className="space-y-3">
       {exercises.map((exercise) => (
         <Link
           key={exercise.id}
-          href={`/exercises/${createSlug(exercise.name)}`}
-          locale={locale}
+          href={{ pathname: '/exercises/[slug]', params: { slug: createSlug(exercise.name) } }}
           className="flex items-center gap-4 border-l-4 border-primary-500 pl-4 pr-4 py-3 bg-background rounded-r-xl hover:bg-background/80 transition-colors group"
         >
           <div className="flex-1 min-w-0">

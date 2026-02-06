@@ -62,7 +62,7 @@ export default async function WorkoutDetailPage({ params }: Props) {
           {isOwner && (
             <div className="flex gap-2">
               <Link
-                href={`/workouts/${id}/edit`}
+                href={{ pathname: '/workouts/[id]/edit', params: { id } }}
                 className="bg-tertiary-500/20 hover:bg-tertiary-500/30 text-tertiary-400 px-4 py-2 rounded-lg border border-tertiary-500/30 transition-colors"
               >
                 {t('edit')}

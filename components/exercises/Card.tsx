@@ -13,7 +13,7 @@ const ExerciseCard = React.memo(function ExerciseCard({
 	return (
 		<article className=" flex flex-col items-center justify-center gap-2 rounded-xl p-4 h-80 bg-surface">
 			<Link
-				href={`/exercises/${createSlug(exercise.name)}`}
+				href={{ pathname: '/exercises/[slug]', params: { slug: createSlug(exercise.name) } }}
 				className="text-center flex flex-col gap-2"
 			>
 				<div className="h-52">
