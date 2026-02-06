@@ -40,6 +40,13 @@
 	  "user": "User",
 	  "toggleMenu": "Toggle menu"
 	},
+	"UserMenu": {
+		"signedInAs": "Signed in as",
+		"profile": "My profile",
+		"settings": "Settings",
+		"myWorkouts": "My workouts",
+		"logout": "Sign out"
+	},
 	"HomePage": {
 	  "about": "Calisthenics is a physical training discipline that uses body weight as resistance. At Calistenia, you will find a variety of workouts and exercises to improve your strength and flexibility.",
 	  "Blog": {

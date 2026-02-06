@@ -3,10 +3,11 @@ import { Link } from '@/i18n/navigation';
 import NavLink from '@/components/header/NavLink';
 import UserMenu from './UserMenu';
 import MobileMenu from './MobileMenu';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getLocale } from 'next-intl/server';
 
 export default async function Header() {
 	const t = await getTranslations('Header');
+	const locale = await getLocale();
 	const supabase = await createClient();
 
 	let user = null;
@@ -67,7 +68,7 @@ export default async function Header() {
 						{translations.roadmaps}
 					</NavLink>
 					{user ? (
-						<UserMenu userName={userName || translations.user} />
+						<UserMenu userName={userName || translations.user} locale={locale} />
 					) : (
 						<NavLink
 							href="/login"

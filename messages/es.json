@@ -40,6 +40,13 @@
 		"user": "Usuario",
 		"toggleMenu": "Abrir menú"
 	},
+	"UserMenu": {
+		"signedInAs": "Conectado como",
+		"profile": "Mi perfil",
+		"settings": "Configuración",
+		"myWorkouts": "Mis entrenamientos",
+		"logout": "Cerrar sesión"
+	},
 	"HomePage": {
 		"about": "La calistenia es una disciplina de entrenamiento físico que utiliza el peso corporal como resistencia. En Calistenia, encontrarás una variedad de entrenamientos y ejercicios para mejorar tu fuerza y flexibilidad.",
 		"Blog": {
