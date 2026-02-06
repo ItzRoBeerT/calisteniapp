@@ -4,6 +4,7 @@ import { useEffect, useRef, useMemo } from 'react';
 import cytoscape from 'cytoscape';
 import { useRouter, useParams } from 'next/navigation';
 import { getExerciseProgressionData, getDifficultyColor } from '@/utils/exerciseProgressionUtils';
+import { getProgressionByExerciseId } from '@/data/exerciseProgressions';
 import { createSlug } from '@/utils/slugs';
 
 interface ExerciseProgressionTreeProps {
@@ -21,11 +22,14 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 	const params = useParams();
 	const locale = (params.locale as string) || 'es';
 
-	const progressionData = useMemo(() => getExerciseProgressionData(exerciseId), [exerciseId]);
+	const progressionData = useMemo(
+		() => getExerciseProgressionData(exerciseId, locale),
+		[exerciseId, locale]
+	);
 
-	const { elements, hasAnyProgression, prereqGroupCount } = useMemo(() => {
+	const { elements, hasAnyProgression, prereqGroupCount, progLevelCount } = useMemo(() => {
 		if (!progressionData) {
-			return { elements: [], hasAnyProgression: false, prereqGroupCount: 0 };
+			return { elements: [], hasAnyProgression: false, prereqGroupCount: 0, progLevelCount: 0 };
 		}
 
 		const nodes: cytoscape.ElementDefinition[] = [];
@@ -157,33 +161,139 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 			});
 		});
 
-		// Agregar progresiones con posiciones
-		progressions.forEach((exercise, index) => {
-			nodes.push({
-				data: {
-					id: `prog-${exercise.id}`,
-					label: exercise.name,
-					difficulty: exercise.difficulty ?? 0,
-					color: getDifficultyColor(exercise.difficulty ?? 0),
-					type: 'progression',
-					exerciseId: exercise.id,
-					exerciseName: exercise.name,
-				},
-				position: { x: centerX, y: currentY + VERTICAL_GAP + index * VERTICAL_GAP },
+		// Agregar progresiones organizadas por niveles según sus prerrequisitos
+		const progressionIds = new Set(progressions.map((p) => p.id));
+
+		// Función para determinar de qué ejercicio depende una progresión
+		const getParentInProgressions = (progExerciseId: number): number | null => {
+			const progData = getProgressionByExerciseId(progExerciseId);
+			if (!progData) return null;
+
+			// Buscar el prerrequisito que esté en la lista de progresiones
+			// (el más cercano en la cadena)
+			for (const prereqId of [...progData.prerequisites].reverse()) {
+				if (progressionIds.has(prereqId)) {
+					return prereqId;
+				}
+			}
+			return null; // Es una progresión directa del ejercicio actual
+		};
+
+		// Agrupar progresiones por niveles
+		type ProgressionLevel = { exerciseId: number; parentId: number | null }[];
+		const levels: ProgressionLevel[] = [];
+		const placed = new Set<number>();
+
+		// Nivel 0: progresiones directas (sin padre en la lista de progresiones)
+		const directProgressions = progressions.filter(
+			(p) => getParentInProgressions(p.id) === null
+		);
+		if (directProgressions.length > 0) {
+			levels.push(directProgressions.map((p) => ({ exerciseId: p.id, parentId: null })));
+			directProgressions.forEach((p) => placed.add(p.id));
+		}
+
+		// Siguientes niveles: progresiones que dependen de las anteriores
+		let remainingProgressions = progressions.filter((p) => !placed.has(p.id));
+		while (remainingProgressions.length > 0) {
+			const nextLevel: ProgressionLevel = [];
+
+			for (const prog of remainingProgressions) {
+				const parentId = getParentInProgressions(prog.id);
+				if (parentId !== null && placed.has(parentId)) {
+					nextLevel.push({ exerciseId: prog.id, parentId });
+					placed.add(prog.id);
+				}
+			}
+
+			if (nextLevel.length === 0) {
+				// Evitar bucle infinito - agregar los restantes como nivel final
+				remainingProgressions.forEach((p) => {
+					nextLevel.push({ exerciseId: p.id, parentId: null });
+				});
+				levels.push(nextLevel);
+				break;
+			}
+
+			levels.push(nextLevel);
+			remainingProgressions = progressions.filter((p) => !placed.has(p.id));
+		}
+
+		// Mapa para guardar las posiciones X de cada nodo de progresión
+		const nodePositions = new Map<number, number>();
+
+		// Calcular posiciones para cada nivel de progresiones
+		levels.forEach((level, levelIndex) => {
+			const levelY = currentY + VERTICAL_GAP + levelIndex * VERTICAL_GAP;
+
+			// Separar items directos (sin padre) de items con padre
+			const directItems = level.filter((item) => item.parentId === null);
+			const childItems = level.filter((item) => item.parentId !== null);
+
+			// Posicionar items directos (nivel 0) centrados
+			if (directItems.length > 0) {
+				const levelWidth = (directItems.length - 1) * HORIZONTAL_GAP;
+				const startX = centerX - levelWidth / 2;
+
+				directItems.forEach((item, itemIndex) => {
+					const xPos =
+						directItems.length === 1 ? centerX : startX + itemIndex * HORIZONTAL_GAP;
+					nodePositions.set(item.exerciseId, xPos);
+				});
+			}
+
+			// Posicionar items con padre debajo de su padre
+			childItems.forEach((item) => {
+				const parentX = nodePositions.get(item.parentId!);
+				if (parentX !== undefined) {
+					nodePositions.set(item.exerciseId, parentX);
+				} else {
+					// Fallback si no se encuentra el padre
+					nodePositions.set(item.exerciseId, centerX);
+				}
 			});
 
-			const sourceId = index === 0 ? 'current' : `prog-${progressions[index - 1].id}`;
-			edges.push({
-				data: {
-					id: `edge-prog-${index}`,
-					source: sourceId,
-					target: `prog-${exercise.id}`,
-					type: 'progression',
-				},
+			// Crear nodos para este nivel
+			level.forEach((item) => {
+				const exercise = progressions.find((p) => p.id === item.exerciseId);
+				if (!exercise) return;
+
+				const xPos = nodePositions.get(item.exerciseId) ?? centerX;
+
+				nodes.push({
+					data: {
+						id: `prog-${exercise.id}`,
+						label: exercise.name,
+						difficulty: exercise.difficulty ?? 0,
+						color: getDifficultyColor(exercise.difficulty ?? 0),
+						type: 'progression',
+						exerciseId: exercise.id,
+						exerciseName: exercise.name,
+					},
+					position: { x: xPos, y: levelY },
+				});
+
+				// Determinar el origen del edge
+				const sourceId =
+					item.parentId !== null ? `prog-${item.parentId}` : 'current';
+
+				edges.push({
+					data: {
+						id: `edge-prog-${exercise.id}`,
+						source: sourceId,
+						target: `prog-${exercise.id}`,
+						type: 'progression',
+					},
+				});
 			});
 		});
 
-		return { elements: [...nodes, ...edges], hasAnyProgression: hasAny, prereqGroupCount };
+		return {
+			elements: [...nodes, ...edges],
+			hasAnyProgression: hasAny,
+			prereqGroupCount,
+			progLevelCount: levels.length,
+		};
 	}, [progressionData]);
 
 	useEffect(() => {
@@ -347,15 +457,14 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 		);
 	}
 
-	const progCount = progressionData.progressions.length;
 	const prereqHeight = prereqGroupCount * VERTICAL_GAP;
-	const progHeight = progCount * VERTICAL_GAP;
+	const progHeight = progLevelCount * VERTICAL_GAP;
 	const currentHeight = VERTICAL_GAP;
 	const totalHeight = Math.max(300, prereqHeight + currentHeight + progHeight + 60);
 
 	// Calcular proporciones para el gradiente de fondo centrado con los nodos
 	const padding = 30;
-	const totalSlots = prereqGroupCount + 1 + progCount;
+	const totalSlots = prereqGroupCount + 1 + progLevelCount;
 	const paddingPct = (padding / totalHeight) * 100;
 	const contentPct = 100 - 2 * paddingPct;
 	const slotPct = contentPct / totalSlots;
@@ -375,7 +484,7 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 	gradientStops.push(`rgba(187, 134, 252, 0.12) ${currentStart}%`);
 	gradientStops.push(`rgba(187, 134, 252, 0.12) ${currentEndPct}%`);
 
-	if (progCount > 0) {
+	if (progLevelCount > 0) {
 		gradientStops.push(`rgba(239, 68, 68, 0.08) ${currentEndPct}%`);
 		gradientStops.push(`rgba(239, 68, 68, 0.08) ${100 - paddingPct}%`);
 	}
