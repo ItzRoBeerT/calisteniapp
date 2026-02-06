@@ -3,7 +3,7 @@
 import { useEffect, useRef, useMemo } from 'react';
 import cytoscape from 'cytoscape';
 import { useRouter, useParams } from 'next/navigation';
-import { getExerciseProgressionData, getDifficultyColor } from '@/utils/exerciseProgressionUtils';
+import { getExerciseProgressionData, getDifficultyColor, getDifficultyBgColor } from '@/utils/exerciseProgressionUtils';
 import { getProgressionByExerciseId } from '@/data/exerciseProgressions';
 import { createSlug } from '@/utils/slugs';
 
@@ -486,55 +486,24 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 	const currentHeight = VERTICAL_GAP;
 	const totalHeight = Math.max(300, prereqHeight + currentHeight + progHeight + 60);
 
-	// Determinar el color de fondo según la dificultad
-	const getDifficultyBgColor = (difficulty: number): string => {
-		if (difficulty <= 1) return 'rgba(34, 197, 94, 0.08)'; // Verde (fácil)
-		if (difficulty <= 3) return 'rgba(250, 204, 21, 0.12)'; // Amarillo (intermedio)
-		return 'rgba(239, 68, 68, 0.08)'; // Rojo (difícil)
-	};
+	// Obtener dificultades reales del primer y último nodo
+	const { prerequisiteGroups, current, progressions } = progressionData;
 
-	// Calcular proporciones para el gradiente de fondo centrado con los nodos
-	const padding = 30;
-	const totalSlots = prereqGroupCount + 1 + progLevelCount;
-	const paddingPct = (padding / totalHeight) * 100;
-	const contentPct = 100 - 2 * paddingPct;
-	const slotPct = contentPct / totalSlots;
+	// Dificultad inicial: primer prerrequisito o el ejercicio actual
+	const firstDifficulty = prerequisiteGroups.length > 0
+		? (prerequisiteGroups[0][0]?.difficulty ?? 0)
+		: (current.difficulty ?? 0);
 
-	const prereqEndPct = paddingPct + prereqGroupCount * slotPct;
-	const currentEndPct = prereqEndPct + slotPct;
+	// Dificultad final: última progresión o el ejercicio actual
+	const lastDifficulty = progressions.length > 0
+		? (progressions[progressions.length - 1]?.difficulty ?? 0)
+		: (current.difficulty ?? 0);
 
-	// Obtener colores basados en la dificultad real
-	const currentDifficulty = progressionData.current.difficulty ?? 0;
-	const currentBgColor = getDifficultyBgColor(currentDifficulty);
+	// Crear degradado del color inicial al color final
+	const startColor = getDifficultyBgColor(firstDifficulty, 0.15);
+	const endColor = getDifficultyBgColor(lastDifficulty, 0.15);
 
-	// Los prerrequisitos son más fáciles que el actual
-	const prereqBgColor = getDifficultyBgColor(Math.max(0, currentDifficulty - 2));
-	// Las progresiones son más difíciles que el actual
-	const progBgColor = getDifficultyBgColor(Math.min(5, currentDifficulty + 2));
-
-	// Crear gradiente de fondo con transiciones suaves entre zonas
-	const gradientStops: string[] = [];
-	const transitionSize = slotPct * 0.4; // 40% del slot para transición
-
-	if (prereqGroupCount > 0) {
-		gradientStops.push(`${prereqBgColor} ${paddingPct}%`);
-		gradientStops.push(`${prereqBgColor} ${prereqEndPct - transitionSize}%`);
-		// Transición prerrequisitos → actual
-		gradientStops.push(`${currentBgColor} ${prereqEndPct + transitionSize}%`);
-	} else {
-		gradientStops.push(`${currentBgColor} ${paddingPct}%`);
-	}
-
-	// Color para ejercicio actual
-	gradientStops.push(`${currentBgColor} ${currentEndPct - transitionSize}%`);
-
-	if (progLevelCount > 0) {
-		// Transición actual → progresiones
-		gradientStops.push(`${progBgColor} ${currentEndPct + transitionSize}%`);
-		gradientStops.push(`${progBgColor} ${100 - paddingPct}%`);
-	}
-
-	const backgroundGradient = `linear-gradient(to bottom, ${gradientStops.join(', ')})`;
+	const backgroundGradient = `linear-gradient(to bottom, ${startColor}, ${endColor})`;
 
 	return (
 		<div className="relative w-full rounded-lg border border-foreground/10 overflow-hidden">

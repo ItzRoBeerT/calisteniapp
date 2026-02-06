@@ -1,7 +1,7 @@
 'use server';
-import { Exercise, ExerciseTranslation, Filter } from '@/types/supabase';
+import { Exercise, ExerciseBase, ExerciseTranslation, Filter } from '@/types/supabase';
 import { createClient } from '@/utils/supabase/server';
-import { getMockExercises, mockFilters } from '@/utils/mock-data';
+import { getMockExercises, mockFilters, exercisesBaseData } from '@/utils/mock-data';
 import { NotFoundError, BadRequestError, UnauthorizedError } from '@/utils/errors';
 
 const EXERCISES_PER_PAGE = 12;
@@ -17,35 +17,51 @@ const translationsByLocale: Record<string, Record<string, ExerciseTranslation>> 
 	en: enMessages.Exercises,
 };
 
-// Apply translations to exercises from database
+// Index exercises base data by id for quick lookup
+const exercisesBaseById: Record<number, ExerciseBase> = {};
+exercisesBaseData.forEach((ex) => {
+	exercisesBaseById[ex.id] = ex;
+});
+
+// Apply translations and enrich with base data (equipment, category, type) from exercises.json
 function applyTranslations(exercises: Exercise[], locale: string): Exercise[] {
 	const translations = translationsByLocale[locale] || translationsByLocale.es;
 	return exercises.map((exercise) => {
 		const translation = translations[String(exercise.id)];
-		if (translation) {
-			return {
-				...exercise,
+		const baseData = exercisesBaseById[exercise.id];
+		return {
+			...exercise,
+			// Enrich with base data if missing from database
+			...(baseData && !exercise.equipment?.length && { equipment: baseData.equipment }),
+			...(baseData && !exercise.category && { category: baseData.category }),
+			...(baseData && !exercise.type && { type: baseData.type }),
+			// Apply translations
+			...(translation && {
 				name: translation.name,
 				description: translation.description,
 				...(translation.instructions && { instructions: translation.instructions }),
-			};
-		}
-		return exercise;
+			}),
+		};
 	});
 }
 
 function applyTranslationSingle(exercise: Exercise, locale: string): Exercise {
 	const translations = translationsByLocale[locale] || translationsByLocale.es;
 	const translation = translations[String(exercise.id)];
-	if (translation) {
-		return {
-			...exercise,
+	const baseData = exercisesBaseById[exercise.id];
+	return {
+		...exercise,
+		// Enrich with base data if missing from database
+		...(baseData && !exercise.equipment?.length && { equipment: baseData.equipment }),
+		...(baseData && !exercise.category && { category: baseData.category }),
+		...(baseData && !exercise.type && { type: baseData.type }),
+		// Apply translations
+		...(translation && {
 			name: translation.name,
 			description: translation.description,
 			...(translation.instructions && { instructions: translation.instructions }),
-		};
-	}
-	return exercise;
+		}),
+	};
 }
 
 export async function getExercise(id: number, locale: string = 'es') {

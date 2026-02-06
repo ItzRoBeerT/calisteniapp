@@ -142,6 +142,29 @@ export function getDifficultyColor(difficulty: number): string {
 }
 
 /**
+ * Obtiene el color de fondo (con transparencia) según la dificultad del ejercicio.
+ * Usado para fondos de nodos en el árbol de progresión.
+ */
+export function getDifficultyBgColor(difficulty: number, opacity: number = 0.3): string {
+	switch (difficulty) {
+		case 0:
+			return `rgba(76, 175, 80, ${opacity})`; // Verde - Muy fácil
+		case 1:
+			return `rgba(139, 195, 74, ${opacity})`; // Verde claro - Fácil
+		case 2:
+			return `rgba(255, 193, 7, ${opacity})`; // Amarillo - Intermedio
+		case 3:
+			return `rgba(255, 152, 0, ${opacity})`; // Naranja - Difícil
+		case 4:
+			return `rgba(255, 87, 34, ${opacity})`; // Naranja oscuro - Muy difícil
+		case 5:
+			return `rgba(244, 67, 54, ${opacity})`; // Rojo - Experto
+		default:
+			return `rgba(158, 158, 158, ${opacity})`; // Gris
+	}
+}
+
+/**
  * Obtiene el texto de dificultad según el nivel.
  */
 export function getDifficultyLabel(difficulty: number): string {

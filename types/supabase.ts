@@ -1,3 +1,10 @@
+// Recurso asociado a un ejercicio (video, artículo, etc.)
+export interface ExerciseResource {
+	type: 'video' | 'article' | 'image';
+	url: string;
+	title?: string;
+}
+
 // Datos base del ejercicio (sin traducciones)
 export interface ExerciseBase {
 	id: number;
@@ -7,6 +14,7 @@ export interface ExerciseBase {
 	category?: string;
 	type?: string;
 	equipment?: string[];
+	resources?: ExerciseResource[];
 }
 
 // Traducciones de un ejercicio
