@@ -183,14 +183,15 @@ export async function getExercisesByPage(
 }
 
 export async function getExerciseByName(name: string, locale: string = 'es') {
+	// First try to find in mock data (always available with translations)
+	const mockExercise = getMockExercises(locale).find(
+		(e) => e.name.toLowerCase() === name.toLowerCase()
+	);
+
 	const supabase = await createClient();
 
 	if (!supabase) {
-		return (
-			getMockExercises(locale).find(
-				(e) => e.name.toLowerCase() === name.toLowerCase()
-			) || null
-		);
+		return mockExercise || null;
 	}
 
 	// Find the exercise ID by translated name
@@ -219,11 +220,12 @@ export async function getExerciseByName(name: string, locale: string = 'es') {
 		.ilike('name', name)
 		.single();
 
-	if (!data) {
-		return null;
+	if (data) {
+		return applyTranslationSingle(data as Exercise, locale);
 	}
 
-	return applyTranslationSingle(data as Exercise, locale);
+	// Final fallback: return mock data if database didn't have the exercise
+	return mockExercise || null;
 }
 
 export async function getFilters() {
