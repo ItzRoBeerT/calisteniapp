@@ -36,6 +36,7 @@
 	  "exercises": "Exercises",
 	  "roadmaps": "Roadmaps",
 	  "login": "Login",
+	  "register": "Register",
 	  "user": "User",
 	  "toggleMenu": "Toggle menu"
 	},
@@ -295,7 +296,9 @@
 	  "title": "My Workouts",
 	  "createWorkout": "Create Workout",
 	  "noWorkouts": "No workouts found.",
-	  "createNewWorkout": "Create new workout"
+	  "createNewWorkout": "Create new workout",
+	  "loginRequired": "Log in to create workouts",
+	  "login": "Log in"
 	},
 	"WorkoutCard": {
 	  "yours": "Yours",
