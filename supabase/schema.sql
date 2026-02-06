@@ -14,8 +14,18 @@ CREATE TABLE IF NOT EXISTS "Exercise" (
     description TEXT,
     image TEXT,
     muscle_group TEXT[] DEFAULT '{}',
-    difficulty INTEGER DEFAULT 0 CHECK (difficulty >= 0 AND difficulty <= 5)
+    difficulty INTEGER DEFAULT 0 CHECK (difficulty >= 0 AND difficulty <= 5),
+    resources JSONB DEFAULT '[]',
+    equipment TEXT[] DEFAULT '{}',
+    category TEXT,
+    type TEXT
 );
+
+-- Add columns if they don't exist (for existing databases)
+ALTER TABLE "Exercise" ADD COLUMN IF NOT EXISTS resources JSONB DEFAULT '[]';
+ALTER TABLE "Exercise" ADD COLUMN IF NOT EXISTS equipment TEXT[] DEFAULT '{}';
+ALTER TABLE "Exercise" ADD COLUMN IF NOT EXISTS category TEXT;
+ALTER TABLE "Exercise" ADD COLUMN IF NOT EXISTS type TEXT;
 
 -- =============================================
 -- WORKOUTS TABLE
@@ -120,6 +130,19 @@ ALTER TABLE "Workout" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "WorkoutExercise" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "WorkoutTags" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "Profile" ENABLE ROW LEVEL SECURITY;
+
+-- Drop existing policies to allow re-running this script
+DROP POLICY IF EXISTS "Exercises are viewable by everyone" ON "Exercise";
+DROP POLICY IF EXISTS "Workouts are viewable by everyone" ON "Workout";
+DROP POLICY IF EXISTS "Users can create their own workouts" ON "Workout";
+DROP POLICY IF EXISTS "Users can update their own workouts" ON "Workout";
+DROP POLICY IF EXISTS "Users can delete their own workouts" ON "Workout";
+DROP POLICY IF EXISTS "Workout exercises viewable by everyone" ON "WorkoutExercise";
+DROP POLICY IF EXISTS "Users can manage exercises of their workouts" ON "WorkoutExercise";
+DROP POLICY IF EXISTS "Workout tags viewable by everyone" ON "WorkoutTags";
+DROP POLICY IF EXISTS "Users can manage tags of their workouts" ON "WorkoutTags";
+DROP POLICY IF EXISTS "Profiles are viewable by everyone" ON "Profile";
+DROP POLICY IF EXISTS "Users can update their own profile" ON "Profile";
 
 -- Exercise: Everyone can read
 CREATE POLICY "Exercises are viewable by everyone" ON "Exercise"
