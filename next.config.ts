@@ -2,11 +2,22 @@ import type { NextConfig } from 'next'
 import createNextIntlPlugin from 'next-intl/plugin'
 
 const nextConfig: NextConfig = {
-  // TODO: - Cambiar esto para cuando tengamos imagenes
   images: {
-    domains: ['nachogst.com', 'rjcaojecsabejmtnkidn.supabase.co'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'nachogst.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'rjcaojecsabejmtnkidn.supabase.co',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
+    ],
   },
-  /* config options here */
 }
 
 const withNextIntl = createNextIntlPlugin();

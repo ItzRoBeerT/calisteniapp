@@ -1,0 +1,111 @@
+{
+  "id": "mi-roadmap",
+  "title": "mi-roadmap",
+  "description": "Roadmap creado con el builder",
+  "isPublic": true,
+  "totalNodes": 3,
+  "completedNodes": 0,
+  "nodes": [
+    {
+      "id": "node-1769680627487",
+      "type": "topic",
+      "position": {
+        "x": -180,
+        "y": -220
+      },
+      "data": {
+        "label": "Básico",
+        "nodeType": "topic",
+        "color": "#BB86FC",
+        "fontSize": 14,
+        "width": 160,
+        "height": 60,
+        "content": {
+          "title": "Básico",
+          "description": "",
+          "tips": "",
+          "progress": "not_started",
+          "resources": []
+        }
+      }
+    },
+    {
+      "id": "node-1769725392602",
+      "type": "subtopic",
+      "position": {
+        "x": 80,
+        "y": -140
+      },
+      "style": {
+        "width": 140,
+        "height": 50
+      },
+      "data": {
+        "nodeType": "subtopic",
+        "label": "Subtema",
+        "color": "#9A64D6",
+        "icon": "none",
+        "handles": {
+          "top": true,
+          "bottom": true,
+          "left": true,
+          "right": true
+        },
+        "width": 140,
+        "height": 50
+      }
+    },
+    {
+      "id": "node-1769725395685",
+      "type": "topic",
+      "position": {
+        "x": -260,
+        "y": -140
+      },
+      "style": {
+        "width": 160,
+        "height": 60
+      },
+      "data": {
+        "nodeType": "topic",
+        "label": "Tema",
+        "color": "#BB86FC",
+        "icon": "none",
+        "handles": {
+          "top": true,
+          "bottom": true,
+          "left": true,
+          "right": true
+        },
+        "width": 160,
+        "height": 60
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "reactflow__edge-node-1769725395685right-node-1769725392602left",
+      "source": "node-1769725395685",
+      "target": "node-1769725392602",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "default",
+      "animated": false,
+      "style": {
+        "stroke": "#BB86FC",
+        "strokeWidth": 2
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#BB86FC"
+      },
+      "data": {
+        "lineStyle": "solid",
+        "arrowStyle": "forward",
+        "pathStyle": "bezier"
+      }
+    }
+  ],
+  "updatedAt": "2026-01-29T22:23:35.993Z",
+  "createdAt": "2026-01-29T22:23:35.993Z"
+}

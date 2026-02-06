@@ -24,7 +24,7 @@ export default function BlogPage() {
 				{keys.map((key) => (
 					<li key={key} className="mb-4">
 						<Link
-							href={`/blog/${t(`Posts.${key}.slug`)}`}
+							href={{ pathname: '/blog/[slug]', params: { slug: t(`Posts.${key}.slug`) } }}
 							className="block p-4 rounded-lg bg-surface"
 						>
 							<h2 className="text-xl font-semibold mb-2">

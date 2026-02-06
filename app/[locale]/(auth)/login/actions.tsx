@@ -5,35 +5,85 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 
 export async function signIn(formData: FormData) {
-	const supabase = await createClient();
+  const supabase = await createClient();
 
-	const data = {
-		email: formData.get('email') as string,
-		password: formData.get('password') as string,
-	};
+  if (!supabase) {
+    return { error: 'Authentication is not available. Running in demo mode.' };
+  }
 
-	const { error } = await supabase.auth.signInWithPassword(data);
-	if (error) {
-		redirect('/error');
-	}
-	revalidatePath('/', 'layout');
-	redirect('/');
+  const email = formData.get('email') as string;
+  const password = formData.get('password') as string;
+
+  if (!email || !password) {
+    return { error: 'Email and password are required' };
+  }
+
+  const { error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    return {
+      error: error.message || 'Error signing in. Please check your credentials.',
+    };
+  }
+
+  revalidatePath('/', 'layout');
+  redirect('/');
 }
 
 export async function signUp(formData: FormData) {
-	const supabase = await createClient();
+  const supabase = await createClient();
 
-	const data = {
-		email: formData.get('email') as string,
-		password: formData.get('password') as string,
-	};
+  if (!supabase) {
+    return { error: 'Authentication is not available. Running in demo mode.' };
+  }
 
-	const { error } = await supabase.auth.signUp(data);
+  const email = formData.get('email') as string;
+  const password = formData.get('password') as string;
+  const confirmPassword = formData.get('confirmPassword') as string;
 
-	if (error) {
-		redirect('/error');
-	}
+  if (!email || !password) {
+    return { error: 'Email and password are required' };
+  }
 
-	revalidatePath('/', 'layout');
-	redirect('/');
+  if (password.length < 6) {
+    return { error: 'Password must be at least 6 characters' };
+  }
+
+  if (password !== confirmPassword) {
+    return { error: 'Passwords do not match' };
+  }
+
+  const { error, data } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
+    },
+  });
+
+  if (error) {
+    return {
+      error: error.message || 'Error creating account. Please try again.',
+    };
+  }
+
+  if (data?.user?.identities?.length === 0) {
+    return {
+      success: 'Account already exists. Please sign in.',
+      redirect: '/login',
+    };
+  }
+
+  if (data.user && !data.user.confirmed_at) {
+    return {
+      success: 'Check your email for the confirmation link.',
+      redirect: '/login',
+    };
+  }
+
+  revalidatePath('/', 'layout');
+  redirect('/');
 }
