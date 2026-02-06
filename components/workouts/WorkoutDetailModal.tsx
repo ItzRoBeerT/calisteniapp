@@ -72,7 +72,7 @@ export default function WorkoutDetailModal({
         {isOwner && (
           <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
             <Link
-              href={`/workouts/${workout.id}/edit`}
+              href={{ pathname: '/workouts/[id]/edit', params: { id: String(workout.id) } }}
               className="bg-tertiary-500/20 hover:bg-tertiary-500/30 text-tertiary-400 px-3 sm:px-4 py-2 rounded-lg border border-tertiary-500/30 transition-colors text-sm"
             >
               {t('edit')}

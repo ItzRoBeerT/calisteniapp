@@ -4,18 +4,23 @@ export interface ExerciseBase {
 	image: string;
 	muscle_group: string[];
 	difficulty: number;
+	category?: string;
+	type?: string;
+	equipment?: string[];
 }
 
 // Traducciones de un ejercicio
 export interface ExerciseTranslation {
 	name: string;
 	description: string;
+	instructions?: string;
 }
 
 // Ejercicio completo con traducciones aplicadas
 export interface Exercise extends ExerciseBase {
 	name: string;
 	description: string;
+	instructions?: string;
 }
 
 export interface User {

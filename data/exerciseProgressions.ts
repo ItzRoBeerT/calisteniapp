@@ -22,14 +22,14 @@ export const exerciseProgressions: ExerciseProgression[] = [
 		exerciseId: 1,
 		prerequisites: [21, 22, 23], // Wall Push Up → Incline Push Up → Knee Push Up
 		variations: [24], // Wide Push Up
-		progressions: [11, 17, 25], // Diamond Push Up → Archer Push Up → One Arm Push Up
+		progressions: [11, 68, 17, 25], // Diamond → Clap → Archer → One Arm Push Up
 	},
 	// Pull Up (id: 2)
 	{
 		exerciseId: 2,
 		prerequisites: [26, 10, 27, 28], // Scapular → Australian → Negative → Band Assisted
 		variations: [12], // Chin Up
-		progressions: [29, 41, 42, 6], // Weighted → High Pull Up → Explosive → Muscle Up
+		progressions: [29, 66, 67, 41, 42, 6], // Weighted → Archer → One Arm → High → Explosive → Muscle Up
 	},
 	// Squat (id: 3)
 	{
@@ -43,7 +43,7 @@ export const exerciseProgressions: ExerciseProgression[] = [
 		exerciseId: 4,
 		prerequisites: [34, 35], // Bench Dips → Assisted Dips
 		variations: [],
-		progressions: [36, 37, 6], // Ring Dips → Weighted Dips → Muscle Up
+		progressions: [36, 69, 37, 6], // Ring Dips → Korean Dips → Weighted Dips → Muscle Up
 	},
 	// Plank (id: 5)
 	{
@@ -139,9 +139,9 @@ export const exerciseProgressions: ExerciseProgression[] = [
 	// Tuck Planche (id: 18)
 	{
 		exerciseId: 18,
-		prerequisites: [57], // Planche Lean
+		prerequisites: [57, 65], // Planche Lean → Pseudo Planche Push Up
 		variations: [],
-		progressions: [58, 59], // Straddle Planche → Full Planche
+		progressions: [71, 58, 59], // Advanced Tuck → Straddle → Full Planche
 	},
 	// Dragon Flag (id: 19)
 	{
@@ -330,7 +330,7 @@ export const exerciseProgressions: ExerciseProgression[] = [
 		exerciseId: 45,
 		prerequisites: [1], // Push Up
 		variations: [],
-		progressions: [46, 47, 8], // Elevated Pike → Wall HSPU → HSPU
+		progressions: [46, 64, 47, 8], // Elevated Pike → Handstand → Wall HSPU → HSPU
 	},
 	// Elevated Pike Push Up (id: 46)
 	{
@@ -372,7 +372,7 @@ export const exerciseProgressions: ExerciseProgression[] = [
 		exerciseId: 51,
 		prerequisites: [50, 20], // Knee Raise → Hanging Leg Raise
 		variations: [],
-		progressions: [19], // Dragon Flag
+		progressions: [62, 19], // Windshield Wipers → Dragon Flag
 	},
 	// Tuck Front Lever (id: 52)
 	{
@@ -386,19 +386,19 @@ export const exerciseProgressions: ExerciseProgression[] = [
 		exerciseId: 53,
 		prerequisites: [2, 52], // Pull Up → Tuck FL
 		variations: [],
-		progressions: [54, 14], // Straddle → Front Lever
+		progressions: [70, 54, 14], // One Leg FL → Straddle → Front Lever
 	},
 	// Straddle Front Lever (id: 54)
 	{
 		exerciseId: 54,
-		prerequisites: [52, 53, 14], // Tuck → Advanced Tuck → Front Lever
+		prerequisites: [52, 53, 70], // Tuck → Advanced Tuck → One Leg FL
 		variations: [],
-		progressions: [],
+		progressions: [14], // Full Front Lever
 	},
 	// Tuck Back Lever (id: 55)
 	{
 		exerciseId: 55,
-		prerequisites: [],
+		prerequisites: [63], // German Hang
 		variations: [],
 		progressions: [56, 15], // Straddle → Back Lever
 	},
@@ -414,21 +414,105 @@ export const exerciseProgressions: ExerciseProgression[] = [
 		exerciseId: 57,
 		prerequisites: [1], // Push Up
 		variations: [],
-		progressions: [18, 58, 59], // Tuck Planche → Straddle → Full
+		progressions: [65, 18, 71, 58, 59], // Pseudo Planche PU → Tuck → Advanced Tuck → Straddle → Full
 	},
 	// Straddle Planche (id: 58)
 	{
 		exerciseId: 58,
-		prerequisites: [57, 18], // Planche Lean → Tuck Planche
+		prerequisites: [57, 65, 18, 71], // Planche Lean → Pseudo Planche PU → Tuck → Advanced Tuck
 		variations: [],
 		progressions: [59], // Full Planche
 	},
 	// Full Planche (id: 59)
 	{
 		exerciseId: 59,
-		prerequisites: [57, 18, 58], // Lean → Tuck → Straddle
+		prerequisites: [57, 65, 18, 71, 58], // Lean → Pseudo Planche PU → Tuck → Advanced Tuck → Straddle
 		variations: [],
 		progressions: [],
+	},
+	// Nordic Curl (id: 60)
+	{
+		exerciseId: 60,
+		prerequisites: [3, 32], // Squat → Bulgarian (leg strength base)
+		variations: [],
+		progressions: [],
+	},
+	// Calf Raises (id: 61)
+	{
+		exerciseId: 61,
+		prerequisites: [],
+		variations: [],
+		progressions: [], // Single leg calf raises not in list
+	},
+	// Windshield Wipers (id: 62)
+	{
+		exerciseId: 62,
+		prerequisites: [20, 51, 49], // Hanging Leg Raise → Toes to Bar → Hollow Body
+		variations: [],
+		progressions: [],
+	},
+	// German Hang (id: 63)
+	{
+		exerciseId: 63,
+		prerequisites: [],
+		variations: [],
+		progressions: [55, 36], // Tuck Back Lever, Ring Dips
+	},
+	// Handstand (id: 64)
+	{
+		exerciseId: 64,
+		prerequisites: [45, 46], // Pike Push Up → Elevated Pike
+		variations: [],
+		progressions: [47, 8], // Wall HSPU → HSPU
+	},
+	// Pseudo Planche Push Up (id: 65)
+	{
+		exerciseId: 65,
+		prerequisites: [1, 57], // Push Up → Planche Lean
+		variations: [],
+		progressions: [18, 71, 58, 59], // Tuck Planche → Advanced Tuck → Straddle → Full
+	},
+	// Archer Pull Up (id: 66)
+	{
+		exerciseId: 66,
+		prerequisites: [2, 29], // Pull Up → Weighted Pull Up
+		variations: [],
+		progressions: [67], // One Arm Pull Up
+	},
+	// One Arm Pull Up (id: 67)
+	{
+		exerciseId: 67,
+		prerequisites: [2, 29, 66], // Pull Up → Weighted → Archer
+		variations: [],
+		progressions: [],
+	},
+	// Clap Push Up (id: 68)
+	{
+		exerciseId: 68,
+		prerequisites: [1, 11], // Push Up → Diamond
+		variations: [42], // Explosive Pull Up (similar plyometric concept)
+		progressions: [25], // One Arm Push Up
+	},
+	// Korean Dips (id: 69)
+	{
+		exerciseId: 69,
+		prerequisites: [4], // Dips
+		variations: [36], // Ring Dips
+		progressions: [],
+	},
+	// One Leg Front Lever (id: 70)
+	{
+		exerciseId: 70,
+		prerequisites: [52, 53], // Tuck FL → Advanced Tuck FL
+		variations: [],
+		progressions: [54, 14], // Straddle FL → Full FL
+	},
+	// Advanced Tuck Planche (id: 71)
+	{
+		exerciseId: 71,
+		prerequisites: [57, 65, 18], // Planche Lean → Pseudo Planche PU → Tuck Planche
+		variations: [],
+		progressions: [58, 59], // Straddle → Full
 	},
 ];
 

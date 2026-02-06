@@ -28,6 +28,7 @@ function combineWithTranslations(
 			...exercise,
 			name: translation.name,
 			description: translation.description,
+			...(translation.instructions && { instructions: translation.instructions }),
 		};
 	});
 }

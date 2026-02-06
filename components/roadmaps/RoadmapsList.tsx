@@ -84,7 +84,7 @@ export default function RoadmapsList() {
             {roadmaps.map((roadmap) => (
               <Link
                 key={roadmap.id}
-                href={`/roadmaps/${roadmap.id}`}
+                href={{ pathname: '/roadmaps/[id]', params: { id: roadmap.id } }}
                 className="group relative border border-white/10 rounded-xl p-5 bg-surface/50 backdrop-blur-sm
                          shadow-lg transition-all duration-300 hover:shadow-xl hover:-translate-y-1
                          hover:border-primary-500/50 hover:bg-surface/80"

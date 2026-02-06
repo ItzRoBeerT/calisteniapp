@@ -3,7 +3,7 @@
   "title": "my-roadmap",
   "description": "Roadmap creado con el builder",
   "isPublic": true,
-  "totalNodes": 6,
+  "totalNodes": 8,
   "completedNodes": 0,
   "nodes": [
     {
@@ -191,6 +191,58 @@
         "width": 140,
         "height": 50
       }
+    },
+    {
+      "id": "node-1770308582210-ow9t7i8",
+      "type": "image",
+      "position": {
+        "x": -540,
+        "y": -20
+      },
+      "style": {
+        "width": 160,
+        "height": 150
+      },
+      "data": {
+        "nodeType": "image",
+        "label": "",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png",
+        "objectFit": "cover",
+        "handles": {
+          "top": true,
+          "bottom": true,
+          "left": true,
+          "right": true
+        },
+        "width": 200,
+        "height": 150
+      }
+    },
+    {
+      "id": "node-1770308626019-ot4vjng",
+      "type": "image",
+      "position": {
+        "x": -740,
+        "y": 20
+      },
+      "style": {
+        "width": 200,
+        "height": 150
+      },
+      "data": {
+        "nodeType": "image",
+        "label": "",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png",
+        "objectFit": "cover",
+        "handles": {
+          "top": true,
+          "bottom": true,
+          "left": true,
+          "right": true
+        },
+        "width": 200,
+        "height": 150
+      }
     }
   ],
   "edges": [
@@ -244,6 +296,6 @@
       }
     }
   ],
-  "updatedAt": "2026-02-05T16:00:36.300Z",
-  "createdAt": "2026-02-05T16:00:36.300Z"
+  "updatedAt": "2026-02-05T16:24:10.457Z",
+  "createdAt": "2026-02-05T16:24:10.457Z"
 }

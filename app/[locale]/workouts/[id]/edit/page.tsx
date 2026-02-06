@@ -56,7 +56,7 @@ export default async function EditWorkoutPage({ params }: Props) {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <BackButton href={`/workouts/${id}`} label={t('backToWorkout')} />
+      <BackButton href={{ pathname: '/workouts/[id]', params: { id } }} label={t('backToWorkout')} />
 
       <div className="mt-4">
         <h1 className="text-3xl font-bold mb-6 text-foreground">{t('title')}</h1>
