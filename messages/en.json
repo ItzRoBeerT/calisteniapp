@@ -31,6 +31,14 @@
 	  "search": "Search",
 	  "submit": "Submit"
 	},
+	"Header": {
+	  "workouts": "Workouts",
+	  "exercises": "Exercises",
+	  "roadmaps": "Roadmaps",
+	  "login": "Login",
+	  "user": "User",
+	  "toggleMenu": "Toggle menu"
+	},
 	"HomePage": {
 	  "about": "Calisthenics is a physical training discipline that uses body weight as resistance. At Calistenia, you will find a variety of workouts and exercises to improve your strength and flexibility.",
 	  "Blog": {
@@ -478,7 +486,19 @@
 		"56": { "name": "Straddle Back Lever", "description": "Back lever with legs spread. Progression toward full back lever." },
 		"57": { "name": "Planche Lean", "description": "Planche lean in push-up position. Develops pushing strength." },
 		"58": { "name": "Straddle Planche", "description": "Planche with legs spread. Advanced progression toward full planche." },
-		"59": { "name": "Full Planche", "description": "Full planche with legs together and extended. One of the most difficult exercises." }
+		"59": { "name": "Full Planche", "description": "Full planche with legs together and extended. One of the most difficult exercises." },
+		"60": { "name": "Nordic Curl", "description": "Advanced hamstring exercise. Kneel with feet anchored and lower your body toward the ground controlling the movement with your hamstrings." },
+		"61": { "name": "Calf Raises", "description": "Basic calf exercise. Standing, raise your heels off the ground contracting your calves and lower in a controlled manner." },
+		"62": { "name": "Windshield Wipers", "description": "Advanced rotational core exercise. Hanging from the bar, raise your legs and rotate them side to side while maintaining control." },
+		"63": { "name": "German Hang", "description": "Mobility position on rings or low bar. Hang with arms behind your body stretching shoulders and chest." },
+		"64": { "name": "Handstand", "description": "Inverted balance on hands. Keep your body straight and aligned while supporting yourself upside down." },
+		"65": { "name": "Pseudo Planche Push Up", "description": "Push-up with hands at hip level and body leaning forward. Prepares for the planche." },
+		"66": { "name": "Archer Pull Up", "description": "Unilateral pull-up with one arm extended laterally. Transfers more load to one side of the body." },
+		"67": { "name": "One Arm Pull Up", "description": "Complete pull-up using only one arm. One of the most advanced pulling exercises in calisthenics." },
+		"68": { "name": "Clap Push Up", "description": "Explosive plyometric push-up. Push forcefully to lift your hands off the ground and clap before landing." },
+		"69": { "name": "Korean Dips", "description": "Dips with hands behind the body on a low bar. Intensely works the triceps and shoulders." },
+		"70": { "name": "One Leg Front Lever", "description": "Front lever with one leg extended and the other tucked. Advanced progression toward full front lever." },
+		"71": { "name": "Advanced Tuck Planche", "description": "Planche with hips extended but knees still tucked. Progression between tuck planche and straddle planche." }
 	},
 	"Footer": {
 		"copyright": "All rights reserved.",

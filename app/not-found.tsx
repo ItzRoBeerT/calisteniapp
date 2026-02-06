@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Orbitron, Space_Grotesk } from 'next/font/google';
+import { Orbitron } from 'next/font/google';
 import esMessages from '@/messages/es.json';
 import enMessages from '@/messages/en.json';
 
@@ -10,11 +10,6 @@ const orbitron = Orbitron({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   display: 'swap',
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  weight: ['700'],
 });
 
 const translations = {
