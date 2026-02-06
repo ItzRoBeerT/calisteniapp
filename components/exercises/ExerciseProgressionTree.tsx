@@ -63,7 +63,7 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 						label: exercise.name,
 						difficulty: exercise.difficulty ?? 0,
 						color: getDifficultyColor(exercise.difficulty ?? 0),
-						type: group.length > 1 ? 'prerequisite-variation' : 'prerequisite',
+												type: group.length > 1 ? 'prerequisite-variation' : 'prerequisite',
 						exerciseId: exercise.id,
 						exerciseName: exercise.name,
 					},
@@ -126,7 +126,7 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 				label: current.name,
 				difficulty: current.difficulty ?? 0,
 				color: getDifficultyColor(current.difficulty ?? 0),
-				type: 'current',
+								type: 'current',
 				exerciseId: current.id,
 				exerciseName: current.name,
 			},
@@ -144,7 +144,7 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 					label: exercise.name,
 					difficulty: exercise.difficulty ?? 0,
 					color: getDifficultyColor(exercise.difficulty ?? 0),
-					type: 'variation',
+										type: 'variation',
 					exerciseId: exercise.id,
 					exerciseName: exercise.name,
 				},
@@ -184,13 +184,37 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 		const levels: ProgressionLevel[] = [];
 		const placed = new Set<number>();
 
-		// Nivel 0: progresiones directas (sin padre en la lista de progresiones)
+		// Función para obtener categoría de dificultad (0=fácil, 1=intermedio, 2=difícil)
+		const getDifficultyCategory = (difficulty: number): number => {
+			if (difficulty <= 1) return 0;
+			if (difficulty <= 3) return 1;
+			return 2;
+		};
+
+		// Nivel 0+: progresiones directas agrupadas por dificultad
 		const directProgressions = progressions.filter(
 			(p) => getParentInProgressions(p.id) === null
 		);
+
 		if (directProgressions.length > 0) {
-			levels.push(directProgressions.map((p) => ({ exerciseId: p.id, parentId: null })));
-			directProgressions.forEach((p) => placed.add(p.id));
+			// Agrupar progresiones directas por categoría de dificultad
+			const byDifficulty = new Map<number, typeof directProgressions>();
+
+			for (const prog of directProgressions) {
+				const category = getDifficultyCategory(prog.difficulty ?? 0);
+				if (!byDifficulty.has(category)) {
+					byDifficulty.set(category, []);
+				}
+				byDifficulty.get(category)!.push(prog);
+			}
+
+			// Añadir cada grupo de dificultad como un nivel separado (ordenado de menor a mayor)
+			const sortedCategories = [...byDifficulty.keys()].sort((a, b) => a - b);
+			for (const category of sortedCategories) {
+				const categoryProgs = byDifficulty.get(category)!;
+				levels.push(categoryProgs.map((p) => ({ exerciseId: p.id, parentId: null })));
+				categoryProgs.forEach((p) => placed.add(p.id));
+			}
 		}
 
 		// Siguientes niveles: progresiones que dependen de las anteriores
@@ -266,7 +290,7 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 						label: exercise.name,
 						difficulty: exercise.difficulty ?? 0,
 						color: getDifficultyColor(exercise.difficulty ?? 0),
-						type: 'progression',
+												type: 'progression',
 						exerciseId: exercise.id,
 						exerciseName: exercise.name,
 					},
@@ -462,6 +486,13 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 	const currentHeight = VERTICAL_GAP;
 	const totalHeight = Math.max(300, prereqHeight + currentHeight + progHeight + 60);
 
+	// Determinar el color de fondo según la dificultad
+	const getDifficultyBgColor = (difficulty: number): string => {
+		if (difficulty <= 1) return 'rgba(34, 197, 94, 0.08)'; // Verde (fácil)
+		if (difficulty <= 3) return 'rgba(250, 204, 21, 0.12)'; // Amarillo (intermedio)
+		return 'rgba(239, 68, 68, 0.08)'; // Rojo (difícil)
+	};
+
 	// Calcular proporciones para el gradiente de fondo centrado con los nodos
 	const padding = 30;
 	const totalSlots = prereqGroupCount + 1 + progLevelCount;
@@ -472,21 +503,35 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 	const prereqEndPct = paddingPct + prereqGroupCount * slotPct;
 	const currentEndPct = prereqEndPct + slotPct;
 
-	// Crear gradiente de fondo con las zonas centradas
+	// Obtener colores basados en la dificultad real
+	const currentDifficulty = progressionData.current.difficulty ?? 0;
+	const currentBgColor = getDifficultyBgColor(currentDifficulty);
+
+	// Los prerrequisitos son más fáciles que el actual
+	const prereqBgColor = getDifficultyBgColor(Math.max(0, currentDifficulty - 2));
+	// Las progresiones son más difíciles que el actual
+	const progBgColor = getDifficultyBgColor(Math.min(5, currentDifficulty + 2));
+
+	// Crear gradiente de fondo con transiciones suaves entre zonas
 	const gradientStops: string[] = [];
+	const transitionSize = slotPct * 0.4; // 40% del slot para transición
 
 	if (prereqGroupCount > 0) {
-		gradientStops.push(`rgba(34, 197, 94, 0.08) ${paddingPct}%`);
-		gradientStops.push(`rgba(34, 197, 94, 0.08) ${prereqEndPct}%`);
+		gradientStops.push(`${prereqBgColor} ${paddingPct}%`);
+		gradientStops.push(`${prereqBgColor} ${prereqEndPct - transitionSize}%`);
+		// Transición prerrequisitos → actual
+		gradientStops.push(`${currentBgColor} ${prereqEndPct + transitionSize}%`);
+	} else {
+		gradientStops.push(`${currentBgColor} ${paddingPct}%`);
 	}
 
-	const currentStart = prereqGroupCount > 0 ? prereqEndPct : paddingPct;
-	gradientStops.push(`rgba(187, 134, 252, 0.12) ${currentStart}%`);
-	gradientStops.push(`rgba(187, 134, 252, 0.12) ${currentEndPct}%`);
+	// Color para ejercicio actual
+	gradientStops.push(`${currentBgColor} ${currentEndPct - transitionSize}%`);
 
 	if (progLevelCount > 0) {
-		gradientStops.push(`rgba(239, 68, 68, 0.08) ${currentEndPct}%`);
-		gradientStops.push(`rgba(239, 68, 68, 0.08) ${100 - paddingPct}%`);
+		// Transición actual → progresiones
+		gradientStops.push(`${progBgColor} ${currentEndPct + transitionSize}%`);
+		gradientStops.push(`${progBgColor} ${100 - paddingPct}%`);
 	}
 
 	const backgroundGradient = `linear-gradient(to bottom, ${gradientStops.join(', ')})`;
