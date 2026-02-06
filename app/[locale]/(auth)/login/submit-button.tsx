@@ -1,20 +1,76 @@
 'use client';
 
 import { useFormStatus } from 'react-dom';
-import { type ComponentProps } from 'react';
+import { type ComponentProps, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-type Props = ComponentProps<'button'> & {
-	pendingText?: string;
+type Props = Omit<ComponentProps<'button'>, 'formAction'> & {
+  pendingText?: string;
+  formAction?: (formData: FormData) => Promise<{ error?: string; success?: string | boolean; redirect?: string }>;
 };
 
-export function SubmitButton({ children, pendingText, ...props }: Props) {
-	const { pending, action } = useFormStatus();
+export function SubmitButton({ children, pendingText, formAction, ...props }: Props) {
+  const { pending } = useFormStatus();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const router = useRouter();
+  
+  const isPending = pending;
 
-	const isPending = pending && action === props.formAction;
+  const handleClick = async () => {
+    // Clear previous error messages
+    setErrorMessage(null);
+  };
 
-	return (
-		<button {...props} type="submit" aria-disabled={pending}>
-			{isPending ? pendingText : children}
-		</button>
-	);
+  // Modify the formAction to handle errors
+  const wrappedAction = async (fd: FormData) => {
+    if (!formAction) return;
+    try {
+      setErrorMessage(null);
+      
+      const result = await formAction(fd);
+      
+      // Handle errors or success messages
+      if (result?.error) {
+        setErrorMessage(result.error);
+        return;
+      }
+      
+      // Handle success with redirect
+      if (result?.success && result?.redirect) {
+        setErrorMessage(null);
+        setTimeout(() => {
+          router.push(result.redirect as string);
+        }, 2000);
+        return result.success;
+      }
+    } catch (error) {
+      // Re-throw Next.js redirect errors - they're not actual errors
+      if (error && typeof error === 'object' && 'digest' in error &&
+          typeof (error as { digest?: string }).digest === 'string' &&
+          (error as { digest: string }).digest.startsWith('NEXT_REDIRECT')) {
+        throw error;
+      }
+      setErrorMessage('An unexpected error occurred');
+      console.error('Form submission error:', error);
+    }
+  };
+
+  return (
+    <>
+      {errorMessage && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+          <span className="block sm:inline">{errorMessage}</span>
+        </div>
+      )}
+      <button 
+        {...props} 
+        type="submit" 
+        aria-disabled={isPending}
+        formAction={wrappedAction as unknown as (formData: FormData) => void | Promise<void>}
+        onClick={handleClick}
+      >
+        {isPending ? pendingText : children}
+      </button>
+    </>
+  );
 }

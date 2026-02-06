@@ -61,7 +61,7 @@ export default function Paginator(props: {
 									onClick={() => onPageChange(page)}
 									className={`rounded px-4 py-2 ${
 										currentPage === page
-											? 'bg-primary text-white'
+											? 'bg-primary-500 text-white'
 											: 'bg-white text-gray-800'
 									}`}
 								>
