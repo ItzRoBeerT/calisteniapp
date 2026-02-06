@@ -1,7 +1,7 @@
 import type { Node, Edge } from 'reactflow';
 
 // Tipos de recursos disponibles
-export type ResourceType = 'video' | 'article' | 'documentation' | 'course' | 'tool' | 'github' | 'exercise' | 'workout';
+export type ResourceType = 'video' | 'article' | 'documentation' | 'course' | 'tool' | 'github' | 'exercise' | 'workout' | 'post';
 
 // Estados de progreso de un nodo
 export type NodeProgress = 'not_started' | 'in_progress' | 'completed' | 'skipped';
@@ -130,6 +130,7 @@ export const resourceTypeConfig: Record<ResourceType, { label: string; color: st
   github: { label: 'GitHub', color: 'text-gray-400 bg-gray-500/10 border-gray-500/20' },
   exercise: { label: 'Ejercicio', color: 'text-primary-400 bg-primary-500/10 border-primary-500/20' },
   workout: { label: 'Rutina', color: 'text-secondary-400 bg-secondary-500/10 border-secondary-500/20' },
+  post: { label: 'Post', color: 'text-orange-400 bg-orange-500/10 border-orange-500/20' },
 };
 
 // Configuración de colores por estado de progreso

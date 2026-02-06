@@ -217,11 +217,13 @@
 			"addExternal": "Externo",
 			"addExercise": "Ejercicio",
 			"addWorkout": "Rutina",
+			"addPost": "Post",
 			"local": "Local",
 			"external": "Externo",
 			"loading": "Cargando...",
 			"selectExercise": "Seleccionar ejercicio",
 			"selectWorkout": "Seleccionar rutina",
+			"selectPost": "Seleccionar post",
 			"resourceTitle": "Título del recurso",
 			"resourceTitlePlaceholder": "Título del recurso",
 			"resourceUrl": "URL del recurso",
@@ -234,7 +236,8 @@
 				"tool": "Herramienta",
 				"github": "GitHub",
 				"exercise": "Ejercicio",
-				"workout": "Rutina"
+				"workout": "Rutina",
+				"post": "Post del Blog"
 			}
 		},
 		"items": {
@@ -296,7 +299,8 @@
 			"documentation": "Documentación",
 			"course": "Curso",
 			"tool": "Herramienta",
-			"github": "Repositorio"
+			"github": "Repositorio",
+			"post": "Post del Blog"
 		}
 	},
 	"WorkoutsPage": {

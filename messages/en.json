@@ -131,7 +131,8 @@
 			"documentation": "Documentation",
 			"course": "Course",
 			"tool": "Tool",
-			"github": "Repository"
+			"github": "Repository",
+			"post": "Blog Post"
 		}
 	},
 	"RoadmapBuilder": {
@@ -249,11 +250,13 @@
 			"addExternal": "External",
 			"addExercise": "Exercise",
 			"addWorkout": "Workout",
+			"addPost": "Post",
 			"local": "Local",
 			"external": "External",
 			"loading": "Loading...",
 			"selectExercise": "Select exercise",
 			"selectWorkout": "Select workout",
+			"selectPost": "Select post",
 			"resourceTitle": "Resource title",
 			"resourceTitlePlaceholder": "Resource title",
 			"resourceUrl": "Resource URL",
@@ -266,7 +269,8 @@
 				"tool": "Tool",
 				"github": "GitHub",
 				"exercise": "Exercise",
-				"workout": "Workout"
+				"workout": "Workout",
+				"post": "Blog Post"
 			}
 		},
 		"items": {
