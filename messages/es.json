@@ -31,6 +31,14 @@
 		"search": "Buscar",
 		"submit": "Enviar"
 	},
+	"Header": {
+		"workouts": "Entrenamientos",
+		"exercises": "Ejercicios",
+		"roadmaps": "Roadmaps",
+		"login": "Iniciar sesión",
+		"user": "Usuario",
+		"toggleMenu": "Abrir menú"
+	},
 	"HomePage": {
 		"about": "La calistenia es una disciplina de entrenamiento físico que utiliza el peso corporal como resistencia. En Calistenia, encontrarás una variedad de entrenamientos y ejercicios para mejorar tu fuerza y flexibilidad.",
 		"Blog": {
@@ -478,7 +486,19 @@
 		"56": { "name": "Straddle Back Lever", "description": "Back lever con piernas abiertas. Progresion hacia el full back lever." },
 		"57": { "name": "Planche Lean", "description": "Inclinacion de planche en posicion de flexion. Desarrolla fuerza de empuje." },
 		"58": { "name": "Straddle Planche", "description": "Planche con piernas abiertas. Progresion avanzada hacia el full planche." },
-		"59": { "name": "Full Planche", "description": "Planche completa con piernas juntas y extendidas. Uno de los ejercicios mas dificiles." }
+		"59": { "name": "Full Planche", "description": "Planche completa con piernas juntas y extendidas. Uno de los ejercicios mas dificiles." },
+		"60": { "name": "Curl Nordico", "description": "Ejercicio avanzado para isquiotibiales. Arrodillate con los pies anclados y baja el cuerpo hacia el suelo controlando el movimiento con los isquiotibiales." },
+		"61": { "name": "Elevacion de Talones", "description": "Ejercicio basico para pantorrillas. De pie, eleva los talones del suelo contrayendo los gemelos y baja de forma controlada." },
+		"62": { "name": "Limpiaparabrisas", "description": "Ejercicio avanzado de core rotacional. Colgado de la barra, eleva las piernas y rotalas de lado a lado manteniendo el control." },
+		"63": { "name": "Colgado Aleman", "description": "Posicion de movilidad en anillas o barra baja. Cuelgate con los brazos detras del cuerpo estirando hombros y pecho." },
+		"64": { "name": "Pino", "description": "Equilibrio invertido sobre las manos. Manten el cuerpo recto y alineado mientras te sostienes boca abajo." },
+		"65": { "name": "Flexion Pseudo Planche", "description": "Flexion con manos a la altura de las caderas y cuerpo inclinado hacia adelante. Prepara para la planche." },
+		"66": { "name": "Dominada Arquero", "description": "Dominada unilateral con un brazo estirado lateralmente. Transfiere mas carga a un lado del cuerpo." },
+		"67": { "name": "Dominada a Una Mano", "description": "Dominada completa usando solo un brazo. Uno de los ejercicios de tiron mas avanzados de la calistenia." },
+		"68": { "name": "Flexion con Palmada", "description": "Flexion pliometrica explosiva. Empuja con fuerza para elevar las manos del suelo y dar una palmada antes de aterrizar." },
+		"69": { "name": "Fondos Coreanos", "description": "Fondos con las manos detras del cuerpo en una barra baja. Trabaja intensamente los triceps y hombros." },
+		"70": { "name": "Front Lever a Una Pierna", "description": "Front lever con una pierna extendida y la otra recogida. Progresion avanzada hacia el front lever completo." },
+		"71": { "name": "Planche Recogida Avanzada", "description": "Planche con caderas extendidas pero rodillas aun recogidas. Progresion entre el tuck planche y el straddle planche." }
 	},
 	"Footer": {
 		"copyright": "Todos los derechos reservados.",

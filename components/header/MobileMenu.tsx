@@ -3,12 +3,22 @@
 import { useState } from 'react';
 import NavLink from './NavLink';
 
+type HeaderTranslations = {
+	workouts: string;
+	exercises: string;
+	roadmaps: string;
+	login: string;
+	user: string;
+	toggleMenu: string;
+};
+
 type MobileMenuProps = {
 	user: unknown;
 	userName: string | null;
+	translations: HeaderTranslations;
 };
 
-export default function MobileMenu({ user, userName }: MobileMenuProps) {
+export default function MobileMenu({ user, userName, translations }: MobileMenuProps) {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const toggleMenu = () => setIsOpen(!isOpen);
@@ -19,7 +29,7 @@ export default function MobileMenu({ user, userName }: MobileMenuProps) {
 			<button
 				onClick={toggleMenu}
 				className="p-2 rounded hover:bg-surface/50 transition-colors"
-				aria-label="Toggle menu"
+				aria-label={translations.toggleMenu}
 			>
 				<svg
 					className="w-6 h-6"
@@ -45,21 +55,21 @@ export default function MobileMenu({ user, userName }: MobileMenuProps) {
 							className="block px-4 py-2 rounded hover:bg-surface/50 transition-colors"
 							onClick={() => setIsOpen(false)}
 						>
-							Entrenamientos
+							{translations.workouts}
 						</NavLink>
 						<NavLink
 							href="/exercises"
 							className="block px-4 py-2 rounded hover:bg-surface/50 transition-colors"
 							onClick={() => setIsOpen(false)}
 						>
-							Ejercicios
+							{translations.exercises}
 						</NavLink>
 						<NavLink
 							href="/roadmaps"
 							className="block px-4 py-2 rounded hover:bg-surface/50 transition-colors"
 							onClick={() => setIsOpen(false)}
 						>
-							Roadmaps
+							{translations.roadmaps}
 						</NavLink>
 						{user ? (
 							<div className="px-4 py-2 text-sm text-foreground/70">
@@ -71,7 +81,7 @@ export default function MobileMenu({ user, userName }: MobileMenuProps) {
 								className="block px-4 py-2 bg-purple-500 rounded hover:bg-purple-600 transition text-black text-center"
 								onClick={() => setIsOpen(false)}
 							>
-								Login
+								{translations.login}
 							</NavLink>
 						)}
 					</nav>

@@ -2,29 +2,35 @@
 
 import { Link } from '@/i18n/navigation';
 import { usePathname } from 'next/navigation';
-import { ReactNode } from 'react';
+import { ReactNode, ComponentProps } from 'react';
 
-interface NavLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+type LinkProps = ComponentProps<typeof Link>;
+
+interface NavLinkProps {
+	href: LinkProps['href'];
 	children: ReactNode;
 	className?: string;
+	onClick?: () => void;
 }
 
 export default function NavLink({
-	href = '',
+	href,
 	children,
 	className,
-	...props
+	onClick,
 }: NavLinkProps) {
 	const path = usePathname();
-	const isActive = path === href || path.startsWith(href + '/');
+	// Extract the pathname string for comparison
+	const hrefPath = typeof href === 'string' ? href : href.pathname;
+	const isActive = path.includes(hrefPath as string);
 
 	return (
 		<Link
 			href={href}
+			onClick={onClick}
 			className={`${isActive ? 'text-primary' : 'text-white'} ${
 				className || ''
 			}`.trim()}
-			{...props}
 		>
 			{children}
 		</Link>
