@@ -44,6 +44,12 @@ export function SubmitButton({ children, pendingText, formAction, ...props }: Pr
         return result.success;
       }
     } catch (error) {
+      // Re-throw Next.js redirect errors - they're not actual errors
+      if (error && typeof error === 'object' && 'digest' in error &&
+          typeof (error as { digest?: string }).digest === 'string' &&
+          (error as { digest: string }).digest.startsWith('NEXT_REDIRECT')) {
+        throw error;
+      }
       setErrorMessage('An unexpected error occurred');
       console.error('Form submission error:', error);
     }
