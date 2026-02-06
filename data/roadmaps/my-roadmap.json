@@ -3,7 +3,7 @@
   "title": "my-roadmap",
   "description": "Roadmap creado con el builder",
   "isPublic": true,
-  "totalNodes": 8,
+  "totalNodes": 10,
   "completedNodes": 0,
   "nodes": [
     {
@@ -189,7 +189,16 @@
           "right": true
         },
         "width": 140,
-        "height": 50
+        "height": 50,
+        "resources": [
+          {
+            "id": "resource-1770370256686-cob0mwl",
+            "title": "Introducción a la Calistenia",
+            "url": "/blog/introduccion-a-la-calistenia",
+            "type": "post",
+            "localId": 1
+          }
+        ]
       }
     },
     {
@@ -205,7 +214,7 @@
       },
       "data": {
         "nodeType": "image",
-        "label": "",
+        "label": "Sin nombre",
         "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png",
         "objectFit": "cover",
         "handles": {
@@ -231,7 +240,7 @@
       },
       "data": {
         "nodeType": "image",
-        "label": "",
+        "label": "Sin nombre",
         "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png",
         "objectFit": "cover",
         "handles": {
@@ -242,6 +251,58 @@
         },
         "width": 200,
         "height": 150
+      }
+    },
+    {
+      "id": "node-1770369313583-njqbdjh",
+      "type": "subtopic",
+      "position": {
+        "x": 320,
+        "y": 180
+      },
+      "style": {
+        "width": 140,
+        "height": 50
+      },
+      "data": {
+        "nodeType": "subtopic",
+        "label": "Subtema",
+        "color": "#9A64D6",
+        "icon": "none",
+        "handles": {
+          "top": true,
+          "bottom": true,
+          "left": true,
+          "right": true
+        },
+        "width": 140,
+        "height": 50
+      }
+    },
+    {
+      "id": "node-1770369331820-v0jlogm",
+      "type": "subtopic",
+      "position": {
+        "x": 320,
+        "y": 240
+      },
+      "style": {
+        "width": 140,
+        "height": 50
+      },
+      "data": {
+        "nodeType": "subtopic",
+        "label": "Subtema",
+        "color": "#9A64D6",
+        "icon": "none",
+        "handles": {
+          "top": true,
+          "bottom": true,
+          "left": true,
+          "right": true
+        },
+        "width": 140,
+        "height": 50
       }
     }
   ],
@@ -294,8 +355,53 @@
         "arrowStyle": "both",
         "pathStyle": "bezier"
       }
+    },
+    {
+      "id": "reactflow__edge-node-1770203189277-udi05lwright-node-1770369313583-njqbdjhleft",
+      "source": "node-1770203189277-udi05lw",
+      "target": "node-1770369313583-njqbdjh",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "straight",
+      "animated": false,
+      "style": {
+        "stroke": "#FFFFFF",
+        "strokeWidth": 2
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#FFFFFF"
+      },
+      "data": {
+        "lineStyle": "solid",
+        "arrowStyle": "forward",
+        "pathStyle": "straight"
+      }
+    },
+    {
+      "id": "reactflow__edge-node-1770203189277-udi05lwright-node-1770369331820-v0jlogmleft",
+      "source": "node-1770203189277-udi05lw",
+      "target": "node-1770369331820-v0jlogm",
+      "sourceHandle": "right",
+      "targetHandle": "left",
+      "type": "step",
+      "animated": false,
+      "style": {
+        "stroke": "#BB86FC",
+        "strokeWidth": 2,
+        "strokeDasharray": "8 4"
+      },
+      "markerEnd": {
+        "type": "arrowclosed",
+        "color": "#BB86FC"
+      },
+      "data": {
+        "lineStyle": "dashed",
+        "arrowStyle": "forward",
+        "pathStyle": "step"
+      }
     }
   ],
-  "updatedAt": "2026-02-05T16:24:10.457Z",
-  "createdAt": "2026-02-05T16:24:10.457Z"
+  "updatedAt": "2026-02-06T09:31:09.024Z",
+  "createdAt": "2026-02-06T09:31:09.024Z"
 }

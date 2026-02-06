@@ -27,7 +27,14 @@ interface ContentConfigPanelProps {
 }
 
 // Tipos de recursos locales
-const LOCAL_RESOURCE_TYPES: ResourceType[] = ['exercise', 'workout'];
+const LOCAL_RESOURCE_TYPES: ResourceType[] = ['exercise', 'workout', 'post'];
+
+// Definición de posts disponibles (basado en las claves del blog)
+interface BlogPost {
+  id: string;
+  titleKey: string;
+  slugKey: string;
+}
 
 const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
   node,
@@ -44,6 +51,14 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
   const [exercises, setExercises] = useState<Exercise[]>([]);
   const [workouts] = useState<WorkoutDetail[]>(mockWorkoutDetails);
   const [loadingExercises, setLoadingExercises] = useState(false);
+
+  // Posts disponibles (basado en las claves del blog)
+  const blogPosts: BlogPost[] = [
+    { id: '1', titleKey: 'BlogPage.Posts.1.title', slugKey: 'BlogPage.Posts.1.slug' },
+    { id: '2', titleKey: 'BlogPage.Posts.2.title', slugKey: 'BlogPage.Posts.2.slug' },
+    { id: '3', titleKey: 'BlogPage.Posts.3.title', slugKey: 'BlogPage.Posts.3.slug' },
+  ];
+  const tBlog = useTranslations();
 
   // Cargar ejercicios al montar
   useEffect(() => {
@@ -78,8 +93,8 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
   // Función para manejar la selección de recurso local
   const handleLocalResourceSelect = (
     index: number,
-    resourceType: 'exercise' | 'workout',
-    localId: number
+    resourceType: 'exercise' | 'workout' | 'post',
+    localId: number | string
   ) => {
     const newResources = [...(data.resources || [])];
 
@@ -105,6 +120,19 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
           localId: workout.id,
         };
       }
+    } else if (resourceType === 'post') {
+      const post = blogPosts.find(p => p.id === localId);
+      if (post) {
+        const postTitle = tBlog(post.titleKey as Parameters<typeof tBlog>[0]);
+        const postSlug = tBlog(post.slugKey as Parameters<typeof tBlog>[0]);
+        newResources[index] = {
+          ...newResources[index],
+          type: 'post',
+          title: postTitle,
+          url: `/blog/${postSlug}`,
+          localId: parseInt(post.id, 10),
+        };
+      }
     }
 
     handleUpdate({ resources: newResources } as Partial<ContentNodeData>);
@@ -124,8 +152,8 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
     handleUpdate({ resources: newResources } as Partial<ContentNodeData>);
   };
 
-  // Función para añadir recurso local (ejercicio o workout)
-  const handleAddLocalResource = (type: 'exercise' | 'workout') => {
+  // Función para añadir recurso local (ejercicio, workout o post)
+  const handleAddLocalResource = (type: 'exercise' | 'workout' | 'post') => {
     const newResources: RoadmapResource[] = [
       ...(data.resources || []),
       {
@@ -252,7 +280,7 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
                           const newResources = [...(data.resources || [])];
                           newResources[index] = {
                             ...resource,
-                            type: e.target.value as 'exercise' | 'workout',
+                            type: e.target.value as 'exercise' | 'workout' | 'post',
                             title: '',
                             url: '',
                             localId: undefined,
@@ -263,9 +291,10 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
                       >
                         <option value="exercise">{t('resources.types.exercise')}</option>
                         <option value="workout">{t('resources.types.workout')}</option>
+                        <option value="post">{t('resources.types.post')}</option>
                       </select>
 
-                      {/* Selector de ejercicio o workout */}
+                      {/* Selector de ejercicio, workout o post */}
                       {resource.type === 'exercise' ? (
                         <select
                           value={resource.localId || ''}
@@ -285,7 +314,7 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
                             </option>
                           ))}
                         </select>
-                      ) : (
+                      ) : resource.type === 'workout' ? (
                         <select
                           value={resource.localId || ''}
                           onChange={(e) => {
@@ -300,6 +329,24 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
                           {workouts.map((w) => (
                             <option key={w.id} value={w.id}>
                               {w.name}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        <select
+                          value={resource.localId || ''}
+                          onChange={(e) => {
+                            const localId = e.target.value;
+                            if (localId) {
+                              handleLocalResourceSelect(index, 'post', localId);
+                            }
+                          }}
+                          className="w-full px-2 py-1 bg-background border border-foreground/20 rounded text-sm text-foreground"
+                        >
+                          <option value="">{t('resources.selectPost')}</option>
+                          {blogPosts.map((post) => (
+                            <option key={post.id} value={post.id}>
+                              {tBlog(post.titleKey as Parameters<typeof tBlog>[0])}
                             </option>
                           ))}
                         </select>
@@ -388,6 +435,14 @@ const ContentConfigPanel: React.FC<ContentConfigPanelProps> = ({
                          rounded-lg text-xs transition-colors"
               >
                 + {t('resources.addWorkout')}
+              </button>
+              <button
+                onClick={() => handleAddLocalResource('post')}
+                className="flex-1 px-3 py-2 border border-dashed border-orange-500/30
+                         text-orange-400/70 hover:text-orange-400 hover:border-orange-500/50
+                         rounded-lg text-xs transition-colors"
+              >
+                + {t('resources.addPost')}
               </button>
             </div>
           </div>
