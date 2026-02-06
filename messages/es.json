@@ -36,6 +36,7 @@
 		"exercises": "Ejercicios",
 		"roadmaps": "Roadmaps",
 		"login": "Iniciar sesión",
+		"register": "Registrarse",
 		"user": "Usuario",
 		"toggleMenu": "Abrir menú"
 	},
@@ -295,7 +296,9 @@
 		"title": "Entrenamientos",
 		"createWorkout": "Crear Entrenamiento",
 		"noWorkouts": "No se encontraron entrenamientos.",
-		"createNewWorkout": "Crear nuevo entrenamiento"
+		"createNewWorkout": "Crear nuevo entrenamiento",
+		"loginRequired": "Inicia sesión para crear entrenamientos",
+		"login": "Iniciar sesión"
 	},
 	"WorkoutCard": {
 		"yours": "Tuyo",

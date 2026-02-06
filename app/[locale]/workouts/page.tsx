@@ -27,13 +27,25 @@ export default async function WorkoutsPage() {
 
   return (
     <>
-      <div className="flex justify-end my-4">
-        <Link
-          href="/workouts/new"
-          className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-xl transition-colors"
-        >
-          {t('createWorkout')}
-        </Link>
+      <div className="flex justify-end items-center gap-4 my-4">
+        {userId ? (
+          <Link
+            href="/workouts/new"
+            className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-xl transition-colors"
+          >
+            {t('createWorkout')}
+          </Link>
+        ) : (
+          <>
+            <span className="text-foreground/50 text-sm">{t('loginRequired')}</span>
+            <Link
+              href="/login"
+              className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-xl transition-colors"
+            >
+              {t('login')}
+            </Link>
+          </>
+        )}
       </div>
       <section>
         <WorkoutFilter allFilters={filters} />

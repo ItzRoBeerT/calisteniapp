@@ -36,6 +36,7 @@ export default async function Header() {
 		exercises: t('exercises'),
 		roadmaps: t('roadmaps'),
 		login: t('login'),
+		register: t('register'),
 		user: t('user'),
 		toggleMenu: t('toggleMenu'),
 	};

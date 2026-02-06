@@ -8,6 +8,7 @@ type HeaderTranslations = {
 	exercises: string;
 	roadmaps: string;
 	login: string;
+	register: string;
 	user: string;
 	toggleMenu: string;
 };
@@ -76,13 +77,22 @@ export default function MobileMenu({ user, userName, translations }: MobileMenuP
 								{userName}
 							</div>
 						) : (
-							<NavLink
-								href="/login"
-								className="block px-4 py-2 bg-purple-500 rounded hover:bg-purple-600 transition text-black text-center"
-								onClick={() => setIsOpen(false)}
-							>
-								{translations.login}
-							</NavLink>
+							<div className="flex flex-col gap-2">
+								<NavLink
+									href="/login"
+									className="block px-4 py-2 bg-purple-500 rounded hover:bg-purple-600 transition text-black text-center"
+									onClick={() => setIsOpen(false)}
+								>
+									{translations.login}
+								</NavLink>
+								<NavLink
+									href="/register"
+									className="block px-4 py-2 border border-purple-500 rounded hover:bg-purple-500/10 transition text-center"
+									onClick={() => setIsOpen(false)}
+								>
+									{translations.register}
+								</NavLink>
+							</div>
 						)}
 					</nav>
 				</div>

@@ -57,15 +57,27 @@ export default function WorkoutsList({ initialWorkouts, totalPages, userId }: Wo
             </svg>
           </div>
           <p className="text-lg text-foreground/60 mb-4">{t('noWorkouts')}</p>
-          <Link
-            href="/workouts/new"
-            className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl transition-colors font-medium"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            {t('createNewWorkout')}
-          </Link>
+          {userId ? (
+            <Link
+              href="/workouts/new"
+              className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl transition-colors font-medium"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              {t('createNewWorkout')}
+            </Link>
+          ) : (
+            <div className="flex flex-col items-center gap-3">
+              <p className="text-foreground/50">{t('loginRequired')}</p>
+              <Link
+                href="/login"
+                className="inline-flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-xl transition-colors font-medium"
+              >
+                {t('login')}
+              </Link>
+            </div>
+          )}
         </div>
       ) : (
         <>
