@@ -87,7 +87,9 @@
 			"title": "¿Listo para empezar?",
 			"description": "Explora nuestra biblioteca de ejercicios y comienza tu viaje en la calistenia hoy mismo",
 			"button": "Explorar ejercicios",
-			"roadmapsButton": "Ver roadmaps"
+			"roadmapsButton": "Ver roadmaps",
+			"createWorkout": "Crea tu entrenamiento",
+			"visitBlog": "Visita nuestro blog"
 		}
 	},
 	"ExercisesPage": {

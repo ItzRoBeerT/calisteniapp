@@ -87,7 +87,9 @@
 		"title": "Ready to start?",
 		"description": "Explore our exercise library and begin your calisthenics journey today",
 		"button": "Explore exercises",
-		"roadmapsButton": "View roadmaps"
+		"roadmapsButton": "View roadmaps",
+		"createWorkout": "Create your workout",
+		"visitBlog": "Visit our blog"
 	  }
 	},
 	"ExercisesPage": {
