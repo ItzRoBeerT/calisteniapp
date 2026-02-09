@@ -136,6 +136,12 @@ export async function getExercisesByPage(
 						difficultyRanges.includes(e.difficulty)
 					);
 				}
+				if (key === 'equipment') {
+					const valueArray = Array.isArray(value) ? value : value.split(',').filter(Boolean);
+					filtered = filtered.filter((e) =>
+						valueArray.some((eq) => (e.equipment || []).includes(eq))
+					);
+				}
 			}
 		}
 
@@ -178,6 +184,11 @@ export async function getExercisesByPage(
 				}
 
 				query = query.in('difficulty', values);
+			}
+
+			if (key === 'equipment') {
+				const valueArray = Array.isArray(value) ? value : value.split(',').filter(Boolean);
+				query = query.overlaps('equipment', valueArray);
 			}
 		}
 	}
@@ -267,7 +278,15 @@ export async function getFilters() {
 				...new Set(data?.map((item) => item.difficulty)),
 			])) || [];
 
-	return { muscle_group, difficulty };
+	const equipment =
+		(await supabase
+			.from('Exercise')
+			.select('equipment')
+			.then(({ data }) => [
+				...new Set(data?.flatMap((item) => item.equipment || [])),
+			])) || [];
+
+	return { muscle_group, difficulty, equipment };
 }
 
 export async function filter(filters: Filter, locale: string = 'es') {

@@ -385,12 +385,31 @@
 	"ExerciseFilter": {
 	  "difficulty": "Difficulty",
 	  "muscleGroup": "Muscle Group",
+	  "equipment": "Equipment",
 	  "all": "All",
 	  "clear": "Clear",
 	  "apply": "Apply",
 	  "beginner": "Beginner",
 	  "intermediate": "Intermediate",
-	  "advanced": "Advanced"
+	  "advanced": "Advanced",
+	  "equipmentOptions": {
+		"none": "No equipment",
+		"pull_up_bar": "Pull-up bar",
+		"parallel_bars": "Parallel bars",
+		"rings": "Rings",
+		"resistance_band": "Resistance band",
+		"wall": "Wall",
+		"bench": "Bench",
+		"box": "Box",
+		"elevated_surface": "Elevated surface",
+		"low_bar": "Low bar",
+		"anchor_point": "Anchor point",
+		"stall_bars": "Stall bars",
+		"step": "Step",
+		"support_surface": "Support surface",
+		"vertical_pole": "Vertical pole",
+		"weight_belt": "Weight belt"
+	  }
 	},
 	"Auth": {
 	  "demoMode": {
