@@ -126,7 +126,11 @@ function AnimatedCounter({
 	);
 }
 
-export default function HomePageClient() {
+export default function HomePageClient({
+	exerciseCount,
+}: {
+	exerciseCount: number;
+}) {
 	const t = useTranslations('HomePage');
 
 	// Parallax refs and transforms
@@ -149,7 +153,7 @@ export default function HomePageClient() {
 				ref={heroRef}
 				className="relative left-1/2 -ml-[50vw] w-screen overflow-hidden"
 			>
-				<div className="relative flex flex-col items-center gap-8 py-16 md:py-24">
+				<div className="relative flex flex-col items-center gap-8 py-16 pb-24 md:py-24">
 					{/* Atmospheric background effects - deepest parallax layer */}
 					<motion.div
 						className="absolute inset-0 -z-10 overflow-visible"
@@ -671,7 +675,7 @@ export default function HomePageClient() {
 						</motion.p>
 
 						<StaggerContainer
-							className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
+							className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
 							staggerDelay={0.12}
 						>
 							<StaggerItem>
@@ -746,7 +750,7 @@ export default function HomePageClient() {
 									transition={{ duration: 0.25 }}
 								>
 									<AnimatedCounter
-										value="564"
+										value={String(exerciseCount)}
 										className="text-3xl md:text-5xl font-bold bg-gradient-to-b from-white to-primary-300 bg-clip-text text-transparent mb-3"
 									/>
 									<p className="text-xs md:text-sm text-primary-100/70 leading-relaxed">
