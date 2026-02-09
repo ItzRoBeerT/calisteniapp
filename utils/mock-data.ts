@@ -478,6 +478,12 @@ export const mockWorkoutDetails: WorkoutDetail[] = [
 export const mockFilters = {
 	muscle_group: ['chest', 'back', 'shoulders', 'triceps', 'biceps', 'core', 'legs', 'glutes'],
 	difficulty: [0, 1, 2, 3, 4, 5],
+	equipment: [
+		'none', 'pull_up_bar', 'parallel_bars', 'rings', 'resistance_band',
+		'wall', 'bench', 'box', 'elevated_surface', 'low_bar',
+		'anchor_point', 'stall_bars', 'step', 'support_surface',
+		'vertical_pole', 'weight_belt',
+	],
 };
 
 export const mockWorkoutFilters = {

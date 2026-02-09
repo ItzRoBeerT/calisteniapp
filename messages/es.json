@@ -385,12 +385,31 @@
 	"ExerciseFilter": {
 		"difficulty": "Dificultad",
 		"muscleGroup": "Grupo Muscular",
+		"equipment": "Equipamiento",
 		"all": "Todos",
 		"clear": "Limpiar",
 		"apply": "Aplicar",
 		"beginner": "Principiante",
 		"intermediate": "Intermedio",
-		"advanced": "Avanzado"
+		"advanced": "Avanzado",
+		"equipmentOptions": {
+			"none": "Sin equipamiento",
+			"pull_up_bar": "Barra de dominadas",
+			"parallel_bars": "Barras paralelas",
+			"rings": "Anillas",
+			"resistance_band": "Banda elástica",
+			"wall": "Pared",
+			"bench": "Banco",
+			"box": "Cajón",
+			"elevated_surface": "Superficie elevada",
+			"low_bar": "Barra baja",
+			"anchor_point": "Punto de anclaje",
+			"stall_bars": "Espalderas",
+			"step": "Step",
+			"support_surface": "Superficie de apoyo",
+			"vertical_pole": "Poste vertical",
+			"weight_belt": "Cinturón de lastre"
+		}
 	},
 	"Auth": {
 		"demoMode": {

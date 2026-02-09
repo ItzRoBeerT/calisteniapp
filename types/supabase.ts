@@ -54,4 +54,5 @@ export interface Workout{
 export interface Filter {
 	difficulty: string[];
 	muscle_group: string[];
+	equipment: string[];
 }
