@@ -18,10 +18,10 @@
 			}
 		},
 		"title": "Nuestro Blog",
-		"welcome": "Bienvenido al blog de Calisteniapp. Aquí encontrarás artículos, guías y consejos para mejorar tu entrenamiento de calistenia y aprovechar al máximo nuestra aplicación."
+		"welcome": "Bienvenido al blog de OpenCalisthenics. Aquí encontrarás artículos, guías y consejos para mejorar tu entrenamiento de calistenia y aprovechar al máximo nuestra aplicación."
 	},
 	"Globals": {
-		"brand": "Calisteniapp",
+		"brand": "OpenCalisthenics",
 		"back": "Volver",
 		"cancel": "Cancelar",
 		"close": "Cerrar",
@@ -48,52 +48,49 @@
 		"logout": "Cerrar sesión"
 	},
 	"HomePage": {
-		"about": "La calistenia es una disciplina de entrenamiento físico que utiliza el peso corporal como resistencia. En Calistenia, encontrarás una variedad de entrenamientos y ejercicios para mejorar tu fuerza y flexibilidad.",
-		"Blog": {
-			"welcome": "Bienvenido a ",
-			"visit": "Visita nuestro blog"
+		"about": "Entrena con tu propio cuerpo. Descubre ejercicios, crea rutinas personalizadas y sigue tu progreso con roadmaps diseñados para todos los niveles.",
+		"hero": {
+			"badge": "Open Source y Gratuito",
+			"titleLine1": "Domina tu cuerpo.",
+			"titleLine2": "Domina la calistenia.",
+			"exercises": "Ejercicios",
+			"workouts": "Entrenamientos",
+			"roadmaps": "Roadmaps"
 		},
-		"discoverExercises": "Descubre los ejercicios",
 		"featuredSection": {
 			"title": "¿Por qué elegir la calistenia?",
+			"subtitle": "Datos que demuestran el poder del entrenamiento con peso corporal",
 			"stat1": "de las personas que comienzan calistenia mejoran su fuerza y flexibilidad",
 			"stat2": "dominadas puede hacer un principiante en las primeras sesiones",
 			"stat3": "para sentir mejoras significativas con entrenamiento regular",
 			"stat4": "ejercicios diferentes para trabajar todo el cuerpo",
-			"weeks": "semanas"
+			"weeks": "sem"
 		},
 		"features": {
 			"title": "Lo que ofrecemos",
+			"subtitle": "Todo lo que necesitas para comenzar y progresar en la calistenia",
+			"explore": "Explorar",
 			"feature1": {
-				"title": "Ejercicios detallados",
-				"description": "Instrucciones paso a paso para cada ejercicio con variaciones para todos los niveles",
-				"alt": "Icono de documento"
+				"title": "Ejercicios",
+				"description": "Biblioteca completa con instrucciones paso a paso, variaciones y progresiones para todos los niveles"
 			},
 			"feature2": {
-				"title": "Entrenamientos personalizados",
-				"description": "Crea y guarda tus propias rutinas adaptadas a tus objetivos y nivel",
-				"alt": "Icono de pulgar arriba"
+				"title": "Entrenamientos",
+				"description": "Crea, guarda y gestiona tus propias rutinas adaptadas a tus objetivos y nivel de experiencia"
 			},
 			"feature3": {
-				"title": "Seguimiento de progreso",
-				"description": "Monitorea tu evolución y visualiza tus mejoras con el tiempo",
-				"alt": "Icono de ventana"
+				"title": "Roadmaps",
+				"description": "Rutas de aprendizaje visuales que te guían desde principiante hasta avanzado con recursos y seguimiento de progreso"
 			}
 		},
 		"cta": {
 			"title": "¿Listo para empezar?",
 			"description": "Explora nuestra biblioteca de ejercicios y comienza tu viaje en la calistenia hoy mismo",
-			"button": "Explorar ejercicios"
-		},
-		"favourites": "Consulta tus ejercicios de calistenia favoritos",
-		"explore": "Explora una variedad de ejercicios diseñados para mejorar tu fuerza y flexibilidad.",
-		"check": "Revisa todos los entrenamientos y puntúalos",
-		"comment": "Evalúa y comenta sobre los entrenamientos que te ayudan a alcanzar tus metas.",
-		"community": "Genera comunidad comentando y compartiendo",
-		"share": "Comparte tus experiencias, consejos y progresos con otros usuarios. Juntos podemos construir una comunidad de apoyo y motivación",
-		"share_tips": "Comparte consejos y curiosidades de calistenia",
-		"share_text": "Todos tenemos algo que aportar. Comparte tus mejores consejos, técnicas y curiosidades sobre calistenia con la comunidad.",
-		"title": "Hola mundo!"
+			"button": "Explorar ejercicios",
+			"roadmapsButton": "Ver roadmaps",
+			"createWorkout": "Crea tu entrenamiento",
+			"visitBlog": "Visita nuestro blog"
+		}
 	},
 	"ExercisesPage": {
 		"title": "Listado de ejercicios"
@@ -385,12 +382,31 @@
 	"ExerciseFilter": {
 		"difficulty": "Dificultad",
 		"muscleGroup": "Grupo Muscular",
+		"equipment": "Equipamiento",
 		"all": "Todos",
 		"clear": "Limpiar",
 		"apply": "Aplicar",
 		"beginner": "Principiante",
 		"intermediate": "Intermedio",
-		"advanced": "Avanzado"
+		"advanced": "Avanzado",
+		"equipmentOptions": {
+			"none": "Sin equipamiento",
+			"pull_up_bar": "Barra de dominadas",
+			"parallel_bars": "Barras paralelas",
+			"rings": "Anillas",
+			"resistance_band": "Banda elástica",
+			"wall": "Pared",
+			"bench": "Banco",
+			"box": "Cajón",
+			"elevated_surface": "Superficie elevada",
+			"low_bar": "Barra baja",
+			"anchor_point": "Punto de anclaje",
+			"stall_bars": "Espalderas",
+			"step": "Step",
+			"support_surface": "Superficie de apoyo",
+			"vertical_pole": "Poste vertical",
+			"weight_belt": "Cinturón de lastre"
+		}
 	},
 	"Auth": {
 		"demoMode": {

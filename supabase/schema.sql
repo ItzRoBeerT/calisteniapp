@@ -1,5 +1,5 @@
 -- =============================================
--- Calisteniapp Database Schema for Supabase
+-- OpenCalisthenics Database Schema for Supabase
 -- =============================================
 
 -- Enable UUID extension (usually already enabled in Supabase)

@@ -9,7 +9,7 @@ import { isSupabaseConfigured } from '@/utils/mock-data';
 
 export const metadata: Metadata = {
   title: 'Login',
-  description: 'Inicia sesión en Calisteniapp para acceder a tus entrenamientos personalizados',
+  description: 'Inicia sesión en OpenCalisthenics para acceder a tus entrenamientos personalizados',
 };
 
 export default async function Login() {

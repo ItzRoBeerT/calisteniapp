@@ -31,6 +31,15 @@ export default function ExerciseFilter({ allFilters }: ExerciseFilterProps) {
         label: group,
       })),
     },
+    {
+      key: 'equipment',
+      label: t('equipment'),
+      options: allFilters.equipment.map((eq) => ({
+        value: eq,
+        label: t(`equipmentOptions.${eq}` as Parameters<typeof t>[0]),
+      })),
+      multiSelect: true,
+    },
   ];
 
   const translations = {
@@ -43,7 +52,7 @@ export default function ExerciseFilter({ allFilters }: ExerciseFilterProps) {
     <FilterPanel
       fields={fields}
       translations={translations}
-      columns={2}
+      columns={3}
     />
   );
 }
