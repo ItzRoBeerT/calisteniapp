@@ -18,10 +18,10 @@
 			}
 		},
 		"title": "Nuestro Blog",
-		"welcome": "Bienvenido al blog de Calisteniapp. Aquí encontrarás artículos, guías y consejos para mejorar tu entrenamiento de calistenia y aprovechar al máximo nuestra aplicación."
+		"welcome": "Bienvenido al blog de OpenCalisthenics. Aquí encontrarás artículos, guías y consejos para mejorar tu entrenamiento de calistenia y aprovechar al máximo nuestra aplicación."
 	},
 	"Globals": {
-		"brand": "Calisteniapp",
+		"brand": "OpenCalisthenics",
 		"back": "Volver",
 		"cancel": "Cancelar",
 		"close": "Cerrar",

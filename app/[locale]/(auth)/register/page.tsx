@@ -9,7 +9,7 @@ import { isSupabaseConfigured } from '@/utils/mock-data';
 
 export const metadata: Metadata = {
   title: 'Registro',
-  description: 'Crea una nueva cuenta en Calisteniapp para acceder a entrenamientos personalizados',
+  description: 'Crea una nueva cuenta en OpenCalisthenics para acceder a entrenamientos personalizados',
 };
 
 export default async function Register() {

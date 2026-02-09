@@ -9,7 +9,7 @@ export default async function Footer() {
 			<div className="container mx-auto py-2 px-4 md:px-6">
 				<div className="flex flex-col md:flex-row justify-between items-center">
 					<p className="text-sm text-gray-600 dark:text-gray-400 mb-4 md:mb-0">
-						©{currentYear} Calisteniapp. {t('copyright')}
+						©{currentYear} OpenCalisthenics. {t('copyright')}
 					</p>
 					<p className="text-sm text-gray-600 dark:text-gray-400">
 						{t('madeWith', { heart: '♥' })}
