@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import { useTranslations } from 'next-intl';
 
 export const metadata: Metadata = {
-	title: 'Calisteniapp Blog',
+	title: 'OpenCalisthenics Blog',
 	description:
 		'Artículos sobre calistenia, rutinas, consejos y novedades de la app.',
 };

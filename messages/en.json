@@ -18,10 +18,10 @@
 		}
 	  },
 	  "title": "Our Blog",
-	  "welcome": "Welcome to the Calisteniapp blog. Here you will find articles, guides, and tips to improve your calisthenics training and get the most out of our app."
+	  "welcome": "Welcome to the OpenCalisthenics blog. Here you will find articles, guides, and tips to improve your calisthenics training and get the most out of our app."
 	},
 	"Globals": {
-	  "brand": "Calisteniapp",
+	  "brand": "OpenCalisthenics",
 	  "back": "Back",
 	  "cancel": "Cancel",
 	  "close": "Close",
