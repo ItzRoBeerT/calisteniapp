@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 export type FilterFieldOption = {
@@ -14,6 +14,8 @@ export type FilterField = {
   options: FilterFieldOption[];
   /** Optional suffix to append to option labels (e.g., "min" for duration) */
   suffix?: string;
+  /** Enable multi-select mode with checkboxes */
+  multiSelect?: boolean;
 };
 
 type FilterPanelProps = {
@@ -30,6 +32,87 @@ type FilterPanelProps = {
   /** Whether to apply filters immediately on change (default: false, shows apply/clear buttons) */
   immediate?: boolean;
 };
+
+function MultiSelectDropdown({
+  field,
+  value,
+  onChange,
+  allLabel,
+}: {
+  field: FilterField;
+  value: string;
+  onChange: (value: string) => void;
+  allLabel: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const selected = value ? value.split(',') : [];
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const toggle = (optionValue: string) => {
+    const newSelected = selected.includes(optionValue)
+      ? selected.filter((v) => v !== optionValue)
+      : [...selected, optionValue];
+    onChange(newSelected.join(','));
+  };
+
+  const displayText =
+    selected.length === 0
+      ? allLabel
+      : selected
+          .map((v) => field.options.find((o) => o.value === v)?.label || v)
+          .join(', ');
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        className="w-full p-2 border border-foreground/20 bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-left flex justify-between items-center"
+      >
+        <span className="truncate">{displayText}</span>
+        <svg
+          className={`w-4 h-4 ml-2 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {open && (
+        <div className="absolute z-10 mt-1 w-full bg-background border border-foreground/20 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+          {field.options.map((option) => (
+            <label
+              key={option.value}
+              className="flex items-center gap-2 px-3 py-2 hover:bg-foreground/10 cursor-pointer"
+            >
+              <input
+                type="checkbox"
+                checked={selected.includes(option.value)}
+                onChange={() => toggle(option.value)}
+                className="rounded border-foreground/20 text-primary-500 focus:ring-primary-500"
+              />
+              <span className="text-sm">
+                {option.label}
+                {field.suffix ? ` ${field.suffix}` : ''}
+              </span>
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function FilterPanel({
   fields,
@@ -112,19 +195,28 @@ export default function FilterPanel({
             <label className="block text-sm font-medium text-foreground/80 mb-1">
               {field.label}
             </label>
-            <select
-              value={filters[field.key] || ''}
-              onChange={(e) => handleFilterChange(field.key, e.target.value)}
-              className="w-full p-2 border border-foreground/20 bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            >
-              <option value="">{translations.all}</option>
-              {field.options.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                  {field.suffix ? ` ${field.suffix}` : ''}
-                </option>
-              ))}
-            </select>
+            {field.multiSelect ? (
+              <MultiSelectDropdown
+                field={field}
+                value={filters[field.key] || ''}
+                onChange={(value) => handleFilterChange(field.key, value)}
+                allLabel={translations.all}
+              />
+            ) : (
+              <select
+                value={filters[field.key] || ''}
+                onChange={(e) => handleFilterChange(field.key, e.target.value)}
+                className="w-full p-2 border border-foreground/20 bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              >
+                <option value="">{translations.all}</option>
+                {field.options.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                    {field.suffix ? ` ${field.suffix}` : ''}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
         ))}
       </div>

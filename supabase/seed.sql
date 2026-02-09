@@ -1,5 +1,5 @@
 -- =============================================
--- Seed data for Calisteniapp
+-- Seed data for OpenCalisthenics
 -- Run this AFTER schema.sql
 -- =============================================
 
