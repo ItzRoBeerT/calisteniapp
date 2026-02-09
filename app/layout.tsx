@@ -5,7 +5,7 @@ import './[locale]/globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Calistenia',
+  title: 'OpenCalisthenics',
   description: 'Aprende calistenia con nosotros y con nuestra comunidad',
 };
 
