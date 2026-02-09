@@ -48,52 +48,47 @@
 		"logout": "Sign out"
 	},
 	"HomePage": {
-	  "about": "Calisthenics is a physical training discipline that uses body weight as resistance. At Calistenia, you will find a variety of workouts and exercises to improve your strength and flexibility.",
-	  "Blog": {
-		"welcome": "Welcome to ",
-		"visit": "Visit our blog"
+	  "about": "Train with your own body. Discover exercises, create custom routines, and track your progress with roadmaps designed for all levels.",
+	  "hero": {
+		"badge": "Open Source & Free",
+		"titleLine1": "Master your body.",
+		"titleLine2": "Master calisthenics.",
+		"exercises": "Exercises",
+		"workouts": "Workouts",
+		"roadmaps": "Roadmaps"
 	  },
-	  "discoverExercises": "Discover exercises",
 	  "featuredSection": {
 		"title": "Why choose calisthenics?",
+		"subtitle": "Data that proves the power of bodyweight training",
 		"stat1": "of people who start calisthenics improve their strength and flexibility",
 		"stat2": "pull-ups a beginner can do in the first sessions",
 		"stat3": "to feel significant improvements with regular training",
 		"stat4": "different exercises to work your entire body",
-		"weeks": "weeks"
+		"weeks": "wk"
 	  },
 	  "features": {
 		"title": "What we offer",
+		"subtitle": "Everything you need to start and progress in calisthenics",
+		"explore": "Explore",
 		"feature1": {
-		  "title": "Detailed exercises",
-		  "description": "Step-by-step instructions for each exercise with variations for all levels",
-		  "alt": "Document icon"
+		  "title": "Exercises",
+		  "description": "Complete library with step-by-step instructions, variations and progressions for all levels"
 		},
 		"feature2": {
-		  "title": "Custom workouts",
-		  "description": "Create and save your own routines tailored to your goals and level",
-		  "alt": "Thumbs up icon"
+		  "title": "Workouts",
+		  "description": "Create, save and manage your own routines tailored to your goals and experience level"
 		},
 		"feature3": {
-		  "title": "Progress tracking",
-		  "description": "Monitor your evolution and visualize your improvements over time",
-		  "alt": "Window icon"
+		  "title": "Roadmaps",
+		  "description": "Visual learning paths that guide you from beginner to advanced with resources and progress tracking"
 		}
 	  },
 	  "cta": {
 		"title": "Ready to start?",
 		"description": "Explore our exercise library and begin your calisthenics journey today",
-		"button": "Explore exercises"
-	  },
-	  "favourites": "Check out your favorite calisthenics exercises",
-	  "explore": "Explore a variety of exercises designed to improve your strength and flexibility.",
-	  "check": "Review all workouts and rate them",
-	  "comment": "Evaluate and comment on the workouts that help you reach your goals.",
-	  "community": "Build community by commenting and sharing",
-	  "share": "Share your experiences, tips, and progress with other users. Together we can build a supportive and motivating community.",
-	  "share_tips": "Share calisthenics tips and fun facts",
-	  "share_text": "We all have something to contribute. Share your best tips, techniques, and fun facts about calisthenics with the community.",
-	  "title": "Hello world!"
+		"button": "Explore exercises",
+		"roadmapsButton": "View roadmaps"
+	  }
 	},
 	"ExercisesPage": {
 		"title": "List of exercises"
