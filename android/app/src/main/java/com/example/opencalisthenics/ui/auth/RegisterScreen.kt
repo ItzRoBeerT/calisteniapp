@@ -25,8 +25,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.opencalisthenics.data.SupabaseClient
+import com.example.opencalisthenics.ui.theme.OpenCalisthenicsTheme
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
@@ -177,5 +179,16 @@ fun RegisterScreen(
         TextButton(onClick = onNavigateToLogin) {
             Text("¿Ya tienes cuenta? Inicia sesión")
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RegisterScreenPreview() {
+    OpenCalisthenicsTheme {
+        RegisterScreen(
+            onRegisterSuccess = {},
+            onNavigateToLogin = {}
+        )
     }
 }
