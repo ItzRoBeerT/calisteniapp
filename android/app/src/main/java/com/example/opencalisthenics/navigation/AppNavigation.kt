@@ -1,5 +1,9 @@
 package com.example.opencalisthenics.navigation
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -26,6 +30,8 @@ object Register
 @Serializable
 object Home
 
+private const val ANIM_DURATION = 300
+
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
@@ -40,7 +46,23 @@ fun AppNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = startDestination!!
+        startDestination = startDestination!!,
+        enterTransition = {
+            fadeIn(animationSpec = tween(ANIM_DURATION)) +
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(ANIM_DURATION))
+        },
+        exitTransition = {
+            fadeOut(animationSpec = tween(ANIM_DURATION)) +
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start, tween(ANIM_DURATION))
+        },
+        popEnterTransition = {
+            fadeIn(animationSpec = tween(ANIM_DURATION)) +
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(ANIM_DURATION))
+        },
+        popExitTransition = {
+            fadeOut(animationSpec = tween(ANIM_DURATION)) +
+                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.End, tween(ANIM_DURATION))
+        }
     ) {
         composable<Login> {
             LoginScreen(
