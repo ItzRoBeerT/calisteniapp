@@ -615,7 +615,11 @@
 		"exercisesCompleted": "Ejercicios completados",
 		"backToWorkouts": "Volver a Entrenamientos",
 		"startAnother": "Empezar Otro",
-		"exercise": "Ejercicio"
+		"exercise": "Ejercicio",
+		"cancelWorkout": "Cancelar",
+		"cancelConfirm": "¿Seguro que quieres cancelar el entrenamiento?",
+		"cancelYes": "Sí, cancelar",
+		"cancelNo": "No, continuar"
 	},
 	"Footer": {
 		"copyright": "Todos los derechos reservados.",

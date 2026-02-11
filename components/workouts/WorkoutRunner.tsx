@@ -24,6 +24,7 @@ export default function WorkoutRunner({ workouts }: WorkoutRunnerProps) {
 	const [restTimeRemaining, setRestTimeRemaining] = useState(0);
 	const [startTime, setStartTime] = useState<Date | null>(null);
 	const [elapsedTime, setElapsedTime] = useState(0);
+	const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 	const timerRef = useRef<NodeJS.Timeout | null>(null);
 
 	const currentExercise = selectedWorkout?.exercises[currentExerciseIndex];
@@ -169,6 +170,34 @@ export default function WorkoutRunner({ workouts }: WorkoutRunnerProps) {
 		);
 	}
 
+	// Cancel confirmation modal
+	const cancelConfirmModal = showCancelConfirm && (
+		<div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
+			<div className="bg-surface rounded-xl p-6 max-w-sm w-full text-center">
+				<p className="text-foreground text-lg font-medium mb-6">
+					{t('cancelConfirm')}
+				</p>
+				<div className="flex gap-3 justify-center">
+					<button
+						onClick={() => {
+							setShowCancelConfirm(false);
+							resetToSelection();
+						}}
+						className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl transition-colors font-medium"
+					>
+						{t('cancelYes')}
+					</button>
+					<button
+						onClick={() => setShowCancelConfirm(false)}
+						className="bg-surface hover:bg-surface/80 text-foreground px-6 py-3 rounded-xl transition-colors border border-white/10"
+					>
+						{t('cancelNo')}
+					</button>
+				</div>
+			</div>
+		</div>
+	);
+
 	// Phase: Rest
 	if (phase === 'rest') {
 		const nextExerciseName = currentSet <= (currentExercise?.sets || 0)
@@ -223,15 +252,24 @@ export default function WorkoutRunner({ workouts }: WorkoutRunnerProps) {
 					</p>
 				)}
 
-				<button
-					onClick={skipRest}
-					className="bg-surface hover:bg-surface/80 text-foreground px-8 py-3 rounded-xl transition-colors border border-white/10"
-				>
-					{t('skipRest')}
-				</button>
+				<div className="flex gap-3 justify-center">
+					<button
+						onClick={skipRest}
+						className="bg-surface hover:bg-surface/80 text-foreground px-8 py-3 rounded-xl transition-colors border border-white/10"
+					>
+						{t('skipRest')}
+					</button>
+					<button
+						onClick={() => setShowCancelConfirm(true)}
+						className="bg-surface hover:bg-red-500/20 text-red-400 px-8 py-3 rounded-xl transition-colors border border-red-500/30"
+					>
+						{t('cancelWorkout')}
+					</button>
+				</div>
 
 				{/* Elapsed time */}
 				<p className="text-foreground/30 text-sm mt-6">{formatTime(elapsedTime)}</p>
+				{cancelConfirmModal}
 			</div>
 		);
 	}
@@ -342,8 +380,17 @@ export default function WorkoutRunner({ workouts }: WorkoutRunnerProps) {
 				</button>
 			</div>
 
-			{/* Elapsed time */}
-			<p className="text-foreground/30 text-sm text-center">{formatTime(elapsedTime)}</p>
+			{/* Cancel and elapsed time */}
+			<div className="flex items-center justify-between mt-2">
+				<button
+					onClick={() => setShowCancelConfirm(true)}
+					className="text-red-400 hover:text-red-300 text-sm transition-colors"
+				>
+					{t('cancelWorkout')}
+				</button>
+				<p className="text-foreground/30 text-sm">{formatTime(elapsedTime)}</p>
+			</div>
+			{cancelConfirmModal}
 		</div>
 	);
 }
