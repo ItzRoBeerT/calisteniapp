@@ -10,8 +10,5 @@ export function getDifficultyColor(difficulty?: string): string {
 
   // Normalize difficulty to match the keys: Capitalize first letter, lowercase rest
   const normalized = difficulty.charAt(0).toUpperCase() + difficulty.slice(1).toLowerCase();
-  
-  console.log('Getting color for difficulty:', difficulty, '-> normalized:', normalized);
-  console.log('Available difficulty colors:', difficultyColors[normalized]);
   return difficultyColors[normalized] || 'bg-primary-500/20 text-primary-400 border-primary-500/30';
 }
