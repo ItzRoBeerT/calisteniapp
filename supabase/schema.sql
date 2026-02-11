@@ -143,6 +143,9 @@ ALTER TABLE "WorkoutExercise" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "WorkoutTags" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "Profile" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE workout_favorites ENABLE ROW LEVEL SECURITY;
+ALTER TABLE workout_tags ENABLE ROW LEVEL SECURITY;
+ALTER TABLE workout_exercises ENABLE ROW LEVEL SECURITY;
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 
 -- Drop existing policies to allow re-running this script
 DROP POLICY IF EXISTS "Exercises are viewable by everyone" ON "Exercise";
@@ -221,6 +224,48 @@ CREATE POLICY "Profiles are viewable by everyone" ON "Profile"
 CREATE POLICY "Users can update their own profile" ON "Profile"
     FOR UPDATE USING (auth.uid() = user_id);
 
+-- workout_tags (snake_case): Follow workout permissions
+DROP POLICY IF EXISTS "workout_tags viewable by everyone" ON workout_tags;
+DROP POLICY IF EXISTS "Users can manage workout_tags of their workouts" ON workout_tags;
+
+CREATE POLICY "workout_tags viewable by everyone" ON workout_tags
+    FOR SELECT USING (true);
+
+CREATE POLICY "Users can manage workout_tags of their workouts" ON workout_tags
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM "Workout"
+            WHERE "Workout".id = workout_tags.workout_id
+            AND "Workout".user_id = auth.uid()
+        )
+    );
+
+-- workout_exercises (snake_case): Follow workout permissions
+DROP POLICY IF EXISTS "workout_exercises viewable by everyone" ON workout_exercises;
+DROP POLICY IF EXISTS "Users can manage workout_exercises of their workouts" ON workout_exercises;
+
+CREATE POLICY "workout_exercises viewable by everyone" ON workout_exercises
+    FOR SELECT USING (true);
+
+CREATE POLICY "Users can manage workout_exercises of their workouts" ON workout_exercises
+    FOR ALL USING (
+        EXISTS (
+            SELECT 1 FROM "Workout"
+            WHERE "Workout".id = workout_exercises.workout_id
+            AND "Workout".user_id = auth.uid()
+        )
+    );
+
+-- profiles (snake_case): Everyone can read, owners can modify
+DROP POLICY IF EXISTS "profiles are viewable by everyone" ON profiles;
+DROP POLICY IF EXISTS "Users can update their own profile (profiles)" ON profiles;
+
+CREATE POLICY "profiles are viewable by everyone" ON profiles
+    FOR SELECT USING (true);
+
+CREATE POLICY "Users can update their own profile (profiles)" ON profiles
+    FOR UPDATE USING (auth.uid() = user_id);
+
 -- =============================================
 -- TRIGGER: Auto-create profile on user signup
 -- =============================================
@@ -245,7 +290,7 @@ BEGIN
 
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 
 -- Create the trigger
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
