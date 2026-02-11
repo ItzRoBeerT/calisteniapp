@@ -54,7 +54,7 @@ export default function WorkoutDetailModal({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex justify-between items-start gap-2 mb-4 sm:mb-6">
+        <div className="flex justify-between items-start gap-2 sm:mb-2">
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground">{workout.name}</h1>
           
           <button
@@ -68,6 +68,13 @@ export default function WorkoutDetailModal({
           </button>
         </div>
 
+        {/* Description */}
+        {workout.description && (
+          <div className="mb-4 sm:mb-6">
+            <p className="text-foreground/70 text-sm sm:text-base">{workout.description}</p>
+          </div>
+        )}
+
         {/* Actions */}
         {isOwner && (
           <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
@@ -80,12 +87,6 @@ export default function WorkoutDetailModal({
             <DeleteWorkoutButton workoutId={workout.id} workoutName={workout.name} />
           </div>
         )}
-
-        {/* Description */}
-        <div className="mb-4 sm:mb-6">
-          <h2 className="text-lg sm:text-xl font-semibold mb-2 text-foreground">{t('description')}</h2>
-          <p className="text-foreground/70 text-sm sm:text-base">{workout.description || t('noDescription')}</p>
-        </div>
 
         {/* Stats and Tags */}
         <div className="mb-4 sm:mb-6 flex justify-between items-center gap-4">
