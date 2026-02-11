@@ -575,6 +575,30 @@
 		"70": { "name": "Front Lever a Una Pierna", "description": "Front lever con una pierna extendida y la otra recogida. Progresion avanzada hacia el front lever completo.", "instructions": "Desde el tuck front lever, extiende una pierna\nManten la otra pierna recogida al pecho\nManten el cuerpo horizontal con los brazos rectos\nActiva los dorsales y el core al maximo\nAlterna la pierna extendida entre series\nTrabaja hacia extender ambas piernas" },
 		"71": { "name": "Planche Recogida Avanzada", "description": "Planche con caderas extendidas pero rodillas aun recogidas. Progresion entre el tuck planche y el straddle planche.", "instructions": "Desde el tuck planche, extiende las caderas\nManten las rodillas flexionadas pero alejadas del cuerpo\nEl cuerpo debe estar mas horizontal que en tuck\nManten los brazos bloqueados y hombros protraidos\nActiva fuertemente el core\nTrabaja hacia la extension completa de las piernas" }
 	},
+	"Profile": {
+		"title": "Mi Perfil",
+		"profileInfo": "Informaci\u00f3n del Perfil",
+		"emailLabel": "Email",
+		"fullNameLabel": "Nombre completo",
+		"fullNamePlaceholder": "Tu nombre completo",
+		"usernameLabel": "Nombre de usuario",
+		"usernamePlaceholder": "Tu nombre de usuario",
+		"saveChanges": "Guardar cambios",
+		"saving": "Guardando...",
+		"profileUpdated": "Perfil actualizado correctamente",
+		"profileError": "Error al actualizar el perfil",
+		"changePassword": "Cambiar Contrase\u00f1a",
+		"newPasswordLabel": "Nueva contrase\u00f1a",
+		"newPasswordPlaceholder": "M\u00ednimo 6 caracteres",
+		"confirmPasswordLabel": "Confirmar nueva contrase\u00f1a",
+		"confirmPasswordPlaceholder": "Repite la nueva contrase\u00f1a",
+		"updatePassword": "Actualizar contrase\u00f1a",
+		"updatingPassword": "Actualizando...",
+		"passwordUpdated": "Contrase\u00f1a actualizada correctamente",
+		"passwordError": "Error al actualizar la contrase\u00f1a",
+		"passwordLength": "La contrase\u00f1a debe tener al menos 6 caracteres",
+		"passwordsDoNotMatch": "Las contrase\u00f1as no coinciden"
+	},
 	"Footer": {
 		"copyright": "Todos los derechos reservados.",
 		"madeWith": "Hecho con {heart} para la comunidad de calistenia"

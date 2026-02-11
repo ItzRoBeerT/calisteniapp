@@ -62,5 +62,9 @@ export const routing = defineRouting({
 			en: '/register',
 			es: '/registro',
 		},
+		'/profile': {
+			en: '/profile',
+			es: '/perfil',
+		},
 	},
 });
