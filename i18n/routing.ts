@@ -34,6 +34,10 @@ export const routing = defineRouting({
 			en: '/workouts/new',
 			es: '/entrenamientos/nuevo',
 		},
+		'/workouts/start': {
+			en: '/workouts/start',
+			es: '/entrenamientos/comenzar',
+		},
 		'/roadmaps': {
 			en: '/roadmaps',
 			es: '/roadmaps',

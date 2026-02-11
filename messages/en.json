@@ -38,7 +38,8 @@
 	  "login": "Access",
 	  "register": "Register",
 	  "user": "User",
-	  "toggleMenu": "Toggle menu"
+	  "toggleMenu": "Toggle menu",
+	  "startWorkout": "Start Workout"
 	},
 	"UserMenu": {
 		"signedInAs": "Signed in as",
@@ -362,7 +363,7 @@
 	  "createWorkout": "Create Workout",
 	  "updateWorkout": "Update Workout",
 	  "submitError": "Error saving workout. Please try again.",
-	  "searchExercise": "Search exercise",
+	  "searchExercise": "Add exercise",
 	  "searchExercisePlaceholder": "Type to search exercises...",
 	  "noExercisesFound": "No exercises found",
 	  "calculatedStats": "Calculated stats",
@@ -598,6 +599,23 @@
 		"passwordError": "Error updating password",
 		"passwordLength": "Password must be at least 6 characters",
 		"passwordsDoNotMatch": "Passwords do not match"
+	},
+	"WorkoutRunner": {
+		"selectWorkout": "Select a Workout",
+		"noWorkouts": "No workouts available",
+		"set": "Set",
+		"of": "of",
+		"reps": "reps",
+		"setDone": "Set Done!",
+		"resting": "Rest",
+		"skipRest": "Skip",
+		"nextExercise": "Next exercise",
+		"workoutComplete": "Workout Complete!",
+		"totalTime": "Total time",
+		"exercisesCompleted": "Exercises completed",
+		"backToWorkouts": "Back to Workouts",
+		"startAnother": "Start Another",
+		"exercise": "Exercise"
 	},
 	"Footer": {
 		"copyright": "All rights reserved.",
