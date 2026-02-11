@@ -575,6 +575,30 @@
 		"70": { "name": "One Leg Front Lever", "description": "Front lever with one leg extended and the other tucked. Advanced progression toward full front lever.", "instructions": "From tuck front lever, extend one leg\nKeep the other leg tucked to your chest\nKeep your body horizontal with arms straight\nEngage your lats and core to the maximum\nAlternate the extended leg between sets\nWork toward extending both legs" },
 		"71": { "name": "Advanced Tuck Planche", "description": "Planche with hips extended but knees still tucked. Progression between tuck planche and straddle planche.", "instructions": "From tuck planche, extend your hips\nKeep your knees bent but away from your body\nYour body should be more horizontal than in tuck\nKeep arms locked and shoulders protracted\nStrongly engage your core\nWork toward full leg extension" }
 	},
+	"Profile": {
+		"title": "My Profile",
+		"profileInfo": "Profile Information",
+		"emailLabel": "Email",
+		"fullNameLabel": "Full name",
+		"fullNamePlaceholder": "Your full name",
+		"usernameLabel": "Username",
+		"usernamePlaceholder": "Your username",
+		"saveChanges": "Save changes",
+		"saving": "Saving...",
+		"profileUpdated": "Profile updated successfully",
+		"profileError": "Error updating profile",
+		"changePassword": "Change Password",
+		"newPasswordLabel": "New password",
+		"newPasswordPlaceholder": "Minimum 6 characters",
+		"confirmPasswordLabel": "Confirm new password",
+		"confirmPasswordPlaceholder": "Repeat the new password",
+		"updatePassword": "Update password",
+		"updatingPassword": "Updating...",
+		"passwordUpdated": "Password updated successfully",
+		"passwordError": "Error updating password",
+		"passwordLength": "Password must be at least 6 characters",
+		"passwordsDoNotMatch": "Passwords do not match"
+	},
 	"Footer": {
 		"copyright": "All rights reserved.",
 		"madeWith": "Made with {heart} for the calisthenics community"

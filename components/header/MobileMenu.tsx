@@ -73,9 +73,13 @@ export default function MobileMenu({ user, userName, translations }: MobileMenuP
 							{translations.roadmaps}
 						</NavLink>
 						{user ? (
-							<div className="px-4 py-2 text-sm text-foreground/70">
+							<NavLink
+								href="/profile"
+								className="block px-4 py-2 rounded hover:bg-surface/50 transition-colors text-sm text-foreground/70"
+								onClick={() => setIsOpen(false)}
+							>
 								{userName}
-							</div>
+							</NavLink>
 						) : (
 							<div className="flex flex-col gap-2">
 								<NavLink
