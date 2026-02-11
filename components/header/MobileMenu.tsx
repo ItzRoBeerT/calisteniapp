@@ -11,6 +11,7 @@ type HeaderTranslations = {
 	register: string;
 	user: string;
 	toggleMenu: string;
+	startWorkout: string;
 };
 
 type MobileMenuProps = {
@@ -72,6 +73,15 @@ export default function MobileMenu({ user, userName, translations }: MobileMenuP
 						>
 							{translations.roadmaps}
 						</NavLink>
+						{!!user && (
+							<NavLink
+								href="/workouts/start"
+								className="block px-4 py-2 bg-secondary-500 rounded hover:bg-secondary-600 transition text-white text-center text-sm font-medium"
+								onClick={() => setIsOpen(false)}
+							>
+								{translations.startWorkout}
+							</NavLink>
+						)}
 						{user ? (
 							<NavLink
 								href="/profile"

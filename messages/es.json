@@ -38,7 +38,8 @@
 		"login": "Acceder",
 		"register": "Registrarse",
 		"user": "Usuario",
-		"toggleMenu": "Abrir menú"
+		"toggleMenu": "Abrir menú",
+		"startWorkout": "Comenzar Entrenamiento"
 	},
 	"UserMenu": {
 		"signedInAs": "Conectado como",
@@ -362,7 +363,7 @@
 		"createWorkout": "Crear Entrenamiento",
 		"updateWorkout": "Actualizar Entrenamiento",
 		"submitError": "Error al guardar el entrenamiento. Inténtalo de nuevo.",
-		"searchExercise": "Buscar ejercicio",
+		"searchExercise": "Añadir ejercicio",
 		"searchExercisePlaceholder": "Escribe para buscar ejercicios...",
 		"noExercisesFound": "No se encontraron ejercicios",
 		"calculatedStats": "Estadísticas calculadas",
@@ -598,6 +599,23 @@
 		"passwordError": "Error al actualizar la contrase\u00f1a",
 		"passwordLength": "La contrase\u00f1a debe tener al menos 6 caracteres",
 		"passwordsDoNotMatch": "Las contrase\u00f1as no coinciden"
+	},
+	"WorkoutRunner": {
+		"selectWorkout": "Elige un Entrenamiento",
+		"noWorkouts": "No hay entrenamientos disponibles",
+		"set": "Serie",
+		"of": "de",
+		"reps": "repeticiones",
+		"setDone": "Serie Hecha!",
+		"resting": "Descanso",
+		"skipRest": "Saltar",
+		"nextExercise": "Siguiente ejercicio",
+		"workoutComplete": "Entrenamiento Completado!",
+		"totalTime": "Tiempo total",
+		"exercisesCompleted": "Ejercicios completados",
+		"backToWorkouts": "Volver a Entrenamientos",
+		"startAnother": "Empezar Otro",
+		"exercise": "Ejercicio"
 	},
 	"Footer": {
 		"copyright": "Todos los derechos reservados.",
