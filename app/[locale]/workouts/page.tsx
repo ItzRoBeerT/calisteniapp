@@ -1,4 +1,4 @@
-import { getWorkoutsByPage, getWorkoutFilters } from '@/actions/workout';
+import { getWorkoutsByPage, getWorkoutFilters, getFavoriteWorkoutIds } from '@/actions/workout';
 import WorkoutsList from '@/components/workouts/List';
 import WorkoutFilter from '@/components/workouts/Filter';
 import { Metadata } from 'next';
@@ -19,10 +19,13 @@ export default async function WorkoutsPage() {
     const { data: { user } } = await supabase.auth.getUser();
     userId = user?.id;
   }
-  
-  const data = await getWorkoutsByPage(1);
-  const filters = await getWorkoutFilters();
-  
+
+  const [data, filters, favoriteIds] = await Promise.all([
+    getWorkoutsByPage(1),
+    getWorkoutFilters(),
+    userId ? getFavoriteWorkoutIds() : Promise.resolve([]),
+  ]);
+
   const t = await getTranslations('WorkoutsPage');
 
   return (
@@ -55,6 +58,7 @@ export default async function WorkoutsPage() {
           totalPages={data?.totalPages || 0}
           initialWorkouts={data?.workouts || []}
           userId={userId}
+          favoriteIds={favoriteIds}
         />
       </section>
     </>

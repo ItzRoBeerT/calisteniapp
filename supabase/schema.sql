@@ -111,6 +111,17 @@ CREATE TABLE IF NOT EXISTS profiles (
 );
 
 -- =============================================
+-- WORKOUT FAVORITES
+-- =============================================
+CREATE TABLE IF NOT EXISTS workout_favorites (
+    id SERIAL PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+    workout_id INTEGER REFERENCES "Workout"(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    UNIQUE(user_id, workout_id)
+);
+
+-- =============================================
 -- INDEXES for better performance
 -- =============================================
 CREATE INDEX IF NOT EXISTS idx_exercise_difficulty ON "Exercise"(difficulty);
@@ -119,6 +130,7 @@ CREATE INDEX IF NOT EXISTS idx_workout_user ON "Workout"(user_id);
 CREATE INDEX IF NOT EXISTS idx_workout_difficulty ON "Workout"(difficulty);
 CREATE INDEX IF NOT EXISTS idx_workout_exercise_workout ON "WorkoutExercise"(workout_id);
 CREATE INDEX IF NOT EXISTS idx_workout_tags_workout ON "WorkoutTags"(workout_id);
+CREATE INDEX IF NOT EXISTS idx_workout_favorites_user ON workout_favorites(user_id);
 
 -- =============================================
 -- ROW LEVEL SECURITY (RLS) Policies
@@ -130,6 +142,7 @@ ALTER TABLE "Workout" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "WorkoutExercise" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "WorkoutTags" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "Profile" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE workout_favorites ENABLE ROW LEVEL SECURITY;
 
 -- Drop existing policies to allow re-running this script
 DROP POLICY IF EXISTS "Exercises are viewable by everyone" ON "Exercise";
@@ -186,6 +199,20 @@ CREATE POLICY "Users can manage tags of their workouts" ON "WorkoutTags"
             AND "Workout".user_id = auth.uid()
         )
     );
+
+-- Workout Favorites: Users can manage their own favorites
+DROP POLICY IF EXISTS "Users can view their own favorites" ON workout_favorites;
+DROP POLICY IF EXISTS "Users can add favorites" ON workout_favorites;
+DROP POLICY IF EXISTS "Users can remove favorites" ON workout_favorites;
+
+CREATE POLICY "Users can view their own favorites" ON workout_favorites
+    FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can add favorites" ON workout_favorites
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can remove favorites" ON workout_favorites
+    FOR DELETE USING (auth.uid() = user_id);
 
 -- Profile: Everyone can read, owners can modify
 CREATE POLICY "Profiles are viewable by everyone" ON "Profile"
