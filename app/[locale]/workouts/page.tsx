@@ -16,8 +16,8 @@ export default async function WorkoutsPage() {
   let userId: string | undefined;
 
   if (supabase) {
-    const { data: { session } } = await supabase.auth.getSession();
-    userId = session?.user.id;
+    const { data: { user } } = await supabase.auth.getUser();
+    userId = user?.id;
   }
   
   const data = await getWorkoutsByPage(1);

@@ -18,8 +18,8 @@ export default async function Register() {
   const supabase = await createClient();
 
   if (supabase) {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
       redirect('/');
     }
   }
