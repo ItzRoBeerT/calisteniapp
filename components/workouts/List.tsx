@@ -13,9 +13,10 @@ type WorkoutsListProps = {
   initialWorkouts: unknown[];
   totalPages: number;
   userId?: string;
+  favoriteIds?: number[];
 };
 
-export default function WorkoutsList({ initialWorkouts, totalPages, userId }: WorkoutsListProps) {
+export default function WorkoutsList({ initialWorkouts, totalPages, userId, favoriteIds = [] }: WorkoutsListProps) {
   const t = useTranslations('WorkoutsPage');
   const [workouts, setWorkouts] = useState<unknown[]>(initialWorkouts);
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,6 +43,17 @@ export default function WorkoutsList({ initialWorkouts, totalPages, userId }: Wo
     loadWorkouts(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // Sort workouts: favorites first
+  const sortedWorkouts = [...workouts].sort((a, b) => {
+    const wA = a as unknown as WorkoutDetail;
+    const wB = b as unknown as WorkoutDetail;
+    const aIsFav = favoriteIds.includes(wA.id);
+    const bIsFav = favoriteIds.includes(wB.id);
+    if (aIsFav && !bIsFav) return -1;
+    if (!aIsFav && bIsFav) return 1;
+    return 0;
+  });
 
   return (
     <div>
@@ -82,21 +94,23 @@ export default function WorkoutsList({ initialWorkouts, totalPages, userId }: Wo
       ) : (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
-            {workouts.map((workout) => {
+            {sortedWorkouts.map((workout) => {
               const w = workout as unknown as WorkoutDetail;
               return (
-                <WorkoutCard 
-                  key={w.id} 
-                  workout={w} 
+                <WorkoutCard
+                  key={w.id}
+                  workout={w}
                   isOwner={userId === (w as unknown as { user_id?: string }).user_id}
+                  isFavorite={favoriteIds.includes(w.id)}
+                  isAuthenticated={!!userId}
                 />
               );
             })}
           </div>
-          
+
           {totalPagesState > 1 && (
             <div className="mt-8">
-              <Paginator 
+              <Paginator
                 currentPage={currentPage}
                 totalPages={totalPagesState}
                 onPageChange={handlePageChange}

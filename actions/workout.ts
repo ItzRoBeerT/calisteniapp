@@ -428,6 +428,74 @@ export async function updateWorkout(id: string, workoutData: any) {
 	return true;
 }
 
+export async function getFavoriteWorkoutIds() {
+	const supabase = await createClient();
+
+	if (!supabase) {
+		return [];
+	}
+
+	const { data: { user } } = await supabase.auth.getUser();
+	if (!user) return [];
+
+	const { data, error } = await supabase
+		.from('workout_favorites')
+		.select('workout_id')
+		.eq('user_id', user.id);
+
+	if (error) {
+		console.error('Error fetching favorite workouts:', error.message);
+		return [];
+	}
+
+	return data?.map((f) => f.workout_id) || [];
+}
+
+export async function toggleFavoriteWorkout(workoutId: number) {
+	const supabase = await createClient();
+
+	if (!supabase) {
+		return false;
+	}
+
+	const { data: { user } } = await supabase.auth.getUser();
+	if (!user) return false;
+
+	// Check if already favorited
+	const { data: existing } = await supabase
+		.from('workout_favorites')
+		.select('id')
+		.eq('user_id', user.id)
+		.eq('workout_id', workoutId)
+		.single();
+
+	if (existing) {
+		// Remove favorite
+		const { error } = await supabase
+			.from('workout_favorites')
+			.delete()
+			.eq('user_id', user.id)
+			.eq('workout_id', workoutId);
+
+		if (error) {
+			console.error('Error removing favorite:', error.message);
+			return false;
+		}
+	} else {
+		// Add favorite
+		const { error } = await supabase
+			.from('workout_favorites')
+			.insert({ user_id: user.id, workout_id: workoutId });
+
+		if (error) {
+			console.error('Error adding favorite:', error.message);
+			return false;
+		}
+	}
+
+	return true;
+}
+
 export async function deleteWorkout(id: string) {
 	const supabase = await createClient();
 

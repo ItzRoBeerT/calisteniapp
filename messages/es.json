@@ -312,7 +312,10 @@
 	"WorkoutCard": {
 		"yours": "Tuyo",
 		"edit": "Editar",
-		"viewDetails": "Ver detalles"
+		"viewDetails": "Ver detalles",
+		"play": "Empezar",
+		"favorite": "Añadir a favoritos",
+		"unfavorite": "Quitar de favoritos"
 	},
 	"WorkoutDetail": {
 		"backToWorkouts": "Volver a Entrenamientos",

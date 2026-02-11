@@ -12,17 +12,22 @@ type Phase = 'select' | 'exercise' | 'rest' | 'complete';
 
 type WorkoutRunnerProps = {
 	workouts: WorkoutDetail[];
+	initialWorkoutId?: number;
 };
 
-export default function WorkoutRunner({ workouts }: WorkoutRunnerProps) {
+export default function WorkoutRunner({ workouts, initialWorkoutId }: WorkoutRunnerProps) {
 	const t = useTranslations('WorkoutRunner');
 
-	const [phase, setPhase] = useState<Phase>('select');
-	const [selectedWorkout, setSelectedWorkout] = useState<WorkoutDetail | null>(null);
+	const initialWorkout = initialWorkoutId
+		? workouts.find((w) => w.id === initialWorkoutId) || null
+		: null;
+
+	const [phase, setPhase] = useState<Phase>(initialWorkout ? 'exercise' : 'select');
+	const [selectedWorkout, setSelectedWorkout] = useState<WorkoutDetail | null>(initialWorkout);
 	const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
 	const [currentSet, setCurrentSet] = useState(1);
 	const [restTimeRemaining, setRestTimeRemaining] = useState(0);
-	const [startTime, setStartTime] = useState<Date | null>(null);
+	const [startTime, setStartTime] = useState<Date | null>(initialWorkout ? new Date() : null);
 	const [elapsedTime, setElapsedTime] = useState(0);
 	const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 	const timerRef = useRef<NodeJS.Timeout | null>(null);
