@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
 import DefaultImage from '@/public/images/default_image.webp';
 import { getDifficultyColor } from '@/utils/difficultyColors';
+import { saveWorkoutCompletion } from '@/actions/workout';
 
 type Phase = 'select' | 'exercise' | 'rest' | 'complete';
 
@@ -58,6 +59,18 @@ export default function WorkoutRunner({ workouts, initialWorkoutId }: WorkoutRun
 			setPhase('exercise');
 		}
 	}, [phase, restTimeRemaining]);
+
+	// Save workout completion to Supabase when workout finishes
+	useEffect(() => {
+		if (phase === 'complete' && selectedWorkout) {
+			saveWorkoutCompletion({
+				workoutId: selectedWorkout.id,
+				workoutName: selectedWorkout.name,
+				durationSeconds: elapsedTime,
+				exercisesCount: totalExercises,
+			});
+		}
+	}, [phase]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const selectWorkout = useCallback((workout: WorkoutDetail) => {
 		setSelectedWorkout(workout);

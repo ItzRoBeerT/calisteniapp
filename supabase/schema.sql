@@ -122,6 +122,19 @@ CREATE TABLE IF NOT EXISTS workout_favorites (
 );
 
 -- =============================================
+-- WORKOUT COMPLETIONS (history for contribution graph)
+-- =============================================
+CREATE TABLE IF NOT EXISTS workout_completions (
+    id SERIAL PRIMARY KEY,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+    workout_id INTEGER REFERENCES "Workout"(id) ON DELETE SET NULL,
+    workout_name TEXT NOT NULL,
+    duration_seconds INTEGER,
+    exercises_count INTEGER,
+    completed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- =============================================
 -- INDEXES for better performance
 -- =============================================
 CREATE INDEX IF NOT EXISTS idx_exercise_difficulty ON "Exercise"(difficulty);
@@ -131,6 +144,7 @@ CREATE INDEX IF NOT EXISTS idx_workout_difficulty ON "Workout"(difficulty);
 CREATE INDEX IF NOT EXISTS idx_workout_exercise_workout ON "WorkoutExercise"(workout_id);
 CREATE INDEX IF NOT EXISTS idx_workout_tags_workout ON "WorkoutTags"(workout_id);
 CREATE INDEX IF NOT EXISTS idx_workout_favorites_user ON workout_favorites(user_id);
+CREATE INDEX IF NOT EXISTS idx_workout_completions_user_date ON workout_completions(user_id, completed_at);
 
 -- =============================================
 -- ROW LEVEL SECURITY (RLS) Policies
@@ -146,6 +160,7 @@ ALTER TABLE workout_favorites ENABLE ROW LEVEL SECURITY;
 ALTER TABLE workout_tags ENABLE ROW LEVEL SECURITY;
 ALTER TABLE workout_exercises ENABLE ROW LEVEL SECURITY;
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE workout_completions ENABLE ROW LEVEL SECURITY;
 
 -- Drop existing policies to allow re-running this script
 DROP POLICY IF EXISTS "Exercises are viewable by everyone" ON "Exercise";
@@ -265,6 +280,16 @@ CREATE POLICY "profiles are viewable by everyone" ON profiles
 
 CREATE POLICY "Users can update their own profile (profiles)" ON profiles
     FOR UPDATE USING (auth.uid() = user_id);
+
+-- Workout Completions: Users can manage their own completions
+DROP POLICY IF EXISTS "Users can view their own completions" ON workout_completions;
+DROP POLICY IF EXISTS "Users can add completions" ON workout_completions;
+
+CREATE POLICY "Users can view their own completions" ON workout_completions
+    FOR SELECT USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can add completions" ON workout_completions
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 -- =============================================
 -- TRIGGER: Auto-create profile on user signup
