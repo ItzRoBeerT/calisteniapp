@@ -36,6 +36,17 @@ export async function getWorkout(id: string) {
 		return null;
 	}
 
+	// Obtener el username del creador
+	let username: string | undefined;
+	if (workout.user_id) {
+		const { data: profile } = await supabase
+			.from('Profile')
+			.select('username')
+			.eq('user_id', workout.user_id)
+			.single();
+		username = profile?.username ?? undefined;
+	}
+
 	// Obtener los ejercicios del workout con imagen del ejercicio
 	const { data: exercises, error: exercisesError } = await supabase
 		.from('WorkoutExercise')
@@ -72,6 +83,7 @@ export async function getWorkout(id: string) {
 
 	return {
 		...workout,
+		username,
 		exercises: formattedExercises,
 		tags: formattedTags,
 	};

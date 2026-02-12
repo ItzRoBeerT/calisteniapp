@@ -25,7 +25,7 @@ export async function updateProfile(formData: FormData) {
       full_name: fullName || null,
       username: username || null,
     })
-    .eq('id', user.id);
+    .eq('user_id', user.id);
 
   if (error) {
     return { error: error.message || 'Error updating profile.' };

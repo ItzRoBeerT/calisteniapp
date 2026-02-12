@@ -28,6 +28,7 @@ export interface WorkoutDetail {
 	duration?: number;
 	muscle_groups?: string[];
 	user_id?: string;
+	username?: string;
 	is_public?: boolean;
 	exercises: ExerciseWorkout[];
 	tags: string[];

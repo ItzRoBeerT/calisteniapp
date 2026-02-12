@@ -84,6 +84,11 @@ export default function WorkoutDetailModal({
           </div>
         </div>
 
+        {/* Username */}
+        {workout.username && (
+          <p className="text-foreground/50 text-sm">@{workout.username}</p>
+        )}
+
         {/* Description */}
         {workout.description && (
           <div className="mb-4 sm:mb-6">
