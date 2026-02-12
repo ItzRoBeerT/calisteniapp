@@ -22,7 +22,7 @@ export default async function SettingsPage() {
 	const { data: profile } = await supabase
 		.from('profiles')
 		.select('full_name, username')
-		.eq('id', user.id)
+		.eq('user_id', user.id)
 		.single();
 
 	const t = await getTranslations('Settings');
