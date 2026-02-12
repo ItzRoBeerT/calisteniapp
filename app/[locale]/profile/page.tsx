@@ -26,12 +26,11 @@ export default async function ProfilePage() {
 	]);
 
 	return (
-		<div className="px-4 py-8">
+		<div className="max-w-5xl mx-auto px-4 py-8">
 			<h1 className="text-4xl text-center font-bold mb-8">{t('title')}</h1>
 
 			<div className="space-y-8">
-				<section className="bg-surface rounded-lg shadow-lg p-6">
-					<h2 className="text-xl font-semibold mb-4">{t('workoutActivity')}</h2>
+				<section>
 					<Suspense>
 						<WorkoutHeatmap completions={completions} />
 					</Suspense>
