@@ -80,17 +80,6 @@ export default async function Header() {
 					>
 						{translations.roadmaps}
 					</NavLink>
-					{user && (
-						<NavLink
-							href="/workouts/start"
-							className="bg-secondary-500 hover:bg-secondary-600 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors flex items-center gap-1.5"
-						>
-							<svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-								<path d="M8 5v14l11-7z" />
-							</svg>
-							{translations.startWorkout}
-						</NavLink>
-					)}
 					{user ? (
 						<UserMenu userName={userName || translations.user} locale={locale} />
 					) : (
