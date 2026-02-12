@@ -646,7 +646,15 @@
 		"monthFullOct": "Octubre",
 		"monthFullNov": "Noviembre",
 		"monthFullDec": "Diciembre",
-		"completedWorkouts": "Completó {count} {count, plural, one {entrenamiento} other {entrenamientos}}"
+		"completedWorkouts": "Completó {count} {count, plural, one {entrenamiento} other {entrenamientos}}",
+		"memberSince": "Miembro desde {date}",
+		"statTotal": "Total entrenamientos",
+		"statStreak": "Racha actual",
+		"statLongest": "Mejor racha",
+		"statActiveDays": "Días activos",
+		"emptyTitle": "Comienza tu viaje",
+		"emptyDescription": "Aún no has completado ningún entrenamiento. Empieza tu primer entrenamiento y observa tu progreso aquí.",
+		"startWorkout": "Ir a entrenamientos"
 	},
 	"Settings": {
 		"title": "Ajustes",

@@ -1,8 +1,8 @@
 import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
-import { getTranslations } from 'next-intl/server';
 import WorkoutHeatmap from '@/components/profile/WorkoutHeatmap';
+import ProfileHeader from '@/components/profile/ProfileHeader';
 import { getWorkoutCompletions } from '@/actions/workout';
 
 export default async function ProfilePage() {
@@ -20,22 +20,47 @@ export default async function ProfilePage() {
 		redirect('/login');
 	}
 
-	const [t, completions] = await Promise.all([
-		getTranslations('Profile'),
+	const [completions, profileResult] = await Promise.all([
 		getWorkoutCompletions(),
+		supabase
+			.from('profiles')
+			.select('full_name, username')
+			.eq('id', user.id)
+			.single(),
 	]);
 
-	return (
-		<div className="max-w-5xl mx-auto px-4 py-8">
-			<h1 className="text-4xl text-center font-bold mb-8">{t('title')}</h1>
+	const profile = profileResult.data;
 
-			<div className="space-y-8">
-				<section>
-					<Suspense>
-						<WorkoutHeatmap completions={completions} />
-					</Suspense>
-				</section>
+	const displayName = profile?.full_name || profile?.username || null;
+	const initials = (displayName || user.email || '?')
+		.split(' ')
+		.map((n: string) => n[0])
+		.join('')
+		.toUpperCase()
+		.slice(0, 2);
+
+	const memberSince = user.created_at
+		? new Date(user.created_at)
+		: null;
+
+	return (
+		<div className="max-w-5xl mx-auto px-4 py-10">
+			{/* Profile header */}
+			<div className="mb-10">
+				<ProfileHeader
+					displayName={displayName}
+					email={user.email || ''}
+					initials={initials}
+					memberSince={memberSince?.toISOString() || null}
+				/>
 			</div>
+
+			{/* Heatmap & activity */}
+			<section>
+				<Suspense>
+					<WorkoutHeatmap completions={completions} />
+				</Suspense>
+			</section>
 		</div>
 	);
 }
