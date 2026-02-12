@@ -316,7 +316,8 @@
 		"viewDetails": "Ver detalles",
 		"play": "Empezar",
 		"favorite": "Añadir a favoritos",
-		"unfavorite": "Quitar de favoritos"
+		"unfavorite": "Quitar de favoritos",
+		"private": "Privado"
 	},
 	"WorkoutDetail": {
 		"backToWorkouts": "Volver a Entrenamientos",
@@ -339,11 +340,16 @@
 	},
 	"EditWorkout": {
 		"title": "Editar Entrenamiento",
-		"backToWorkout": "Volver al Entrenamiento"
+		"backToWorkout": "Volver al Entrenamiento",
+		"metaTitle": "Editar {name}",
+		"metaDescription": "Edita tu entrenamiento personalizado",
+		"notFoundTitle": "Entrenamiento no encontrado"
 	},
 	"NewWorkout": {
 		"title": "Crear Nuevo Entrenamiento",
-		"backToWorkouts": "Volver a Entrenamientos"
+		"backToWorkouts": "Volver a Entrenamientos",
+		"metaTitle": "Crear Nuevo Entrenamiento",
+		"metaDescription": "Crea un nuevo entrenamiento personalizado para tu rutina"
 	},
 	"WorkoutForm": {
 		"basicInfo": "Información Básica",
@@ -373,7 +379,12 @@
 		"calculatedStats": "Estadísticas calculadas",
 		"estimatedDuration": "Duración estimada",
 		"noMuscleGroups": "Sin grupos musculares",
-		"addExercisesToSave": "Añade ejercicios para poder guardar"
+		"addExercisesToSave": "Añade ejercicios para poder guardar",
+		"visibility": "Visibilidad",
+		"public": "Público",
+		"private": "Privado",
+		"publicDescription": "Visible para todos los usuarios en los listados",
+		"privateDescription": "Solo visible para ti"
 	},
 	"WorkoutFilter": {
 		"difficulty": "Dificultad",

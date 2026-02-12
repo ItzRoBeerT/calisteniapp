@@ -38,9 +38,12 @@ CREATE TABLE IF NOT EXISTS "Workout" (
     duration INTEGER,
     muscle_groups TEXT[] DEFAULT '{}',
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+    is_public BOOLEAN DEFAULT true,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+ALTER TABLE "Workout" ADD COLUMN IF NOT EXISTS is_public BOOLEAN DEFAULT true;
 
 -- =============================================
 -- WORKOUT EXERCISES (junction table)
@@ -140,6 +143,7 @@ CREATE TABLE IF NOT EXISTS workout_completions (
 CREATE INDEX IF NOT EXISTS idx_exercise_difficulty ON "Exercise"(difficulty);
 CREATE INDEX IF NOT EXISTS idx_exercise_muscle_group ON "Exercise" USING GIN(muscle_group);
 CREATE INDEX IF NOT EXISTS idx_workout_user ON "Workout"(user_id);
+CREATE INDEX IF NOT EXISTS idx_workout_is_public ON "Workout"(is_public);
 CREATE INDEX IF NOT EXISTS idx_workout_difficulty ON "Workout"(difficulty);
 CREATE INDEX IF NOT EXISTS idx_workout_exercise_workout ON "WorkoutExercise"(workout_id);
 CREATE INDEX IF NOT EXISTS idx_workout_tags_workout ON "WorkoutTags"(workout_id);
@@ -179,9 +183,9 @@ DROP POLICY IF EXISTS "Users can update their own profile" ON "Profile";
 CREATE POLICY "Exercises are viewable by everyone" ON "Exercise"
     FOR SELECT USING (true);
 
--- Workout: Everyone can read, owners can modify
+-- Workout: Public workouts visible to all, private only to owner
 CREATE POLICY "Workouts are viewable by everyone" ON "Workout"
-    FOR SELECT USING (true);
+    FOR SELECT USING (is_public = true OR auth.uid() = user_id);
 
 CREATE POLICY "Users can create their own workouts" ON "Workout"
     FOR INSERT WITH CHECK (auth.uid() = user_id);

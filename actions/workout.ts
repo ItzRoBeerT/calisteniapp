@@ -287,6 +287,7 @@ export async function createWorkout(workoutData: any, userId: string) {
 			duration: workoutData.duration,
 			muscle_groups: workoutData.muscleGroups,
 			user_id: userId,
+			is_public: workoutData.is_public ?? true,
 		})
 		.select()
 		.single();
@@ -355,6 +356,7 @@ export async function updateWorkout(id: string, workoutData: any) {
 			difficulty: workoutData.difficulty,
 			duration: workoutData.duration,
 			muscle_groups: workoutData.muscleGroups,
+			is_public: workoutData.is_public ?? true,
 		})
 		.eq('id', id);
 

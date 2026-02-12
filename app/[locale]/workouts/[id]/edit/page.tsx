@@ -16,17 +16,18 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
+  const t = await getTranslations('EditWorkout');
   const workout = await getWorkout(id);
 
   if (!workout) {
     return {
-      title: 'Entrenamiento no encontrado',
+      title: t('notFoundTitle'),
     };
   }
 
   return {
-    title: `Editar ${workout.name}`,
-    description: 'Edita tu entrenamiento personalizado',
+    title: t('metaTitle', { name: workout.name }),
+    description: t('metaDescription'),
   };
 }
 

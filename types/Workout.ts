@@ -17,6 +17,7 @@ export interface WorkoutFormData {
 	muscleGroups: string[];
 	tags: string[];
 	exercises: ExerciseWorkout[];
+	is_public: boolean;
 }
 
 export interface WorkoutDetail {
@@ -27,6 +28,7 @@ export interface WorkoutDetail {
 	duration?: number;
 	muscle_groups?: string[];
 	user_id?: string;
+	is_public?: boolean;
 	exercises: ExerciseWorkout[];
 	tags: string[];
 }
