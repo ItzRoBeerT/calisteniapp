@@ -646,7 +646,15 @@
 		"monthFullOct": "October",
 		"monthFullNov": "November",
 		"monthFullDec": "December",
-		"completedWorkouts": "Completed {count} {count, plural, one {workout} other {workouts}}"
+		"completedWorkouts": "Completed {count} {count, plural, one {workout} other {workouts}}",
+		"memberSince": "Member since {date}",
+		"statTotal": "Total workouts",
+		"statStreak": "Current streak",
+		"statLongest": "Best streak",
+		"statActiveDays": "Active days",
+		"emptyTitle": "Start your journey",
+		"emptyDescription": "You haven't completed any workouts yet. Start your first workout and track your progress here.",
+		"startWorkout": "Go to workouts"
 	},
 	"Settings": {
 		"title": "Settings",
