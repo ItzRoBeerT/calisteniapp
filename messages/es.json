@@ -39,7 +39,8 @@
 		"register": "Registrarse",
 		"user": "Usuario",
 		"toggleMenu": "Abrir menú",
-		"startWorkout": "Comenzar Entrenamiento"
+		"startWorkout": "Comenzar Entrenamiento",
+		"settings": "Ajustes"
 	},
 	"UserMenu": {
 		"signedInAs": "Conectado como",
@@ -628,6 +629,30 @@
 		"dayMon": "Lun",
 		"dayWed": "Mi\u00e9",
 		"dayFri": "Vie"
+	},
+	"Settings": {
+		"title": "Ajustes",
+		"profileInfo": "Información del Perfil",
+		"emailLabel": "Email",
+		"fullNameLabel": "Nombre completo",
+		"fullNamePlaceholder": "Tu nombre completo",
+		"usernameLabel": "Nombre de usuario",
+		"usernamePlaceholder": "Tu nombre de usuario",
+		"saveChanges": "Guardar cambios",
+		"saving": "Guardando...",
+		"profileUpdated": "Perfil actualizado correctamente",
+		"profileError": "Error al actualizar el perfil",
+		"changePassword": "Cambiar Contraseña",
+		"newPasswordLabel": "Nueva contraseña",
+		"newPasswordPlaceholder": "Mínimo 6 caracteres",
+		"confirmPasswordLabel": "Confirmar nueva contraseña",
+		"confirmPasswordPlaceholder": "Repite la nueva contraseña",
+		"updatePassword": "Actualizar contraseña",
+		"updatingPassword": "Actualizando...",
+		"passwordUpdated": "Contraseña actualizada correctamente",
+		"passwordError": "Error al actualizar la contraseña",
+		"passwordLength": "La contraseña debe tener al menos 6 caracteres",
+		"passwordsDoNotMatch": "Las contraseñas no coinciden"
 	},
 	"WorkoutRunner": {
 		"selectWorkout": "Elige un Entrenamiento",

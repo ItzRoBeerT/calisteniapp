@@ -2,8 +2,6 @@ import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import { getTranslations } from 'next-intl/server';
-import ProfileForm from '@/components/profile/ProfileForm';
-import ChangePasswordForm from '@/components/profile/ChangePasswordForm';
 import WorkoutHeatmap from '@/components/profile/WorkoutHeatmap';
 import { getWorkoutCompletions } from '@/actions/workout';
 
@@ -22,12 +20,6 @@ export default async function ProfilePage() {
 		redirect('/login');
 	}
 
-	const { data: profile } = await supabase
-		.from('profiles')
-		.select('full_name, username')
-		.eq('id', user.id)
-		.single();
-
 	const [t, completions] = await Promise.all([
 		getTranslations('Profile'),
 		getWorkoutCompletions(),
@@ -43,22 +35,6 @@ export default async function ProfilePage() {
 					<Suspense>
 						<WorkoutHeatmap completions={completions} />
 					</Suspense>
-				</section>
-
-				<section className="bg-surface rounded-lg shadow-lg p-6">
-					<h2 className="text-xl font-semibold mb-4">{t('profileInfo')}</h2>
-					<ProfileForm
-						email={user.email || ''}
-						fullName={profile?.full_name || ''}
-						username={profile?.username || ''}
-					/>
-				</section>
-
-				<section className="bg-surface rounded-lg shadow-lg p-6">
-					<h2 className="text-xl font-semibold mb-4">
-						{t('changePassword')}
-					</h2>
-					<ChangePasswordForm />
 				</section>
 			</div>
 		</div>
