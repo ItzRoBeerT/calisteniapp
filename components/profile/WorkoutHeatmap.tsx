@@ -39,6 +39,31 @@ function formatDate(date: Date, locale: string): string {
 	return locale === 'es' ? `${dd}/${mm}/${yyyy}` : `${mm}/${dd}/${yyyy}`;
 }
 
+function formatRelativeDate(dateStr: string, locale: string, t: (key: any, values?: any) => string): string {
+	const date = new Date(dateStr);
+	const now = new Date();
+	const diffMs = now.getTime() - date.getTime();
+	const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+	if (diffDays === 0) return t('today');
+	if (diffDays === 1) return t('yesterday');
+	if (diffDays < 7) return t('daysAgo', { count: diffDays });
+
+	const monthKeys = [
+		'monthJan', 'monthFeb', 'monthMar', 'monthApr', 'monthMay', 'monthJun',
+		'monthJul', 'monthAug', 'monthSep', 'monthOct', 'monthNov', 'monthDec',
+	] as const;
+
+	const day = date.getDate();
+	const month = t(monthKeys[date.getMonth()]);
+	const year = date.getFullYear();
+
+	if (year === now.getFullYear()) {
+		return `${month} ${day}`;
+	}
+	return `${month} ${day}, ${year}`;
+}
+
 function getIntensityLevel(count: number, max: number): number {
 	if (count === 0) return 0;
 	if (max <= 1) return 1;
@@ -49,24 +74,25 @@ function getIntensityLevel(count: number, max: number): number {
 	return 4;
 }
 
-const CELL_SIZE = 13;
-const CELL_GAP = 3;
+const CELL_SIZE = 11;
+const CELL_GAP = 2;
 const CELL_STEP = CELL_SIZE + CELL_GAP;
 
 const INTENSITY_COLORS = [
 	'bg-[#161b22]',
-	'bg-[#0e4429]',
-	'bg-[#006d32]',
-	'bg-[#26a641]',
-	'bg-[#39d353]',
+	'bg-primary-900',
+	'bg-primary-700',
+	'bg-primary-500',
+	'bg-primary-300',
 ];
 
 export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 	const t = useTranslations('Profile');
 	const locale = useLocale();
-	const [selectedYear, setSelectedYear] = useState(() => new Date().getFullYear());
+	const [selectedYear, setSelectedYear] = useState<number | null>(null);
 	const [tooltip, setTooltip] = useState<{ x: number; y: number; day: DayData } | null>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
+	const isRolling = selectedYear === null;
 
 	const availableYears = useMemo(() => {
 		const currentYear = new Date().getFullYear();
@@ -79,10 +105,20 @@ export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 
 	const { weeks, monthLabels, maxCount, totalCount, currentStreak } = useMemo(() => {
 		const now = new Date();
-		const isCurrentYear = selectedYear === now.getFullYear();
 
-		const endDate = isCurrentYear ? now : new Date(selectedYear, 11, 31);
-		const startDate = new Date(selectedYear, 0, 1);
+		let startDate: Date;
+		let endDate: Date;
+
+		if (isRolling) {
+			// Last 360 days
+			endDate = now;
+			startDate = new Date(now);
+			startDate.setDate(startDate.getDate() - 360);
+		} else {
+			const isCurrentYear = selectedYear === now.getFullYear();
+			endDate = isCurrentYear ? now : new Date(selectedYear, 11, 31);
+			startDate = new Date(selectedYear, 0, 1);
+		}
 
 		// Adjust start to previous Sunday
 		const startDay = startDate.getDay();
@@ -90,7 +126,6 @@ export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 			startDate.setDate(startDate.getDate() - startDay);
 		}
 
-		// Build completion map
 		const completionMap = new Map<string, Completion[]>();
 		completions.forEach((c) => {
 			const key = getDayKey(new Date(c.completed_at));
@@ -98,19 +133,22 @@ export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 			completionMap.get(key)!.push(c);
 		});
 
-		// Build weeks grid
 		const weeks: DayData[][] = [];
 		let currentWeek: DayData[] = [];
 		const current = new Date(startDate);
 		let maxCount = 0;
 		let totalCount = 0;
 
+		const rangeStart = isRolling
+			? new Date(new Date().getTime() - 360 * 24 * 60 * 60 * 1000)
+			: new Date(selectedYear!, 0, 1);
+
 		while (current <= endDate) {
 			const key = getDayKey(current);
 			const dayCompletions = completionMap.get(key) || [];
 			const count = dayCompletions.length;
 
-			if (current.getFullYear() === selectedYear) {
+			if (current >= rangeStart) {
 				totalCount += count;
 			}
 			if (count > maxCount) maxCount = count;
@@ -134,40 +172,85 @@ export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 			weeks.push(currentWeek);
 		}
 
-		// Month labels
 		const monthKeys = [
 			'monthJan', 'monthFeb', 'monthMar', 'monthApr', 'monthMay', 'monthJun',
 			'monthJul', 'monthAug', 'monthSep', 'monthOct', 'monthNov', 'monthDec',
 		] as const;
-		const monthLabels: { label: string; col: number }[] = [];
+		const allMonthLabels: { label: string; col: number }[] = [];
 		let lastMonth = -1;
 		weeks.forEach((week, weekIdx) => {
 			const firstDayOfWeek = week[0];
-			if (firstDayOfWeek && firstDayOfWeek.date.getFullYear() === selectedYear) {
+			if (firstDayOfWeek) {
 				const month = firstDayOfWeek.date.getMonth();
 				if (month !== lastMonth) {
-					monthLabels.push({ label: t(monthKeys[month]), col: weekIdx });
+					allMonthLabels.push({ label: t(monthKeys[month]), col: weekIdx });
 					lastMonth = month;
 				}
 			}
 		});
+		// Skip labels that are too close to the next one (partial months at boundaries)
+		const MIN_COL_GAP = 4;
+		const monthLabels = allMonthLabels.filter((label, i) => {
+			const next = allMonthLabels[i + 1];
+			if (next && next.col - label.col < MIN_COL_GAP) {
+				return false;
+			}
+			return true;
+		});
 
-		// Current streak
 		let currentStreak = 0;
-		if (isCurrentYear) {
-			const streakDate = new Date(now);
-			// If no workout today, start from yesterday
-			if (!completionMap.has(getDayKey(streakDate))) {
-				streakDate.setDate(streakDate.getDate() - 1);
-			}
-			while (completionMap.has(getDayKey(streakDate))) {
-				currentStreak++;
-				streakDate.setDate(streakDate.getDate() - 1);
-			}
+		const streakDate = new Date(now);
+		if (!completionMap.has(getDayKey(streakDate))) {
+			streakDate.setDate(streakDate.getDate() - 1);
+		}
+		while (completionMap.has(getDayKey(streakDate))) {
+			currentStreak++;
+			streakDate.setDate(streakDate.getDate() - 1);
 		}
 
 		return { weeks, monthLabels, maxCount, totalCount, currentStreak };
-	}, [completions, selectedYear, t]);
+	}, [completions, selectedYear, isRolling, t]);
+
+	// Group completions by month for the activity timeline
+	const activityByMonth = useMemo(() => {
+		const cutoff = isRolling
+			? new Date(new Date().getTime() - 360 * 24 * 60 * 60 * 1000)
+			: null;
+		const filtered = completions.filter((c) => {
+			const d = new Date(c.completed_at);
+			return isRolling ? d >= cutoff! : d.getFullYear() === selectedYear;
+		});
+
+		const monthFullKeys = [
+			'monthFullJan', 'monthFullFeb', 'monthFullMar', 'monthFullApr', 'monthFullMay', 'monthFullJun',
+			'monthFullJul', 'monthFullAug', 'monthFullSep', 'monthFullOct', 'monthFullNov', 'monthFullDec',
+		] as const;
+
+		// Group by month key (YYYY-MM)
+		const grouped = new Map<string, { monthLabel: string; year: number; days: Map<string, Completion[]> }>();
+		filtered.forEach((c) => {
+			const d = new Date(c.completed_at);
+			const monthKey = `${d.getFullYear()}-${String(d.getMonth()).padStart(2, '0')}`;
+			const dayKey = getDayKey(d);
+			if (!grouped.has(monthKey)) {
+				grouped.set(monthKey, {
+					monthLabel: t(monthFullKeys[d.getMonth()]),
+					year: d.getFullYear(),
+					days: new Map(),
+				});
+			}
+			const month = grouped.get(monthKey)!;
+			if (!month.days.has(dayKey)) month.days.set(dayKey, []);
+			month.days.get(dayKey)!.push(c);
+		});
+
+		return Array.from(grouped.entries())
+			.sort(([a], [b]) => b.localeCompare(a))
+			.map(([, data]) => ({
+				...data,
+				sortedDays: Array.from(data.days.entries()).sort(([a], [b]) => b.localeCompare(a)),
+			}));
+	}, [completions, selectedYear, isRolling, t]);
 
 	const handleCellHover = useCallback(
 		(e: React.MouseEvent, day: DayData) => {
@@ -196,156 +279,211 @@ export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 	const dayLabels = [t('dayMon'), t('dayWed'), t('dayFri')];
 
 	return (
-		<div className="space-y-3">
-			{/* Year selector */}
-			{availableYears.length > 1 && (
-				<div className="flex gap-2 justify-end">
+		<div className="space-y-4">
+			{/* Header with total count */}
+			<h2 className="text-base text-foreground/70">
+				<strong className="text-foreground">{totalCount}</strong>{' '}
+				{isRolling
+					? t('completionsLastYear')
+					: t('completionsInYear', { year: selectedYear })}
+				{currentStreak > 0 && isRolling && (
+					<>
+						{' · '}
+						<strong className="text-foreground">{currentStreak}</strong> {t('dayStreak')}
+					</>
+				)}
+			</h2>
+
+			{/* Main layout: heatmap + year nav */}
+			<div className="flex flex-col lg:flex-row gap-4">
+				{/* Heatmap */}
+				<div className="flex-1 min-w-0">
+					<div className="border border-foreground/10 rounded-lg p-3 overflow-x-auto" ref={containerRef}>
+						<div className="inline-block min-w-fit relative">
+							{/* Month labels */}
+							<div className="relative text-xs text-foreground/50 mb-1" style={{ paddingLeft: 32, height: 16 }}>
+								{monthLabels.map((m) => (
+									<span
+										key={`${m.label}-${m.col}`}
+										className="absolute"
+										style={{ left: 32 + m.col * CELL_STEP }}
+									>
+										{m.label}
+									</span>
+								))}
+							</div>
+
+							{/* Grid with day labels */}
+							<div className="flex">
+								<div
+									className="flex flex-col text-xs text-foreground/50 mr-1"
+									style={{ width: 28 }}
+								>
+									{[0, 1, 2, 3, 4, 5, 6].map((row) => (
+										<div
+											key={row}
+											style={{ height: CELL_STEP }}
+											className="flex items-center justify-end pr-1"
+										>
+											{row === 1 ? dayLabels[0] : row === 3 ? dayLabels[1] : row === 5 ? dayLabels[2] : ''}
+										</div>
+									))}
+								</div>
+
+								<div className="flex gap-[2px]">
+									{weeks.map((week, weekIdx) => (
+										<div key={weekIdx} className="flex flex-col gap-[2px]">
+											{Array.from({ length: 7 }).map((_, dayIdx) => {
+												const day = week[dayIdx];
+												const outOfRange = day && !isRolling && day.date.getFullYear() !== selectedYear;
+												if (!day || outOfRange) {
+													return (
+														<div
+															key={day?.key ?? dayIdx}
+															style={{ width: CELL_SIZE, height: CELL_SIZE }}
+														/>
+													);
+												}
+												const level = getIntensityLevel(day.count, maxCount);
+												return (
+													<div
+														key={day.key}
+														className={`rounded-sm cursor-pointer ${INTENSITY_COLORS[level]} hover:ring-1 hover:ring-foreground/30`}
+														style={{ width: CELL_SIZE, height: CELL_SIZE }}
+														onMouseEnter={(e) => handleCellHover(e, day)}
+														onMouseLeave={handleCellLeave}
+													/>
+												);
+											})}
+										</div>
+									))}
+								</div>
+							</div>
+
+							{/* Legend */}
+							<div className="flex items-center justify-end gap-1 mt-2 text-xs text-foreground/50">
+								<span>{t('less')}</span>
+								{INTENSITY_COLORS.map((color, i) => (
+									<div
+										key={i}
+										className={`rounded-sm ${color}`}
+										style={{ width: CELL_SIZE - 2, height: CELL_SIZE - 2 }}
+									/>
+								))}
+								<span>{t('more')}</span>
+							</div>
+
+							{/* Tooltip */}
+							{tooltip && (
+								<div
+									className="absolute z-50 pointer-events-none"
+									style={{
+										left: tooltip.x,
+										top: tooltip.y,
+										transform: 'translate(-50%, -100%)',
+									}}
+								>
+									<div className="bg-[#1b1f23] border border-foreground/20 rounded-md px-3 py-2 text-xs text-white shadow-lg whitespace-nowrap">
+										<div className="font-semibold">
+											{tooltip.day.count === 0
+												? t('noWorkouts')
+												: `${tooltip.day.count} ${tooltip.day.count === 1 ? t('workout') : t('workouts')}`}
+										</div>
+										<div className="text-foreground/50">
+											{formatDate(tooltip.day.date, locale)}
+										</div>
+										{tooltip.day.completions.length > 0 && (
+											<div className="mt-1 border-t border-foreground/10 pt-1 space-y-0.5">
+												{tooltip.day.completions.map((c, i) => (
+													<div key={i} className="text-foreground/70">
+														{c.workout_name}
+														{c.duration_seconds ? ` · ${formatDuration(c.duration_seconds)}` : ''}
+														{c.exercises_count ? ` · ${c.exercises_count} ${t('exercises')}` : ''}
+													</div>
+												))}
+											</div>
+										)}
+									</div>
+								</div>
+							)}
+						</div>
+					</div>
+				</div>
+
+				{/* Year navigation sidebar */}
+				<div className="flex lg:flex-col gap-2 lg:gap-0 lg:w-auto flex-wrap">
 					{availableYears.map((year) => (
 						<button
 							key={year}
-							onClick={() => setSelectedYear(year)}
-							className={`px-3 py-1 text-sm rounded-md transition-colors ${
+							onClick={() => setSelectedYear(selectedYear === year ? null : year)}
+							className={`text-sm px-3 py-1 lg:px-4 lg:py-2 rounded-md lg:rounded-none lg:border-r-2 transition-colors text-left ${
 								selectedYear === year
-									? 'bg-primary-500 text-white'
-									: 'bg-surface text-foreground/60 hover:text-foreground'
+									? 'font-bold text-foreground lg:border-r-primary-500 bg-primary-500/10 lg:bg-transparent'
+									: 'text-foreground/50 hover:text-foreground lg:border-r-transparent'
 							}`}
 						>
 							{year}
 						</button>
 					))}
 				</div>
-			)}
-
-			{/* Stats */}
-			<div className="flex gap-4 text-sm text-foreground/70">
-				<span>
-					<strong className="text-foreground">{totalCount}</strong>{' '}
-					{selectedYear === new Date().getFullYear()
-						? t('completionsLastYear')
-						: t('completionsInYear', { year: selectedYear })}
-				</span>
-				{currentStreak > 0 && selectedYear === new Date().getFullYear() && (
-					<span>
-						<strong className="text-foreground">{currentStreak}</strong> {t('dayStreak')}
-					</span>
-				)}
 			</div>
 
-			{/* Heatmap grid */}
-			<div className="relative overflow-x-auto" ref={containerRef}>
-				<div className="inline-block min-w-fit">
-					{/* Month labels */}
-					<div className="flex text-xs text-foreground/50 mb-1" style={{ paddingLeft: 32 }}>
-						{monthLabels.map((m, i) => {
-							const nextCol = monthLabels[i + 1]?.col ?? weeks.length;
-							const span = nextCol - m.col;
-							return (
-								<span
-									key={`${m.label}-${m.col}`}
-									style={{ width: span * CELL_STEP }}
-								>
-									{m.label}
+			{/* Activity timeline */}
+			{activityByMonth.length > 0 && (
+				<div>
+					<h2 className="text-base font-semibold mb-4">{t('activityTitle')}</h2>
+
+					{activityByMonth.map((month) => (
+						<div key={`${month.year}-${month.monthLabel}`}>
+							{/* Month header */}
+							<h3 className="text-sm pb-1 mb-3 border-b border-foreground/10">
+								<span className="bg-background pr-3">
+									{month.monthLabel}{' '}
+									<span className="text-foreground/50">{month.year}</span>
 								</span>
-							);
-						})}
-					</div>
+							</h3>
 
-					{/* Grid with day labels */}
-					<div className="flex">
-						{/* Day labels */}
-						<div
-							className="flex flex-col text-xs text-foreground/50 mr-1"
-							style={{ width: 28 }}
-						>
-							{[0, 1, 2, 3, 4, 5, 6].map((row) => (
-								<div
-									key={row}
-									style={{ height: CELL_STEP }}
-									className="flex items-center justify-end pr-1"
-								>
-									{row === 1 ? dayLabels[0] : row === 3 ? dayLabels[1] : row === 5 ? dayLabels[2] : ''}
-								</div>
-							))}
-						</div>
+							{/* Timeline items for this month */}
+							<div className="ml-4 mb-6">
+								{month.sortedDays.map(([dateKey, dayCompletions]) => {
+									const totalForDay = dayCompletions.length;
+									return (
+										<div key={dateKey} className="relative pl-6 pb-4 border-l-2 border-foreground/10 last:border-l-transparent">
+											{/* Timeline dot */}
+											<div className="absolute left-[-5px] top-1 w-2 h-2 rounded-full bg-primary-500" />
 
-						{/* Cells */}
-						<div className="flex gap-[3px]">
-							{weeks.map((week, weekIdx) => (
-								<div key={weekIdx} className="flex flex-col gap-[3px]">
-									{Array.from({ length: 7 }).map((_, dayIdx) => {
-										const day = week[dayIdx];
-										if (!day) {
-											return (
-												<div
-													key={dayIdx}
-													style={{ width: CELL_SIZE, height: CELL_SIZE }}
-												/>
-											);
-										}
-										const level = getIntensityLevel(day.count, maxCount);
-										return (
-											<div
-												key={day.key}
-												className={`rounded-sm cursor-pointer ${INTENSITY_COLORS[level]} hover:ring-1 hover:ring-foreground/30`}
-												style={{ width: CELL_SIZE, height: CELL_SIZE }}
-												onMouseEnter={(e) => handleCellHover(e, day)}
-												onMouseLeave={handleCellLeave}
-											/>
-										);
-									})}
-								</div>
-							))}
-						</div>
-					</div>
-
-					{/* Legend */}
-					<div className="flex items-center justify-end gap-1 mt-2 text-xs text-foreground/50">
-						<span>{t('less')}</span>
-						{INTENSITY_COLORS.map((color, i) => (
-							<div
-								key={i}
-								className={`rounded-sm ${color}`}
-								style={{ width: CELL_SIZE - 2, height: CELL_SIZE - 2 }}
-							/>
-						))}
-						<span>{t('more')}</span>
-					</div>
-				</div>
-
-				{/* Tooltip */}
-				{tooltip && (
-					<div
-						className="absolute z-50 pointer-events-none"
-						style={{
-							left: tooltip.x,
-							top: tooltip.y,
-							transform: 'translate(-50%, -100%)',
-						}}
-					>
-						<div className="bg-[#1b1f23] border border-foreground/20 rounded-md px-3 py-2 text-xs text-white shadow-lg whitespace-nowrap">
-							<div className="font-semibold">
-								{tooltip.day.count === 0
-									? t('noWorkouts')
-									: `${tooltip.day.count} ${tooltip.day.count === 1 ? t('workout') : t('workouts')}`}
-							</div>
-							<div className="text-foreground/50">
-								{formatDate(tooltip.day.date, locale)}
-							</div>
-							{tooltip.day.completions.length > 0 && (
-								<div className="mt-1 border-t border-foreground/10 pt-1 space-y-0.5">
-									{tooltip.day.completions.map((c, i) => (
-										<div key={i} className="text-foreground/70">
-											{c.workout_name}
-											{c.duration_seconds ? ` · ${formatDuration(c.duration_seconds)}` : ''}
-											{c.exercises_count ? ` · ${c.exercises_count} ${t('exercises')}` : ''}
+											{/* Content */}
+											<div className="flex items-start justify-between gap-4">
+												<div className="flex-1 min-w-0">
+													<p className="text-sm text-foreground">
+														{t('completedWorkouts', { count: totalForDay })}
+													</p>
+													<ul className="mt-1 space-y-1">
+														{dayCompletions.map((c, i) => (
+															<li key={i} className="text-sm text-foreground/70 flex items-center gap-2">
+																<span>{c.workout_name}</span>
+																{(c.exercises_count || c.duration_seconds) && (
+																	<span className="text-xs text-foreground/40">
+																		{c.exercises_count ? `${c.exercises_count} ${t('exercises')}` : ''}
+																		{c.duration_seconds ? ` · ${formatDuration(c.duration_seconds)}` : ''}
+																	</span>
+																)}
+															</li>
+														))}
+													</ul>
+												</div>
+												<time className="text-xs text-foreground/50 shrink-0 pt-0.5">
+													{formatRelativeDate(dateKey, locale, t)}
+												</time>
+											</div>
 										</div>
-									))}
-								</div>
-							)}
+									);
+								})}
+							</div>
 						</div>
-					</div>
-				)}
-			</div>
+					))}
+				</div>
+			)}
 		</div>
 	);
 }
