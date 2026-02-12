@@ -12,6 +12,7 @@ type HeaderTranslations = {
 	user: string;
 	toggleMenu: string;
 	startWorkout: string;
+	settings: string;
 };
 
 type MobileMenuProps = {
@@ -83,13 +84,22 @@ export default function MobileMenu({ user, userName, translations }: MobileMenuP
 							</NavLink>
 						)}
 						{user ? (
-							<NavLink
-								href="/profile"
-								className="block px-4 py-2 rounded hover:bg-surface/50 transition-colors text-sm text-foreground/70"
-								onClick={() => setIsOpen(false)}
-							>
-								{userName}
-							</NavLink>
+							<>
+								<NavLink
+									href="/settings"
+									className="block px-4 py-2 rounded hover:bg-surface/50 transition-colors"
+									onClick={() => setIsOpen(false)}
+								>
+									{translations.settings}
+								</NavLink>
+								<NavLink
+									href="/profile"
+									className="block px-4 py-2 rounded hover:bg-surface/50 transition-colors text-sm text-foreground/70"
+									onClick={() => setIsOpen(false)}
+								>
+									{userName}
+								</NavLink>
+							</>
 						) : (
 							<div className="flex flex-col gap-2">
 								<NavLink

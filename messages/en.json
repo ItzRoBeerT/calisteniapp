@@ -39,7 +39,8 @@
 	  "register": "Register",
 	  "user": "User",
 	  "toggleMenu": "Toggle menu",
-	  "startWorkout": "Start Workout"
+	  "startWorkout": "Start Workout",
+	  "settings": "Settings"
 	},
 	"UserMenu": {
 		"signedInAs": "Signed in as",
@@ -628,6 +629,30 @@
 		"dayMon": "Mon",
 		"dayWed": "Wed",
 		"dayFri": "Fri"
+	},
+	"Settings": {
+		"title": "Settings",
+		"profileInfo": "Profile Information",
+		"emailLabel": "Email",
+		"fullNameLabel": "Full name",
+		"fullNamePlaceholder": "Your full name",
+		"usernameLabel": "Username",
+		"usernamePlaceholder": "Your username",
+		"saveChanges": "Save changes",
+		"saving": "Saving...",
+		"profileUpdated": "Profile updated successfully",
+		"profileError": "Error updating profile",
+		"changePassword": "Change Password",
+		"newPasswordLabel": "New password",
+		"newPasswordPlaceholder": "Minimum 6 characters",
+		"confirmPasswordLabel": "Confirm new password",
+		"confirmPasswordPlaceholder": "Repeat the new password",
+		"updatePassword": "Update password",
+		"updatingPassword": "Updating...",
+		"passwordUpdated": "Password updated successfully",
+		"passwordError": "Error updating password",
+		"passwordLength": "Password must be at least 6 characters",
+		"passwordsDoNotMatch": "Passwords do not match"
 	},
 	"WorkoutRunner": {
 		"selectWorkout": "Select a Workout",

@@ -5,20 +5,20 @@ import { changePassword } from '@/app/[locale]/profile/actions';
 import { SubmitButton } from '@/app/[locale]/(auth)/login/submit-button';
 
 export default function ChangePasswordForm() {
-	const t = useTranslations('Profile');
+	const t = useTranslations('Settings');
 
 	return (
-		<form className="flex flex-col gap-4">
+		<form className="flex flex-col gap-5">
 			<div>
 				<label
 					htmlFor="newPassword"
-					className="block text-sm font-medium mb-1"
+					className="block text-xs font-medium text-foreground/50 uppercase tracking-wider mb-2"
 				>
 					{t('newPasswordLabel')}
 				</label>
 				<input
 					id="newPassword"
-					className="w-full rounded-md px-4 py-2 bg-inherit border border-foreground/20 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none transition-colors"
+					className="w-full rounded-xl px-4 py-3 bg-background/60 border border-white/[0.06] focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/30 focus:outline-none transition-all text-sm placeholder:text-foreground/20"
 					name="newPassword"
 					type="password"
 					placeholder={t('newPasswordPlaceholder')}
@@ -30,13 +30,13 @@ export default function ChangePasswordForm() {
 			<div>
 				<label
 					htmlFor="confirmPassword"
-					className="block text-sm font-medium mb-1"
+					className="block text-xs font-medium text-foreground/50 uppercase tracking-wider mb-2"
 				>
 					{t('confirmPasswordLabel')}
 				</label>
 				<input
 					id="confirmPassword"
-					className="w-full rounded-md px-4 py-2 bg-inherit border border-foreground/20 focus:border-primary-500 focus:ring-2 focus:ring-primary-500 focus:outline-none transition-colors"
+					className="w-full rounded-xl px-4 py-3 bg-background/60 border border-white/[0.06] focus:border-primary-500/50 focus:ring-1 focus:ring-primary-500/30 focus:outline-none transition-all text-sm placeholder:text-foreground/20"
 					name="confirmPassword"
 					type="password"
 					placeholder={t('confirmPasswordPlaceholder')}
@@ -48,7 +48,7 @@ export default function ChangePasswordForm() {
 			<SubmitButton
 				formAction={changePassword}
 				pendingText={t('updatingPassword')}
-				className="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-xl font-medium transition-colors mt-2"
+				className="bg-primary-500 hover:bg-primary-400 text-black font-semibold px-5 py-3 rounded-xl transition-all mt-1 text-sm tracking-wide hover:shadow-lg hover:shadow-primary-500/20"
 			>
 				{t('updatePassword')}
 			</SubmitButton>

@@ -70,5 +70,9 @@ export const routing = defineRouting({
 			en: '/profile',
 			es: '/perfil',
 		},
+		'/settings': {
+			en: '/settings',
+			es: '/ajustes',
+		},
 	},
 });
