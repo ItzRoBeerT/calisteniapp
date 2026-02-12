@@ -496,6 +496,63 @@ export async function toggleFavoriteWorkout(workoutId: number) {
 	return true;
 }
 
+export async function saveWorkoutCompletion(data: {
+	workoutId: number;
+	workoutName: string;
+	durationSeconds: number;
+	exercisesCount: number;
+}) {
+	const supabase = await createClient();
+
+	if (!supabase) {
+		return false;
+	}
+
+	const { data: { user } } = await supabase.auth.getUser();
+	if (!user) return false;
+
+	const { error } = await supabase
+		.from('workout_completions')
+		.insert({
+			user_id: user.id,
+			workout_id: data.workoutId,
+			workout_name: data.workoutName,
+			duration_seconds: data.durationSeconds,
+			exercises_count: data.exercisesCount,
+		});
+
+	if (error) {
+		console.error('Error saving workout completion:', error.message);
+		return false;
+	}
+
+	return true;
+}
+
+export async function getWorkoutCompletions() {
+	const supabase = await createClient();
+
+	if (!supabase) {
+		return [];
+	}
+
+	const { data: { user } } = await supabase.auth.getUser();
+	if (!user) return [];
+
+	const { data, error } = await supabase
+		.from('workout_completions')
+		.select('completed_at, workout_name, workout_id, duration_seconds, exercises_count')
+		.eq('user_id', user.id)
+		.order('completed_at', { ascending: false });
+
+	if (error) {
+		console.error('Error fetching workout completions:', error.message);
+		return [];
+	}
+
+	return data || [];
+}
+
 export async function deleteWorkout(id: string) {
 	const supabase = await createClient();
 
