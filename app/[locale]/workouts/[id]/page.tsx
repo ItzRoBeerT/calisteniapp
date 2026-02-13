@@ -40,8 +40,8 @@ export default async function WorkoutDetailPage({ params }: Props) {
   let userId: string | undefined;
 
   if (supabase) {
-    const { data: { session } } = await supabase.auth.getSession();
-    userId = session?.user.id;
+    const { data: { user } } = await supabase.auth.getUser();
+    userId = user?.id;
   }
 
   if (!workout) {

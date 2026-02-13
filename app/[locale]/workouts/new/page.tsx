@@ -5,10 +5,13 @@ import { createClient } from '@/utils/supabase/server';
 import BackButton from '@/components/ui/BackButton';
 import { getExercises } from '@/actions/exercise';
 
-export const metadata: Metadata = {
-  title: 'Crear Nuevo Entrenamiento',
-  description: 'Crea un nuevo entrenamiento personalizado para tu rutina',
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('NewWorkout');
+  return {
+    title: t('metaTitle'),
+    description: t('metaDescription'),
+  };
+}
 
 type Props = {
   params: Promise<{ locale: string }>;
@@ -21,8 +24,8 @@ export default async function NewWorkoutPage({ params }: Props) {
   let userId: string | undefined;
 
   if (supabase) {
-    const { data: { session } } = await supabase.auth.getSession();
-    userId = session?.user.id;
+    const { data: { user } } = await supabase.auth.getUser();
+    userId = user?.id;
   }
 
   const exercises = await getExercises(locale) || [];
