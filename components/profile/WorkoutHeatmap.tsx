@@ -80,9 +80,9 @@ function getIntensityLevel(count: number, max: number): number {
 	return 4;
 }
 
-const CELL_SIZE = 11;
+const DEFAULT_CELL_SIZE = 11;
 const CELL_GAP = 2;
-const CELL_STEP = CELL_SIZE + CELL_GAP;
+const DAY_LABELS_WIDTH = 32;
 
 const INTENSITY_COLORS = [
 	'bg-white/[0.06]',
@@ -98,6 +98,8 @@ export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 	const [selectedYear, setSelectedYear] = useState<number | null>(null);
 	const [tooltip, setTooltip] = useState<{ x: number; y: number; day: DayData } | null>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
+	const gridRef = useRef<HTMLDivElement>(null);
+	const [cellSize, setCellSize] = useState(DEFAULT_CELL_SIZE);
 	const isRolling = selectedYear === null;
 
 	const availableYears = useMemo(() => {
@@ -300,6 +302,20 @@ export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 		return () => window.removeEventListener('scroll', handleScroll, true);
 	}, []);
 
+	useEffect(() => {
+		const el = gridRef.current;
+		if (!el) return;
+		const ro = new ResizeObserver((entries) => {
+			const width = entries[0].contentRect.width;
+			if (weeks.length === 0) return;
+			const available = width - DAY_LABELS_WIDTH - 4;
+			const size = Math.floor((available - (weeks.length - 1) * CELL_GAP) / weeks.length);
+			setCellSize(Math.max(size, 2));
+		});
+		ro.observe(el);
+		return () => ro.disconnect();
+	}, [weeks.length]);
+
 	const dayLabels = [t('dayMon'), t('dayWed'), t('dayFri')];
 
 	// Stats cards data
@@ -454,15 +470,15 @@ export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 				</div>
 
 				{/* Heatmap grid */}
-				<div className="relative p-4 overflow-x-auto" ref={containerRef}>
-					<div className="inline-block min-w-fit relative">
+				<div className="relative p-4" ref={gridRef}>
+					<div className="w-full relative" ref={containerRef}>
 						{/* Month labels */}
-						<div className="relative text-xs text-foreground/40 mb-1" style={{ paddingLeft: 32, height: 16 }}>
+						<div className="relative text-xs text-foreground/40 mb-1" style={{ paddingLeft: DAY_LABELS_WIDTH, height: 16 }}>
 							{monthLabels.map((m) => (
 								<span
 									key={`${m.label}-${m.col}`}
 									className="absolute"
-									style={{ left: 32 + m.col * CELL_STEP }}
+									style={{ left: DAY_LABELS_WIDTH + m.col * (cellSize + CELL_GAP) }}
 								>
 									{m.label}
 								</span>
@@ -472,13 +488,13 @@ export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 						{/* Grid with day labels */}
 						<div className="flex">
 							<div
-								className="flex flex-col text-xs text-foreground/40 mr-1"
-								style={{ width: 28 }}
+								className="flex flex-col text-xs text-foreground/40 mr-1 shrink-0"
+								style={{ width: DAY_LABELS_WIDTH - 4 }}
 							>
 								{[0, 1, 2, 3, 4, 5, 6].map((row) => (
 									<div
 										key={row}
-										style={{ height: CELL_STEP }}
+										style={{ height: cellSize + CELL_GAP }}
 										className="flex items-center justify-end pr-1"
 									>
 										{row === 1 ? dayLabels[0] : row === 3 ? dayLabels[1] : row === 5 ? dayLabels[2] : ''}
@@ -486,9 +502,9 @@ export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 								))}
 							</div>
 
-							<div className="flex gap-[2px]">
+							<div className="flex gap-[2px] flex-1">
 								{weeks.map((week, weekIdx) => (
-									<div key={weekIdx} className="flex flex-col gap-[2px]">
+									<div key={weekIdx} className="flex flex-col gap-[2px] flex-1">
 										{Array.from({ length: 7 }).map((_, dayIdx) => {
 											const day = week[dayIdx];
 											const outOfRange = day && !isRolling && day.date.getFullYear() !== selectedYear;
@@ -496,7 +512,7 @@ export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 												return (
 													<div
 														key={day?.key ?? dayIdx}
-														style={{ width: CELL_SIZE, height: CELL_SIZE }}
+														style={{ height: cellSize }}
 													/>
 												);
 											}
@@ -505,7 +521,7 @@ export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 												<div
 													key={day.key}
 													className={`rounded-sm cursor-pointer ${INTENSITY_COLORS[level]} hover:ring-1 hover:ring-foreground/30 transition-colors`}
-													style={{ width: CELL_SIZE, height: CELL_SIZE }}
+													style={{ height: cellSize }}
 													onMouseEnter={(e) => handleCellHover(e, day)}
 													onMouseLeave={handleCellLeave}
 												/>
@@ -523,7 +539,7 @@ export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 								<div
 									key={i}
 									className={`rounded-sm ${color}`}
-									style={{ width: CELL_SIZE - 2, height: CELL_SIZE - 2 }}
+									style={{ width: cellSize - 2, height: cellSize - 2 }}
 								/>
 							))}
 							<span>{t('more')}</span>
