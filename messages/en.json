@@ -665,7 +665,8 @@
 		"statActiveDays": "Active days",
 		"emptyTitle": "Start your journey",
 		"emptyDescription": "You haven't completed any workouts yet. Start your first workout and track your progress here.",
-		"startWorkout": "Go to workouts"
+		"startWorkout": "Go to workouts",
+		"showAll": "Show all"
 	},
 	"Settings": {
 		"title": "Settings",
