@@ -174,8 +174,12 @@ DROP POLICY IF EXISTS "Users can update their own workouts" ON "Workout";
 DROP POLICY IF EXISTS "Users can delete their own workouts" ON "Workout";
 DROP POLICY IF EXISTS "Workout exercises viewable by everyone" ON "WorkoutExercise";
 DROP POLICY IF EXISTS "Users can manage exercises of their workouts" ON "WorkoutExercise";
+DROP POLICY IF EXISTS "Users can update exercises of their workouts" ON "WorkoutExercise";
+DROP POLICY IF EXISTS "Users can delete exercises of their workouts" ON "WorkoutExercise";
 DROP POLICY IF EXISTS "Workout tags viewable by everyone" ON "WorkoutTags";
 DROP POLICY IF EXISTS "Users can manage tags of their workouts" ON "WorkoutTags";
+DROP POLICY IF EXISTS "Users can update tags of their workouts" ON "WorkoutTags";
+DROP POLICY IF EXISTS "Users can delete tags of their workouts" ON "WorkoutTags";
 DROP POLICY IF EXISTS "Profiles are viewable by everyone" ON "Profile";
 DROP POLICY IF EXISTS "Users can update their own profile" ON "Profile";
 
@@ -185,27 +189,45 @@ CREATE POLICY "Exercises are viewable by everyone" ON "Exercise"
 
 -- Workout: Public workouts visible to all, private only to owner
 CREATE POLICY "Workouts are viewable by everyone" ON "Workout"
-    FOR SELECT USING (is_public = true OR auth.uid() = user_id);
+    FOR SELECT USING (is_public = true OR (select auth.uid()) = user_id);
 
 CREATE POLICY "Users can create their own workouts" ON "Workout"
-    FOR INSERT WITH CHECK (auth.uid() = user_id);
+    FOR INSERT WITH CHECK ((select auth.uid()) = user_id);
 
 CREATE POLICY "Users can update their own workouts" ON "Workout"
-    FOR UPDATE USING (auth.uid() = user_id);
+    FOR UPDATE USING ((select auth.uid()) = user_id);
 
 CREATE POLICY "Users can delete their own workouts" ON "Workout"
-    FOR DELETE USING (auth.uid() = user_id);
+    FOR DELETE USING ((select auth.uid()) = user_id);
 
 -- WorkoutExercise: Follow workout permissions
 CREATE POLICY "Workout exercises viewable by everyone" ON "WorkoutExercise"
     FOR SELECT USING (true);
 
 CREATE POLICY "Users can manage exercises of their workouts" ON "WorkoutExercise"
-    FOR ALL USING (
+    FOR INSERT WITH CHECK (
         EXISTS (
             SELECT 1 FROM "Workout"
             WHERE "Workout".id = "WorkoutExercise".workout_id
-            AND "Workout".user_id = auth.uid()
+            AND "Workout".user_id = (select auth.uid())
+        )
+    );
+
+CREATE POLICY "Users can update exercises of their workouts" ON "WorkoutExercise"
+    FOR UPDATE USING (
+        EXISTS (
+            SELECT 1 FROM "Workout"
+            WHERE "Workout".id = "WorkoutExercise".workout_id
+            AND "Workout".user_id = (select auth.uid())
+        )
+    );
+
+CREATE POLICY "Users can delete exercises of their workouts" ON "WorkoutExercise"
+    FOR DELETE USING (
+        EXISTS (
+            SELECT 1 FROM "Workout"
+            WHERE "Workout".id = "WorkoutExercise".workout_id
+            AND "Workout".user_id = (select auth.uid())
         )
     );
 
@@ -214,11 +236,29 @@ CREATE POLICY "Workout tags viewable by everyone" ON "WorkoutTags"
     FOR SELECT USING (true);
 
 CREATE POLICY "Users can manage tags of their workouts" ON "WorkoutTags"
-    FOR ALL USING (
+    FOR INSERT WITH CHECK (
         EXISTS (
             SELECT 1 FROM "Workout"
             WHERE "Workout".id = "WorkoutTags".workout_id
-            AND "Workout".user_id = auth.uid()
+            AND "Workout".user_id = (select auth.uid())
+        )
+    );
+
+CREATE POLICY "Users can update tags of their workouts" ON "WorkoutTags"
+    FOR UPDATE USING (
+        EXISTS (
+            SELECT 1 FROM "Workout"
+            WHERE "Workout".id = "WorkoutTags".workout_id
+            AND "Workout".user_id = (select auth.uid())
+        )
+    );
+
+CREATE POLICY "Users can delete tags of their workouts" ON "WorkoutTags"
+    FOR DELETE USING (
+        EXISTS (
+            SELECT 1 FROM "Workout"
+            WHERE "Workout".id = "WorkoutTags".workout_id
+            AND "Workout".user_id = (select auth.uid())
         )
     );
 
@@ -228,50 +268,90 @@ DROP POLICY IF EXISTS "Users can add favorites" ON workout_favorites;
 DROP POLICY IF EXISTS "Users can remove favorites" ON workout_favorites;
 
 CREATE POLICY "Users can view their own favorites" ON workout_favorites
-    FOR SELECT USING (auth.uid() = user_id);
+    FOR SELECT USING ((select auth.uid()) = user_id);
 
 CREATE POLICY "Users can add favorites" ON workout_favorites
-    FOR INSERT WITH CHECK (auth.uid() = user_id);
+    FOR INSERT WITH CHECK ((select auth.uid()) = user_id);
 
 CREATE POLICY "Users can remove favorites" ON workout_favorites
-    FOR DELETE USING (auth.uid() = user_id);
+    FOR DELETE USING ((select auth.uid()) = user_id);
 
 -- Profile: Everyone can read, owners can modify
 CREATE POLICY "Profiles are viewable by everyone" ON "Profile"
     FOR SELECT USING (true);
 
 CREATE POLICY "Users can update their own profile" ON "Profile"
-    FOR UPDATE USING (auth.uid() = user_id);
+    FOR UPDATE USING ((select auth.uid()) = user_id);
 
 -- workout_tags (snake_case): Follow workout permissions
 DROP POLICY IF EXISTS "workout_tags viewable by everyone" ON workout_tags;
 DROP POLICY IF EXISTS "Users can manage workout_tags of their workouts" ON workout_tags;
+DROP POLICY IF EXISTS "Users can update workout_tags of their workouts" ON workout_tags;
+DROP POLICY IF EXISTS "Users can delete workout_tags of their workouts" ON workout_tags;
 
 CREATE POLICY "workout_tags viewable by everyone" ON workout_tags
     FOR SELECT USING (true);
 
 CREATE POLICY "Users can manage workout_tags of their workouts" ON workout_tags
-    FOR ALL USING (
+    FOR INSERT WITH CHECK (
         EXISTS (
             SELECT 1 FROM "Workout"
             WHERE "Workout".id = workout_tags.workout_id
-            AND "Workout".user_id = auth.uid()
+            AND "Workout".user_id = (select auth.uid())
+        )
+    );
+
+CREATE POLICY "Users can update workout_tags of their workouts" ON workout_tags
+    FOR UPDATE USING (
+        EXISTS (
+            SELECT 1 FROM "Workout"
+            WHERE "Workout".id = workout_tags.workout_id
+            AND "Workout".user_id = (select auth.uid())
+        )
+    );
+
+CREATE POLICY "Users can delete workout_tags of their workouts" ON workout_tags
+    FOR DELETE USING (
+        EXISTS (
+            SELECT 1 FROM "Workout"
+            WHERE "Workout".id = workout_tags.workout_id
+            AND "Workout".user_id = (select auth.uid())
         )
     );
 
 -- workout_exercises (snake_case): Follow workout permissions
 DROP POLICY IF EXISTS "workout_exercises viewable by everyone" ON workout_exercises;
 DROP POLICY IF EXISTS "Users can manage workout_exercises of their workouts" ON workout_exercises;
+DROP POLICY IF EXISTS "Users can update workout_exercises of their workouts" ON workout_exercises;
+DROP POLICY IF EXISTS "Users can delete workout_exercises of their workouts" ON workout_exercises;
 
 CREATE POLICY "workout_exercises viewable by everyone" ON workout_exercises
     FOR SELECT USING (true);
 
 CREATE POLICY "Users can manage workout_exercises of their workouts" ON workout_exercises
-    FOR ALL USING (
+    FOR INSERT WITH CHECK (
         EXISTS (
             SELECT 1 FROM "Workout"
             WHERE "Workout".id = workout_exercises.workout_id
-            AND "Workout".user_id = auth.uid()
+            AND "Workout".user_id = (select auth.uid())
+        )
+    );
+
+CREATE POLICY "Users can update workout_exercises of their workouts" ON workout_exercises
+    FOR UPDATE USING (
+        EXISTS (
+            SELECT 1 FROM "Workout"
+            WHERE "Workout".id = workout_exercises.workout_id
+            AND "Workout".user_id = (select auth.uid())
+        )
+    );
+
+CREATE POLICY "Users can delete workout_exercises of their workouts" ON workout_exercises
+    FOR DELETE USING (
+        EXISTS (
+            SELECT 1 FROM "Workout"
+            WHERE "Workout".id = workout_exercises.workout_id
+            AND "Workout".user_id = (select auth.uid())
         )
     );
 
@@ -283,17 +363,17 @@ CREATE POLICY "profiles are viewable by everyone" ON profiles
     FOR SELECT USING (true);
 
 CREATE POLICY "Users can update their own profile (profiles)" ON profiles
-    FOR UPDATE USING (auth.uid() = user_id);
+    FOR UPDATE USING ((select auth.uid()) = user_id);
 
 -- Workout Completions: Users can manage their own completions
 DROP POLICY IF EXISTS "Users can view their own completions" ON workout_completions;
 DROP POLICY IF EXISTS "Users can add completions" ON workout_completions;
 
 CREATE POLICY "Users can view their own completions" ON workout_completions
-    FOR SELECT USING (auth.uid() = user_id);
+    FOR SELECT USING ((select auth.uid()) = user_id);
 
 CREATE POLICY "Users can add completions" ON workout_completions
-    FOR INSERT WITH CHECK (auth.uid() = user_id);
+    FOR INSERT WITH CHECK ((select auth.uid()) = user_id);
 
 -- =============================================
 -- TRIGGER: Auto-create profile on user signup
