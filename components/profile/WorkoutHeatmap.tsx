@@ -96,9 +96,11 @@ export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 	const t = useTranslations('Profile');
 	const locale = useLocale();
 	const [selectedYear, setSelectedYear] = useState<number | null>(null);
+	const [selectedDay, setSelectedDay] = useState<string | null>(null);
 	const [tooltip, setTooltip] = useState<{ x: number; y: number; day: DayData } | null>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const gridRef = useRef<HTMLDivElement>(null);
+	const activityRef = useRef<HTMLDivElement>(null);
 	const [cellSize, setCellSize] = useState(DEFAULT_CELL_SIZE);
 	const isRolling = selectedYear === null;
 
@@ -292,6 +294,10 @@ export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 		[]
 	);
 
+	const handleCellClick = useCallback((day: DayData) => {
+		setSelectedDay((prev) => (prev === day.key ? null : day.key));
+	}, []);
+
 	const handleCellLeave = useCallback(() => {
 		setTooltip(null);
 	}, []);
@@ -301,6 +307,12 @@ export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 		window.addEventListener('scroll', handleScroll, true);
 		return () => window.removeEventListener('scroll', handleScroll, true);
 	}, []);
+
+	useEffect(() => {
+		if (selectedDay && activityRef.current) {
+			activityRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+		}
+	}, [selectedDay]);
 
 	useEffect(() => {
 		const el = gridRef.current;
@@ -517,13 +529,15 @@ export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 												);
 											}
 											const level = getIntensityLevel(day.count, maxCount);
+											const isSelected = selectedDay === day.key;
 											return (
 												<div
 													key={day.key}
-													className={`rounded-sm cursor-pointer ${INTENSITY_COLORS[level]} hover:ring-1 hover:ring-foreground/30 transition-colors`}
+													className={`rounded-sm cursor-pointer ${INTENSITY_COLORS[level]} ${isSelected ? 'ring-2 ring-primary-400' : 'hover:ring-1 hover:ring-foreground/30'} transition-colors`}
 													style={{ height: cellSize }}
 													onMouseEnter={(e) => handleCellHover(e, day)}
 													onMouseLeave={handleCellLeave}
+													onClick={() => handleCellClick(day)}
 												/>
 											);
 										})}
@@ -580,80 +594,140 @@ export default function WorkoutHeatmap({ completions }: WorkoutHeatmapProps) {
 			</div>
 
 			{/* Activity timeline */}
-			{activityByMonth.length > 0 && (
-				<div className="relative overflow-hidden rounded-2xl border border-white/[0.06] bg-surface/80 backdrop-blur-sm">
-					<div className="absolute inset-0 bg-gradient-to-br from-secondary-500/[0.02] to-transparent pointer-events-none" />
+			{(selectedDay || activityByMonth.length > 0) && (() => {
+				const filteredActivity = selectedDay
+					? activityByMonth
+						.map((month) => ({
+							...month,
+							sortedDays: month.sortedDays.filter(([dateKey]) => dateKey === selectedDay),
+						}))
+						.filter((month) => month.sortedDays.length > 0)
+					: activityByMonth;
 
-					{/* Section header */}
-					<div className="relative px-5 py-4 border-b border-white/[0.06]">
-						<div className="flex items-center gap-3">
-							<div className="w-8 h-8 rounded-lg bg-secondary-500/10 flex items-center justify-center">
-								<svg className="w-4 h-4 text-secondary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-								</svg>
-							</div>
-							<h2 className="font-heading text-sm font-semibold tracking-wider uppercase text-foreground/80">
-								{t('activityTitle')}
-							</h2>
-						</div>
-					</div>
-
-					<div className="relative p-5">
-						{activityByMonth.map((month) => (
-							<div key={`${month.year}-${month.monthLabel}`}>
-								{/* Month header */}
-								<h3 className="text-sm font-medium pb-1 mb-3 border-b border-white/[0.06]">
-									<span className="text-foreground/70">
-										{month.monthLabel}{' '}
-										<span className="text-foreground/30">{month.year}</span>
-									</span>
-								</h3>
-
-								{/* Timeline items */}
-								<div className="ml-4 mb-6">
-									{month.sortedDays.map(([dateKey, dayCompletions]) => {
-										const totalForDay = dayCompletions.length;
-										return (
-											<div key={dateKey} className="relative pl-6 pb-4 border-l-2 border-white/[0.06] last:border-l-transparent">
-												{/* Timeline dot */}
-												<div className={`absolute left-[-5px] top-1 w-2 h-2 rounded-full ${
-													totalForDay >= 3 ? 'bg-secondary-400' : totalForDay >= 2 ? 'bg-primary-400' : 'bg-primary-600'
-												}`} />
-
-												{/* Content */}
-												<div className="flex items-start justify-between gap-4">
-													<div className="flex-1 min-w-0">
-														<p className="text-sm text-foreground">
-															{t('completedWorkouts', { count: totalForDay })}
-														</p>
-														<ul className="mt-1 space-y-1">
-															{dayCompletions.map((c, i) => (
-																<li key={i} className="text-sm text-foreground/60 flex items-center gap-2">
-																	<span className="w-1 h-1 rounded-full bg-foreground/20 shrink-0" />
-																	<span>{c.workout_name}</span>
-																	{(c.exercises_count || c.duration_seconds) && (
-																		<span className="text-xs text-foreground/30">
-																			{c.exercises_count ? `${c.exercises_count} ${t('exercises')}` : ''}
-																			{c.duration_seconds ? ` · ${formatDuration(c.duration_seconds)}` : ''}
-																		</span>
-																	)}
-																</li>
-															))}
-														</ul>
-													</div>
-													<time className="text-xs text-foreground/40 shrink-0 pt-0.5">
-														{formatRelativeDate(dateKey, locale, t)}
-													</time>
-												</div>
-											</div>
-										);
-									})}
+				if (filteredActivity.length === 0 && selectedDay) {
+					return (
+						<div ref={activityRef} className="relative overflow-hidden rounded-2xl border border-white/[0.06] bg-surface/80 backdrop-blur-sm">
+							<div className="absolute inset-0 bg-gradient-to-br from-secondary-500/[0.02] to-transparent pointer-events-none" />
+							<div className="relative px-5 py-4 border-b border-white/[0.06]">
+								<div className="flex items-center justify-between">
+									<div className="flex items-center gap-3">
+										<div className="w-8 h-8 rounded-lg bg-secondary-500/10 flex items-center justify-center">
+											<svg className="w-4 h-4 text-secondary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+											</svg>
+										</div>
+										<h2 className="font-heading text-sm font-semibold tracking-wider uppercase text-foreground/80">
+											{formatDate(new Date(selectedDay), locale)}
+										</h2>
+									</div>
+									<button
+										onClick={() => setSelectedDay(null)}
+										className="text-xs text-foreground/40 hover:text-foreground/70 px-3 py-1.5 rounded-lg hover:bg-white/[0.04] transition-colors"
+									>
+										{t('showAll')}
+									</button>
 								</div>
 							</div>
-						))}
+							<div className="relative p-5 text-center py-8">
+								<p className="text-sm text-foreground/40">{t('noWorkouts')}</p>
+							</div>
+						</div>
+					);
+				}
+
+				if (filteredActivity.length === 0) return null;
+
+				return (
+					<div ref={activityRef} className="relative overflow-hidden rounded-2xl border border-white/[0.06] bg-surface/80 backdrop-blur-sm">
+						<div className="absolute inset-0 bg-gradient-to-br from-secondary-500/[0.02] to-transparent pointer-events-none" />
+
+						{/* Section header */}
+						<div className="relative px-5 py-4 border-b border-white/[0.06]">
+							<div className="flex items-center justify-between">
+								<div className="flex items-center gap-3">
+									<div className="w-8 h-8 rounded-lg bg-secondary-500/10 flex items-center justify-center">
+										<svg className="w-4 h-4 text-secondary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+										</svg>
+									</div>
+									<h2 className="font-heading text-sm font-semibold tracking-wider uppercase text-foreground/80">
+										{selectedDay ? formatDate(new Date(selectedDay), locale) : t('activityTitle')}
+									</h2>
+								</div>
+								{selectedDay && (
+									<button
+										onClick={() => setSelectedDay(null)}
+										className="text-xs text-foreground/40 hover:text-foreground/70 px-3 py-1.5 rounded-lg hover:bg-white/[0.04] transition-colors"
+									>
+										{t('showAll')}
+									</button>
+								)}
+							</div>
+						</div>
+
+						<div className="relative p-5">
+							{filteredActivity.map((month) => (
+								<div key={`${month.year}-${month.monthLabel}`}>
+									{/* Month header - hidden when filtering a single day */}
+									{!selectedDay && (
+										<h3 className="text-sm font-medium pb-1 mb-3 border-b border-white/[0.06]">
+											<span className="text-foreground/70">
+												{month.monthLabel}{' '}
+												<span className="text-foreground/30">{month.year}</span>
+											</span>
+										</h3>
+									)}
+
+									{/* Timeline items */}
+									<div className={selectedDay ? '' : 'ml-4 mb-6'}>
+										{month.sortedDays.map(([dateKey, dayCompletions]) => {
+											const totalForDay = dayCompletions.length;
+											return (
+												<div key={dateKey} className={selectedDay ? 'pb-2' : 'relative pl-6 pb-4 border-l-2 border-white/[0.06] last:border-l-transparent'}>
+													{/* Timeline dot */}
+													{!selectedDay && (
+														<div className={`absolute left-[-5px] top-1 w-2 h-2 rounded-full ${
+															totalForDay >= 3 ? 'bg-secondary-400' : totalForDay >= 2 ? 'bg-primary-400' : 'bg-primary-600'
+														}`} />
+													)}
+
+													{/* Content */}
+													<div className="flex items-start justify-between gap-4">
+														<div className="flex-1 min-w-0">
+															<p className="text-sm text-foreground">
+																{t('completedWorkouts', { count: totalForDay })}
+															</p>
+															<ul className="mt-1 space-y-1">
+																{dayCompletions.map((c, i) => (
+																	<li key={i} className="text-sm text-foreground/60 flex items-center gap-2">
+																		<span className="w-1 h-1 rounded-full bg-foreground/20 shrink-0" />
+																		<span>{c.workout_name}</span>
+																		{(c.exercises_count || c.duration_seconds) && (
+																			<span className="text-xs text-foreground/30">
+																				{c.exercises_count ? `${c.exercises_count} ${t('exercises')}` : ''}
+																				{c.duration_seconds ? ` · ${formatDuration(c.duration_seconds)}` : ''}
+																			</span>
+																		)}
+																	</li>
+																))}
+															</ul>
+														</div>
+														{!selectedDay && (
+															<time className="text-xs text-foreground/40 shrink-0 pt-0.5">
+																{formatRelativeDate(dateKey, locale, t)}
+															</time>
+														)}
+													</div>
+												</div>
+											);
+										})}
+									</div>
+								</div>
+							))}
+						</div>
 					</div>
-				</div>
-			)}
+				);
+			})()}
 		</div>
 	);
 }

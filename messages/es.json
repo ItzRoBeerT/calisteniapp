@@ -665,7 +665,8 @@
 		"statActiveDays": "Días activos",
 		"emptyTitle": "Comienza tu viaje",
 		"emptyDescription": "Aún no has completado ningún entrenamiento. Empieza tu primer entrenamiento y observa tu progreso aquí.",
-		"startWorkout": "Ir a entrenamientos"
+		"startWorkout": "Ir a entrenamientos",
+		"showAll": "Ver todo"
 	},
 	"Settings": {
 		"title": "Ajustes",
