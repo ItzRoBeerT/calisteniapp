@@ -36,10 +36,21 @@ export async function getWorkout(id: string) {
 		return null;
 	}
 
-	// Obtener los ejercicios del workout
+	// Obtener el username del creador
+	let username: string | undefined;
+	if (workout.user_id) {
+		const { data: profile } = await supabase
+			.from('Profile')
+			.select('username')
+			.eq('user_id', workout.user_id)
+			.single();
+		username = profile?.username ?? undefined;
+	}
+
+	// Obtener los ejercicios del workout con imagen del ejercicio
 	const { data: exercises, error: exercisesError } = await supabase
 		.from('WorkoutExercise')
-		.select('*')
+		.select('*, Exercise(image)')
 		.eq('workout_id', id);
 
 	if (exercisesError) {
@@ -47,24 +58,24 @@ export async function getWorkout(id: string) {
 	}
 
 	// Obtener los tags del workout
-
 	let { data: tags, error: tagsError } = await supabase
 		.from('WorkoutTags')
-		.select('*');
+		.select('*')
+		.eq('workout_id', id);
 
-	console.log(tags);
 	if (tagsError) {
 		console.error('Error fetching tags:', tagsError.message);
 	}
 
 	// Formatear los ejercicios
 	const formattedExercises =
-		exercises?.map((item) => ({
+		exercises?.map((item: any) => ({
 			id: item.id,
 			name: item.exercise_name,
 			sets: item.sets,
 			reps: item.reps,
 			rest: item.rest,
+			image: item.Exercise?.image,
 		})) || [];
 
 	// Formatear los tags
@@ -72,6 +83,7 @@ export async function getWorkout(id: string) {
 
 	return {
 		...workout,
+		username,
 		exercises: formattedExercises,
 		tags: formattedTags,
 	};
@@ -158,23 +170,41 @@ export async function getWorkoutsByPage(page = 1, limit = 12, filters?: any) {
 	// Calcular total de páginas
 	const totalPages = count ? Math.ceil(count / limit) : 0;
 
-	// Para cada workout, obtener los tags
-	const workoutsWithTags = await Promise.all(
+	// Para cada workout, obtener los tags y exercises
+	const workoutsWithDetails = await Promise.all(
 		data.map(async (workout) => {
-			const { data: tags } = await supabase
-				.from('workout_tags')
-				.select('tag')
-				.eq('workout_id', workout.id);
+			const [{ data: tags }, { data: exercises }] = await Promise.all([
+				supabase
+					.from('WorkoutTags')
+					.select('name')
+					.eq('workout_id', workout.id),
+				supabase
+					.from('WorkoutExercise')
+					.select('*, Exercise(image)')
+					.eq('workout_id', workout.id)
+					.order('order'),
+			]);
+
+			const formattedExercises =
+				exercises?.map((item: any) => ({
+					id: item.id,
+					name: item.exercise_name,
+					sets: item.sets,
+					reps: item.reps,
+					rest: item.rest,
+					image: item.Exercise?.image,
+				})) || [];
 
 			return {
 				...workout,
-				tags: tags?.map((t) => t.tag) || [],
+				tags: tags?.map((t) => t.name) || [],
+				exercises: formattedExercises,
 			};
 		})
 	);
 
 	return {
-		workouts: workoutsWithTags,
+		workouts: workoutsWithDetails,
 		totalPages,
 	};
 }
@@ -194,7 +224,7 @@ export async function getWorkoutFilters() {
 
 	// Obtener diferentes dificultades
 	const { data: difficulties } = await supabase
-		.from('workouts')
+		.from('Workout')
 		.select('difficulty')
 		.order('difficulty');
 
@@ -208,7 +238,7 @@ export async function getWorkoutFilters() {
 
 	// Obtener grupos musculares únicos (asumiendo que están en un array)
 	const { data: muscleGroupsData } = await supabase
-		.from('workouts')
+		.from('Workout')
 		.select('muscle_groups');
 
 	// Extraer y aplanar todos los grupos musculares de todos los workouts
@@ -222,7 +252,7 @@ export async function getWorkoutFilters() {
 
 	// Obtener duraciones únicas
 	const { data: durationsData } = await supabase
-		.from('workouts')
+		.from('Workout')
 		.select('duration')
 		.order('duration');
 
@@ -236,11 +266,11 @@ export async function getWorkoutFilters() {
 
 	// Obtener tags únicos
 	const { data: tagsData } = await supabase
-		.from('workout_tags')
-		.select('tag');
+		.from('WorkoutTags')
+		.select('name');
 
 	const uniqueTags = tagsData
-		? [...new Set(tagsData.map((item) => item.tag))]
+		? [...new Set(tagsData.map((item) => item.name))]
 		: [];
 
 	return {
@@ -261,7 +291,7 @@ export async function createWorkout(workoutData: any, userId: string) {
 
 	// Insertar el workout
 	const { data: workout, error } = await supabase
-		.from('workouts')
+		.from('Workout')
 		.insert({
 			name: workoutData.name,
 			description: workoutData.description,
@@ -269,6 +299,7 @@ export async function createWorkout(workoutData: any, userId: string) {
 			duration: workoutData.duration,
 			muscle_groups: workoutData.muscleGroups,
 			user_id: userId,
+			is_public: workoutData.is_public ?? true,
 		})
 		.select()
 		.single();
@@ -284,6 +315,7 @@ export async function createWorkout(workoutData: any, userId: string) {
 			(exercise: any, index: number) => ({
 				workout_id: workout.id,
 				exercise_id: exercise.id,
+				exercise_name: exercise.name,
 				sets: exercise.sets,
 				reps: exercise.reps,
 				rest: exercise.rest || 60,
@@ -292,7 +324,7 @@ export async function createWorkout(workoutData: any, userId: string) {
 		);
 
 		const { error: exercisesError } = await supabase
-			.from('workout_exercises')
+			.from('WorkoutExercise')
 			.insert(exercisesData);
 
 		if (exercisesError) {
@@ -304,11 +336,11 @@ export async function createWorkout(workoutData: any, userId: string) {
 	if (workoutData.tags && workoutData.tags.length > 0) {
 		const tagsData = workoutData.tags.map((tag: string) => ({
 			workout_id: workout.id,
-			tag,
+			name: tag,
 		}));
 
 		const { error: tagsError } = await supabase
-			.from('workout_tags')
+			.from('WorkoutTags')
 			.insert(tagsData);
 
 		if (tagsError) {
@@ -329,13 +361,14 @@ export async function updateWorkout(id: string, workoutData: any) {
 
 	// Actualizar el workout
 	const { error } = await supabase
-		.from('workouts')
+		.from('Workout')
 		.update({
 			name: workoutData.name,
 			description: workoutData.description,
 			difficulty: workoutData.difficulty,
 			duration: workoutData.duration,
 			muscle_groups: workoutData.muscleGroups,
+			is_public: workoutData.is_public ?? true,
 		})
 		.eq('id', id);
 
@@ -346,7 +379,7 @@ export async function updateWorkout(id: string, workoutData: any) {
 
 	// Eliminar los ejercicios anteriores
 	const { error: deleteExercisesError } = await supabase
-		.from('workout_exercises')
+		.from('WorkoutExercise')
 		.delete()
 		.eq('workout_id', id);
 
@@ -363,6 +396,7 @@ export async function updateWorkout(id: string, workoutData: any) {
 			(exercise: any, index: number) => ({
 				workout_id: id,
 				exercise_id: exercise.id,
+				exercise_name: exercise.name,
 				sets: exercise.sets,
 				reps: exercise.reps,
 				rest: exercise.rest || 60,
@@ -371,7 +405,7 @@ export async function updateWorkout(id: string, workoutData: any) {
 		);
 
 		const { error: exercisesError } = await supabase
-			.from('workout_exercises')
+			.from('WorkoutExercise')
 			.insert(exercisesData);
 
 		if (exercisesError) {
@@ -381,7 +415,7 @@ export async function updateWorkout(id: string, workoutData: any) {
 
 	// Eliminar los tags anteriores
 	const { error: deleteTagsError } = await supabase
-		.from('workout_tags')
+		.from('WorkoutTags')
 		.delete()
 		.eq('workout_id', id);
 
@@ -393,11 +427,11 @@ export async function updateWorkout(id: string, workoutData: any) {
 	if (workoutData.tags && workoutData.tags.length > 0) {
 		const tagsData = workoutData.tags.map((tag: string) => ({
 			workout_id: id,
-			tag,
+			name: tag,
 		}));
 
 		const { error: tagsError } = await supabase
-			.from('workout_tags')
+			.from('WorkoutTags')
 			.insert(tagsData);
 
 		if (tagsError) {
@@ -406,6 +440,131 @@ export async function updateWorkout(id: string, workoutData: any) {
 	}
 
 	return true;
+}
+
+export async function getFavoriteWorkoutIds() {
+	const supabase = await createClient();
+
+	if (!supabase) {
+		return [];
+	}
+
+	const { data: { user } } = await supabase.auth.getUser();
+	if (!user) return [];
+
+	const { data, error } = await supabase
+		.from('workout_favorites')
+		.select('workout_id')
+		.eq('user_id', user.id);
+
+	if (error) {
+		console.error('Error fetching favorite workouts:', error.message);
+		return [];
+	}
+
+	return data?.map((f) => f.workout_id) || [];
+}
+
+export async function toggleFavoriteWorkout(workoutId: number) {
+	const supabase = await createClient();
+
+	if (!supabase) {
+		return false;
+	}
+
+	const { data: { user } } = await supabase.auth.getUser();
+	if (!user) return false;
+
+	// Check if already favorited
+	const { data: existing } = await supabase
+		.from('workout_favorites')
+		.select('id')
+		.eq('user_id', user.id)
+		.eq('workout_id', workoutId)
+		.single();
+
+	if (existing) {
+		// Remove favorite
+		const { error } = await supabase
+			.from('workout_favorites')
+			.delete()
+			.eq('user_id', user.id)
+			.eq('workout_id', workoutId);
+
+		if (error) {
+			console.error('Error removing favorite:', error.message);
+			return false;
+		}
+	} else {
+		// Add favorite
+		const { error } = await supabase
+			.from('workout_favorites')
+			.insert({ user_id: user.id, workout_id: workoutId });
+
+		if (error) {
+			console.error('Error adding favorite:', error.message);
+			return false;
+		}
+	}
+
+	return true;
+}
+
+export async function saveWorkoutCompletion(data: {
+	workoutId: number;
+	workoutName: string;
+	durationSeconds: number;
+	exercisesCount: number;
+}) {
+	const supabase = await createClient();
+
+	if (!supabase) {
+		return false;
+	}
+
+	const { data: { user } } = await supabase.auth.getUser();
+	if (!user) return false;
+
+	const { error } = await supabase
+		.from('workout_completions')
+		.insert({
+			user_id: user.id,
+			workout_id: data.workoutId,
+			workout_name: data.workoutName,
+			duration_seconds: data.durationSeconds,
+			exercises_count: data.exercisesCount,
+		});
+
+	if (error) {
+		console.error('Error saving workout completion:', error.message);
+		return false;
+	}
+
+	return true;
+}
+
+export async function getWorkoutCompletions() {
+	const supabase = await createClient();
+
+	if (!supabase) {
+		return [];
+	}
+
+	const { data: { user } } = await supabase.auth.getUser();
+	if (!user) return [];
+
+	const { data, error } = await supabase
+		.from('workout_completions')
+		.select('completed_at, workout_name, workout_id, duration_seconds, exercises_count')
+		.eq('user_id', user.id)
+		.order('completed_at', { ascending: false });
+
+	if (error) {
+		console.error('Error fetching workout completions:', error.message);
+		return [];
+	}
+
+	return data || [];
 }
 
 export async function deleteWorkout(id: string) {
@@ -417,13 +576,13 @@ export async function deleteWorkout(id: string) {
 	}
 
 	// Eliminar los ejercicios relacionados
-	await supabase.from('workout_exercises').delete().eq('workout_id', id);
+	await supabase.from('WorkoutExercise').delete().eq('workout_id', id);
 
 	// Eliminar los tags relacionados
-	await supabase.from('workout_tags').delete().eq('workout_id', id);
+	await supabase.from('WorkoutTags').delete().eq('workout_id', id);
 
 	// Eliminar el workout
-	const { error } = await supabase.from('workouts').delete().eq('id', id);
+	const { error } = await supabase.from('Workout').delete().eq('id', id);
 
 	if (error) {
 		console.error('Error deleting workout:', error.message);

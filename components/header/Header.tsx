@@ -41,6 +41,8 @@ export default async function Header() {
 		register: t('register'),
 		user: t('user'),
 		toggleMenu: t('toggleMenu'),
+		startWorkout: t('startWorkout'),
+		settings: t('settings'),
 	};
 
 	return (
