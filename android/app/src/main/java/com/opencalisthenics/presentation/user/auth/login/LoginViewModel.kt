@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.opencalisthenics.data.repository.AuthRepositoryImpl
-import com.opencalisthenics.domain.repository.AuthRepository
+import com.opencalisthenics.domain.usecase.auth.SignInUseCase
 import kotlinx.coroutines.launch
 
 data class LoginUiState(
@@ -17,7 +17,7 @@ data class LoginUiState(
 )
 
 class LoginViewModel(
-    private val authRepository: AuthRepository = AuthRepositoryImpl()
+    private val signInUseCase: SignInUseCase = SignInUseCase(AuthRepositoryImpl())
 ) : ViewModel() {
     var uiState by mutableStateOf(LoginUiState())
         private set
@@ -36,7 +36,7 @@ class LoginViewModel(
         uiState = uiState.copy(isLoading = true, errorMessage = null)
 
         viewModelScope.launch {
-            authRepository.signIn(uiState.email, uiState.password)
+            signInUseCase(uiState.email, uiState.password)
                 .onSuccess { onSuccess() }
                 .onFailure { e ->
                     uiState = uiState.copy(

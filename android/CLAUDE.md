@@ -28,8 +28,13 @@ app/src/main/java/com/opencalisthenics/
 │       └── AuthRepositoryImpl.kt  # Auth repository (Supabase)
 ├── domain/                        # Domain layer (pure Kotlin)
 │   ├── model/                     # Domain models
-│   └── repository/                # Repository interfaces
-│       └── AuthRepository.kt      # Auth contract
+│   ├── repository/                # Repository interfaces
+│   │   └── AuthRepository.kt      # Auth contract
+│   └── usecase/                   # Use cases (business logic)
+│       └── auth/
+│           ├── SignInUseCase.kt
+│           ├── SignUpUseCase.kt
+│           └── SignOutUseCase.kt
 ├── presentation/                  # Presentation layer
 │   ├── user/                      # User-related features
 │   │   ├── auth/                  # Authentication
@@ -65,39 +70,41 @@ data class LoginUiState(
 )
 ```
 
-**2. ViewModel** - Owns state, exposes `StateFlow`, contains all logic:
+**2. ViewModel** - Owns state, delegates business logic to Use Cases:
 ```kotlin
 class LoginViewModel(
-    private val authRepository: AuthRepository
+    private val signInUseCase: SignInUseCase = SignInUseCase(AuthRepositoryImpl())
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(LoginUiState())
-    val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
+    var uiState by mutableStateOf(LoginUiState())
+        private set
 
     fun onEmailChange(email: String) {
-        _uiState.update { it.copy(email = email) }
+        uiState = uiState.copy(email = email)
     }
 
     fun login(onSuccess: () -> Unit) {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, error = null) }
-            authRepository.signIn(_uiState.value.email, _uiState.value.password)
+            uiState = uiState.copy(isLoading = true, error = null)
+            signInUseCase(uiState.email, uiState.password)
                 .onSuccess { onSuccess() }
-                .onFailure { e -> _uiState.update { it.copy(error = e.message) } }
-            _uiState.update { it.copy(isLoading = false) }
+                .onFailure { e -> uiState = uiState.copy(error = e.message) }
+            uiState = uiState.copy(isLoading = false)
         }
     }
 }
 ```
 
-**3. Composable Screen** - Pure UI, collects state from ViewModel:
+**Important:** ViewModels MUST depend on Use Cases, NOT directly on Repositories. The flow is: **Screen → ViewModel → UseCase → Repository**.
+
+**3. Composable Screen** - Pure UI, reads state from ViewModel:
 ```kotlin
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel = viewModel(),
     onLoginSuccess: () -> Unit,
-    onNavigateToRegister: () -> Unit
+    onNavigateToRegister: () -> Unit,
+    viewModel: LoginViewModel = viewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState = viewModel.uiState  // mutableStateOf, not StateFlow
     // UI only - delegate all actions to viewModel
 }
 ```
@@ -128,6 +135,127 @@ AppNavigation (NavHost)
 - Routes defined as `@Serializable object` in `navigation/AppNavigation.kt`
 - Session-aware start destination (checks `SupabaseClient.client.auth.sessionStatus`)
 - Transitions: 300ms fade + slide animations
+
+## Use Case Conventions
+
+Every Use Case MUST follow this pattern:
+
+- **One public action per UseCase** - Single Responsibility Principle
+- **`operator fun invoke`** - Allows calling the UseCase like a function: `signInUseCase(email, password)`
+- **Receives repository interfaces** via constructor (never implementations)
+- **Organized by feature** under `domain/usecase/{feature}/`
+
+```kotlin
+class SignInUseCase(
+    private val authRepository: AuthRepository  // Interface, not Impl
+) {
+    suspend operator fun invoke(email: String, password: String): Result<Unit> {
+        return authRepository.signIn(email, password)
+    }
+}
+```
+
+When a UseCase needs validation or orchestration logic beyond a simple repository call, that logic belongs here (not in the ViewModel):
+```kotlin
+class SignUpUseCase(
+    private val authRepository: AuthRepository
+) {
+    suspend operator fun invoke(email: String, password: String): Result<Unit> {
+        // Business validation belongs in the UseCase
+        if (password.length < 6) return Result.failure(IllegalArgumentException("Password too short"))
+        return authRepository.signUp(email, password)
+    }
+}
+```
+
+## Repository Conventions
+
+- **Interface in `domain/repository/`** - Pure Kotlin, no framework dependencies
+- **Implementation in `data/repository/`** - Contains Supabase/network/database specifics
+- **Always return `Result<T>`** - Use `runCatching` to wrap external calls
+- **Never throw exceptions** - All errors wrapped in `Result.failure()`
+
+```kotlin
+// domain/repository/ - contract
+interface AuthRepository {
+    suspend fun signIn(email: String, password: String): Result<Unit>
+}
+
+// data/repository/ - implementation
+class AuthRepositoryImpl : AuthRepository {
+    override suspend fun signIn(email: String, password: String): Result<Unit> = runCatching {
+        SupabaseClient.client.auth.signInWith(Email) {
+            this.email = email
+            this.password = password
+        }
+    }
+}
+```
+
+## Error Handling
+
+- Repositories wrap all external calls with `runCatching` and return `Result<T>`
+- ViewModels handle `Result` with `.onSuccess {}` / `.onFailure {}`
+- Error messages are stored in `UiState.errorMessage` and displayed in the UI
+- All error strings default to Spanish: `e.message ?: "Error al iniciar sesion"`
+- Errors are cleared before each new action: `uiState = uiState.copy(errorMessage = null)`
+
+## Dependency Injection Strategy
+
+Currently using **manual constructor injection with defaults**. No DI framework (Hilt/Koin) is configured yet.
+
+```kotlin
+// ViewModel receives UseCase with a default instance
+class LoginViewModel(
+    private val signInUseCase: SignInUseCase = SignInUseCase(AuthRepositoryImpl())
+) : ViewModel()
+```
+
+This pattern allows:
+- Simple setup without framework overhead
+- Easy testing by passing mock UseCases in constructor
+- Future migration to Hilt by adding `@HiltViewModel` + `@Inject constructor`
+
+**Rule:** ViewModels instantiate UseCases with default Impl. UseCases receive repository interfaces only.
+
+## Domain Layer Purity
+
+The `domain/` package MUST be **pure Kotlin** with zero Android framework dependencies:
+- **No imports from** `android.*`, `androidx.*`, `io.github.jan.supabase.*`, or any framework
+- `domain/repository/` contains only interfaces
+- `domain/usecase/` depends only on `domain/repository/` and `domain/model/`
+- `domain/model/` contains plain Kotlin data classes
+
+This ensures the domain layer is testable without Android instrumentation and portable across platforms.
+
+## Testing Conventions
+
+- **Unit tests** in `app/src/test/` for ViewModels and UseCases
+- **Test UseCases** by providing a fake repository implementation
+- **Test ViewModels** by providing a fake UseCase or mock repository
+- Use `kotlinx-coroutines-test` for coroutine testing (`runTest`, `TestDispatcher`)
+
+```kotlin
+class FakeAuthRepository : AuthRepository {
+    var shouldFail = false
+    override suspend fun signIn(email: String, password: String): Result<Unit> {
+        return if (shouldFail) Result.failure(Exception("Auth failed"))
+        else Result.success(Unit)
+    }
+    // ...
+}
+
+class SignInUseCaseTest {
+    private val fakeRepo = FakeAuthRepository()
+    private val useCase = SignInUseCase(fakeRepo)
+
+    @Test
+    fun `signIn returns success`() = runTest {
+        val result = useCase("test@email.com", "password")
+        assertTrue(result.isSuccess)
+    }
+}
+```
 
 ## Key Conventions
 

@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.opencalisthenics.data.repository.AuthRepositoryImpl
-import com.opencalisthenics.domain.repository.AuthRepository
+import com.opencalisthenics.domain.usecase.auth.SignUpUseCase
 import kotlinx.coroutines.launch
 
 data class RegisterUiState(
@@ -19,7 +19,7 @@ data class RegisterUiState(
 )
 
 class RegisterViewModel(
-    private val authRepository: AuthRepository = AuthRepositoryImpl()
+    private val signUpUseCase: SignUpUseCase = SignUpUseCase(AuthRepositoryImpl())
 ) : ViewModel() {
     var uiState by mutableStateOf(RegisterUiState())
         private set
@@ -41,10 +41,6 @@ class RegisterViewModel(
 
         uiState = uiState.copy(errorMessage = null, successMessage = null)
 
-        if (uiState.password.length < 6) {
-            uiState = uiState.copy(errorMessage = "La contrasena debe tener al menos 6 caracteres")
-            return
-        }
         if (uiState.password != uiState.confirmPassword) {
             uiState = uiState.copy(errorMessage = "Las contrasenas no coinciden")
             return
@@ -53,7 +49,7 @@ class RegisterViewModel(
         uiState = uiState.copy(isLoading = true)
 
         viewModelScope.launch {
-            authRepository.signUp(uiState.email, uiState.password)
+            signUpUseCase(uiState.email, uiState.password)
                 .onSuccess {
                     uiState = uiState.copy(
                         successMessage = "Revisa tu email para confirmar tu cuenta"

@@ -150,7 +150,7 @@ fun LoginScreen(
 
             TextButton(onClick = onNavigateToRegister) {
                 Text(
-                    text = "¿No tienes cuenta? ",
+                    text = "¿No tienes cuenta?",
                     color = GrayText,
                     fontSize = 14.sp
                 )

@@ -6,7 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.opencalisthenics.data.repository.AuthRepositoryImpl
-import com.opencalisthenics.domain.repository.AuthRepository
+import com.opencalisthenics.domain.usecase.auth.SignOutUseCase
 import kotlinx.coroutines.launch
 
 data class ProfileUiState(
@@ -15,7 +15,7 @@ data class ProfileUiState(
 )
 
 class ProfileViewModel(
-    private val authRepository: AuthRepository = AuthRepositoryImpl()
+    private val signOutUseCase: SignOutUseCase = SignOutUseCase(AuthRepositoryImpl())
 ) : ViewModel() {
     var uiState by mutableStateOf(ProfileUiState())
         private set
@@ -26,7 +26,7 @@ class ProfileViewModel(
         uiState = uiState.copy(isLoading = true, errorMessage = null)
 
         viewModelScope.launch {
-            authRepository.signOut()
+            signOutUseCase()
                 .onSuccess { onSuccess() }
                 .onFailure { e ->
                     uiState = uiState.copy(
