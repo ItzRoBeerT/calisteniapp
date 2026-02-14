@@ -142,10 +142,11 @@ export default function HeatmapGrid({
 										}
 										const level = getIntensityLevel(day.count, maxCount);
 										const isSelected = selectedDay === day.key;
+										const isDimmed = selectedDay !== null && !isSelected;
 										return (
 											<div
 												key={day.key}
-												className={`rounded-sm cursor-pointer ${INTENSITY_COLORS[level]} ${isSelected ? 'ring-2 ring-primary-400' : 'hover:ring-1 hover:ring-foreground/30'} transition-colors`}
+												className={`rounded-sm cursor-pointer ${INTENSITY_COLORS[level]} ${isSelected ? 'ring-2 ring-primary-400' : 'hover:ring-1 hover:ring-foreground/30'} ${isDimmed ? 'opacity-30' : ''} transition-all`}
 												style={{ height: cellSize }}
 												onMouseEnter={(e) => onCellHover(e, day)}
 												onMouseLeave={onCellLeave}
