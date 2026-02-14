@@ -1,4 +1,4 @@
-package com.opencalisthenics.ui.profile
+package com.opencalisthenics.presentation.user.profile
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

@@ -2,8 +2,6 @@ package com.opencalisthenics.ui.auth
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,11 +20,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,7 +32,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.opencalisthenics.data.SupabaseClient
 import com.opencalisthenics.ui.theme.Background
 import com.opencalisthenics.ui.theme.ErrorRed
 import com.opencalisthenics.ui.theme.GrayText
@@ -47,22 +39,17 @@ import com.opencalisthenics.ui.theme.OpenCalisthenicsTheme
 import com.opencalisthenics.ui.theme.Primary500
 import com.opencalisthenics.ui.theme.Primary600
 import com.opencalisthenics.ui.theme.Surface
-import io.github.jan.supabase.auth.auth
-import io.github.jan.supabase.auth.providers.builtin.Email
-import kotlinx.coroutines.launch
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun RegisterScreen(
     onRegisterSuccess: () -> Unit,
-    onNavigateToLogin: () -> Unit
+    onNavigateToLogin: () -> Unit,
+    viewModel: RegisterViewModel = viewModel()
 ) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
-    var isLoading by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf<String?>(null) }
-    var successMessage by remember { mutableStateOf<String?>(null) }
-    val scope = rememberCoroutineScope()
+    val uiState = viewModel.uiState
 
     val textFieldColors = OutlinedTextFieldDefaults.colors(
         unfocusedBorderColor = Color.White.copy(alpha = 0.3f),
@@ -111,8 +98,8 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
+                value = uiState.email,
+                onValueChange = viewModel::onEmailChange,
                 label = { Text("Email") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
@@ -127,8 +114,8 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
+                value = uiState.password,
+                onValueChange = viewModel::onPasswordChange,
                 label = { Text("Contraseña") },
                 supportingText = {
                     Text(
@@ -150,8 +137,8 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
-                value = confirmPassword,
-                onValueChange = { confirmPassword = it },
+                value = uiState.confirmPassword,
+                onValueChange = viewModel::onConfirmPasswordChange,
                 label = { Text("Confirmar contraseña") },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
@@ -164,10 +151,10 @@ fun RegisterScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            if (errorMessage != null) {
+            if (uiState.errorMessage != null) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = errorMessage!!,
+                    text = uiState.errorMessage!!,
                     color = ErrorRed,
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center,
@@ -175,10 +162,10 @@ fun RegisterScreen(
                 )
             }
 
-            if (successMessage != null) {
+            if (uiState.successMessage != null) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = successMessage!!,
+                    text = uiState.successMessage!!,
                     color = Primary500,
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center,
@@ -189,36 +176,8 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = {
-                    errorMessage = null
-                    successMessage = null
-
-                    if (password.length < 6) {
-                        errorMessage = "La contraseña debe tener al menos 6 caracteres"
-                        return@Button
-                    }
-                    if (password != confirmPassword) {
-                        errorMessage = "Las contraseñas no coinciden"
-                        return@Button
-                    }
-
-                    isLoading = true
-                    scope.launch {
-                        try {
-                            SupabaseClient.client.auth.signUpWith(Email) {
-                                this.email = email
-                                this.password = password
-                            }
-                            successMessage = "Revisa tu email para confirmar tu cuenta"
-                            onRegisterSuccess()
-                        } catch (e: Exception) {
-                            errorMessage = e.message ?: "Error al crear la cuenta"
-                        } finally {
-                            isLoading = false
-                        }
-                    }
-                },
-                enabled = !isLoading && email.isNotBlank() && password.isNotBlank() && confirmPassword.isNotBlank(),
+                onClick = { viewModel.submit(onRegisterSuccess) },
+                enabled = !uiState.isLoading && uiState.email.isNotBlank() && uiState.password.isNotBlank() && uiState.confirmPassword.isNotBlank(),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Primary600,
                     contentColor = Color.White,
@@ -230,7 +189,7 @@ fun RegisterScreen(
                     .fillMaxWidth()
                     .height(48.dp)
             ) {
-                if (isLoading) {
+                if (uiState.isLoading) {
                     CircularProgressIndicator(
                         modifier = Modifier.size(24.dp),
                         strokeWidth = 2.dp,
@@ -270,7 +229,8 @@ fun RegisterScreenPreview() {
     OpenCalisthenicsTheme {
         RegisterScreen(
             onRegisterSuccess = {},
-            onNavigateToLogin = {}
+            onNavigateToLogin = {},
+            viewModel = RegisterViewModel()
         )
     }
 }

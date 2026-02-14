@@ -15,8 +15,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.opencalisthenics.OpenCalisthenicsApp
 import com.opencalisthenics.data.SupabaseClient
-import com.opencalisthenics.ui.auth.LoginScreen
-import com.opencalisthenics.ui.auth.RegisterScreen
+import com.opencalisthenics.presentation.user.auth.login.LoginScreen
+import com.opencalisthenics.presentation.user.auth.register.RegisterScreen
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.serialization.Serializable

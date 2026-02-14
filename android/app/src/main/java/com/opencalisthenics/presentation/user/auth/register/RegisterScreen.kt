@@ -1,4 +1,4 @@
-package com.opencalisthenics.ui.auth
+package com.opencalisthenics.presentation.user.auth.register
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -44,10 +44,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun LoginScreen(
-    onLoginSuccess: () -> Unit,
-    onNavigateToRegister: () -> Unit,
-    viewModel: LoginViewModel = viewModel()
+fun RegisterScreen(
+    onRegisterSuccess: () -> Unit,
+    onNavigateToLogin: () -> Unit,
+    viewModel: RegisterViewModel = viewModel()
 ) {
     val uiState = viewModel.uiState
 
@@ -79,7 +79,7 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "OpenCalisthenics",
+                text = "Crear cuenta",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -89,7 +89,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Inicia sesión para continuar",
+                text = "Regístrate para empezar",
                 fontSize = 16.sp,
                 color = GrayText,
                 textAlign = TextAlign.Center
@@ -117,6 +117,29 @@ fun LoginScreen(
                 value = uiState.password,
                 onValueChange = viewModel::onPasswordChange,
                 label = { Text("Contraseña") },
+                supportingText = {
+                    Text(
+                        text = "Mínimo 6 caracteres",
+                        color = GrayText
+                    )
+                },
+                singleLine = true,
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Password,
+                    imeAction = ImeAction.Next
+                ),
+                colors = textFieldColors,
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            OutlinedTextField(
+                value = uiState.confirmPassword,
+                onValueChange = viewModel::onConfirmPasswordChange,
+                label = { Text("Confirmar contraseña") },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
@@ -139,11 +162,22 @@ fun LoginScreen(
                 )
             }
 
+            if (uiState.successMessage != null) {
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = uiState.successMessage!!,
+                    color = Primary500,
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { viewModel.submit(onLoginSuccess) },
-                enabled = !uiState.isLoading && uiState.email.isNotBlank() && uiState.password.isNotBlank(),
+                onClick = { viewModel.submit(onRegisterSuccess) },
+                enabled = !uiState.isLoading && uiState.email.isNotBlank() && uiState.password.isNotBlank() && uiState.confirmPassword.isNotBlank(),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Primary600,
                     contentColor = Color.White,
@@ -163,7 +197,7 @@ fun LoginScreen(
                     )
                 } else {
                     Text(
-                        text = "Iniciar sesión",
+                        text = "Crear cuenta",
                         fontWeight = FontWeight.Medium,
                         fontSize = 16.sp
                     )
@@ -172,14 +206,14 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            TextButton(onClick = onNavigateToRegister) {
+            TextButton(onClick = onNavigateToLogin) {
                 Text(
-                    text = "¿No tienes cuenta? ",
+                    text = "¿Ya tienes cuenta? ",
                     color = GrayText,
                     fontSize = 14.sp
                 )
                 Text(
-                    text = "Regístrate",
+                    text = "Inicia sesión",
                     color = Primary500,
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp
@@ -191,12 +225,12 @@ fun LoginScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun LoginScreenPreview() {
+fun RegisterScreenPreview() {
     OpenCalisthenicsTheme {
-        LoginScreen(
-            onLoginSuccess = {},
-            onNavigateToRegister = {},
-            viewModel = LoginViewModel()
+        RegisterScreen(
+            onRegisterSuccess = {},
+            onNavigateToLogin = {},
+            viewModel = RegisterViewModel()
         )
     }
 }
