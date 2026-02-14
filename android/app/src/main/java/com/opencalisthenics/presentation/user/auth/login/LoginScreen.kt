@@ -9,12 +9,10 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
+import com.opencalisthenics.presentation.common.AppButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -37,7 +35,7 @@ import com.opencalisthenics.ui.theme.ErrorRed
 import com.opencalisthenics.ui.theme.GrayText
 import com.opencalisthenics.ui.theme.OpenCalisthenicsTheme
 import com.opencalisthenics.ui.theme.Primary500
-import com.opencalisthenics.ui.theme.Primary600
+
 import com.opencalisthenics.ui.theme.Surface
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -141,34 +139,12 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Button(
+            AppButton(
+                text = "Iniciar sesión",
                 onClick = { viewModel.submit(onLoginSuccess) },
-                enabled = !uiState.isLoading && uiState.email.isNotBlank() && uiState.password.isNotBlank(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Primary600,
-                    contentColor = Color.White,
-                    disabledContainerColor = Primary600.copy(alpha = 0.5f),
-                    disabledContentColor = Color.White.copy(alpha = 0.5f)
-                ),
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp)
-            ) {
-                if (uiState.isLoading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        strokeWidth = 2.dp,
-                        color = Color.White
-                    )
-                } else {
-                    Text(
-                        text = "Iniciar sesión",
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 16.sp
-                    )
-                }
-            }
+                enabled = uiState.email.isNotBlank() && uiState.password.isNotBlank(),
+                isLoading = uiState.isLoading
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
