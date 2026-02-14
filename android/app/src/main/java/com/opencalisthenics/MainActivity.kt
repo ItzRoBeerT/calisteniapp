@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import com.opencalisthenics.navigation.AppNavigation
+import com.opencalisthenics.ui.profile.ProfileScreen
 import com.opencalisthenics.ui.theme.OpenCalisthenicsTheme
 
 class MainActivity : ComponentActivity() {
@@ -44,7 +45,7 @@ class MainActivity : ComponentActivity() {
 
 @PreviewScreenSizes
 @Composable
-fun OpenCalisthenicsApp() {
+fun OpenCalisthenicsApp(onLogout: () -> Unit = {}) {
     var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
 
     NavigationSuiteScaffold(
@@ -65,10 +66,13 @@ fun OpenCalisthenicsApp() {
         }
     ) {
         Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-            Greeting(
-                name = "Android",
-                modifier = Modifier.padding(innerPadding)
-            )
+            when (currentDestination) {
+                AppDestinations.PROFILE -> ProfileScreen(onLogout = onLogout)
+                else -> Greeting(
+                    name = "Android",
+                    modifier = Modifier.padding(innerPadding)
+                )
+            }
         }
     }
 }

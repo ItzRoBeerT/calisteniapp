@@ -91,7 +91,13 @@ fun AppNavigation() {
         }
 
         composable<Home> {
-            OpenCalisthenicsApp()
+            OpenCalisthenicsApp(
+                onLogout = {
+                    navController.navigate(Login) {
+                        popUpTo<Home> { inclusive = true }
+                    }
+                }
+            )
         }
     }
 }
