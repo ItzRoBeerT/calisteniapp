@@ -47,45 +47,54 @@ export default function WorkoutDetailModal({
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/50 backdrop-blur-sm"
-      onClick={onClose}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClose();
+      }}
     >
       <div
-        className="bg-surface rounded-xl p-4 sm:p-6 max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto"
+        className="bg-surface rounded-xl p-4 sm:p-6 max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-y-auto cursor-default"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex justify-between items-start gap-2 mb-4 sm:mb-6">
+        <div className="flex justify-between items-start gap-2 sm:mb-2">
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground">{workout.name}</h1>
-          
-          <button
-            onClick={onClose}
-            className="text-foreground/60 hover:text-foreground transition-colors shrink-0"
-            aria-label="Close"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+
+          <div className="flex items-center gap-2 shrink-0">
+            {isOwner && (
+              <>
+                <Link
+                  href={{ pathname: '/workouts/[id]/edit', params: { id: String(workout.id) } }}
+                  className="bg-tertiary-500/20 hover:bg-tertiary-500/30 text-tertiary-400 px-3 sm:px-4 py-2 rounded-lg border border-tertiary-500/30 transition-colors text-sm"
+                >
+                  {t('edit')}
+                </Link>
+                <DeleteWorkoutButton workoutId={workout.id} workoutName={workout.name} />
+              </>
+            )}
+            <button
+              onClick={onClose}
+              className="text-foreground/60 hover:text-foreground transition-colors"
+              aria-label="Close"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
         </div>
 
-        {/* Actions */}
-        {isOwner && (
-          <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
-            <Link
-              href={{ pathname: '/workouts/[id]/edit', params: { id: String(workout.id) } }}
-              className="bg-tertiary-500/20 hover:bg-tertiary-500/30 text-tertiary-400 px-3 sm:px-4 py-2 rounded-lg border border-tertiary-500/30 transition-colors text-sm"
-            >
-              {t('edit')}
-            </Link>
-            <DeleteWorkoutButton workoutId={workout.id} workoutName={workout.name} />
-          </div>
+        {/* Username */}
+        {workout.username && (
+          <p className="text-foreground/50 text-sm">@{workout.username}</p>
         )}
 
         {/* Description */}
-        <div className="mb-4 sm:mb-6">
-          <h2 className="text-lg sm:text-xl font-semibold mb-2 text-foreground">{t('description')}</h2>
-          <p className="text-foreground/70 text-sm sm:text-base">{workout.description || t('noDescription')}</p>
-        </div>
+        {workout.description && (
+          <div className="mb-4 sm:mb-6">
+            <p className="text-foreground/70 text-sm sm:text-base">{workout.description}</p>
+          </div>
+        )}
 
         {/* Stats and Tags */}
         <div className="mb-4 sm:mb-6 flex justify-between items-center gap-4">
