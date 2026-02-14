@@ -1,4 +1,4 @@
-package com.example.opencalisthenics
+package com.opencalisthenics
 
 import org.junit.Test
 

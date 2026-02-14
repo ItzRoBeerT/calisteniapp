@@ -1,4 +1,4 @@
-package com.example.opencalisthenics.ui.auth
+package com.opencalisthenics.ui.auth
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -39,29 +39,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.opencalisthenics.data.SupabaseClient
-import com.example.opencalisthenics.ui.theme.Background
-import com.example.opencalisthenics.ui.theme.ErrorRed
-import com.example.opencalisthenics.ui.theme.GrayText
-import com.example.opencalisthenics.ui.theme.OpenCalisthenicsTheme
-import com.example.opencalisthenics.ui.theme.Primary500
-import com.example.opencalisthenics.ui.theme.Primary600
-import com.example.opencalisthenics.ui.theme.Surface
+import com.opencalisthenics.data.SupabaseClient
+import com.opencalisthenics.ui.theme.Background
+import com.opencalisthenics.ui.theme.ErrorRed
+import com.opencalisthenics.ui.theme.GrayText
+import com.opencalisthenics.ui.theme.OpenCalisthenicsTheme
+import com.opencalisthenics.ui.theme.Primary500
+import com.opencalisthenics.ui.theme.Primary600
+import com.opencalisthenics.ui.theme.Surface
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.providers.builtin.Email
 import kotlinx.coroutines.launch
 
 @Composable
-fun RegisterScreen(
-    onRegisterSuccess: () -> Unit,
-    onNavigateToLogin: () -> Unit
+fun LoginScreen(
+    onLoginSuccess: () -> Unit,
+    onNavigateToRegister: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-    var successMessage by remember { mutableStateOf<String?>(null) }
     val scope = rememberCoroutineScope()
 
     val textFieldColors = OutlinedTextFieldDefaults.colors(
@@ -92,7 +90,7 @@ fun RegisterScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Crear cuenta",
+                text = "OpenCalisthenics",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -102,7 +100,7 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Regístrate para empezar",
+                text = "Inicia sesión para continuar",
                 fontSize = 16.sp,
                 color = GrayText,
                 textAlign = TextAlign.Center
@@ -130,29 +128,6 @@ fun RegisterScreen(
                 value = password,
                 onValueChange = { password = it },
                 label = { Text("Contraseña") },
-                supportingText = {
-                    Text(
-                        text = "Mínimo 6 caracteres",
-                        color = GrayText
-                    )
-                },
-                singleLine = true,
-                visualTransformation = PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Next
-                ),
-                colors = textFieldColors,
-                shape = RoundedCornerShape(8.dp),
-                modifier = Modifier.fillMaxWidth()
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedTextField(
-                value = confirmPassword,
-                onValueChange = { confirmPassword = it },
-                label = { Text("Confirmar contraseña") },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
@@ -175,50 +150,27 @@ fun RegisterScreen(
                 )
             }
 
-            if (successMessage != null) {
-                Spacer(modifier = Modifier.height(12.dp))
-                Text(
-                    text = successMessage!!,
-                    color = Primary500,
-                    fontSize = 14.sp,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
                 onClick = {
-                    errorMessage = null
-                    successMessage = null
-
-                    if (password.length < 6) {
-                        errorMessage = "La contraseña debe tener al menos 6 caracteres"
-                        return@Button
-                    }
-                    if (password != confirmPassword) {
-                        errorMessage = "Las contraseñas no coinciden"
-                        return@Button
-                    }
-
                     isLoading = true
+                    errorMessage = null
                     scope.launch {
                         try {
-                            SupabaseClient.client.auth.signUpWith(Email) {
+                            SupabaseClient.client.auth.signInWith(Email) {
                                 this.email = email
                                 this.password = password
                             }
-                            successMessage = "Revisa tu email para confirmar tu cuenta"
-                            onRegisterSuccess()
+                            onLoginSuccess()
                         } catch (e: Exception) {
-                            errorMessage = e.message ?: "Error al crear la cuenta"
+                            errorMessage = e.message ?: "Error al iniciar sesión"
                         } finally {
                             isLoading = false
                         }
                     }
                 },
-                enabled = !isLoading && email.isNotBlank() && password.isNotBlank() && confirmPassword.isNotBlank(),
+                enabled = !isLoading && email.isNotBlank() && password.isNotBlank(),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Primary600,
                     contentColor = Color.White,
@@ -238,7 +190,7 @@ fun RegisterScreen(
                     )
                 } else {
                     Text(
-                        text = "Crear cuenta",
+                        text = "Iniciar sesión",
                         fontWeight = FontWeight.Medium,
                         fontSize = 16.sp
                     )
@@ -247,14 +199,14 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            TextButton(onClick = onNavigateToLogin) {
+            TextButton(onClick = onNavigateToRegister) {
                 Text(
-                    text = "¿Ya tienes cuenta? ",
+                    text = "¿No tienes cuenta? ",
                     color = GrayText,
                     fontSize = 14.sp
                 )
                 Text(
-                    text = "Inicia sesión",
+                    text = "Regístrate",
                     color = Primary500,
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp
@@ -266,11 +218,11 @@ fun RegisterScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun RegisterScreenPreview() {
+fun LoginScreenPreview() {
     OpenCalisthenicsTheme {
-        RegisterScreen(
-            onRegisterSuccess = {},
-            onNavigateToLogin = {}
+        LoginScreen(
+            onLoginSuccess = {},
+            onNavigateToRegister = {}
         )
     }
 }

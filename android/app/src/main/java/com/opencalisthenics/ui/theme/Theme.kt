@@ -1,4 +1,4 @@
-package com.example.opencalisthenics.ui.theme
+package com.opencalisthenics.ui.theme
 
 import android.app.Activity
 import android.os.Build

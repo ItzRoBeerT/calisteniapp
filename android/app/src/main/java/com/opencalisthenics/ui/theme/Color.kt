@@ -1,4 +1,4 @@
-package com.example.opencalisthenics.ui.theme
+package com.opencalisthenics.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

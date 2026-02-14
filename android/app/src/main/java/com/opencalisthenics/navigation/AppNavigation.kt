@@ -1,4 +1,4 @@
-package com.example.opencalisthenics.navigation
+package com.opencalisthenics.navigation
 
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
@@ -13,10 +13,10 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.opencalisthenics.OpenCalisthenicsApp
-import com.example.opencalisthenics.data.SupabaseClient
-import com.example.opencalisthenics.ui.auth.LoginScreen
-import com.example.opencalisthenics.ui.auth.RegisterScreen
+import com.opencalisthenics.OpenCalisthenicsApp
+import com.opencalisthenics.data.SupabaseClient
+import com.opencalisthenics.ui.auth.LoginScreen
+import com.opencalisthenics.ui.auth.RegisterScreen
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.serialization.Serializable

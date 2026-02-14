@@ -12,13 +12,13 @@ val localProperties = Properties().apply {
 }
 
 android {
-    namespace = "com.example.opencalisthenics"
+    namespace = "com.opencalisthenics"
     compileSdk {
         version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.example.opencalisthenics"
+        applicationId = "com.opencalisthenics"
         minSdk = 24
         targetSdk = 36
         versionCode = 1

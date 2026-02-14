@@ -1,6 +1,6 @@
-package com.example.opencalisthenics.data
+package com.opencalisthenics.data
 
-import com.example.opencalisthenics.BuildConfig
+import com.opencalisthenics.BuildConfig
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient
 
