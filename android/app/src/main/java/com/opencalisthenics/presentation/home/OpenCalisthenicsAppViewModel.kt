@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.opencalisthenics.AppDestinations
+import com.opencalisthenics.navigation.AppDestinations
 
 class OpenCalisthenicsAppViewModel(
     private val savedStateHandle: SavedStateHandle
