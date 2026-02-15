@@ -11,7 +11,7 @@ class OpenCalisthenicsAppViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     var currentDestination by mutableStateOf(
-        savedStateHandle.get<AppDestinations>(KEY_DESTINATION) ?: AppDestinations.HOME
+        savedStateHandle.get<AppDestinations>(KEY_DESTINATION) ?: AppDestinations.EXERCISES
     )
         private set
 

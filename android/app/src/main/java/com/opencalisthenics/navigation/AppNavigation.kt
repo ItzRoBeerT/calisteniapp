@@ -96,6 +96,12 @@ fun AppNavigation() {
                     navController.navigate(Login) {
                         popUpTo<Home> { inclusive = true }
                     }
+                },
+                onDoWorkout = {
+                    // TODO: Navigate to do workout screen
+                },
+                onAddWorkout = {
+                    // TODO: Navigate to add workout screen
                 }
             )
         }
