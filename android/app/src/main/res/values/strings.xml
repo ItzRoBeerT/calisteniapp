@@ -74,4 +74,12 @@
     <string name="error_passwords_dont_match">Las contraseñas no coinciden</string>
     <string name="error_load_exercises">Error al cargar los ejercicios</string>
     <string name="error_load_exercise">Error al cargar el ejercicio</string>
+    <string name="error_invalid_credentials">Email o contraseña incorrectos</string>
+    <string name="error_user_already_exists">Ya existe una cuenta con este email</string>
+    <string name="error_email_not_confirmed">Debes confirmar tu email antes de iniciar sesión</string>
+    <string name="error_weak_password">La contraseña es demasiado débil</string>
+    <string name="error_too_many_requests">Demasiados intentos. Intenta de nuevo más tarde</string>
+    <string name="error_network">Sin conexión a internet</string>
+    <string name="error_not_found">No se encontró el recurso</string>
+    <string name="error_unknown">Ha ocurrido un error inesperado</string>
 </resources>

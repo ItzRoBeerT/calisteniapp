@@ -7,8 +7,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.opencalisthenics.R
 import com.opencalisthenics.data.repository.AuthRepositoryImpl
+import com.opencalisthenics.domain.model.AppError
 import com.opencalisthenics.domain.usecase.auth.SignOutUseCase
 import com.opencalisthenics.presentation.common.UiText
+import com.opencalisthenics.presentation.common.toUiText
 import kotlinx.coroutines.launch
 
 data class ProfileUiState(
@@ -32,7 +34,7 @@ class ProfileViewModel(
                 .onSuccess { onSuccess() }
                 .onFailure { e ->
                     uiState = uiState.copy(
-                        errorMessage = e.message?.let { UiText.DynamicString(it) }
+                        errorMessage = (e as? AppError)?.toUiText()
                             ?: UiText.StringResource(R.string.error_sign_out)
                     )
                 }

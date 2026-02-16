@@ -10,8 +10,10 @@ import androidx.lifecycle.viewModelScope
 import com.opencalisthenics.R
 import com.opencalisthenics.data.repository.ExerciseRepositoryImpl
 import com.opencalisthenics.domain.model.Exercise
+import com.opencalisthenics.domain.model.AppError
 import com.opencalisthenics.domain.usecase.exercise.GetExerciseByIdUseCase
 import com.opencalisthenics.presentation.common.UiText
+import com.opencalisthenics.presentation.common.toUiText
 import kotlinx.coroutines.launch
 
 data class ExerciseDetailUiState(
@@ -45,7 +47,7 @@ class ExerciseDetailViewModel(
                 }
                 .onFailure { e ->
                     uiState = uiState.copy(
-                        errorMessage = e.message?.let { UiText.DynamicString(it) }
+                        errorMessage = (e as? AppError)?.toUiText()
                             ?: UiText.StringResource(R.string.error_load_exercise),
                         isLoading = false
                     )

@@ -11,8 +11,10 @@ import com.opencalisthenics.R
 import com.opencalisthenics.data.repository.ExerciseRepositoryImpl
 import com.opencalisthenics.domain.model.DifficultyLevel
 import com.opencalisthenics.domain.model.Exercise
+import com.opencalisthenics.domain.model.AppError
 import com.opencalisthenics.domain.usecase.exercise.GetExercisesUseCase
 import com.opencalisthenics.presentation.common.UiText
+import com.opencalisthenics.presentation.common.toUiText
 import kotlinx.coroutines.launch
 
 data class ExercisesUiState(
@@ -55,7 +57,7 @@ class ExercisesViewModel(
                 }
                 .onFailure { e ->
                     uiState = uiState.copy(
-                        errorMessage = e.message?.let { UiText.DynamicString(it) }
+                        errorMessage = (e as? AppError)?.toUiText()
                             ?: UiText.StringResource(R.string.error_load_exercises),
                         isLoading = false
                     )

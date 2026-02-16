@@ -3,6 +3,7 @@ package com.opencalisthenics.data.repository
 import android.content.Context
 import com.opencalisthenics.data.model.ExerciseDto
 import com.opencalisthenics.domain.model.Exercise
+import com.opencalisthenics.domain.model.AppError
 import com.opencalisthenics.domain.repository.ExerciseRepository
 import kotlinx.serialization.json.Json
 
@@ -12,18 +13,24 @@ class ExerciseRepositoryImpl(
 
     private val json = Json { ignoreUnknownKeys = true }
 
-    override suspend fun getExerciseById(id: Int): Result<Exercise> = runCatching {
+    override suspend fun getExerciseById(id: Int): Result<Exercise> = try {
         val exercises = getExercises().getOrThrow()
-        exercises.first { it.id == id }
+        val exercise = exercises.firstOrNull { it.id == id }
+            ?: return Result.failure(AppError.NotFound)
+        Result.success(exercise)
+    } catch (e: AppError) {
+        Result.failure(e)
+    } catch (e: Exception) {
+        Result.failure(AppError.Unknown(e.message))
     }
 
-    override suspend fun getExercises(): Result<List<Exercise>> = runCatching {
+    override suspend fun getExercises(): Result<List<Exercise>> = try {
         val jsonString = context.assets.open("exercises.json")
             .bufferedReader()
             .use { it.readText() }
 
         val dtos = json.decodeFromString<List<ExerciseDto>>(jsonString)
-        dtos.map { dto ->
+        Result.success(dtos.map { dto ->
             val translation = exerciseTranslations[dto.id]
             Exercise(
                 id = dto.id,
@@ -36,7 +43,9 @@ class ExerciseRepositoryImpl(
                 name = translation?.first ?: "Ejercicio ${dto.id}",
                 description = translation?.second ?: ""
             )
-        }
+        })
+    } catch (e: Exception) {
+        Result.failure(AppError.Unknown(e.message))
     }
 
     companion object {

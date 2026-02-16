@@ -74,4 +74,12 @@
     <string name="error_passwords_dont_match">Passwords don\'t match</string>
     <string name="error_load_exercises">Error loading exercises</string>
     <string name="error_load_exercise">Error loading exercise</string>
+    <string name="error_invalid_credentials">Invalid email or password</string>
+    <string name="error_user_already_exists">An account with this email already exists</string>
+    <string name="error_email_not_confirmed">Please confirm your email before signing in</string>
+    <string name="error_weak_password">Password is too weak</string>
+    <string name="error_too_many_requests">Too many attempts. Please try again later</string>
+    <string name="error_network">No internet connection</string>
+    <string name="error_not_found">Resource not found</string>
+    <string name="error_unknown">An unexpected error occurred</string>
 </resources>
