@@ -64,6 +64,8 @@ dependencies {
     implementation(libs.supabase.auth)
     implementation(libs.ktor.client.android)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.ktor3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

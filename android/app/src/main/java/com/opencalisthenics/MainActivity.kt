@@ -20,6 +20,7 @@ import com.opencalisthenics.navigation.AppDestinations
 import com.opencalisthenics.navigation.AppNavigation
 import com.opencalisthenics.presentation.common.AppBottomBar
 import com.opencalisthenics.presentation.common.PlaceholderScreen
+import com.opencalisthenics.presentation.exercise.ExercisesScreen
 import com.opencalisthenics.presentation.common.WorkoutFabMenu
 import com.opencalisthenics.presentation.home.OpenCalisthenicsAppViewModel
 import com.opencalisthenics.presentation.user.profile.ProfileScreen
@@ -72,6 +73,7 @@ fun OpenCalisthenicsApp(
                 .padding(innerPadding)
         ) {
             when (currentDestination) {
+                AppDestinations.EXERCISES -> ExercisesScreen()
                 AppDestinations.PROFILE -> ProfileScreen(onLogout = onLogout)
                 else -> PlaceholderScreen(currentDestination.label)
             }
