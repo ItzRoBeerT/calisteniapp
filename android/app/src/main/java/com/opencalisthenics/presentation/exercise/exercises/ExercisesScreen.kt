@@ -63,17 +63,8 @@ fun ExercisesScreen(
             .background(Background)
             .statusBarsPadding()
             .padding(horizontal = 16.dp)
+            .padding(top = 12.dp)
     ) {
-        Text(
-            text = "Ejercicios",
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onBackground,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp, bottom = 12.dp)
-        )
 
         DifficultyFilterRow(
             selected = uiState.selectedDifficulty,
@@ -152,12 +143,17 @@ private fun DifficultyFilterRow(
             .horizontalScroll(rememberScrollState())
     ) {
         DifficultyLevel.entries.forEach { level ->
+            val chipColor = when (level) {
+                DifficultyLevel.BEGINNER -> MaterialTheme.colorScheme.secondary
+                DifficultyLevel.INTERMEDIATE -> MaterialTheme.colorScheme.tertiary
+                DifficultyLevel.ADVANCED -> ErrorRed
+            }
             FilterChip(
                 selected = selected == level,
                 onClick = { onSelected(if (selected == level) null else level) },
                 label = { Text(level.label, fontSize = 13.sp) },
                 colors = FilterChipDefaults.filterChipColors(
-                    selectedContainerColor = Primary600,
+                    selectedContainerColor = chipColor,
                     selectedLabelColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
