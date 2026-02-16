@@ -20,7 +20,7 @@ import com.opencalisthenics.navigation.AppDestinations
 import com.opencalisthenics.navigation.AppNavigation
 import com.opencalisthenics.presentation.common.AppBottomBar
 import com.opencalisthenics.presentation.common.PlaceholderScreen
-import com.opencalisthenics.presentation.exercise.ExercisesScreen
+import com.opencalisthenics.presentation.exercise.exercises.ExercisesScreen
 import com.opencalisthenics.presentation.common.WorkoutFabMenu
 import com.opencalisthenics.presentation.home.OpenCalisthenicsAppViewModel
 import com.opencalisthenics.presentation.user.profile.ProfileScreen
@@ -47,6 +47,7 @@ fun OpenCalisthenicsApp(
     onLogout: () -> Unit = {},
     onDoWorkout: () -> Unit = {},
     onAddWorkout: () -> Unit = {},
+    onExerciseClick: (Int) -> Unit = {},
     viewModel: OpenCalisthenicsAppViewModel = viewModel()
 ) {
     val currentDestination = viewModel.currentDestination
@@ -73,7 +74,7 @@ fun OpenCalisthenicsApp(
                 .padding(innerPadding)
         ) {
             when (currentDestination) {
-                AppDestinations.EXERCISES -> ExercisesScreen()
+                AppDestinations.EXERCISES -> ExercisesScreen(onExerciseClick = onExerciseClick)
                 AppDestinations.PROFILE -> ProfileScreen(onLogout = onLogout)
                 else -> PlaceholderScreen(currentDestination.label)
             }

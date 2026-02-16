@@ -13,8 +13,10 @@ import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import com.opencalisthenics.OpenCalisthenicsApp
 import com.opencalisthenics.data.SupabaseClient
+import com.opencalisthenics.presentation.exercise.exercise.ExerciseDetailScreen
 import com.opencalisthenics.presentation.user.auth.login.LoginScreen
 import com.opencalisthenics.presentation.user.auth.register.RegisterScreen
 import io.github.jan.supabase.auth.auth
@@ -29,6 +31,9 @@ object Register
 
 @Serializable
 object Home
+
+@Serializable
+data class ExerciseDetail(val exerciseId: Int)
 
 private const val ANIM_DURATION = 300
 
@@ -102,7 +107,18 @@ fun AppNavigation() {
                 },
                 onAddWorkout = {
                     // TODO: Navigate to add workout screen
+                },
+                onExerciseClick = { exerciseId ->
+                    navController.navigate(ExerciseDetail(exerciseId))
                 }
+            )
+        }
+
+        composable<ExerciseDetail> { backStackEntry ->
+            val route = backStackEntry.toRoute<ExerciseDetail>()
+            ExerciseDetailScreen(
+                exerciseId = route.exerciseId,
+                onBack = { navController.popBackStack() }
             )
         }
     }

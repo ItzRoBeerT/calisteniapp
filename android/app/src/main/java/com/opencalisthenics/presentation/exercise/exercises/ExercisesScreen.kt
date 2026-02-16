@@ -1,6 +1,7 @@
-package com.opencalisthenics.presentation.exercise
+package com.opencalisthenics.presentation.exercise.exercises
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +12,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -39,6 +40,8 @@ import coil3.compose.AsyncImage
 import com.opencalisthenics.data.repository.ExerciseRepositoryImpl
 import com.opencalisthenics.domain.model.DifficultyLevel
 import com.opencalisthenics.domain.model.Exercise
+import com.opencalisthenics.presentation.exercise.difficultyColor
+import com.opencalisthenics.presentation.exercise.difficultyLabel
 import com.opencalisthenics.ui.theme.Background
 import com.opencalisthenics.ui.theme.ErrorRed
 import com.opencalisthenics.ui.theme.GrayText
@@ -47,6 +50,7 @@ import com.opencalisthenics.ui.theme.Surface
 
 @Composable
 fun ExercisesScreen(
+    onExerciseClick: (Int) -> Unit = {},
     viewModel: ExercisesViewModel = viewModel(
         factory = ExercisesViewModel.factory(LocalContext.current.applicationContext as android.app.Application)
     )
@@ -57,6 +61,7 @@ fun ExercisesScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Background)
+            .statusBarsPadding()
             .padding(horizontal = 16.dp)
     ) {
         Text(
@@ -124,7 +129,10 @@ fun ExercisesScreen(
                         .padding(top = 8.dp)
                 ) {
                     items(uiState.filteredExercises, key = { it.id }) { exercise ->
-                        ExerciseCard(exercise = exercise)
+                        ExerciseCard(
+                            exercise = exercise,
+                            onClick = { onExerciseClick(exercise.id) }
+                        )
                     }
                 }
             }
@@ -185,8 +193,12 @@ private fun MuscleGroupFilterRow(
 }
 
 @Composable
-private fun ExerciseCard(exercise: Exercise) {
+private fun ExerciseCard(
+    exercise: Exercise,
+    onClick: () -> Unit
+) {
     Card(
+        onClick = onClick,
         colors = CardDefaults.cardColors(containerColor = Surface),
         shape = RoundedCornerShape(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -232,21 +244,4 @@ private fun ExerciseCard(exercise: Exercise) {
             }
         }
     }
-}
-
-@Composable
-private fun difficultyColor(difficulty: Int) = when (difficulty) {
-    in 0..1 -> MaterialTheme.colorScheme.secondary
-    in 2..3 -> MaterialTheme.colorScheme.tertiary
-    else -> ErrorRed
-}
-
-private fun difficultyLabel(difficulty: Int) = when (difficulty) {
-    0 -> "Muy fácil"
-    1 -> "Fácil"
-    2 -> "Intermedio"
-    3 -> "Intermedio-Alto"
-    4 -> "Difícil"
-    5 -> "Muy difícil"
-    else -> ""
 }

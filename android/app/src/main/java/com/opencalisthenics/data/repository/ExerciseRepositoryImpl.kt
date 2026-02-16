@@ -12,6 +12,11 @@ class ExerciseRepositoryImpl(
 
     private val json = Json { ignoreUnknownKeys = true }
 
+    override suspend fun getExerciseById(id: Int): Result<Exercise> = runCatching {
+        val exercises = getExercises().getOrThrow()
+        exercises.first { it.id == id }
+    }
+
     override suspend fun getExercises(): Result<List<Exercise>> = runCatching {
         val jsonString = context.assets.open("exercises.json")
             .bufferedReader()

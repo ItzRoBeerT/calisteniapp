@@ -1,4 +1,4 @@
-package com.opencalisthenics.presentation.exercise
+package com.opencalisthenics.presentation.exercise.exercises
 
 import android.app.Application
 import androidx.compose.runtime.getValue
