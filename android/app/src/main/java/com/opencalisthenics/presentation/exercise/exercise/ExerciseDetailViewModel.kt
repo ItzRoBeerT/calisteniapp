@@ -10,23 +10,27 @@ import androidx.lifecycle.viewModelScope
 import com.opencalisthenics.data.repository.ExerciseRepositoryImpl
 import com.opencalisthenics.domain.model.Exercise
 import com.opencalisthenics.domain.usecase.exercise.GetExerciseByIdUseCase
+import com.opencalisthenics.domain.usecase.exercise.GetMuscleGroupLabelsUseCase
 import kotlinx.coroutines.launch
 
 data class ExerciseDetailUiState(
     val exercise: Exercise? = null,
+    val muscleGroupLabels: Map<String, String> = emptyMap(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )
 
 class ExerciseDetailViewModel(
     private val exerciseId: Int,
-    private val getExerciseByIdUseCase: GetExerciseByIdUseCase
+    private val getExerciseByIdUseCase: GetExerciseByIdUseCase,
+    private val getMuscleGroupLabelsUseCase: GetMuscleGroupLabelsUseCase = GetMuscleGroupLabelsUseCase()
 ) : ViewModel() {
 
     var uiState by mutableStateOf(ExerciseDetailUiState())
         private set
 
     init {
+        uiState = uiState.copy(muscleGroupLabels = getMuscleGroupLabelsUseCase())
         loadExercise()
     }
 

@@ -11,6 +11,7 @@ import com.opencalisthenics.data.repository.ExerciseRepositoryImpl
 import com.opencalisthenics.domain.model.DifficultyLevel
 import com.opencalisthenics.domain.model.Exercise
 import com.opencalisthenics.domain.usecase.exercise.GetExercisesUseCase
+import com.opencalisthenics.domain.usecase.exercise.GetMuscleGroupLabelsUseCase
 import kotlinx.coroutines.launch
 
 data class ExercisesUiState(
@@ -19,18 +20,21 @@ data class ExercisesUiState(
     val selectedDifficulty: DifficultyLevel? = null,
     val selectedMuscleGroup: String? = null,
     val availableMuscleGroups: List<String> = emptyList(),
+    val muscleGroupLabels: Map<String, String> = emptyMap(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 )
 
 class ExercisesViewModel(
-    private val getExercisesUseCase: GetExercisesUseCase
+    private val getExercisesUseCase: GetExercisesUseCase,
+    private val getMuscleGroupLabelsUseCase: GetMuscleGroupLabelsUseCase = GetMuscleGroupLabelsUseCase()
 ) : ViewModel() {
 
     var uiState by mutableStateOf(ExercisesUiState())
         private set
 
     init {
+        uiState = uiState.copy(muscleGroupLabels = getMuscleGroupLabelsUseCase())
         loadExercises()
     }
 

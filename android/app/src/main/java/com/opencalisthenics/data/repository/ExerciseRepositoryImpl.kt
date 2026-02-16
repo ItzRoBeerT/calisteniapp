@@ -40,17 +40,6 @@ class ExerciseRepositoryImpl(
     }
 
     companion object {
-        val muscleGroupLabels = mapOf(
-            "chest" to "Pecho",
-            "back" to "Espalda",
-            "shoulders" to "Hombros",
-            "triceps" to "Tríceps",
-            "biceps" to "Bíceps",
-            "core" to "Core",
-            "legs" to "Piernas",
-            "glutes" to "Glúteos"
-        )
-
         // Pair(name, description)
         private val exerciseTranslations = mapOf(
             1 to ("Flexiones" to "Ejercicio básico para pecho, hombros y tríceps"),

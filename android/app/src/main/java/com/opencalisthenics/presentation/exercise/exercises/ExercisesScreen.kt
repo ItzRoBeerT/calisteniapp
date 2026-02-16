@@ -37,7 +37,6 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
-import com.opencalisthenics.data.repository.ExerciseRepositoryImpl
 import com.opencalisthenics.domain.model.DifficultyLevel
 import com.opencalisthenics.domain.model.Exercise
 import com.opencalisthenics.presentation.exercise.difficultyColor
@@ -73,6 +72,7 @@ fun ExercisesScreen(
 
         MuscleGroupFilterRow(
             muscleGroups = uiState.availableMuscleGroups,
+            muscleGroupLabels = uiState.muscleGroupLabels,
             selected = uiState.selectedMuscleGroup,
             onSelected = viewModel::onMuscleGroupSelected
         )
@@ -122,6 +122,7 @@ fun ExercisesScreen(
                     items(uiState.filteredExercises, key = { it.id }) { exercise ->
                         ExerciseCard(
                             exercise = exercise,
+                            muscleGroupLabels = uiState.muscleGroupLabels,
                             onClick = { onExerciseClick(exercise.id) }
                         )
                     }
@@ -164,6 +165,7 @@ private fun DifficultyFilterRow(
 @Composable
 private fun MuscleGroupFilterRow(
     muscleGroups: List<String>,
+    muscleGroupLabels: Map<String, String>,
     selected: String?,
     onSelected: (String?) -> Unit
 ) {
@@ -174,7 +176,7 @@ private fun MuscleGroupFilterRow(
             .horizontalScroll(rememberScrollState())
     ) {
         muscleGroups.forEach { group ->
-            val label = ExerciseRepositoryImpl.muscleGroupLabels[group] ?: group
+            val label = muscleGroupLabels[group] ?: group
             FilterChip(
                 selected = selected == group,
                 onClick = { onSelected(if (selected == group) null else group) },
@@ -191,6 +193,7 @@ private fun MuscleGroupFilterRow(
 @Composable
 private fun ExerciseCard(
     exercise: Exercise,
+    muscleGroupLabels: Map<String, String>,
     onClick: () -> Unit
 ) {
     Card(
@@ -229,7 +232,7 @@ private fun ExerciseCard(
 
                 Text(
                     text = exercise.muscleGroups
-                        .mapNotNull { ExerciseRepositoryImpl.muscleGroupLabels[it] }
+                        .mapNotNull { muscleGroupLabels[it] }
                         .joinToString(" · "),
                     fontSize = 11.sp,
                     color = GrayText,

@@ -35,7 +35,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
-import com.opencalisthenics.data.repository.ExerciseRepositoryImpl
 import com.opencalisthenics.domain.model.Exercise
 import com.opencalisthenics.presentation.exercise.difficultyColor
 import com.opencalisthenics.presentation.exercise.difficultyLabel
@@ -96,7 +95,10 @@ fun ExerciseDetailScreen(
                 }
             }
             uiState.exercise != null -> {
-                ExerciseDetailContent(exercise = uiState.exercise)
+                ExerciseDetailContent(
+                    exercise = uiState.exercise,
+                    muscleGroupLabels = uiState.muscleGroupLabels
+                )
             }
         }
     }
@@ -104,7 +106,10 @@ fun ExerciseDetailScreen(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ExerciseDetailContent(exercise: Exercise) {
+private fun ExerciseDetailContent(
+    exercise: Exercise,
+    muscleGroupLabels: Map<String, String>
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -152,7 +157,7 @@ private fun ExerciseDetailContent(exercise: Exercise) {
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     exercise.muscleGroups.forEach { group ->
-                        val label = ExerciseRepositoryImpl.muscleGroupLabels[group] ?: group
+                        val label = muscleGroupLabels[group] ?: group
                         InfoChip(text = label)
                     }
                 }
