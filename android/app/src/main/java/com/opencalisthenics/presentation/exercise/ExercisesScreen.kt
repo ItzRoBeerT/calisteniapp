@@ -4,8 +4,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -131,15 +132,16 @@ fun ExercisesScreen(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun DifficultyFilterRow(
     selected: DifficultyLevel?,
     onSelected: (DifficultyLevel?) -> Unit
 ) {
-    FlowRow(
+    Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.padding(bottom = 4.dp)
+        modifier = Modifier
+            .padding(bottom = 4.dp)
+            .horizontalScroll(rememberScrollState())
     ) {
         DifficultyLevel.entries.forEach { level ->
             FilterChip(
@@ -155,16 +157,17 @@ private fun DifficultyFilterRow(
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun MuscleGroupFilterRow(
     muscleGroups: List<String>,
     selected: String?,
     onSelected: (String?) -> Unit
 ) {
-    FlowRow(
+    Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.padding(bottom = 4.dp)
+        modifier = Modifier
+            .padding(bottom = 4.dp)
+            .horizontalScroll(rememberScrollState())
     ) {
         muscleGroups.forEach { group ->
             val label = ExerciseRepositoryImpl.muscleGroupLabels[group] ?: group
