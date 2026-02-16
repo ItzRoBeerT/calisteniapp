@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.opencalisthenics.navigation.AppDestinations
@@ -87,17 +88,18 @@ private fun RowScope.AppNavItem(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
+    val label = stringResource(destination.labelRes)
     NavigationBarItem(
         icon = {
             Icon(
                 imageVector = if (isSelected) destination.selectedIcon else destination.icon,
-                contentDescription = destination.label,
+                contentDescription = label,
                 modifier = Modifier.size(24.dp)
             )
         },
         label = {
             Text(
-                text = destination.label,
+                text = label,
                 style = MaterialTheme.typography.labelSmall,
                 fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
             )

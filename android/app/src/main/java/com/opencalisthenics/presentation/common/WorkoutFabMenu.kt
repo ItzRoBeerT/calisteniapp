@@ -33,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -40,6 +41,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupProperties
+import com.opencalisthenics.R
 
 @Composable
 fun WorkoutFabMenu(
@@ -64,7 +66,7 @@ fun WorkoutFabMenu(
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
-                contentDescription = "Crear workout",
+                contentDescription = stringResource(R.string.workout_create),
                 modifier = Modifier.size(32.dp)
             )
         }
@@ -91,7 +93,7 @@ fun WorkoutFabMenu(
                     ) {
                         WorkoutMenuItem(
                             icon = Icons.Filled.PlayArrow,
-                            text = "Hacer workout",
+                            text = stringResource(R.string.workout_do),
                             onClick = {
                                 showMenu = false
                                 onDoWorkout()
@@ -99,7 +101,7 @@ fun WorkoutFabMenu(
                         )
                         WorkoutMenuItem(
                             icon = Icons.Filled.Edit,
-                            text = "Añadir workout",
+                            text = stringResource(R.string.workout_add),
                             onClick = {
                                 showMenu = false
                                 onAddWorkout()

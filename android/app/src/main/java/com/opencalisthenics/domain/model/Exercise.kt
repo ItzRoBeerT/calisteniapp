@@ -12,8 +12,8 @@ data class Exercise(
     val description: String
 )
 
-enum class DifficultyLevel(val label: String, val range: IntRange) {
-    BEGINNER("Principiante", 0..1),
-    INTERMEDIATE("Intermedio", 2..3),
-    ADVANCED("Avanzado", 4..5);
+enum class DifficultyLevel(val range: IntRange) {
+    BEGINNER(0..1),
+    INTERMEDIATE(2..3),
+    ADVANCED(4..5);
 }

@@ -7,30 +7,28 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.opencalisthenics.R
 import com.opencalisthenics.data.repository.ExerciseRepositoryImpl
 import com.opencalisthenics.domain.model.Exercise
 import com.opencalisthenics.domain.usecase.exercise.GetExerciseByIdUseCase
-import com.opencalisthenics.domain.usecase.exercise.GetMuscleGroupLabelsUseCase
+import com.opencalisthenics.presentation.common.UiText
 import kotlinx.coroutines.launch
 
 data class ExerciseDetailUiState(
     val exercise: Exercise? = null,
-    val muscleGroupLabels: Map<String, String> = emptyMap(),
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: UiText? = null
 )
 
 class ExerciseDetailViewModel(
     private val exerciseId: Int,
-    private val getExerciseByIdUseCase: GetExerciseByIdUseCase,
-    private val getMuscleGroupLabelsUseCase: GetMuscleGroupLabelsUseCase = GetMuscleGroupLabelsUseCase()
+    private val getExerciseByIdUseCase: GetExerciseByIdUseCase
 ) : ViewModel() {
 
     var uiState by mutableStateOf(ExerciseDetailUiState())
         private set
 
     init {
-        uiState = uiState.copy(muscleGroupLabels = getMuscleGroupLabelsUseCase())
         loadExercise()
     }
 
@@ -47,7 +45,8 @@ class ExerciseDetailViewModel(
                 }
                 .onFailure { e ->
                     uiState = uiState.copy(
-                        errorMessage = e.message ?: "Error al cargar el ejercicio",
+                        errorMessage = e.message?.let { UiText.DynamicString(it) }
+                            ?: UiText.StringResource(R.string.error_load_exercise),
                         isLoading = false
                     )
                 }

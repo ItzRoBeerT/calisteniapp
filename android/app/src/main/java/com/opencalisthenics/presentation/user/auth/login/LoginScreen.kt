@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import com.opencalisthenics.presentation.common.AppButton
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -30,16 +31,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.opencalisthenics.R
+import com.opencalisthenics.presentation.common.AppButton
 import com.opencalisthenics.ui.theme.Background
 import com.opencalisthenics.ui.theme.ErrorRed
 import com.opencalisthenics.ui.theme.GrayText
 import com.opencalisthenics.ui.theme.OpenCalisthenicsTheme
 import com.opencalisthenics.ui.theme.Primary500
-
 import com.opencalisthenics.ui.theme.Surface
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun LoginScreen(
@@ -77,7 +77,7 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "OpenCalisthenics",
+                text = stringResource(R.string.login_title),
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -87,7 +87,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Inicia sesión para continuar",
+                text = stringResource(R.string.login_subtitle),
                 fontSize = 16.sp,
                 color = GrayText,
                 textAlign = TextAlign.Center
@@ -98,7 +98,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = uiState.email,
                 onValueChange = viewModel::onEmailChange,
-                label = { Text("Email") },
+                label = { Text(stringResource(R.string.login_email_label)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
@@ -114,7 +114,7 @@ fun LoginScreen(
             OutlinedTextField(
                 value = uiState.password,
                 onValueChange = viewModel::onPasswordChange,
-                label = { Text("Contraseña") },
+                label = { Text(stringResource(R.string.login_password_label)) },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
@@ -129,7 +129,7 @@ fun LoginScreen(
             if (uiState.errorMessage != null) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = uiState.errorMessage!!,
+                    text = uiState.errorMessage!!.asString(),
                     color = ErrorRed,
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center,
@@ -140,7 +140,7 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             AppButton(
-                text = "Iniciar sesión",
+                text = stringResource(R.string.login_button),
                 onClick = { viewModel.submit(onLoginSuccess) },
                 enabled = uiState.email.isNotBlank() && uiState.password.isNotBlank(),
                 isLoading = uiState.isLoading
@@ -150,12 +150,12 @@ fun LoginScreen(
 
             TextButton(onClick = onNavigateToRegister) {
                 Text(
-                    text = "¿No tienes cuenta?",
+                    text = stringResource(R.string.login_no_account),
                     color = GrayText,
                     fontSize = 14.sp
                 )
                 Text(
-                    text = "Regístrate",
+                    text = stringResource(R.string.login_register_link),
                     color = Primary500,
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp

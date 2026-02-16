@@ -1,7 +1,6 @@
 package com.opencalisthenics.presentation.exercise.exercises
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,18 +28,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
+import com.opencalisthenics.R
 import com.opencalisthenics.domain.model.DifficultyLevel
 import com.opencalisthenics.domain.model.Exercise
 import com.opencalisthenics.presentation.exercise.difficultyColor
 import com.opencalisthenics.presentation.exercise.difficultyLabel
+import com.opencalisthenics.presentation.exercise.label
+import com.opencalisthenics.presentation.exercise.muscleGroupLabel
 import com.opencalisthenics.ui.theme.Background
 import com.opencalisthenics.ui.theme.ErrorRed
 import com.opencalisthenics.ui.theme.GrayText
@@ -72,7 +74,6 @@ fun ExercisesScreen(
 
         MuscleGroupFilterRow(
             muscleGroups = uiState.availableMuscleGroups,
-            muscleGroupLabels = uiState.muscleGroupLabels,
             selected = uiState.selectedMuscleGroup,
             onSelected = viewModel::onMuscleGroupSelected
         )
@@ -92,7 +93,7 @@ fun ExercisesScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = uiState.errorMessage,
+                        text = uiState.errorMessage!!.asString(),
                         color = ErrorRed,
                         fontSize = 14.sp
                     )
@@ -104,7 +105,7 @@ fun ExercisesScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "No se encontraron ejercicios",
+                        text = stringResource(R.string.exercises_empty),
                         color = GrayText,
                         fontSize = 16.sp
                     )
@@ -122,7 +123,6 @@ fun ExercisesScreen(
                     items(uiState.filteredExercises, key = { it.id }) { exercise ->
                         ExerciseCard(
                             exercise = exercise,
-                            muscleGroupLabels = uiState.muscleGroupLabels,
                             onClick = { onExerciseClick(exercise.id) }
                         )
                     }
@@ -152,7 +152,7 @@ private fun DifficultyFilterRow(
             FilterChip(
                 selected = selected == level,
                 onClick = { onSelected(if (selected == level) null else level) },
-                label = { Text(level.label, fontSize = 13.sp) },
+                label = { Text(level.label(), fontSize = 13.sp) },
                 colors = FilterChipDefaults.filterChipColors(
                     selectedContainerColor = chipColor,
                     selectedLabelColor = MaterialTheme.colorScheme.onPrimary
@@ -165,7 +165,6 @@ private fun DifficultyFilterRow(
 @Composable
 private fun MuscleGroupFilterRow(
     muscleGroups: List<String>,
-    muscleGroupLabels: Map<String, String>,
     selected: String?,
     onSelected: (String?) -> Unit
 ) {
@@ -176,7 +175,7 @@ private fun MuscleGroupFilterRow(
             .horizontalScroll(rememberScrollState())
     ) {
         muscleGroups.forEach { group ->
-            val label = muscleGroupLabels[group] ?: group
+            val label = muscleGroupLabel(group)
             FilterChip(
                 selected = selected == group,
                 onClick = { onSelected(if (selected == group) null else group) },
@@ -193,7 +192,6 @@ private fun MuscleGroupFilterRow(
 @Composable
 private fun ExerciseCard(
     exercise: Exercise,
-    muscleGroupLabels: Map<String, String>,
     onClick: () -> Unit
 ) {
     Card(
@@ -232,7 +230,7 @@ private fun ExerciseCard(
 
                 Text(
                     text = exercise.muscleGroups
-                        .mapNotNull { muscleGroupLabels[it] }
+                        .map { muscleGroupLabel(it) }
                         .joinToString(" · "),
                     fontSize = 11.sp,
                     color = GrayText,

@@ -5,8 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.opencalisthenics.R
 import com.opencalisthenics.data.repository.AuthRepositoryImpl
 import com.opencalisthenics.domain.usecase.auth.SignUpUseCase
+import com.opencalisthenics.presentation.common.UiText
 import kotlinx.coroutines.launch
 
 data class RegisterUiState(
@@ -14,8 +16,8 @@ data class RegisterUiState(
     val password: String = "",
     val confirmPassword: String = "",
     val isLoading: Boolean = false,
-    val errorMessage: String? = null,
-    val successMessage: String? = null
+    val errorMessage: UiText? = null,
+    val successMessage: UiText? = null
 )
 
 class RegisterViewModel(
@@ -42,7 +44,7 @@ class RegisterViewModel(
         uiState = uiState.copy(errorMessage = null, successMessage = null)
 
         if (uiState.password != uiState.confirmPassword) {
-            uiState = uiState.copy(errorMessage = "Las contrasenas no coinciden")
+            uiState = uiState.copy(errorMessage = UiText.StringResource(R.string.error_passwords_dont_match))
             return
         }
 
@@ -52,13 +54,14 @@ class RegisterViewModel(
             signUpUseCase(uiState.email, uiState.password)
                 .onSuccess {
                     uiState = uiState.copy(
-                        successMessage = "Revisa tu email para confirmar tu cuenta"
+                        successMessage = UiText.StringResource(R.string.register_check_email)
                     )
                     onSuccess()
                 }
                 .onFailure { e ->
                     uiState = uiState.copy(
-                        errorMessage = e.message ?: "Error al crear la cuenta"
+                        errorMessage = e.message?.let { UiText.DynamicString(it) }
+                            ?: UiText.StringResource(R.string.error_create_account)
                     )
                 }
             uiState = uiState.copy(isLoading = false)

@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,17 +26,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
+import com.opencalisthenics.R
 import com.opencalisthenics.domain.model.Exercise
 import com.opencalisthenics.presentation.exercise.difficultyColor
 import com.opencalisthenics.presentation.exercise.difficultyLabel
+import com.opencalisthenics.presentation.exercise.muscleGroupLabel
 import com.opencalisthenics.ui.theme.Background
 import com.opencalisthenics.ui.theme.ErrorRed
 import com.opencalisthenics.ui.theme.GrayText
@@ -68,7 +69,7 @@ fun ExerciseDetailScreen(
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = "Volver",
+                contentDescription = stringResource(R.string.exercise_back),
                 tint = MaterialTheme.colorScheme.onBackground
             )
         }
@@ -88,17 +89,14 @@ fun ExerciseDetailScreen(
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = uiState.errorMessage,
+                        text = uiState.errorMessage!!.asString(),
                         color = ErrorRed,
                         fontSize = 14.sp
                     )
                 }
             }
             uiState.exercise != null -> {
-                ExerciseDetailContent(
-                    exercise = uiState.exercise,
-                    muscleGroupLabels = uiState.muscleGroupLabels
-                )
+                ExerciseDetailContent(exercise = uiState.exercise)
             }
         }
     }
@@ -106,10 +104,7 @@ fun ExerciseDetailScreen(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ExerciseDetailContent(
-    exercise: Exercise,
-    muscleGroupLabels: Map<String, String>
-) {
+private fun ExerciseDetailContent(exercise: Exercise) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -151,20 +146,19 @@ private fun ExerciseDetailContent(
                 )
             }
 
-            DetailSection(title = "Grupos musculares") {
+            DetailSection(title = stringResource(R.string.exercise_muscle_groups)) {
                 FlowRow(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     exercise.muscleGroups.forEach { group ->
-                        val label = muscleGroupLabels[group] ?: group
-                        InfoChip(text = label)
+                        InfoChip(text = muscleGroupLabel(group))
                     }
                 }
             }
 
             if (exercise.equipment.isNotEmpty()) {
-                DetailSection(title = "Equipamiento") {
+                DetailSection(title = stringResource(R.string.exercise_equipment)) {
                     FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -177,7 +171,7 @@ private fun ExerciseDetailContent(
             }
 
             if (exercise.category.isNotBlank()) {
-                DetailSection(title = "Categoría") {
+                DetailSection(title = stringResource(R.string.exercise_category)) {
                     Text(
                         text = exercise.category,
                         fontSize = 14.sp,
@@ -187,7 +181,7 @@ private fun ExerciseDetailContent(
             }
 
             if (exercise.type.isNotBlank()) {
-                DetailSection(title = "Tipo") {
+                DetailSection(title = stringResource(R.string.exercise_type)) {
                     Text(
                         text = exercise.type,
                         fontSize = 14.sp,

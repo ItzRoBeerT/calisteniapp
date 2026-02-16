@@ -21,14 +21,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.opencalisthenics.R
 import com.opencalisthenics.ui.theme.Background
 import com.opencalisthenics.ui.theme.ErrorRed
 import com.opencalisthenics.ui.theme.OpenCalisthenicsTheme
-import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun ProfileScreen(
@@ -49,7 +51,7 @@ fun ProfileScreen(
         ) {
             if (uiState.errorMessage != null) {
                 Text(
-                    text = uiState.errorMessage!!,
+                    text = uiState.errorMessage!!.asString(),
                     color = ErrorRed,
                     fontSize = 14.sp,
                     modifier = Modifier.padding(bottom = 16.dp)
@@ -84,7 +86,7 @@ fun ProfileScreen(
                     )
                     Spacer(modifier = Modifier.size(8.dp))
                     Text(
-                        text = "Cerrar sesión",
+                        text = stringResource(R.string.profile_logout),
                         fontWeight = FontWeight.Medium,
                         fontSize = 16.sp
                     )

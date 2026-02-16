@@ -1,3 +1,77 @@
 <resources>
     <string name="app_name">OpenCalisthenics</string>
+
+    <!-- Auth - Login -->
+    <string name="login_title">OpenCalisthenics</string>
+    <string name="login_subtitle">Inicia sesión para continuar</string>
+    <string name="login_email_label">Email</string>
+    <string name="login_password_label">Contraseña</string>
+    <string name="login_button">Iniciar sesión</string>
+    <string name="login_no_account">¿No tienes cuenta?</string>
+    <string name="login_register_link">Regístrate</string>
+
+    <!-- Auth - Register -->
+    <string name="register_title">Crear cuenta</string>
+    <string name="register_subtitle">Regístrate para empezar</string>
+    <string name="register_email_label">Email</string>
+    <string name="register_password_label">Contraseña</string>
+    <string name="register_password_hint">Mínimo 6 caracteres</string>
+    <string name="register_confirm_password_label">Confirmar contraseña</string>
+    <string name="register_button">Crear cuenta</string>
+    <string name="register_has_account">¿Ya tienes cuenta?\u0020</string>
+    <string name="register_login_link">Inicia sesión</string>
+    <string name="register_check_email">Revisa tu email para confirmar tu cuenta</string>
+
+    <!-- Profile -->
+    <string name="profile_logout">Cerrar sesión</string>
+
+    <!-- Navigation -->
+    <string name="nav_exercises">Ejercicios</string>
+    <string name="nav_workouts">Workouts</string>
+    <string name="nav_roadmaps">Roadmaps</string>
+    <string name="nav_profile">Perfil</string>
+
+    <!-- Exercises -->
+    <string name="exercises_empty">No se encontraron ejercicios</string>
+    <string name="exercise_back">Volver</string>
+    <string name="exercise_muscle_groups">Grupos musculares</string>
+    <string name="exercise_equipment">Equipamiento</string>
+    <string name="exercise_category">Categoría</string>
+    <string name="exercise_type">Tipo</string>
+
+    <!-- Difficulty Levels (filter chips) -->
+    <string name="difficulty_beginner">Principiante</string>
+    <string name="difficulty_intermediate">Intermedio</string>
+    <string name="difficulty_advanced">Avanzado</string>
+
+    <!-- Difficulty Labels (detail view) -->
+    <string name="difficulty_very_easy">Muy fácil</string>
+    <string name="difficulty_easy">Fácil</string>
+    <string name="difficulty_medium">Intermedio</string>
+    <string name="difficulty_medium_high">Intermedio-Alto</string>
+    <string name="difficulty_hard">Difícil</string>
+    <string name="difficulty_very_hard">Muy difícil</string>
+
+    <!-- Muscle Groups -->
+    <string name="muscle_group_chest">Pecho</string>
+    <string name="muscle_group_back">Espalda</string>
+    <string name="muscle_group_shoulders">Hombros</string>
+    <string name="muscle_group_triceps">Tríceps</string>
+    <string name="muscle_group_biceps">Bíceps</string>
+    <string name="muscle_group_core">Core</string>
+    <string name="muscle_group_legs">Piernas</string>
+    <string name="muscle_group_glutes">Glúteos</string>
+
+    <!-- Workout FAB Menu -->
+    <string name="workout_create">Crear workout</string>
+    <string name="workout_do">Hacer workout</string>
+    <string name="workout_add">Añadir workout</string>
+
+    <!-- Errors -->
+    <string name="error_sign_in">Error al iniciar sesión</string>
+    <string name="error_sign_out">Error al cerrar sesión</string>
+    <string name="error_create_account">Error al crear la cuenta</string>
+    <string name="error_passwords_dont_match">Las contraseñas no coinciden</string>
+    <string name="error_load_exercises">Error al cargar los ejercicios</string>
+    <string name="error_load_exercise">Error al cargar el ejercicio</string>
 </resources>

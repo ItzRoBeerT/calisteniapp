@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import com.opencalisthenics.presentation.common.AppButton
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -30,16 +31,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.opencalisthenics.R
+import com.opencalisthenics.presentation.common.AppButton
 import com.opencalisthenics.ui.theme.Background
 import com.opencalisthenics.ui.theme.ErrorRed
 import com.opencalisthenics.ui.theme.GrayText
 import com.opencalisthenics.ui.theme.OpenCalisthenicsTheme
 import com.opencalisthenics.ui.theme.Primary500
-
 import com.opencalisthenics.ui.theme.Surface
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun RegisterScreen(
@@ -77,7 +77,7 @@ fun RegisterScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Crear cuenta",
+                text = stringResource(R.string.register_title),
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -87,7 +87,7 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Regístrate para empezar",
+                text = stringResource(R.string.register_subtitle),
                 fontSize = 16.sp,
                 color = GrayText,
                 textAlign = TextAlign.Center
@@ -98,7 +98,7 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = uiState.email,
                 onValueChange = viewModel::onEmailChange,
-                label = { Text("Email") },
+                label = { Text(stringResource(R.string.register_email_label)) },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
@@ -114,10 +114,10 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = uiState.password,
                 onValueChange = viewModel::onPasswordChange,
-                label = { Text("Contraseña") },
+                label = { Text(stringResource(R.string.register_password_label)) },
                 supportingText = {
                     Text(
-                        text = "Mínimo 6 caracteres",
+                        text = stringResource(R.string.register_password_hint),
                         color = GrayText
                     )
                 },
@@ -137,7 +137,7 @@ fun RegisterScreen(
             OutlinedTextField(
                 value = uiState.confirmPassword,
                 onValueChange = viewModel::onConfirmPasswordChange,
-                label = { Text("Confirmar contraseña") },
+                label = { Text(stringResource(R.string.register_confirm_password_label)) },
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
@@ -152,7 +152,7 @@ fun RegisterScreen(
             if (uiState.errorMessage != null) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = uiState.errorMessage!!,
+                    text = uiState.errorMessage!!.asString(),
                     color = ErrorRed,
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center,
@@ -163,7 +163,7 @@ fun RegisterScreen(
             if (uiState.successMessage != null) {
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = uiState.successMessage!!,
+                    text = uiState.successMessage!!.asString(),
                     color = Primary500,
                     fontSize = 14.sp,
                     textAlign = TextAlign.Center,
@@ -174,7 +174,7 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             AppButton(
-                text = "Crear cuenta",
+                text = stringResource(R.string.register_button),
                 onClick = { viewModel.submit(onRegisterSuccess) },
                 enabled = uiState.email.isNotBlank() && uiState.password.isNotBlank() && uiState.confirmPassword.isNotBlank(),
                 isLoading = uiState.isLoading
@@ -184,12 +184,12 @@ fun RegisterScreen(
 
             TextButton(onClick = onNavigateToLogin) {
                 Text(
-                    text = "¿Ya tienes cuenta? ",
+                    text = stringResource(R.string.register_has_account),
                     color = GrayText,
                     fontSize = 14.sp
                 )
                 Text(
-                    text = "Inicia sesión",
+                    text = stringResource(R.string.register_login_link),
                     color = Primary500,
                     fontWeight = FontWeight.Medium,
                     fontSize = 14.sp
