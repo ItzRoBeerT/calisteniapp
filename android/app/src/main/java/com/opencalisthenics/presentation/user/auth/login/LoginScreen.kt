@@ -100,6 +100,10 @@ fun LoginScreen(
                 onValueChange = viewModel::onEmailChange,
                 label = { Text(stringResource(R.string.login_email_label)) },
                 singleLine = true,
+                isError = uiState.emailError != null,
+                supportingText = uiState.emailError?.let { error ->
+                    { Text(text = error.asString(), color = ErrorRed) }
+                },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next
@@ -116,6 +120,10 @@ fun LoginScreen(
                 onValueChange = viewModel::onPasswordChange,
                 label = { Text(stringResource(R.string.login_password_label)) },
                 singleLine = true,
+                isError = uiState.passwordError != null,
+                supportingText = uiState.passwordError?.let { error ->
+                    { Text(text = error.asString(), color = ErrorRed) }
+                },
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Password,

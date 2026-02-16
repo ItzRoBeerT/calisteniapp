@@ -74,6 +74,8 @@
     <string name="error_passwords_dont_match">Las contraseñas no coinciden</string>
     <string name="error_load_exercises">Error al cargar los ejercicios</string>
     <string name="error_load_exercise">Error al cargar el ejercicio</string>
+    <string name="error_invalid_email">Introduce un email válido</string>
+    <string name="error_password_too_short">La contraseña debe tener al menos 6 caracteres</string>
     <string name="error_invalid_credentials">Email o contraseña incorrectos</string>
     <string name="error_user_already_exists">Ya existe una cuenta con este email</string>
     <string name="error_email_not_confirmed">Debes confirmar tu email antes de iniciar sesión</string>

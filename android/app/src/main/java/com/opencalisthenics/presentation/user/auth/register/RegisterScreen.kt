@@ -100,6 +100,10 @@ fun RegisterScreen(
                 onValueChange = viewModel::onEmailChange,
                 label = { Text(stringResource(R.string.register_email_label)) },
                 singleLine = true,
+                isError = uiState.emailError != null,
+                supportingText = uiState.emailError?.let { error ->
+                    { Text(text = error.asString(), color = ErrorRed) }
+                },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next
@@ -115,10 +119,12 @@ fun RegisterScreen(
                 value = uiState.password,
                 onValueChange = viewModel::onPasswordChange,
                 label = { Text(stringResource(R.string.register_password_label)) },
+                isError = uiState.passwordError != null,
                 supportingText = {
                     Text(
-                        text = stringResource(R.string.register_password_hint),
-                        color = GrayText
+                        text = if (uiState.passwordError != null) uiState.passwordError!!.asString()
+                            else stringResource(R.string.register_password_hint),
+                        color = if (uiState.passwordError != null) ErrorRed else GrayText
                     )
                 },
                 singleLine = true,
@@ -139,6 +145,10 @@ fun RegisterScreen(
                 onValueChange = viewModel::onConfirmPasswordChange,
                 label = { Text(stringResource(R.string.register_confirm_password_label)) },
                 singleLine = true,
+                isError = uiState.confirmPasswordError != null,
+                supportingText = uiState.confirmPasswordError?.let { error ->
+                    { Text(text = error.asString(), color = ErrorRed) }
+                },
                 visualTransformation = PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Password,
