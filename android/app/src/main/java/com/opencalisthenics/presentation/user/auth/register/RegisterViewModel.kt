@@ -8,12 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.opencalisthenics.R
 import com.opencalisthenics.data.repository.AuthRepositoryImpl
 import com.opencalisthenics.domain.model.AppError
+import com.opencalisthenics.domain.model.ValidationError
 import com.opencalisthenics.domain.usecase.auth.SignUpUseCase
 import com.opencalisthenics.presentation.common.UiText
 import com.opencalisthenics.presentation.common.toUiText
 import kotlinx.coroutines.launch
-
-private val EMAIL_PATTERN = android.util.Patterns.EMAIL_ADDRESS
 
 data class RegisterUiState(
     val email: String = "",
@@ -48,41 +47,40 @@ class RegisterViewModel(
     fun submit(onSuccess: () -> Unit) {
         if (uiState.isLoading) return
 
-        uiState = uiState.copy(errorMessage = null, successMessage = null)
-
-        val emailError = if (!EMAIL_PATTERN.matcher(uiState.email.trim()).matches())
-            UiText.StringResource(R.string.error_invalid_email) else null
-        val passwordError = if (uiState.password.length < 6)
-            UiText.StringResource(R.string.error_password_too_short) else null
-        val confirmPasswordError = if (uiState.password != uiState.confirmPassword)
-            UiText.StringResource(R.string.error_passwords_dont_match) else null
-
-        if (emailError != null || passwordError != null || confirmPasswordError != null) {
-            uiState = uiState.copy(
-                emailError = emailError,
-                passwordError = passwordError,
-                confirmPasswordError = confirmPasswordError
-            )
-            return
-        }
-
-        uiState = uiState.copy(isLoading = true)
+        uiState = uiState.copy(
+            isLoading = true,
+            errorMessage = null,
+            successMessage = null,
+            emailError = null,
+            passwordError = null,
+            confirmPasswordError = null
+        )
 
         viewModelScope.launch {
-            signUpUseCase(uiState.email.trim(), uiState.password)
+            signUpUseCase(uiState.email, uiState.password, uiState.confirmPassword)
                 .onSuccess {
                     uiState = uiState.copy(
                         successMessage = UiText.StringResource(R.string.register_check_email)
                     )
                     onSuccess()
                 }
-                .onFailure { e ->
-                    uiState = uiState.copy(
-                        errorMessage = (e as? AppError)?.toUiText()
-                            ?: UiText.StringResource(R.string.error_create_account)
-                    )
-                }
+                .onFailure { e -> handleError(e) }
             uiState = uiState.copy(isLoading = false)
+        }
+    }
+
+    private fun handleError(e: Throwable) {
+        when (e) {
+            is ValidationError.InvalidEmail ->
+                uiState = uiState.copy(emailError = UiText.StringResource(R.string.error_invalid_email))
+            is ValidationError.PasswordTooShort ->
+                uiState = uiState.copy(passwordError = UiText.StringResource(R.string.error_password_too_short))
+            is ValidationError.PasswordsMismatch ->
+                uiState = uiState.copy(confirmPasswordError = UiText.StringResource(R.string.error_passwords_dont_match))
+            is AppError ->
+                uiState = uiState.copy(errorMessage = e.toUiText())
+            else ->
+                uiState = uiState.copy(errorMessage = UiText.StringResource(R.string.error_create_account))
         }
     }
 }
