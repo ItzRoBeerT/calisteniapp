@@ -3,6 +3,7 @@ package com.opencalisthenics.data
 import com.opencalisthenics.BuildConfig
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient
+import io.github.jan.supabase.postgrest.Postgrest
 
 object SupabaseClient {
     val client = createSupabaseClient(
@@ -10,5 +11,6 @@ object SupabaseClient {
         supabaseKey = BuildConfig.SUPABASE_ANON_KEY
     ) {
         install(Auth)
+        install(Postgrest)
     }
 }
