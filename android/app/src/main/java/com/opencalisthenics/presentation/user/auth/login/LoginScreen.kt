@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -158,10 +159,11 @@ fun LoginScreen(
 
             TextButton(onClick = onNavigateToRegister) {
                 Text(
-                    text = stringResource(R.string.login_no_account) + " ",
+                    text = stringResource(R.string.login_no_account),
                     color = GrayText,
                     fontSize = 14.sp
                 )
+                Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = stringResource(R.string.login_register_link),
                     color = Primary500,

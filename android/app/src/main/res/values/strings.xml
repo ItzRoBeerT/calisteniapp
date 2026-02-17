@@ -18,7 +18,7 @@
     <string name="register_password_hint">Mínimo 6 caracteres</string>
     <string name="register_confirm_password_label">Confirmar contraseña</string>
     <string name="register_button">Crear cuenta</string>
-    <string name="register_has_account">¿Ya tienes cuenta?\u0020</string>
+    <string name="register_has_account">¿Ya tienes cuenta?</string>
     <string name="register_login_link">Inicia sesión</string>
     <string name="register_check_email">Revisa tu email para confirmar tu cuenta</string>
 
