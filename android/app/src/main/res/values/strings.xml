@@ -82,6 +82,67 @@
     <string name="workout_do">Hacer workout</string>
     <string name="workout_add">Añadir workout</string>
 
+    <!-- Workouts -->
+    <string name="workouts_title">Workouts</string>
+    <string name="workouts_empty">No hay workouts disponibles</string>
+    <string name="workouts_empty_cta">Crea tu primer workout</string>
+    <string name="workouts_filter">Filtrar</string>
+    <string name="workouts_page">Página %1$d</string>
+    <string name="workouts_previous">Anterior</string>
+    <string name="workouts_next">Siguiente</string>
+    <string name="workout_yours">Tuyo</string>
+    <string name="workout_private">Privado</string>
+    <string name="workout_public">Público</string>
+    <string name="workout_duration">%1$d min</string>
+    <string name="workout_sets">Series</string>
+    <string name="workout_reps">Repeticiones</string>
+    <string name="workout_rest">Descanso</string>
+    <string name="workout_rest_seconds">%1$ds</string>
+    <string name="workout_exercises">Ejercicios</string>
+    <string name="workout_tags">Tags</string>
+    <string name="workout_edit">Editar</string>
+    <string name="workout_delete">Eliminar</string>
+    <string name="workout_delete_confirm">¿Estás seguro de que quieres eliminar este workout?</string>
+    <string name="workout_delete_title">Eliminar workout</string>
+    <string name="workout_back">Volver</string>
+    <string name="workout_by">por %1$s</string>
+    <string name="workout_visibility">Visibilidad</string>
+    <string name="workout_difficulty">Dificultad</string>
+
+    <!-- Workout Form -->
+    <string name="workout_form_create_title">Crear workout</string>
+    <string name="workout_form_edit_title">Editar workout</string>
+    <string name="workout_form_name">Nombre</string>
+    <string name="workout_form_name_placeholder">Nombre del workout</string>
+    <string name="workout_form_description">Descripción</string>
+    <string name="workout_form_description_placeholder">Describe tu workout</string>
+    <string name="workout_form_add_exercise">Buscar ejercicio</string>
+    <string name="workout_form_add_tag">Añadir tag</string>
+    <string name="workout_form_tag_placeholder">Nuevo tag</string>
+    <string name="workout_form_save">Guardar</string>
+    <string name="workout_form_create">Crear workout</string>
+    <string name="workout_form_estimated_duration">Duración estimada: %1$d min</string>
+    <string name="workout_form_no_exercises">Añade al menos un ejercicio</string>
+
+    <!-- Workout Runner -->
+    <string name="workout_runner_title">Entrenamiento</string>
+    <string name="workout_runner_set_done">Serie completada</string>
+    <string name="workout_runner_skip_rest">Saltar descanso</string>
+    <string name="workout_runner_cancel">Cancelar entrenamiento</string>
+    <string name="workout_runner_cancel_confirm">¿Quieres cancelar el entrenamiento? Se perderá el progreso.</string>
+    <string name="workout_runner_cancel_title">Cancelar</string>
+    <string name="workout_runner_cancel_yes">Sí, cancelar</string>
+    <string name="workout_runner_cancel_no">Continuar</string>
+    <string name="workout_runner_complete">¡Entrenamiento completado!</string>
+    <string name="workout_runner_complete_time">Tiempo total: %1$s</string>
+    <string name="workout_runner_complete_exercises">Ejercicios: %1$d</string>
+    <string name="workout_runner_finish">Finalizar</string>
+    <string name="workout_runner_exercise">Ejercicio %1$d de %2$d</string>
+    <string name="workout_runner_set">Serie %1$d de %2$d</string>
+    <string name="workout_runner_elapsed">Tiempo: %1$s</string>
+    <string name="workout_runner_rest_title">Descanso</string>
+    <string name="workout_runner_select">Selecciona un workout</string>
+
     <!-- Errors -->
     <string name="error_sign_in">Error al iniciar sesión</string>
     <string name="error_sign_out">Error al cerrar sesión</string>

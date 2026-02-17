@@ -25,6 +25,7 @@ import com.opencalisthenics.presentation.exercise.exercises.ExercisesScreen
 import com.opencalisthenics.presentation.common.WorkoutFabMenu
 import com.opencalisthenics.presentation.home.OpenCalisthenicsAppViewModel
 import com.opencalisthenics.presentation.user.profile.ProfileScreen
+import com.opencalisthenics.presentation.workout.list.WorkoutsScreen
 import com.opencalisthenics.ui.theme.OpenCalisthenicsTheme
 
 class MainActivity : ComponentActivity() {
@@ -46,8 +47,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun OpenCalisthenicsApp(
     onLogout: () -> Unit = {},
-    onDoWorkout: () -> Unit = {},
+    onDoWorkout: (Int) -> Unit = {},
     onAddWorkout: () -> Unit = {},
+    onWorkoutClick: (Int) -> Unit = {},
     onExerciseClick: (Int) -> Unit = {},
     viewModel: OpenCalisthenicsAppViewModel = viewModel()
 ) {
@@ -62,7 +64,9 @@ fun OpenCalisthenicsApp(
                 onDestinationSelected = viewModel::onDestinationSelected,
                 fabContent = {
                     WorkoutFabMenu(
-                        onDoWorkout = onDoWorkout,
+                        onDoWorkout = {
+                            viewModel.onDestinationSelected(AppDestinations.WORKOUTS)
+                        },
                         onAddWorkout = onAddWorkout
                     )
                 }
@@ -76,6 +80,11 @@ fun OpenCalisthenicsApp(
         ) {
             when (currentDestination) {
                 AppDestinations.EXERCISES -> ExercisesScreen(onExerciseClick = onExerciseClick)
+                AppDestinations.WORKOUTS -> WorkoutsScreen(
+                    onWorkoutClick = onWorkoutClick,
+                    onStartWorkout = onDoWorkout,
+                    onCreateWorkout = onAddWorkout
+                )
                 AppDestinations.PROFILE -> ProfileScreen(onLogout = onLogout)
                 else -> PlaceholderScreen(stringResource(currentDestination.labelRes))
             }

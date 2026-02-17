@@ -19,6 +19,9 @@ import com.opencalisthenics.data.SupabaseClient
 import com.opencalisthenics.presentation.exercise.exercise.ExerciseDetailScreen
 import com.opencalisthenics.presentation.user.auth.login.LoginScreen
 import com.opencalisthenics.presentation.user.auth.register.RegisterScreen
+import com.opencalisthenics.presentation.workout.detail.WorkoutDetailScreen
+import com.opencalisthenics.presentation.workout.form.WorkoutFormScreen
+import com.opencalisthenics.presentation.workout.runner.WorkoutRunnerScreen
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.serialization.Serializable
@@ -34,6 +37,18 @@ object Home
 
 @Serializable
 data class ExerciseDetail(val exerciseId: Int)
+
+@Serializable
+data class WorkoutDetail(val workoutId: Int)
+
+@Serializable
+object WorkoutCreate
+
+@Serializable
+data class WorkoutEdit(val workoutId: Int)
+
+@Serializable
+data class WorkoutRunner(val workoutId: Int)
 
 private const val ANIM_DURATION = 300
 
@@ -102,11 +117,14 @@ fun AppNavigation() {
                         popUpTo<Home> { inclusive = true }
                     }
                 },
-                onDoWorkout = {
-                    // TODO: Navigate to do workout screen
+                onDoWorkout = { workoutId ->
+                    navController.navigate(WorkoutRunner(workoutId))
                 },
                 onAddWorkout = {
-                    // TODO: Navigate to add workout screen
+                    navController.navigate(WorkoutCreate)
+                },
+                onWorkoutClick = { workoutId ->
+                    navController.navigate(WorkoutDetail(workoutId))
                 },
                 onExerciseClick = { exerciseId ->
                     navController.navigate(ExerciseDetail(exerciseId))
@@ -118,6 +136,38 @@ fun AppNavigation() {
             val route = backStackEntry.toRoute<ExerciseDetail>()
             ExerciseDetailScreen(
                 exerciseId = route.exerciseId,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<WorkoutDetail> { backStackEntry ->
+            val route = backStackEntry.toRoute<WorkoutDetail>()
+            WorkoutDetailScreen(
+                workoutId = route.workoutId,
+                onBack = { navController.popBackStack() },
+                onEdit = { id -> navController.navigate(WorkoutEdit(id)) },
+                onStartWorkout = { id -> navController.navigate(WorkoutRunner(id)) }
+            )
+        }
+
+        composable<WorkoutCreate> {
+            WorkoutFormScreen(
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<WorkoutEdit> { backStackEntry ->
+            val route = backStackEntry.toRoute<WorkoutEdit>()
+            WorkoutFormScreen(
+                editWorkoutId = route.workoutId,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<WorkoutRunner> { backStackEntry ->
+            val route = backStackEntry.toRoute<WorkoutRunner>()
+            WorkoutRunnerScreen(
+                workoutId = route.workoutId,
                 onBack = { navController.popBackStack() }
             )
         }
