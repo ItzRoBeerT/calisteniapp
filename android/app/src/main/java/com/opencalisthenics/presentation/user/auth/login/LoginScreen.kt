@@ -158,7 +158,7 @@ fun LoginScreen(
 
             TextButton(onClick = onNavigateToRegister) {
                 Text(
-                    text = stringResource(R.string.login_no_account),
+                    text = stringResource(R.string.login_no_account) + " ",
                     color = GrayText,
                     fontSize = 14.sp
                 )
