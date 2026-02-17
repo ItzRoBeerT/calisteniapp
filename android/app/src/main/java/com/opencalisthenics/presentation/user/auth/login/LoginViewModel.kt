@@ -43,8 +43,8 @@ class LoginViewModel(
 
         val emailError = if (!EMAIL_PATTERN.matcher(uiState.email.trim()).matches())
             UiText.StringResource(R.string.error_invalid_email) else null
-        val passwordError = if (uiState.password.length < 6)
-            UiText.StringResource(R.string.error_password_too_short) else null
+        val passwordError = if (uiState.password.isBlank())
+            UiText.StringResource(R.string.error_empty_password) else null
 
         if (emailError != null || passwordError != null) {
             uiState = uiState.copy(emailError = emailError, passwordError = passwordError)
