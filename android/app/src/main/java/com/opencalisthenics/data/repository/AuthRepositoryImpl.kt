@@ -38,6 +38,20 @@ class AuthRepositoryImpl : AuthRepository {
         Result.failure(e.toAppError())
     }
 
+    override suspend fun updateEmail(newEmail: String): Result<Unit> = try {
+        SupabaseClient.client.auth.updateUser { email = newEmail }
+        Result.success(Unit)
+    } catch (e: Exception) {
+        Result.failure(e.toAppError())
+    }
+
+    override suspend fun updatePassword(newPassword: String): Result<Unit> = try {
+        SupabaseClient.client.auth.updateUser { password = newPassword }
+        Result.success(Unit)
+    } catch (e: Exception) {
+        Result.failure(e.toAppError())
+    }
+
     private fun Exception.toAppError(): AppError = when (this) {
         is RestException -> mapRestException()
         is UnknownHostException -> AppError.NetworkError

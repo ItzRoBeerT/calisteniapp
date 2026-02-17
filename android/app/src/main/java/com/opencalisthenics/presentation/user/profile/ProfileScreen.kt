@@ -15,17 +15,22 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -37,6 +42,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -130,14 +137,14 @@ fun ProfileScreen(
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                // Action buttons row - MD3 FilledTonal style
+                // Action buttons row
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    // Edit profile button
+                    // Change email button
                     TextButton(
-                        onClick = { /* TODO */ },
+                        onClick = { viewModel.showChangeEmailDialog() },
                         modifier = Modifier
                             .weight(1f)
                             .height(40.dp)
@@ -153,16 +160,17 @@ fun ProfileScreen(
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = stringResource(R.string.profile_edit),
-                            fontSize = 13.sp,
+                            text = stringResource(R.string.profile_change_email),
+                            fontSize = 12.sp,
                             fontWeight = FontWeight.Medium,
-                            color = Primary400
+                            color = Primary400,
+                            maxLines = 1
                         )
                     }
 
-                    // Settings button
+                    // Change password button
                     TextButton(
-                        onClick = { /* TODO */ },
+                        onClick = { viewModel.showChangePasswordDialog() },
                         modifier = Modifier
                             .weight(1f)
                             .height(40.dp)
@@ -171,21 +179,44 @@ fun ProfileScreen(
                         shape = RoundedCornerShape(50)
                     ) {
                         Icon(
-                            imageVector = Icons.Default.Settings,
+                            imageVector = Icons.Default.Lock,
                             contentDescription = null,
                             modifier = Modifier.size(16.dp),
                             tint = GrayText
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
-                            text = stringResource(R.string.profile_settings),
-                            fontSize = 13.sp,
+                            text = stringResource(R.string.profile_change_password),
+                            fontSize = 12.sp,
                             fontWeight = FontWeight.Medium,
-                            color = GrayText
+                            color = GrayText,
+                            maxLines = 1
                         )
                     }
                 }
             }
+        }
+
+        // Success messages
+        if (uiState.changeEmailSuccess != null) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = uiState.changeEmailSuccess!!.asString(),
+                color = Primary400,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        if (uiState.changePasswordSuccess != null) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = uiState.changePasswordSuccess!!.asString(),
+                color = Primary400,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -274,6 +305,217 @@ fun ProfileScreen(
             }
         }
     }
+
+    // Change email dialog
+    if (uiState.showChangeEmailDialog) {
+        ChangeEmailDialog(
+            newEmail = uiState.newEmail,
+            onNewEmailChange = viewModel::onNewEmailChange,
+            onConfirm = viewModel::changeEmail,
+            onDismiss = viewModel::dismissChangeEmailDialog,
+            isLoading = uiState.isChangingEmail,
+            error = uiState.changeEmailError
+        )
+    }
+
+    // Change password dialog
+    if (uiState.showChangePasswordDialog) {
+        ChangePasswordDialog(
+            newPassword = uiState.newPassword,
+            confirmPassword = uiState.confirmPassword,
+            onNewPasswordChange = viewModel::onNewPasswordChange,
+            onConfirmPasswordChange = viewModel::onConfirmPasswordChange,
+            onConfirm = viewModel::changePassword,
+            onDismiss = viewModel::dismissChangePasswordDialog,
+            isLoading = uiState.isChangingPassword,
+            error = uiState.changePasswordError
+        )
+    }
+}
+
+@Composable
+private fun ChangeEmailDialog(
+    newEmail: String,
+    onNewEmailChange: (String) -> Unit,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+    isLoading: Boolean,
+    error: com.opencalisthenics.presentation.common.UiText?
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = Surface,
+        title = {
+            Text(
+                text = stringResource(R.string.profile_change_email),
+                color = Color.White
+            )
+        },
+        text = {
+            Column {
+                OutlinedTextField(
+                    value = newEmail,
+                    onValueChange = onNewEmailChange,
+                    label = { Text(stringResource(R.string.profile_new_email)) },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    isError = error != null,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        focusedBorderColor = Primary400,
+                        unfocusedBorderColor = GrayText,
+                        focusedLabelColor = Primary400,
+                        unfocusedLabelColor = GrayText,
+                        cursorColor = Primary400
+                    )
+                )
+                if (error != null) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = error.asString(),
+                        color = ErrorRed,
+                        fontSize = 12.sp
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = onConfirm,
+                enabled = !isLoading && newEmail.isNotBlank()
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(16.dp),
+                        strokeWidth = 2.dp,
+                        color = Primary400
+                    )
+                } else {
+                    Text(
+                        text = stringResource(R.string.profile_save),
+                        color = Primary400
+                    )
+                }
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(
+                    text = stringResource(R.string.profile_cancel),
+                    color = GrayText
+                )
+            }
+        }
+    )
+}
+
+@Composable
+private fun ChangePasswordDialog(
+    newPassword: String,
+    confirmPassword: String,
+    onNewPasswordChange: (String) -> Unit,
+    onConfirmPasswordChange: (String) -> Unit,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+    isLoading: Boolean,
+    error: com.opencalisthenics.presentation.common.UiText?
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = Surface,
+        title = {
+            Text(
+                text = stringResource(R.string.profile_change_password),
+                color = Color.White
+            )
+        },
+        text = {
+            Column {
+                OutlinedTextField(
+                    value = newPassword,
+                    onValueChange = onNewPasswordChange,
+                    label = { Text(stringResource(R.string.profile_new_password)) },
+                    singleLine = true,
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    isError = error != null,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        focusedBorderColor = Primary400,
+                        unfocusedBorderColor = GrayText,
+                        focusedLabelColor = Primary400,
+                        unfocusedLabelColor = GrayText,
+                        cursorColor = Primary400
+                    )
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                OutlinedTextField(
+                    value = confirmPassword,
+                    onValueChange = onConfirmPasswordChange,
+                    label = { Text(stringResource(R.string.profile_confirm_password)) },
+                    singleLine = true,
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    isError = error != null,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color.White,
+                        focusedBorderColor = Primary400,
+                        unfocusedBorderColor = GrayText,
+                        focusedLabelColor = Primary400,
+                        unfocusedLabelColor = GrayText,
+                        cursorColor = Primary400
+                    )
+                )
+                if (error != null) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = error.asString(),
+                        color = ErrorRed,
+                        fontSize = 12.sp
+                    )
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = stringResource(R.string.register_password_hint),
+                    color = GrayText,
+                    fontSize = 11.sp
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = onConfirm,
+                enabled = !isLoading && newPassword.isNotBlank() && confirmPassword.isNotBlank()
+            ) {
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(16.dp),
+                        strokeWidth = 2.dp,
+                        color = Primary400
+                    )
+                } else {
+                    Text(
+                        text = stringResource(R.string.profile_save),
+                        color = Primary400
+                    )
+                }
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(
+                    text = stringResource(R.string.profile_cancel),
+                    color = GrayText
+                )
+            }
+        }
+    )
 }
 
 @Composable
