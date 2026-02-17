@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.opencalisthenics.R
 import com.opencalisthenics.presentation.common.AppButton
+import com.opencalisthenics.ui.theme.Background
 import com.opencalisthenics.ui.theme.ErrorRed
 import com.opencalisthenics.ui.theme.GrayText
 
@@ -87,6 +88,7 @@ fun WorkoutFormScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Background)
             .statusBarsPadding()
             .padding(top = 8.dp)
     ) {

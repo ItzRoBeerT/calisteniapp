@@ -12,7 +12,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.AlertDialog
@@ -42,6 +45,7 @@ import coil3.compose.AsyncImage
 import com.opencalisthenics.R
 import com.opencalisthenics.presentation.common.AppButton
 import com.opencalisthenics.presentation.workout.formatDuration
+import com.opencalisthenics.ui.theme.Background
 import com.opencalisthenics.ui.theme.GrayText
 import com.opencalisthenics.ui.theme.Secondary500
 
@@ -92,6 +96,8 @@ fun WorkoutRunnerScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Background)
+            .statusBarsPadding()
             .padding(top = 8.dp)
     ) {
         // Top bar
@@ -176,6 +182,7 @@ private fun ExercisePhase(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -267,7 +274,7 @@ private fun ExercisePhase(
             )
         }
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(40.dp))
 
         // Set done button
         AppButton(
@@ -288,6 +295,7 @@ private fun RestPhase(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -370,6 +378,7 @@ private fun CompletePhase(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center

@@ -42,6 +42,7 @@ import com.opencalisthenics.presentation.workout.components.WorkoutExerciseList
 import com.opencalisthenics.presentation.workout.components.WorkoutTagList
 import com.opencalisthenics.presentation.workout.workoutDifficultyColor
 import com.opencalisthenics.presentation.workout.workoutDifficultyLabel
+import com.opencalisthenics.ui.theme.Background
 import com.opencalisthenics.ui.theme.ErrorRed
 import com.opencalisthenics.ui.theme.GrayText
 
@@ -69,6 +70,7 @@ fun WorkoutDetailScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Background)
             .statusBarsPadding()
             .padding(top = 8.dp)
     ) {
@@ -109,7 +111,7 @@ fun WorkoutDetailScreen(
                         imageVector = Icons.Default.PlayArrow,
                         contentDescription = stringResource(R.string.workout_do),
                         tint = MaterialTheme.colorScheme.primary,
-                        modifier = Modifier.size(28.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             }

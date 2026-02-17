@@ -1,6 +1,7 @@
 package com.opencalisthenics.presentation.workout.list
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.opencalisthenics.R
 import com.opencalisthenics.presentation.workout.components.WorkoutCard
 import com.opencalisthenics.presentation.workout.components.WorkoutFilterPanel
+import com.opencalisthenics.ui.theme.Background
 import com.opencalisthenics.ui.theme.GrayText
 
 @Composable
@@ -50,6 +52,7 @@ fun WorkoutsScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(Background)
             .statusBarsPadding()
     ) {
         // Header
