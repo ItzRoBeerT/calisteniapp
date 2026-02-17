@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import com.opencalisthenics.R
 
 enum class AppDestinations(
-    @StringRes val labelRes: Int,
+    @param:StringRes val labelRes: Int,
     val icon: ImageVector,
     val selectedIcon: ImageVector,
 ) {

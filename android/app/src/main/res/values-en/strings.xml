@@ -82,6 +82,7 @@
     <string name="error_load_exercise">Error loading exercise</string>
     <string name="error_invalid_email">Enter a valid email</string>
     <string name="error_password_too_short">Password must be at least 6 characters</string>
+    <string name="error_empty_password">Enter a password</string>
     <string name="error_invalid_credentials">Invalid email or password</string>
     <string name="error_user_already_exists">An account with this email already exists</string>
     <string name="error_email_not_confirmed">Please confirm your email before signing in</string>

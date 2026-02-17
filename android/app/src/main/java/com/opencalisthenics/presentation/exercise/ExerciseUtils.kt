@@ -38,8 +38,8 @@ fun DifficultyLevel.label(): String = stringResource(
 )
 
 @Composable
-fun muscleGroupLabel(key: String): String = stringResource(
-    when (key) {
+fun muscleGroupLabel(key: String): String {
+    val resId = when (key) {
         "chest" -> R.string.muscle_group_chest
         "back" -> R.string.muscle_group_back
         "shoulders" -> R.string.muscle_group_shoulders
@@ -50,4 +50,5 @@ fun muscleGroupLabel(key: String): String = stringResource(
         "glutes" -> R.string.muscle_group_glutes
         else -> return key
     }
-)
+    return stringResource(resId)
+}
