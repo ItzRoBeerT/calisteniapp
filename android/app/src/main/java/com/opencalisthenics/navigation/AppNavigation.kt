@@ -24,6 +24,7 @@ import com.opencalisthenics.presentation.workout.form.WorkoutFormScreen
 import com.opencalisthenics.presentation.workout.runner.WorkoutRunnerScreen
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.status.SessionStatus
+import kotlinx.coroutines.flow.first
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -58,7 +59,9 @@ fun AppNavigation() {
     var startDestination by remember { mutableStateOf<Any?>(null) }
 
     LaunchedEffect(Unit) {
-        val status = SupabaseClient.client.auth.sessionStatus.value
+        val status = SupabaseClient.client.auth.sessionStatus.first { s ->
+            s is SessionStatus.Authenticated || s is SessionStatus.NotAuthenticated
+        }
         startDestination = if (status is SessionStatus.Authenticated) Home else Login
     }
 
