@@ -49,6 +49,7 @@ fun OpenCalisthenicsApp(
     workoutSavedAction: String? = null,
     onLogout: () -> Unit = {},
     onDoWorkout: (Int) -> Unit = {},
+    onOpenWorkoutSelection: () -> Unit = {},
     onAddWorkout: () -> Unit = {},
     onWorkoutClick: (Int) -> Unit = {},
     onExerciseClick: (Int) -> Unit = {},
@@ -65,9 +66,7 @@ fun OpenCalisthenicsApp(
                 onDestinationSelected = viewModel::onDestinationSelected,
                 fabContent = {
                     WorkoutFabMenu(
-                        onDoWorkout = {
-                            viewModel.onDestinationSelected(AppDestinations.WORKOUTS)
-                        },
+                        onDoWorkout = onOpenWorkoutSelection,
                         onAddWorkout = onAddWorkout
                     )
                 }

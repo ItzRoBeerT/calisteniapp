@@ -149,6 +149,14 @@
     <string name="workout_runner_retry_save">Reintentar</string>
     <string name="workout_runner_select">Selecciona un workout</string>
 
+    <!-- Workout Selection -->
+    <string name="workout_selection_title">Selecciona un workout</string>
+    <string name="workout_selection_my_workouts">Mis workouts</string>
+    <string name="workout_selection_liked_workouts">Workouts que me gustan</string>
+    <string name="workout_selection_empty">No tienes workouts propios ni guardados. ¡Crea uno o explora el catálogo!</string>
+    <string name="workout_selection_created">Creado el %1$s</string>
+    <string name="workout_selection_liked_on">Me gustó el %1$s</string>
+
     <!-- Errors -->
     <string name="error_sign_in">Error al iniciar sesión</string>
     <string name="error_sign_out">Error al cerrar sesión</string>

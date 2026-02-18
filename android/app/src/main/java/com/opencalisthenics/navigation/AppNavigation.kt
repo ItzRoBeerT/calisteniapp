@@ -22,6 +22,7 @@ import com.opencalisthenics.presentation.user.auth.register.RegisterScreen
 import com.opencalisthenics.presentation.workout.detail.WorkoutDetailScreen
 import com.opencalisthenics.presentation.workout.form.WorkoutFormScreen
 import com.opencalisthenics.presentation.workout.runner.WorkoutRunnerScreen
+import com.opencalisthenics.presentation.workout.selection.WorkoutSelectionScreen
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.auth.status.SessionStatus
 import kotlinx.coroutines.flow.first
@@ -50,6 +51,9 @@ data class WorkoutEdit(val workoutId: Int)
 
 @Serializable
 data class WorkoutRunner(val workoutId: Int)
+
+@Serializable
+object WorkoutSelection
 
 private const val ANIM_DURATION = 300
 
@@ -129,6 +133,9 @@ fun AppNavigation() {
                 onDoWorkout = { workoutId ->
                     navController.navigate(WorkoutRunner(workoutId))
                 },
+                onOpenWorkoutSelection = {
+                    navController.navigate(WorkoutSelection)
+                },
                 onAddWorkout = {
                     navController.navigate(WorkoutCreate)
                 },
@@ -185,6 +192,15 @@ fun AppNavigation() {
             val route = backStackEntry.toRoute<WorkoutRunner>()
             WorkoutRunnerScreen(
                 workoutId = route.workoutId,
+                onBack = { navController.popBackStack() }
+            )
+        }
+
+        composable<WorkoutSelection> {
+            WorkoutSelectionScreen(
+                onWorkoutSelected = { workoutId ->
+                    navController.navigate(WorkoutRunner(workoutId))
+                },
                 onBack = { navController.popBackStack() }
             )
         }
