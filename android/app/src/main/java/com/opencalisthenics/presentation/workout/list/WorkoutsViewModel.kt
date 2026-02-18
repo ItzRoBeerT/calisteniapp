@@ -102,6 +102,7 @@ class WorkoutsViewModel(
                     )
                 }
                 .onFailure { e ->
+                    android.util.Log.e("WorkoutsViewModel", "fetchWorkouts failed", e)
                     uiState = uiState.copy(
                         errorMessage = (e as? AppError)?.toUiText()
                             ?: UiText.StringResource(R.string.error_unknown),
@@ -145,9 +146,11 @@ class WorkoutsViewModel(
         loadWorkouts()
     }
 
-    fun onWorkoutSaved() {
+    fun onWorkoutSaved(action: String) {
+        val messageRes = if (action == "updated") R.string.workout_updated_success
+            else R.string.workout_created_success
         uiState = uiState.copy(
-            successMessage = UiText.StringResource(R.string.workout_created_success),
+            successMessage = UiText.StringResource(messageRes),
             currentPage = 1
         )
         loadWorkouts()

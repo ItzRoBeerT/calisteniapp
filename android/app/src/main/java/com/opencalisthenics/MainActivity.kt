@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
 @PreviewScreenSizes
 @Composable
 fun OpenCalisthenicsApp(
-    workoutSaved: Boolean = false,
+    workoutSavedAction: String? = null,
     onLogout: () -> Unit = {},
     onDoWorkout: (Int) -> Unit = {},
     onAddWorkout: () -> Unit = {},
@@ -85,7 +85,7 @@ fun OpenCalisthenicsApp(
                     onWorkoutClick = onWorkoutClick,
                     onStartWorkout = onDoWorkout,
                     onCreateWorkout = onAddWorkout,
-                    workoutSaved = workoutSaved
+                    workoutSavedAction = workoutSavedAction
                 )
                 AppDestinations.PROFILE -> ProfileScreen(onLogout = onLogout)
                 else -> PlaceholderScreen(stringResource(currentDestination.labelRes))

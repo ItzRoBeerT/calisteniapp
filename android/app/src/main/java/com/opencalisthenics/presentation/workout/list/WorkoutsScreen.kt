@@ -53,15 +53,15 @@ fun WorkoutsScreen(
     onWorkoutClick: (Int) -> Unit,
     onStartWorkout: (Int) -> Unit,
     onCreateWorkout: () -> Unit,
-    workoutSaved: Boolean = false,
+    workoutSavedAction: String? = null,
     viewModel: WorkoutsViewModel = viewModel(factory = WorkoutsViewModel.Factory)
 ) {
     val state = viewModel.uiState
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(workoutSaved) {
-        if (workoutSaved) {
-            viewModel.onWorkoutSaved()
+    LaunchedEffect(workoutSavedAction) {
+        if (workoutSavedAction != null) {
+            viewModel.onWorkoutSaved(workoutSavedAction)
         }
     }
 
