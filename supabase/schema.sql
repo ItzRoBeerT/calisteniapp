@@ -264,11 +264,13 @@ CREATE POLICY "Users can delete tags of their workouts" ON "WorkoutTags"
 
 -- Workout Favorites: Users can manage their own favorites
 DROP POLICY IF EXISTS "Users can view their own favorites" ON workout_favorites;
+DROP POLICY IF EXISTS "Anyone can view favorites" ON workout_favorites;
 DROP POLICY IF EXISTS "Users can add favorites" ON workout_favorites;
 DROP POLICY IF EXISTS "Users can remove favorites" ON workout_favorites;
 
-CREATE POLICY "Users can view their own favorites" ON workout_favorites
-    FOR SELECT USING ((select auth.uid()) = user_id);
+-- Allow anyone (including anonymous) to read favorites so like counts are always visible
+CREATE POLICY "Anyone can view favorites" ON workout_favorites
+    FOR SELECT USING (true);
 
 CREATE POLICY "Users can add favorites" ON workout_favorites
     FOR INSERT WITH CHECK ((select auth.uid()) = user_id);
