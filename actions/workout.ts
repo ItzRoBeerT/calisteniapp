@@ -591,3 +591,278 @@ export async function deleteWorkout(id: string) {
 
 	return true;
 }
+
+export async function getWorkoutLikesCount(workoutId: number) {
+	const supabase = await createClient();
+
+	if (!supabase) {
+		return 0;
+	}
+
+	const { count, error } = await supabase
+		.from('workout_favorites')
+		.select('*', { count: 'exact', head: true })
+		.eq('workout_id', workoutId);
+
+	if (error) {
+		console.error('Error fetching workout likes count:', error.message);
+		return 0;
+	}
+
+	return count || 0;
+}
+
+export async function getUserWorkouts() {
+	const supabase = await createClient();
+
+	if (!supabase) {
+		return [];
+	}
+
+	const { data: { user } } = await supabase.auth.getUser();
+	if (!user) return [];
+
+	// Get user's workouts ordered by creation date (newest first)
+	const { data: workouts, error } = await supabase
+		.from('Workout')
+		.select('*')
+		.eq('user_id', user.id)
+		.order('created_at', { ascending: false });
+
+	if (error) {
+		console.error('Error fetching user workouts:', error.message);
+		return [];
+	}
+
+	// Para cada workout, obtener los tags, exercises y likes count
+	const workoutsWithDetails = await Promise.all(
+		(workouts || []).map(async (workout) => {
+			const [{ data: tags }, { data: exercises }, likesCount] = await Promise.all([
+				supabase
+					.from('WorkoutTags')
+					.select('name')
+					.eq('workout_id', workout.id),
+				supabase
+					.from('WorkoutExercise')
+					.select('*, Exercise(image)')
+					.eq('workout_id', workout.id)
+					.order('order'),
+				getWorkoutLikesCount(workout.id),
+			]);
+
+			const formattedExercises =
+				exercises?.map((item: any) => ({
+					id: item.id,
+					name: item.exercise_name,
+					sets: item.sets,
+					reps: item.reps,
+					rest: item.rest,
+					image: item.Exercise?.image,
+				})) || [];
+
+			return {
+				...workout,
+				tags: tags?.map((t) => t.name) || [],
+				exercises: formattedExercises,
+				likes_count: likesCount,
+			};
+		})
+	);
+
+	return workoutsWithDetails;
+}
+
+export async function getFavoriteWorkoutsWithDetails() {
+	const supabase = await createClient();
+
+	if (!supabase) {
+		return [];
+	}
+
+	const { data: { user } } = await supabase.auth.getUser();
+	if (!user) return [];
+
+	// Get user's favorite workouts with the date they favorited it, ordered by favorited_at (newest first)
+	const { data: favorites, error } = await supabase
+		.from('workout_favorites')
+		.select('workout_id, created_at')
+		.eq('user_id', user.id)
+		.order('created_at', { ascending: false });
+
+	if (error) {
+		console.error('Error fetching favorite workouts:', error.message);
+		return [];
+	}
+
+	if (!favorites || favorites.length === 0) return [];
+
+	// Get the workout details for each favorite
+	const workoutsWithDetails = await Promise.all(
+		favorites.map(async (fav) => {
+			const { data: workout } = await supabase
+				.from('Workout')
+				.select('*')
+				.eq('id', fav.workout_id)
+				.single();
+
+			if (!workout) return null;
+
+			// Get tags, exercises, and likes count
+			const [{ data: tags }, { data: exercises }, likesCount] = await Promise.all([
+				supabase
+					.from('WorkoutTags')
+					.select('name')
+					.eq('workout_id', workout.id),
+				supabase
+					.from('WorkoutExercise')
+					.select('*, Exercise(image)')
+					.eq('workout_id', workout.id)
+					.order('order'),
+				getWorkoutLikesCount(workout.id),
+			]);
+
+			const formattedExercises =
+				exercises?.map((item: any) => ({
+					id: item.id,
+					name: item.exercise_name,
+					sets: item.sets,
+					reps: item.reps,
+					rest: item.rest,
+					image: item.Exercise?.image,
+				})) || [];
+
+			return {
+				...workout,
+				tags: tags?.map((t) => t.name) || [],
+				exercises: formattedExercises,
+				likes_count: likesCount,
+				favorited_at: fav.created_at,
+			};
+		})
+	);
+
+	return workoutsWithDetails.filter((w) => w !== null);
+}
+
+export async function getWorkoutsByPageWithLikes(page = 1, limit = 12, filters?: any) {
+	const supabase = await createClient();
+
+	if (!supabase) {
+		let filteredWorkouts = [...mockWorkoutDetails];
+
+		// Apply filters if provided
+		if (filters) {
+			if (filters.difficulty) {
+				filteredWorkouts = filteredWorkouts.filter(
+					(w) => w.difficulty === filters.difficulty
+				);
+			}
+			if (filters.muscleGroup) {
+				filteredWorkouts = filteredWorkouts.filter(
+					(w) => w.muscle_groups?.includes(filters.muscleGroup)
+				);
+			}
+			if (filters.duration) {
+				filteredWorkouts = filteredWorkouts.filter(
+					(w) => w.duration === Number(filters.duration)
+				);
+			}
+			if (filters.tag) {
+				filteredWorkouts = filteredWorkouts.filter(
+					(w) => w.tags?.includes(filters.tag)
+				);
+			}
+		}
+
+		const startIndex = (page - 1) * limit;
+		const endIndex = startIndex + limit;
+		const paginatedWorkouts = filteredWorkouts.slice(startIndex, endIndex);
+		const totalPages = Math.ceil(filteredWorkouts.length / limit);
+
+		// Enrich exercises with images
+		const workoutsWithImages = paginatedWorkouts.map((workout) => ({
+			...workout,
+			exercise: workout.exercises.map((ex) => {
+				const exerciseData = mockExercises.find((e) => e.id === ex.exercise_id);
+				return {
+					...ex,
+					image: exerciseData?.image,
+				};
+			}),
+			likes_count: 0,
+		}));
+
+		return {
+			workouts: workoutsWithImages,
+			totalPages,
+		};
+	}
+
+	const startIndex = (page - 1) * limit;
+	const endIndex = startIndex + limit - 1;
+
+	let query = supabase
+		.from('Workout')
+		.select('*')
+		.range(startIndex, endIndex);
+
+	// Aplicar filtros si existen
+	if (filters) {
+		if (filters.difficulty) {
+			query = query.eq('difficulty', filters.difficulty);
+		}
+		if (filters.muscleGroups) {
+			query = query.contains('muscle_groups', [filters.muscleGroups]);
+		}
+	}
+
+	const { data, count, error } = await query;
+
+	if (error) {
+		console.error('Error fetching workouts:', error.message);
+		return null;
+	}
+
+	// Calcular total de páginas
+	const totalPages = count ? Math.ceil(count / limit) : 0;
+
+	// Para cada workout, obtener los tags, exercises y likes count
+	const workoutsWithDetails = await Promise.all(
+		(data || []).map(async (workout) => {
+			const [{ data: tags }, { data: exercises }, likesCount] = await Promise.all([
+				supabase
+					.from('WorkoutTags')
+					.select('name')
+					.eq('workout_id', workout.id),
+				supabase
+					.from('WorkoutExercise')
+					.select('*, Exercise(image)')
+					.eq('workout_id', workout.id)
+					.order('order'),
+				getWorkoutLikesCount(workout.id),
+			]);
+
+			const formattedExercises =
+				exercises?.map((item: any) => ({
+					id: item.id,
+					name: item.exercise_name,
+					sets: item.sets,
+					reps: item.reps,
+					rest: item.rest,
+					image: item.Exercise?.image,
+				})) || [];
+
+			return {
+				...workout,
+				tags: tags?.map((t) => t.name) || [],
+				exercises: formattedExercises,
+				likes_count: likesCount,
+			};
+		})
+	);
+
+	return {
+		workouts: workoutsWithDetails,
+		totalPages,
+	};
+}
