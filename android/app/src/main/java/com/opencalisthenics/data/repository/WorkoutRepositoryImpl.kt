@@ -358,9 +358,10 @@ class WorkoutRepositoryImpl : WorkoutRepository {
     }
 
     private fun calculateDuration(exercises: List<ExerciseWorkout>): Int {
-        return exercises.sumOf { ex ->
+        val totalSeconds = exercises.sumOf { ex ->
             (4 * ex.reps * ex.sets) + (ex.rest * ex.sets)
         }
+        return Math.ceil(totalSeconds / 60.0).toInt()
     }
 
     private suspend fun getLikesCountForWorkout(workoutId: Int): Int = try {
