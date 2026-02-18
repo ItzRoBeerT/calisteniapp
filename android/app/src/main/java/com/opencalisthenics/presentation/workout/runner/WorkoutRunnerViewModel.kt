@@ -38,6 +38,7 @@ data class WorkoutRunnerUiState(
     val restSecondsRemaining: Int = 0,
     val restTotalSeconds: Int = 0,
     val showCancelDialog: Boolean = false,
+    val isRestBetweenExercises: Boolean = false,
     val isLoading: Boolean = true,
     val errorMessage: UiText? = null,
     val isSaving: Boolean = false,
@@ -110,6 +111,7 @@ class WorkoutRunnerViewModel(
                 totalSetsCompleted = newTotalCompleted,
                 currentSet = uiState.currentSet + 1,
                 phase = RunnerPhase.REST,
+                isRestBetweenExercises = false,
                 restSecondsRemaining = exercise.rest,
                 restTotalSeconds = exercise.rest
             )
@@ -124,6 +126,7 @@ class WorkoutRunnerViewModel(
                 uiState = uiState.copy(
                     totalSetsCompleted = newTotalCompleted,
                     phase = RunnerPhase.REST,
+                    isRestBetweenExercises = true,
                     restSecondsRemaining = exercise.rest,
                     restTotalSeconds = exercise.rest
                 )
@@ -155,36 +158,7 @@ class WorkoutRunnerViewModel(
 
     fun onSkipRest() {
         restTimerJob?.cancel()
-        val workout = uiState.workout ?: return
-        val exercise = uiState.currentExercise ?: return
-
-        // Determine if we need to move to next exercise
-        val moveToNext = uiState.currentSet > exercise.sets ||
-            (uiState.currentSet == exercise.sets && uiState.currentExerciseIndex + 1 < workout.exercises.size)
-
-        // Check if the current set was the last set of the exercise
-        if (uiState.currentSet <= exercise.sets) {
-            // Still have sets on current exercise
-            uiState = uiState.copy(phase = RunnerPhase.EXERCISE)
-        } else {
-            onRestFinished(true)
-        }
-        // Simpler approach: just go back to exercise phase
-        uiState = uiState.copy(
-            phase = RunnerPhase.EXERCISE,
-            restSecondsRemaining = 0
-        )
-        if (uiState.currentSet > (uiState.currentExercise?.sets ?: 0)) {
-            // Need to advance to next exercise
-            val nextIndex = uiState.currentExerciseIndex + 1
-            if (nextIndex < (uiState.workout?.exercises?.size ?: 0)) {
-                uiState = uiState.copy(
-                    currentExerciseIndex = nextIndex,
-                    currentSet = 1,
-                    phase = RunnerPhase.EXERCISE
-                )
-            }
-        }
+        onRestFinished(uiState.isRestBetweenExercises)
     }
 
     private fun onRestFinished(moveToNextExercise: Boolean) {
