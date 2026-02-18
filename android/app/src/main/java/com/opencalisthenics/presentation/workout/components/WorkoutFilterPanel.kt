@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.opencalisthenics.R
 import com.opencalisthenics.presentation.exercise.muscleGroupLabel
+import com.opencalisthenics.presentation.workout.workoutDifficultyColor
 import com.opencalisthenics.ui.theme.GrayText
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -49,6 +50,7 @@ fun WorkoutFilterPanel(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             difficulties.forEach { difficulty ->
+                val difficultyColor = workoutDifficultyColor(difficulty)
                 FilterChip(
                     selected = selectedDifficulty == difficulty,
                     onClick = {
@@ -68,8 +70,10 @@ fun WorkoutFilterPanel(
                         )
                     },
                     colors = FilterChipDefaults.filterChipColors(
-                        selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                        selectedLabelColor = MaterialTheme.colorScheme.primary
+                        containerColor = difficultyColor.copy(alpha = 0.1f),
+                        labelColor = difficultyColor,
+                        selectedContainerColor = difficultyColor.copy(alpha = 0.25f),
+                        selectedLabelColor = difficultyColor
                     )
                 )
             }
