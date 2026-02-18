@@ -39,7 +39,10 @@ data class WorkoutRunnerUiState(
     val restTotalSeconds: Int = 0,
     val showCancelDialog: Boolean = false,
     val isLoading: Boolean = true,
-    val errorMessage: UiText? = null
+    val errorMessage: UiText? = null,
+    val isSaving: Boolean = false,
+    val isSaved: Boolean = false,
+    val saveError: UiText? = null
 ) {
     val currentExercise: ExerciseWorkout?
         get() = workout?.exercises?.getOrNull(currentExerciseIndex)
@@ -212,6 +215,7 @@ class WorkoutRunnerViewModel(
     private fun saveCompletion() {
         val workout = uiState.workout ?: return
         viewModelScope.launch {
+            uiState = uiState.copy(isSaving = true, saveError = null)
             saveWorkoutCompletionUseCase(
                 WorkoutCompletion(
                     workoutId = workout.id,
@@ -220,7 +224,21 @@ class WorkoutRunnerViewModel(
                     exercisesCount = workout.exercises.size
                 )
             )
+                .onSuccess {
+                    uiState = uiState.copy(isSaving = false, isSaved = true)
+                }
+                .onFailure { e ->
+                    uiState = uiState.copy(
+                        isSaving = false,
+                        saveError = (e as? AppError)?.toUiText()
+                            ?: UiText.StringResource(R.string.workout_runner_save_error)
+                    )
+                }
         }
+    }
+
+    fun onRetrySave() {
+        saveCompletion()
     }
 
     override fun onCleared() {

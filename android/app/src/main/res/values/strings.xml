@@ -141,6 +141,10 @@
     <string name="workout_runner_set">Serie %1$d de %2$d</string>
     <string name="workout_runner_elapsed">Tiempo: %1$s</string>
     <string name="workout_runner_rest_title">Descanso</string>
+    <string name="workout_runner_saving">Guardando entrenamiento…</string>
+    <string name="workout_runner_saved">Entrenamiento guardado</string>
+    <string name="workout_runner_save_error">Error al guardar el entrenamiento</string>
+    <string name="workout_runner_retry_save">Reintentar</string>
     <string name="workout_runner_select">Selecciona un workout</string>
 
     <!-- Errors -->
