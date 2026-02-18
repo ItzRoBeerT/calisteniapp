@@ -317,7 +317,8 @@
 		"play": "Empezar",
 		"favorite": "Añadir a favoritos",
 		"unfavorite": "Quitar de favoritos",
-		"private": "Privado"
+		"private": "Privado",
+		"loginToFavorite": "Inicia sesión para guardar favoritos"
 	},
 	"WorkoutDetail": {
 		"backToWorkouts": "Volver a Entrenamientos",

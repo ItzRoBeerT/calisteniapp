@@ -317,7 +317,8 @@
 	  "play": "Start",
 	  "favorite": "Add to favorites",
 	  "unfavorite": "Remove from favorites",
-	  "private": "Private"
+	  "private": "Private",
+	  "loginToFavorite": "Log in to save favorites"
 	},
 	"WorkoutDetail": {
 	  "backToWorkouts": "Back to Workouts",

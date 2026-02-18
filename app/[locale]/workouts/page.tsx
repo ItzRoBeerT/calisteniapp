@@ -1,4 +1,4 @@
-import { getWorkoutsByPage, getWorkoutFilters, getFavoriteWorkoutIds } from '@/actions/workout';
+import { getWorkoutsByPageWithLikes, getWorkoutFilters, getFavoriteWorkoutIds } from '@/actions/workout';
 import WorkoutsList from '@/components/workouts/List';
 import WorkoutFilter from '@/components/workouts/Filter';
 import { Metadata } from 'next';
@@ -21,7 +21,7 @@ export default async function WorkoutsPage() {
   }
 
   const [data, filters, favoriteIds] = await Promise.all([
-    getWorkoutsByPage(1),
+    getWorkoutsByPageWithLikes(1),
     getWorkoutFilters(),
     userId ? getFavoriteWorkoutIds() : Promise.resolve([]),
   ]);

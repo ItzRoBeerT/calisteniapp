@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import WorkoutDetailModal from './WorkoutDetailModal';
@@ -23,8 +23,18 @@ export default function WorkoutCard({ workout, isOwner, isFavorite: initialFavor
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isFavorite, setIsFavorite] = useState(initialFavorite);
   const [isTogglingFavorite, setIsTogglingFavorite] = useState(false);
+  const [likesCount, setLikesCount] = useState(workout.likes_count ?? 0);
+  const [showLoginHint, setShowLoginHint] = useState(false);
+  const loginHintTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const difficultyClass = getDifficultyColor(workout.difficulty);
+
+  const handleLoginHint = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (loginHintTimer.current) clearTimeout(loginHintTimer.current);
+    setShowLoginHint(true);
+    loginHintTimer.current = setTimeout(() => setShowLoginHint(false), 2500);
+  };
 
   const handleCardClick = () => {
     setIsModalOpen(true);
@@ -44,12 +54,15 @@ export default function WorkoutCard({ workout, isOwner, isFavorite: initialFavor
     e.stopPropagation();
     if (isTogglingFavorite) return;
 
+    const newFavoriteState = !isFavorite;
     setIsTogglingFavorite(true);
-    setIsFavorite((prev) => !prev);
+    setIsFavorite(newFavoriteState);
+    setLikesCount((prev) => newFavoriteState ? prev + 1 : Math.max(0, prev - 1));
 
     const success = await toggleFavoriteWorkout(workout.id);
     if (!success) {
-      setIsFavorite((prev) => !prev);
+      setIsFavorite(!newFavoriteState);
+      setLikesCount((prev) => newFavoriteState ? Math.max(0, prev - 1) : prev + 1);
     }
     setIsTogglingFavorite(false);
   };
@@ -66,11 +79,11 @@ export default function WorkoutCard({ workout, isOwner, isFavorite: initialFavor
         </h2>
 
         <div className="flex items-center gap-2 shrink-0">
-          {isAuthenticated && (
+          {isAuthenticated ? (
             <button
               onClick={handleFavoriteClick}
               disabled={isTogglingFavorite}
-              className="p-1 transition-colors"
+              className="p-1 transition-colors flex items-center gap-1"
               title={isFavorite ? t('unfavorite') : t('favorite')}
             >
               <svg
@@ -81,7 +94,39 @@ export default function WorkoutCard({ workout, isOwner, isFavorite: initialFavor
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
               </svg>
+              {likesCount > 0 && (
+                <span className="text-xs font-medium text-foreground/60">
+                  {likesCount}
+                </span>
+              )}
             </button>
+          ) : (
+            <div className="relative">
+              <button
+                onClick={handleLoginHint}
+                className="p-1 flex items-center gap-1 text-foreground/60 hover:text-foreground/80 transition-colors"
+                title={t('loginToFavorite')}
+              >
+                <svg
+                  className="w-5 h-5 text-foreground/30"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                {likesCount > 0 && (
+                  <span className="text-xs font-medium">
+                    {likesCount}
+                  </span>
+                )}
+              </button>
+              {showLoginHint && (
+                <div className="absolute right-0 top-8 z-10 bg-surface border border-foreground/10 text-foreground/80 text-xs rounded-lg px-3 py-2 whitespace-nowrap shadow-lg">
+                  {t('loginToFavorite')}
+                </div>
+              )}
+            </div>
           )}
 
           {isOwner && workout.is_public === false && (
