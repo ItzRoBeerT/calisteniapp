@@ -113,8 +113,14 @@ fun AppNavigation() {
             )
         }
 
-        composable<Home> {
+        composable<Home> { backStackEntry ->
+            val workoutSaved = backStackEntry.savedStateHandle.get<Boolean>("workout_saved") == true
+            if (workoutSaved) {
+                backStackEntry.savedStateHandle.remove<Boolean>("workout_saved")
+            }
+
             OpenCalisthenicsApp(
+                workoutSaved = workoutSaved,
                 onLogout = {
                     navController.navigate(Login) {
                         popUpTo<Home> { inclusive = true }
@@ -155,7 +161,11 @@ fun AppNavigation() {
 
         composable<WorkoutCreate> {
             WorkoutFormScreen(
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                onSaveSuccess = {
+                    navController.getBackStackEntry<Home>().savedStateHandle["workout_saved"] = true
+                    navController.popBackStack()
+                }
             )
         }
 
@@ -163,7 +173,11 @@ fun AppNavigation() {
             val route = backStackEntry.toRoute<WorkoutEdit>()
             WorkoutFormScreen(
                 editWorkoutId = route.workoutId,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                onSaveSuccess = {
+                    navController.getBackStackEntry<Home>().savedStateHandle["workout_saved"] = true
+                    navController.popBackStack()
+                }
             )
         }
 

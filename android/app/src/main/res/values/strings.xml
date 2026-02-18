@@ -123,6 +123,8 @@
     <string name="workout_form_create">Crear workout</string>
     <string name="workout_form_estimated_duration">Duración estimada: %1$d min</string>
     <string name="workout_form_no_exercises">Añade al menos un ejercicio</string>
+    <string name="workout_created_success">Workout creado correctamente</string>
+    <string name="workout_updated_success">Workout actualizado correctamente</string>
 
     <!-- Workout Runner -->
     <string name="workout_runner_title">Entrenamiento</string>

@@ -63,6 +63,7 @@ import com.opencalisthenics.ui.theme.GrayText
 fun WorkoutFormScreen(
     editWorkoutId: Int? = null,
     onBack: () -> Unit,
+    onSaveSuccess: () -> Unit = onBack,
     viewModel: WorkoutFormViewModel = viewModel(
         factory = WorkoutFormViewModel.factory(
             LocalContext.current.applicationContext as Application,
@@ -73,7 +74,7 @@ fun WorkoutFormScreen(
     val state = viewModel.uiState
 
     LaunchedEffect(state.isSaved) {
-        if (state.isSaved) onBack()
+        if (state.isSaved) onSaveSuccess()
     }
 
     val textFieldColors = OutlinedTextFieldDefaults.colors(

@@ -31,7 +31,9 @@ data class WorkoutsUiState(
     val availableMuscleGroups: List<String> = emptyList(),
     val showFilters: Boolean = false,
     val isLoading: Boolean = false,
-    val errorMessage: UiText? = null
+    val isRefreshing: Boolean = false,
+    val errorMessage: UiText? = null,
+    val successMessage: UiText? = null
 )
 
 class WorkoutsViewModel(
@@ -59,7 +61,15 @@ class WorkoutsViewModel(
 
     fun loadWorkouts() {
         uiState = uiState.copy(isLoading = true, errorMessage = null)
+        fetchWorkouts()
+    }
 
+    fun onRefresh() {
+        uiState = uiState.copy(isRefreshing = true, errorMessage = null)
+        fetchWorkouts()
+    }
+
+    private fun fetchWorkouts() {
         val filters = if (uiState.selectedDifficulty != null || uiState.selectedMuscleGroup != null) {
             WorkoutFilters(
                 difficulty = uiState.selectedDifficulty,
@@ -87,14 +97,16 @@ class WorkoutsViewModel(
                         availableMuscleGroups = if (muscleGroups.isNotEmpty()) muscleGroups
                         else uiState.availableMuscleGroups,
                         hasMorePages = workouts.size >= pageSize,
-                        isLoading = false
+                        isLoading = false,
+                        isRefreshing = false
                     )
                 }
                 .onFailure { e ->
                     uiState = uiState.copy(
                         errorMessage = (e as? AppError)?.toUiText()
                             ?: UiText.StringResource(R.string.error_unknown),
-                        isLoading = false
+                        isLoading = false,
+                        isRefreshing = false
                     )
                 }
         }
@@ -131,6 +143,18 @@ class WorkoutsViewModel(
     fun onMuscleGroupSelected(muscleGroup: String?) {
         uiState = uiState.copy(selectedMuscleGroup = muscleGroup, currentPage = 1)
         loadWorkouts()
+    }
+
+    fun onWorkoutSaved() {
+        uiState = uiState.copy(
+            successMessage = UiText.StringResource(R.string.workout_created_success),
+            currentPage = 1
+        )
+        loadWorkouts()
+    }
+
+    fun onSuccessMessageShown() {
+        uiState = uiState.copy(successMessage = null)
     }
 
     fun onToggleFilters() {
