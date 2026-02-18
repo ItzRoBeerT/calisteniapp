@@ -151,22 +151,34 @@ fun WorkoutCard(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Action row: favorite + play
+            // Action row: favorite + likes count + play
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(
-                    onClick = onFavoriteClick,
-                    modifier = Modifier.size(32.dp)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
-                    Icon(
-                        imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                        contentDescription = null,
-                        tint = if (isFavorite) ErrorRed else GrayText,
-                        modifier = Modifier.size(20.dp)
-                    )
+                    IconButton(
+                        onClick = onFavoriteClick,
+                        modifier = Modifier.size(32.dp)
+                    ) {
+                        Icon(
+                            imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                            contentDescription = null,
+                            tint = if (isFavorite) ErrorRed else GrayText,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
+                    if (workout.likesCount > 0) {
+                        Text(
+                            text = workout.likesCount.toString(),
+                            color = GrayText,
+                            fontSize = 12.sp
+                        )
+                    }
                 }
                 IconButton(
                     onClick = onPlayClick,

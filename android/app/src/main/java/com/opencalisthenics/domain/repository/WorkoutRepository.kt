@@ -13,4 +13,6 @@ interface WorkoutRepository {
     suspend fun toggleFavorite(workoutId: Int): Result<Boolean>
     suspend fun getFavoriteIds(): Result<List<Int>>
     suspend fun saveCompletion(completion: WorkoutCompletion): Result<Unit>
+    suspend fun getUserWorkouts(): Result<List<Workout>>
+    suspend fun getFavoriteWorkoutsWithDetails(): Result<List<Workout>>
 }

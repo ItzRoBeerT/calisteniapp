@@ -12,7 +12,8 @@ data class WorkoutDto(
     val duration: Int? = null,
     val muscle_groups: List<String>? = null,
     val user_id: String? = null,
-    val is_public: Boolean = true
+    val is_public: Boolean = true,
+    val created_at: String? = null
 )
 
 @Serializable
@@ -58,6 +59,12 @@ data class WorkoutFavoriteDto(
     val id: Int = 0,
     val user_id: String,
     val workout_id: Int
+)
+
+@Serializable
+data class WorkoutFavoriteWithDateDto(
+    val workout_id: Int,
+    val created_at: String? = null
 )
 
 @Serializable

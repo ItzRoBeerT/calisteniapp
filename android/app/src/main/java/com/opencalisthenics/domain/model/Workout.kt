@@ -11,7 +11,10 @@ data class Workout(
     val username: String? = null,
     val isPublic: Boolean = true,
     val exercises: List<ExerciseWorkout> = emptyList(),
-    val tags: List<String> = emptyList()
+    val tags: List<String> = emptyList(),
+    val likesCount: Int = 0,
+    val createdAt: String = "",
+    val favoritedAt: String? = null
 )
 
 data class ExerciseWorkout(
