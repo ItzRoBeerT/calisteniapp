@@ -278,83 +278,87 @@ class WorkoutRepositoryImpl : WorkoutRepository {
         Result.failure(e.toAppError())
     }
 
-    override suspend fun getUserWorkouts(): Result<List<Workout>> = try {
-        val userId = client.auth.currentUserOrNull()?.id
-            ?: return Result.success(emptyList())
+    override suspend fun getUserWorkouts(): Result<List<Workout>> {
+        return try {
+            val userId = client.auth.currentUserOrNull()?.id
+                ?: return Result.success(emptyList())
 
-        val workouts = client.from("Workout").select {
-            filter { WorkoutDto::user_id eq userId }
-            order("created_at", io.github.jan.supabase.postgrest.query.Order.DESCENDING)
-        }.decodeList<WorkoutDto>()
+            val workouts = client.from("Workout").select {
+                filter { WorkoutDto::user_id eq userId }
+                order("created_at", io.github.jan.supabase.postgrest.query.Order.DESCENDING)
+            }.decodeList<WorkoutDto>()
 
-        val workoutsWithDetails = workouts.map { workout ->
-            val exercises = client.from("WorkoutExercise").select(
-                Columns.raw("*, Exercise(image)")
-            ) {
-                filter { WorkoutExerciseWithImageDto::workout_id eq workout.id }
-                order("order", io.github.jan.supabase.postgrest.query.Order.ASCENDING)
-            }.decodeList<WorkoutExerciseWithImageDto>()
-
-            val tags = client.from("WorkoutTags").select {
-                filter { WorkoutTagDto::workout_id eq workout.id }
-            }.decodeList<WorkoutTagDto>()
-
-            val likesCount = getLikesCountForWorkout(workout.id)
-
-            workout.toDomain(
-                exercises = exercises.map { it.toDomain() },
-                tags = tags.map { it.name },
-                likesCount = likesCount
-            )
-        }
-
-        Result.success(workoutsWithDetails)
-    } catch (e: Exception) {
-        Result.failure(e.toAppError())
-    }
-
-    override suspend fun getFavoriteWorkoutsWithDetails(): Result<List<Workout>> = try {
-        val userId = client.auth.currentUserOrNull()?.id
-            ?: return Result.success(emptyList())
-
-        val favorites = client.from("workout_favorites").select("workout_id, created_at") {
-            filter { eq("user_id", userId) }
-            order("created_at", io.github.jan.supabase.postgrest.query.Order.DESCENDING)
-        }.decodeList<WorkoutFavoriteWithDateDto>()
-
-        if (favorites.isEmpty()) return Result.success(emptyList())
-
-        val workoutsWithDetails = favorites.mapNotNull { fav ->
-            try {
-                val workout = client.from("Workout").select {
-                    filter { WorkoutDto::id eq fav.workout_id }
-                }.decodeSingle<WorkoutDto>()
-
+            val workoutsWithDetails = workouts.map { workout ->
                 val exercises = client.from("WorkoutExercise").select(
                     Columns.raw("*, Exercise(image)")
                 ) {
-                    filter { WorkoutExerciseWithImageDto::workout_id eq fav.workout_id }
+                    filter { WorkoutExerciseWithImageDto::workout_id eq workout.id }
                     order("order", io.github.jan.supabase.postgrest.query.Order.ASCENDING)
                 }.decodeList<WorkoutExerciseWithImageDto>()
 
                 val tags = client.from("WorkoutTags").select {
-                    filter { WorkoutTagDto::workout_id eq fav.workout_id }
+                    filter { WorkoutTagDto::workout_id eq workout.id }
                 }.decodeList<WorkoutTagDto>()
 
-                val likesCount = getLikesCountForWorkout(fav.workout_id)
+                val likesCount = getLikesCountForWorkout(workout.id)
 
                 workout.toDomain(
                     exercises = exercises.map { it.toDomain() },
                     tags = tags.map { it.name },
-                    likesCount = likesCount,
-                    favoritedAt = fav.created_at
+                    likesCount = likesCount
                 )
-            } catch (_: Exception) { null }
-        }
+            }
 
-        Result.success(workoutsWithDetails)
-    } catch (e: Exception) {
-        Result.failure(e.toAppError())
+            Result.success(workoutsWithDetails)
+        } catch (e: Exception) {
+            Result.failure(e.toAppError())
+        }
+    }
+
+    override suspend fun getFavoriteWorkoutsWithDetails(): Result<List<Workout>> {
+        return try {
+            val userId = client.auth.currentUserOrNull()?.id
+                ?: return Result.success(emptyList())
+
+            val favorites = client.from("workout_favorites").select(Columns.raw("workout_id, created_at")) {
+                filter { eq("user_id", userId) }
+                order("created_at", io.github.jan.supabase.postgrest.query.Order.DESCENDING)
+            }.decodeList<WorkoutFavoriteWithDateDto>()
+
+            if (favorites.isEmpty()) return Result.success(emptyList())
+
+            val workoutsWithDetails = favorites.mapNotNull { fav ->
+                try {
+                    val workout = client.from("Workout").select {
+                        filter { WorkoutDto::id eq fav.workout_id }
+                    }.decodeSingle<WorkoutDto>()
+
+                    val exercises = client.from("WorkoutExercise").select(
+                        Columns.raw("*, Exercise(image)")
+                    ) {
+                        filter { WorkoutExerciseWithImageDto::workout_id eq fav.workout_id }
+                        order("order", io.github.jan.supabase.postgrest.query.Order.ASCENDING)
+                    }.decodeList<WorkoutExerciseWithImageDto>()
+
+                    val tags = client.from("WorkoutTags").select {
+                        filter { WorkoutTagDto::workout_id eq fav.workout_id }
+                    }.decodeList<WorkoutTagDto>()
+
+                    val likesCount = getLikesCountForWorkout(fav.workout_id)
+
+                    workout.toDomain(
+                        exercises = exercises.map { it.toDomain() },
+                        tags = tags.map { it.name },
+                        likesCount = likesCount,
+                        favoritedAt = fav.created_at
+                    )
+                } catch (_: Exception) { null }
+            }
+
+            Result.success(workoutsWithDetails)
+        } catch (e: Exception) {
+            Result.failure(e.toAppError())
+        }
     }
 
     private fun calculateDuration(exercises: List<ExerciseWorkout>): Int {
