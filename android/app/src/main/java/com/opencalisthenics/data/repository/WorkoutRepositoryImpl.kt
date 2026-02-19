@@ -19,6 +19,7 @@ import com.opencalisthenics.domain.repository.WorkoutRepository
 import io.github.jan.supabase.auth.auth
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.postgrest.query.Columns
+import io.github.jan.supabase.postgrest.query.Order
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import java.net.UnknownHostException
 
@@ -45,7 +46,7 @@ class WorkoutRepositoryImpl : WorkoutRepository {
                 Columns.raw("*, Exercise(image)")
             ) {
                 filter { WorkoutExerciseWithImageDto::workout_id eq workout.id }
-                order("order", io.github.jan.supabase.postgrest.query.Order.ASCENDING)
+                order("order", Order.ASCENDING)
             }.decodeList<WorkoutExerciseWithImageDto>()
 
             val tags = client.from("WorkoutTags").select {
@@ -86,7 +87,7 @@ class WorkoutRepositoryImpl : WorkoutRepository {
             Columns.raw("*, Exercise(image)")
         ) {
             filter { WorkoutExerciseWithImageDto::workout_id eq id }
-            order("order", io.github.jan.supabase.postgrest.query.Order.ASCENDING)
+            order("order", Order.ASCENDING)
         }.decodeList<WorkoutExerciseWithImageDto>()
 
         val tags = client.from("WorkoutTags").select {
@@ -285,7 +286,7 @@ class WorkoutRepositoryImpl : WorkoutRepository {
 
             val workouts = client.from("Workout").select {
                 filter { WorkoutDto::user_id eq userId }
-                order("created_at", io.github.jan.supabase.postgrest.query.Order.DESCENDING)
+                order("created_at", Order.DESCENDING)
             }.decodeList<WorkoutDto>()
 
             val workoutsWithDetails = workouts.map { workout ->
@@ -293,7 +294,7 @@ class WorkoutRepositoryImpl : WorkoutRepository {
                     Columns.raw("*, Exercise(image)")
                 ) {
                     filter { WorkoutExerciseWithImageDto::workout_id eq workout.id }
-                    order("order", io.github.jan.supabase.postgrest.query.Order.ASCENDING)
+                    order("order", Order.ASCENDING)
                 }.decodeList<WorkoutExerciseWithImageDto>()
 
                 val tags = client.from("WorkoutTags").select {
@@ -322,7 +323,7 @@ class WorkoutRepositoryImpl : WorkoutRepository {
 
             val favorites = client.from("workout_favorites").select(Columns.raw("workout_id, created_at")) {
                 filter { eq("user_id", userId) }
-                order("created_at", io.github.jan.supabase.postgrest.query.Order.DESCENDING)
+                order("created_at", Order.DESCENDING)
             }.decodeList<WorkoutFavoriteWithDateDto>()
 
             if (favorites.isEmpty()) return Result.success(emptyList())
@@ -337,7 +338,7 @@ class WorkoutRepositoryImpl : WorkoutRepository {
                         Columns.raw("*, Exercise(image)")
                     ) {
                         filter { WorkoutExerciseWithImageDto::workout_id eq fav.workout_id }
-                        order("order", io.github.jan.supabase.postgrest.query.Order.ASCENDING)
+                        order("order", Order.ASCENDING)
                     }.decodeList<WorkoutExerciseWithImageDto>()
 
                     val tags = client.from("WorkoutTags").select {
