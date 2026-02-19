@@ -712,7 +712,11 @@
 		"cancelWorkout": "Cancelar",
 		"cancelConfirm": "¿Seguro que quieres cancelar el entrenamiento?",
 		"cancelYes": "Sí, cancelar",
-		"cancelNo": "No, continuar"
+		"cancelNo": "No, continuar",
+		"myWorkouts": "Mis Entrenamientos",
+		"likedWorkouts": "Entrenamientos Favoritos",
+		"loading": "Cargando...",
+		"allWorkouts": "Todos los Entrenamientos"
 	},
 	"Footer": {
 		"copyright": "Todos los derechos reservados.",
