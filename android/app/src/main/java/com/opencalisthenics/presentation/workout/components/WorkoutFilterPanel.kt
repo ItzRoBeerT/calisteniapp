@@ -20,6 +20,7 @@ import com.opencalisthenics.R
 import com.opencalisthenics.presentation.exercise.muscleGroupLabel
 import com.opencalisthenics.presentation.workout.workoutDifficultyColor
 import com.opencalisthenics.ui.theme.GrayText
+import com.opencalisthenics.ui.theme.Primary600
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -66,14 +67,12 @@ fun WorkoutFilterPanel(
                                 "Advanced" -> stringResource(R.string.difficulty_advanced)
                                 else -> difficulty
                             },
-                            fontSize = 12.sp
+                            fontSize = 13.sp
                         )
                     },
                     colors = FilterChipDefaults.filterChipColors(
-                        containerColor = difficultyColor.copy(alpha = 0.1f),
-                        labelColor = difficultyColor,
-                        selectedContainerColor = difficultyColor.copy(alpha = 0.25f),
-                        selectedLabelColor = difficultyColor
+                        selectedContainerColor = difficultyColor,
+                        selectedLabelColor = MaterialTheme.colorScheme.onPrimary
                     )
                 )
             }
@@ -101,12 +100,12 @@ fun WorkoutFilterPanel(
                         label = {
                             Text(
                                 text = muscleGroupLabel(group),
-                                fontSize = 12.sp
+                                fontSize = 13.sp
                             )
                         },
                         colors = FilterChipDefaults.filterChipColors(
-                            selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
-                            selectedLabelColor = MaterialTheme.colorScheme.primary
+                            selectedContainerColor = Primary600,
+                            selectedLabelColor = MaterialTheme.colorScheme.onPrimary
                         )
                     )
                 }
