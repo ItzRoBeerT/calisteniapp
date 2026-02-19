@@ -143,6 +143,14 @@
     <string name="workout_runner_rest_title">Rest</string>
     <string name="workout_runner_select">Select a workout</string>
 
+    <!-- Workout Selection -->
+    <string name="workout_selection_title">Select a workout</string>
+    <string name="workout_selection_my_workouts">My workouts</string>
+    <string name="workout_selection_liked_workouts">Workouts you like</string>
+    <string name="workout_selection_empty">You have no personal or saved workouts. Create one or explore the catalog!</string>
+    <string name="workout_selection_created">Created on %1$s</string>
+    <string name="workout_selection_liked_on">Liked on %1$s</string>
+
     <!-- Errors -->
     <string name="error_sign_in">Error signing in</string>
     <string name="error_sign_out">Error signing out</string>
