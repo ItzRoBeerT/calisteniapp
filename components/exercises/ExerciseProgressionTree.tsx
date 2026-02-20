@@ -5,17 +5,19 @@ import cytoscape from 'cytoscape';
 import { useRouter, useParams } from 'next/navigation';
 import { getExerciseProgressionData, getDifficultyColor, getDifficultyBgColor } from '@/utils/exerciseProgressionUtils';
 import { getProgressionByExerciseId } from '@/data/exerciseProgressions';
+import type { ExerciseProgression } from '@/data/exerciseProgressions';
 import { createSlug } from '@/utils/slugs';
 
 interface ExerciseProgressionTreeProps {
 	exerciseId: number;
 	exerciseName: string;
+	progression?: ExerciseProgression;
 }
 
 const VERTICAL_GAP = 80;
 const HORIZONTAL_GAP = 160;
 
-export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgressionTreeProps) {
+export default function ExerciseProgressionTree({ exerciseId, progression }: ExerciseProgressionTreeProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const cyRef = useRef<cytoscape.Core | null>(null);
 	const router = useRouter();
@@ -23,8 +25,8 @@ export default function ExerciseProgressionTree({ exerciseId }: ExerciseProgress
 	const locale = (params.locale as string) || 'es';
 
 	const progressionData = useMemo(
-		() => getExerciseProgressionData(exerciseId, locale),
-		[exerciseId, locale]
+		() => getExerciseProgressionData(exerciseId, locale, progression),
+		[exerciseId, locale, progression]
 	);
 
 	const { elements, hasAnyProgression, prereqGroupCount, progLevelCount } = useMemo(() => {

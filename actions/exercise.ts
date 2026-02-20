@@ -3,6 +3,7 @@ import { Exercise, ExerciseBase, ExerciseTranslation, Filter } from '@/types/sup
 import { createClient } from '@/utils/supabase/server';
 import { getMockExercises, mockFilters, exercisesBaseData } from '@/utils/mock-data';
 import { NotFoundError, BadRequestError, UnauthorizedError } from '@/utils/errors';
+import { getProgressionByExerciseId, type ExerciseProgression } from '@/data/exerciseProgressions';
 
 const EXERCISES_PER_PAGE = 12;
 
@@ -311,6 +312,31 @@ export async function filter(filters: Filter, locale: string = 'es') {
 	}
 
 	return applyTranslations(data as Exercise[], locale);
+}
+
+export async function getExerciseProgression(exerciseId: number): Promise<ExerciseProgression | undefined> {
+	const supabase = await createClient();
+
+	if (!supabase) {
+		return getProgressionByExerciseId(exerciseId);
+	}
+
+	const { data } = await supabase
+		.from('exercise_progressions')
+		.select('exercise_id, prerequisites, variations, progressions')
+		.eq('exercise_id', exerciseId)
+		.single();
+
+	if (!data) {
+		return getProgressionByExerciseId(exerciseId);
+	}
+
+	return {
+		exerciseId: data.exercise_id,
+		prerequisites: data.prerequisites ?? [],
+		variations: data.variations ?? [],
+		progressions: data.progressions ?? [],
+	};
 }
 
 // Ejemplo de función que podría lanzar diferentes tipos de errores
