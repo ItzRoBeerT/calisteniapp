@@ -1,15 +1,21 @@
 package com.opencalisthenics.data.repository
 
 import android.content.Context
+import com.opencalisthenics.data.SupabaseClient
 import com.opencalisthenics.data.model.ExerciseDto
-import com.opencalisthenics.domain.model.Exercise
+import com.opencalisthenics.data.model.ExerciseProgressionDto
 import com.opencalisthenics.domain.model.AppError
+import com.opencalisthenics.domain.model.Exercise
+import com.opencalisthenics.domain.model.ExerciseProgression
 import com.opencalisthenics.domain.repository.ExerciseRepository
+import io.github.jan.supabase.postgrest.from
 import kotlinx.serialization.json.Json
 
 class ExerciseRepositoryImpl(
     private val context: Context
 ) : ExerciseRepository {
+
+    private val supabaseClient = SupabaseClient.client
 
     private val json = Json { ignoreUnknownKeys = true }
 
@@ -46,6 +52,23 @@ class ExerciseRepositoryImpl(
         })
     } catch (e: Exception) {
         Result.failure(AppError.Unknown(e.message))
+    }
+
+    override suspend fun getProgressionForExercise(id: Int): Result<ExerciseProgression?> = try {
+        val rows = supabaseClient.from("exercise_progressions").select {
+            filter { eq("exercise_id", id) }
+        }.decodeList<ExerciseProgressionDto>()
+        val dto = rows.firstOrNull()
+        Result.success(dto?.let {
+            ExerciseProgression(
+                exerciseId = it.exercise_id,
+                prerequisites = it.prerequisites,
+                variations = it.variations,
+                progressions = it.progressions
+            )
+        })
+    } catch (e: Exception) {
+        Result.success(null) // graceful fallback — show exercise detail without tree
     }
 
     companion object {

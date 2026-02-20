@@ -53,6 +53,7 @@
     <string name="exercise_equipment">Equipamiento</string>
     <string name="exercise_category">Categoría</string>
     <string name="exercise_type">Tipo</string>
+    <string name="exercise_progression_title">Árbol de progresión</string>
 
     <!-- Difficulty Levels (filter chips) -->
     <string name="difficulty_beginner">Principiante</string>

@@ -48,6 +48,7 @@ import com.opencalisthenics.ui.theme.Primary600
 fun ExerciseDetailScreen(
     exerciseId: Int,
     onBack: () -> Unit,
+    onExerciseClick: (Int) -> Unit = {},
     viewModel: ExerciseDetailViewModel = viewModel(
         factory = ExerciseDetailViewModel.factory(
             LocalContext.current.applicationContext as android.app.Application,
@@ -96,7 +97,13 @@ fun ExerciseDetailScreen(
                 }
             }
             uiState.exercise != null -> {
-                ExerciseDetailContent(exercise = uiState.exercise)
+                ExerciseDetailContent(
+                    exercise = uiState.exercise,
+                    prerequisites = uiState.prerequisites,
+                    variations = uiState.variations,
+                    progressions = uiState.progressions,
+                    onExerciseClick = onExerciseClick
+                )
             }
         }
     }
@@ -104,7 +111,13 @@ fun ExerciseDetailScreen(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ExerciseDetailContent(exercise: Exercise) {
+private fun ExerciseDetailContent(
+    exercise: Exercise,
+    prerequisites: List<Exercise> = emptyList(),
+    variations: List<Exercise> = emptyList(),
+    progressions: List<Exercise> = emptyList(),
+    onExerciseClick: (Int) -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -186,6 +199,21 @@ private fun ExerciseDetailContent(exercise: Exercise) {
                         text = exercise.type,
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+            }
+
+            val hasAnyProgression =
+                prerequisites.isNotEmpty() || variations.isNotEmpty() || progressions.isNotEmpty()
+            if (hasAnyProgression) {
+                DetailSection(title = stringResource(R.string.exercise_progression_title)) {
+                    ExerciseProgressionGraph(
+                        current = exercise,
+                        prerequisites = prerequisites,
+                        variations = variations,
+                        progressions = progressions,
+                        onNodeClick = onExerciseClick,
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
             }

@@ -152,7 +152,8 @@ fun AppNavigation() {
             val route = backStackEntry.toRoute<ExerciseDetail>()
             ExerciseDetailScreen(
                 exerciseId = route.exerciseId,
-                onBack = { navController.popBackStack() }
+                onBack = { navController.popBackStack() },
+                onExerciseClick = { id -> navController.navigate(ExerciseDetail(id)) }
             )
         }
 
