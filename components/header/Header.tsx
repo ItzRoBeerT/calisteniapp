@@ -3,6 +3,7 @@ import { Link } from '@/i18n/navigation';
 import NavLink from '@/components/header/NavLink';
 import UserMenu from './UserMenu';
 import MobileMenu from './MobileMenu';
+import ScrollProgressBar from './ScrollProgressBar';
 import { getTranslations, getLocale } from 'next-intl/server';
 import Image from 'next/image';
 
@@ -46,7 +47,7 @@ export default async function Header() {
 	};
 
 	return (
-		<header className="bg-surface/90 backdrop-blur-md border-b border-white/5 sticky top-0 z-50">
+		<header className="relative bg-surface/90 backdrop-blur-md border-b border-white/5 sticky top-0 z-50">
 			<div className="container mx-auto px-4 py-3 flex justify-between items-center">
 				<Link href="/" className="flex items-center gap-2 group">
 					<Image
@@ -95,6 +96,7 @@ export default async function Header() {
 				{/* Mobile navigation */}
 				<MobileMenu user={user} userName={userName} translations={translations} />
 			</div>
+			<ScrollProgressBar />
 		</header>
 	);
 }

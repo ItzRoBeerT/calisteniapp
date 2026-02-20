@@ -1,7 +1,6 @@
 'use client';
 
 import { Link } from '@/i18n/navigation';
-import { useEffect, useState } from 'react';
 
 interface BlogPostLayoutProps {
 	title: string;
@@ -22,21 +21,6 @@ export function BlogPostLayout({
 	trainingLogLabel,
 	postNumber,
 }: BlogPostLayoutProps) {
-	const [scrollProgress, setScrollProgress] = useState(0);
-
-	useEffect(() => {
-		const handleScroll = () => {
-			const scrollTop = window.scrollY;
-			const docHeight =
-				document.documentElement.scrollHeight - window.innerHeight;
-			setScrollProgress(
-				docHeight > 0 ? (scrollTop / docHeight) * 100 : 0
-			);
-		};
-		window.addEventListener('scroll', handleScroll, { passive: true });
-		return () => window.removeEventListener('scroll', handleScroll);
-	}, []);
-
 	const paragraphs = content.split('\n\n').filter(Boolean);
 	const wordCount = content.split(/\s+/).filter(Boolean).length;
 	const readingTime = Math.max(1, Math.ceil(wordCount / 200));
@@ -183,18 +167,7 @@ export function BlogPostLayout({
 							</div>
 							<div className="h-px flex-1 bg-gradient-to-l from-primary-500/50 via-primary-500/15 to-transparent" />
 						</div>
-						{/* Progress bar at bottom of header */}
-						<div className="w-full h-[2px] bg-white/5 rounded-full overflow-hidden">
-							<div
-								className="h-full transition-all duration-75 ease-out rounded-full"
-								style={{
-									width: `${scrollProgress}%`,
-									background: 'linear-gradient(90deg, #32D74B, #03DAC5)',
-									boxShadow: '0 0 8px rgba(50,215,75,0.6)',
-								}}
-							/>
 						</div>
-					</div>
 				</header>
 
 				{/* Article body */}
