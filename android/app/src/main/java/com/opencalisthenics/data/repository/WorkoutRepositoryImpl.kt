@@ -1,7 +1,6 @@
 package com.opencalisthenics.data.repository
 
 import com.opencalisthenics.data.SupabaseClient
-import com.opencalisthenics.data.model.ExerciseImageDto
 import com.opencalisthenics.data.model.ProfileUsernameDto
 import com.opencalisthenics.data.model.WorkoutCompletionDto
 import com.opencalisthenics.data.model.WorkoutDto
