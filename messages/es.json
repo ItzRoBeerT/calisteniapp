@@ -4,21 +4,34 @@
 			"1": {
 				"title": "Introducción a la Calistenia",
 				"slug": "introduccion-a-la-calistenia",
-				"excerpt": "Descubre los fundamentos de la calistenia y cómo empezar tu entrenamiento."
+				"excerpt": "Descubre los fundamentos de la calistenia y cómo empezar tu entrenamiento.",
+				"date": "15 de enero de 2025",
+				"content": "La calistenia es una forma de entrenamiento que utiliza el peso corporal como resistencia. Es una disciplina accesible para todos, ya que no requiere equipamiento costoso ni membresías de gimnasio. Con solo tu cuerpo y algo de espacio, puedes desarrollar fuerza, flexibilidad y coordinación de manera progresiva.\n\nLos ejercicios fundamentales de la calistenia incluyen las flexiones, dominadas, fondos y sentadillas. Cada uno de estos movimientos trabaja múltiples grupos musculares simultáneamente, lo que hace que los entrenamientos sean eficientes y completos. A medida que progresas, puedes aumentar la dificultad mediante variaciones más avanzadas.\n\nPara comenzar, te recomendamos establecer una rutina de 3 a 4 días por semana, alternando días de trabajo con días de descanso. Empieza con las versiones más básicas de cada ejercicio y ve aumentando progresivamente la dificultad. La consistencia es la clave del progreso en la calistenia.\n\nEn OpenCalisthenics encontrarás una biblioteca completa de ejercicios con instrucciones detalladas y progresiones recomendadas. También puedes crear tus propias rutinas personalizadas y seguir tu progreso a lo largo del tiempo."
 			},
 			"2": {
 				"title": "Novedades: Integración de IA para Rutinas Personalizadas",
 				"slug": "ia-rutinas-personalizadas",
-				"excerpt": "Ahora puedes generar rutinas personalizadas con nuestra nueva función de IA."
+				"excerpt": "Ahora puedes generar rutinas personalizadas con nuestra nueva función de IA.",
+				"date": "3 de febrero de 2025",
+				"content": "Nos complace anunciar una de las novedades más esperadas de OpenCalisthenics: la integración de inteligencia artificial para la creación de rutinas personalizadas. Esta nueva función analiza tus objetivos, nivel de experiencia y equipamiento disponible para generar entrenamientos adaptados específicamente a ti.\n\nLa IA tiene en cuenta múltiples factores al crear tu rutina: tu nivel actual de fitness, los músculos que deseas trabajar, el tiempo que tienes disponible y cualquier restricción física que puedas tener. El resultado es un plan de entrenamiento coherente y progresivo que se adapta a tus necesidades únicas.\n\nPara acceder a esta función, simplemente ve a la sección de entrenamientos y selecciona la opción de creación asistida. Responde algunas preguntas sobre tus objetivos y preferencias, y en segundos tendrás un plan personalizado listo para usar. Puedes guardarlo, modificarlo y compartirlo con otros usuarios.\n\nEsta es solo la primera fase de nuestra integración de IA. En los próximos meses, continuaremos mejorando el sistema con capacidad de ajuste basada en tu progreso y retroalimentación."
 			},
 			"3": {
 				"title": "Progresiones Calisténicas: Del Nivel Básico al Avanzado",
 				"slug": "progresiones-calistenicas",
-				"excerpt": "Aprende cómo avanzar en tus ejercicios de calistenia con progresiones efectivas."
+				"excerpt": "Aprende cómo avanzar en tus ejercicios de calistenia con progresiones efectivas.",
+				"date": "20 de febrero de 2026",
+				"content": "Una de las características más fascinantes de la calistenia es su sistema de progresiones. Cada ejercicio avanzado tiene una serie de etapas que te permiten desarrollar la fuerza y técnica necesarias de forma gradual y segura. Entender estas progresiones es fundamental para avanzar de manera efectiva.\n\nTomemos como ejemplo las dominadas: el camino comienza con los ejercicios de activación escapular y dominadas negativas, luego avanzas a dominadas con banda de asistencia y dominadas normales, para finalmente llegar a las dominadas con peso adicional y la dominada a una sola mano. Cada paso construye sobre el anterior.\n\nLo mismo ocurre con ejercicios de empuje como las flexiones: desde las flexiones en pared para principiantes absolutos, pasando por las inclinadas y las de rodillas, hasta llegar a las flexiones estándar, diamante, arquero y finalmente la flexión a una mano. La clave es no saltarse etapas y dominar cada nivel antes de avanzar.\n\nEn OpenCalisthenics, cada ejercicio incluye su árbol de progresión, mostrándote los ejercicios previos necesarios y los que podrás desbloquear al dominarlo. Usa los roadmaps disponibles para planificar tu camino de aprendizaje y llevar un registro de tu progreso."
 			}
 		},
 		"title": "Nuestro Blog",
 		"welcome": "Bienvenido al blog de OpenCalisthenics. Aquí encontrarás artículos, guías y consejos para mejorar tu entrenamiento de calistenia y aprovechar al máximo nuestra aplicación."
+	},
+	"BlogPost": {
+		"backToBlog": "Volver al Blog",
+		"notFound": "Artículo no encontrado",
+		"notFoundDescription": "El artículo que buscas no existe o ha sido eliminado.",
+		"publishedOn": "Publicado el",
+		"trainingLog": "Registro de Entrenamiento"
 	},
 	"Globals": {
 		"brand": "OpenCalisthenics",

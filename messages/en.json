@@ -4,21 +4,34 @@
 		"1": {
 		  "title": "Introduction to Calisthenics",
 		  "slug": "introduction-to-calisthenics",
-		  "excerpt": "Discover the fundamentals of calisthenics and how to start your training."
+		  "excerpt": "Discover the fundamentals of calisthenics and how to start your training.",
+		  "date": "January 15, 2025",
+		  "content": "Calisthenics is a form of training that uses your own body weight as resistance. It is an accessible discipline for everyone, as it requires no expensive equipment or gym memberships. With just your body and some space, you can develop strength, flexibility, and coordination progressively.\n\nThe fundamental calisthenics exercises include push-ups, pull-ups, dips, and squats. Each of these movements works multiple muscle groups simultaneously, making workouts efficient and comprehensive. As you progress, you can increase difficulty through more advanced variations.\n\nTo get started, we recommend establishing a routine of 3 to 4 days per week, alternating work days with rest days. Begin with the most basic versions of each exercise and progressively increase the difficulty. Consistency is the key to progress in calisthenics.\n\nAt OpenCalisthenics, you will find a complete exercise library with detailed instructions and recommended progressions. You can also create your own personalized routines and track your progress over time."
 		},
 		"2": {
 		  "title": "News: AI Integration for Personalized Routines",
 		  "slug": "ai-personalized-routines",
-		  "excerpt": "Now you can generate personalized routines with our new AI feature."
+		  "excerpt": "Now you can generate personalized routines with our new AI feature.",
+		  "date": "February 3, 2025",
+		  "content": "We are pleased to announce one of the most anticipated features of OpenCalisthenics: artificial intelligence integration for creating personalized routines. This new feature analyzes your goals, experience level, and available equipment to generate workouts specifically tailored to you.\n\nThe AI takes into account multiple factors when creating your routine: your current fitness level, the muscles you want to work, the time you have available, and any physical restrictions you may have. The result is a coherent and progressive training plan that adapts to your unique needs.\n\nTo access this feature, simply go to the workouts section and select the assisted creation option. Answer a few questions about your goals and preferences, and in seconds you will have a personalized plan ready to use. You can save it, modify it, and share it with other users.\n\nThis is just the first phase of our AI integration. In the coming months, we will continue to improve the system with adjustment capabilities based on your progress and feedback."
 		},
 		"3": {
 		  "title": "Calisthenic Progressions: From Beginner to Advanced",
 		  "slug": "calisthenic-progressions",
-		  "excerpt": "Learn how to advance your calisthenics exercises with effective progressions."
+		  "excerpt": "Learn how to advance your calisthenics exercises with effective progressions.",
+		  "date": "February 20, 2026",
+		  "content": "One of the most fascinating aspects of calisthenics is its progression system. Every advanced exercise has a series of stages that allow you to develop the necessary strength and technique gradually and safely. Understanding these progressions is essential for advancing effectively.\n\nTake pull-ups as an example: the journey begins with scapular activation exercises and negative pull-ups, then you advance to band-assisted pull-ups and regular pull-ups, to finally reach weighted pull-ups and the one-arm pull-up. Each step builds upon the previous one.\n\nThe same applies to pushing exercises like push-ups: from wall push-ups for absolute beginners, through incline and knee push-ups, to standard push-ups, diamond push-ups, archer push-ups, and finally the one-arm push-up. The key is not to skip stages and to master each level before advancing.\n\nAt OpenCalisthenics, each exercise includes its progression tree, showing you the prerequisite exercises and those you will unlock upon mastering it. Use the available roadmaps to plan your learning path and keep track of your progress."
 		}
 	  },
 	  "title": "Our Blog",
 	  "welcome": "Welcome to the OpenCalisthenics blog. Here you will find articles, guides, and tips to improve your calisthenics training and get the most out of our app."
+	},
+	"BlogPost": {
+	  "backToBlog": "Back to Blog",
+	  "notFound": "Article Not Found",
+	  "notFoundDescription": "The article you are looking for does not exist or has been removed.",
+	  "publishedOn": "Published on",
+	  "trainingLog": "Training Log"
 	},
 	"Globals": {
 	  "brand": "OpenCalisthenics",
