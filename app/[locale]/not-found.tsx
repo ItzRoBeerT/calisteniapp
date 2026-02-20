@@ -11,7 +11,14 @@ export default async function NotFound() {
   const t = await getTranslations('NotFound');
 
   return (
-    <div className="min-h-[calc(100vh-200px)] flex flex-col items-center justify-center p-4 relative overflow-hidden">
+    <div
+      className="min-h-[calc(100vh-104px)] flex flex-col items-center justify-center p-4 relative overflow-hidden -my-4"
+      style={{
+        width: '100vw',
+        marginLeft: 'calc(50% - 50vw)',
+        marginRight: 'calc(50% - 50vw)',
+      }}
+    >
       {/* Background gradient */}
       <div
         className="absolute inset-0 pointer-events-none"
