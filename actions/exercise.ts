@@ -211,25 +211,48 @@ export async function getExercisesByPage(
 }
 
 export async function getExerciseByName(name: string, locale: string = 'es') {
-	// First try to find in mock data (always available with translations)
+	const nameLower = name.toLowerCase();
+
+	// First try to find in mock data for current locale
 	const mockExercise = getMockExercises(locale).find(
-		(e) => e.name.toLowerCase() === name.toLowerCase()
+		(e) => e.name.toLowerCase() === nameLower
 	);
 
 	const supabase = await createClient();
 
 	if (!supabase) {
-		return mockExercise || null;
+		if (mockExercise) return mockExercise;
+		// Cross-locale fallback for mock data: find by name in other locales, return with current locale's translation
+		const otherLocales = Object.keys(translationsByLocale).filter((l) => l !== locale);
+		for (const otherLocale of otherLocales) {
+			const found = getMockExercises(otherLocale).find((e) => e.name.toLowerCase() === nameLower);
+			if (found) {
+				return getMockExercises(locale).find((e) => e.id === found.id) || null;
+			}
+		}
+		return null;
 	}
 
-	// Find the exercise ID by translated name
+	// Find the exercise ID by translated name in the current locale
 	const translations = translationsByLocale[locale] || translationsByLocale.es;
-	const exerciseId = Object.entries(translations).find(
-		([, translation]) => translation.name.toLowerCase() === name.toLowerCase()
+	let exerciseId = Object.entries(translations).find(
+		([, translation]) => translation.name.toLowerCase() === nameLower
 	)?.[0];
 
+	// Cross-locale fallback: if not found in current locale, search other locales' translations
+	if (!exerciseId) {
+		const otherLocales = Object.keys(translationsByLocale).filter((l) => l !== locale);
+		for (const otherLocale of otherLocales) {
+			const otherTranslations = translationsByLocale[otherLocale];
+			exerciseId = Object.entries(otherTranslations).find(
+				([, translation]) => translation.name.toLowerCase() === nameLower
+			)?.[0];
+			if (exerciseId) break;
+		}
+	}
+
 	if (exerciseId) {
-		// Found by translation, fetch by ID
+		// Found by translation (current or other locale), fetch by ID
 		const { data } = await supabase
 			.from('Exercise')
 			.select('*')
