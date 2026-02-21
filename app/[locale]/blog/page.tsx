@@ -1,4 +1,4 @@
-import { Link } from '@/i18n/navigation';
+import BlogList from '@/components/blog/BlogList';
 import { Metadata } from 'next';
 import { useTranslations } from 'next-intl';
 
@@ -10,9 +10,6 @@ export const metadata: Metadata = {
 
 export default function BlogPage() {
 	const t = useTranslations('BlogPage');
-
-	//TODO: Actualizar a una forma de iterar los blogs más dinámica
-	const keys = ['1', '2', '3'] as const;
 
 	return (
 		<div className="relative min-h-screen bg-background overflow-x-hidden">
@@ -124,66 +121,7 @@ export default function BlogPage() {
 				</header>
 
 				{/* Posts list */}
-				<ul>
-					{keys.map((key, index) => (
-						<li key={key} className={`rv rv-d${index + 5}`}>
-							<Link
-								href={{
-									pathname: '/blog/[slug]',
-									params: { slug: t(`Posts.${key}.slug`) },
-								}}
-								className="group relative flex items-start gap-6 py-10 border-b border-white/5 hover:border-primary-500/20 transition-colors duration-300"
-							>
-								{/* Left accent bar — slides in on hover */}
-								<div
-									className="absolute left-0 top-4 bottom-4 w-[2px] scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top"
-									style={{
-										background:
-											'linear-gradient(to bottom, rgba(187,134,252,0.7), rgba(187,134,252,0.05))',
-									}}
-								/>
-
-								{/* Ordinal number */}
-								<div
-									className="shrink-0 w-12 text-right font-bold leading-none pt-1 text-gray-700 group-hover:text-primary-500/50 transition-colors duration-300"
-									style={{
-										fontFamily: 'Orbitron, sans-serif',
-										fontSize: '1.75rem',
-									}}
-								>
-									{String(index + 1).padStart(2, '0')}
-								</div>
-
-								{/* Content */}
-								<div className="flex-1 min-w-0">
-									<h2
-										className="font-bold text-white mb-3 group-hover:text-primary-200 transition-colors duration-300"
-										style={{
-											fontFamily: 'Orbitron, sans-serif',
-											fontSize: 'clamp(0.95rem, 2.2vw, 1.25rem)',
-											lineHeight: 1.3,
-										}}
-									>
-										{t(`Posts.${key}.title`)}
-									</h2>
-									<p className="text-gray-500 text-sm leading-relaxed line-clamp-2">
-										{t(`Posts.${key}.excerpt`)}
-									</p>
-								</div>
-
-								{/* Date + arrow */}
-								<div className="shrink-0 flex flex-col items-end gap-3 pt-1">
-									<span className="font-mono text-xs text-secondary-400/60 tracking-wider whitespace-nowrap hidden sm:block">
-										{t(`Posts.${key}.date`)}
-									</span>
-									<span className="font-mono text-primary-400/40 group-hover:text-primary-400 group-hover:translate-x-1 transition-all duration-300">
-										→
-									</span>
-								</div>
-							</Link>
-						</li>
-					))}
-				</ul>
+				<BlogList />
 			</div>
 		</div>
 	);

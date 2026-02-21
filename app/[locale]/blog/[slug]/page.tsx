@@ -1,9 +1,10 @@
 import { BlogPostLayout } from '@/components/blog/BlogPostLayout';
 import { getTranslations } from 'next-intl/server';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import type { Metadata } from 'next';
+import { BLOG_POST_KEYS } from '../config';
 
-const POST_KEYS = ['1', '2', '3'] as const;
+const OTHER_LOCALE: Record<string, string> = { es: 'en', en: 'es' };
 
 export async function generateMetadata({
 	params,
@@ -13,7 +14,7 @@ export async function generateMetadata({
 	const { slug } = await params;
 	const t = await getTranslations('BlogPage');
 
-	const postKey = POST_KEYS.find(
+	const postKey = BLOG_POST_KEYS.find(
 		(key) => t(`Posts.${key}.slug` as Parameters<typeof t>[0]) === slug
 	);
 
@@ -32,15 +33,29 @@ export default async function PostPage({
 }: {
 	params: Promise<{ slug: string; locale: string }>;
 }) {
-	const { slug } = await params;
+	const { slug, locale } = await params;
 	const t = await getTranslations('BlogPage');
 	const tPost = await getTranslations('BlogPost');
 
-	const postKey = POST_KEYS.find(
+	let postKey = BLOG_POST_KEYS.find(
 		(key) => t(`Posts.${key}.slug` as Parameters<typeof t>[0]) === slug
 	);
 
 	if (!postKey) {
+		// Slug not found in current locale — try the other locale (cross-locale navigation)
+		const otherLocale = OTHER_LOCALE[locale] ?? 'en';
+		const tOther = await getTranslations({ locale: otherLocale, namespace: 'BlogPage' });
+
+		const crossLocaleKey = BLOG_POST_KEYS.find(
+			(key) => tOther(`Posts.${key}.slug` as Parameters<typeof tOther>[0]) === slug
+		);
+
+		if (crossLocaleKey) {
+			// Redirect to the correct slug in the current locale
+			const correctSlug = t(`Posts.${crossLocaleKey}.slug` as Parameters<typeof t>[0]);
+			redirect(`/${locale}/blog/${correctSlug}`);
+		}
+
 		notFound();
 	}
 
