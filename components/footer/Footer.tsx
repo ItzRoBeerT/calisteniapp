@@ -7,7 +7,7 @@ export default async function Footer() {
 	const t = await getTranslations('Footer');
 
 	return (
-		<footer className="bg-surface/90 backdrop-blur-md border-t border-white/5 mt-auto w-full">
+		<footer className="relative z-20 bg-surface/90 backdrop-blur-md border-t border-white/5 mt-auto w-full">
 			<div className="container mx-auto py-2 px-4">
 				<div className="flex flex-col md:flex-row justify-between items-center gap-2">
 					{/* Brand */}
