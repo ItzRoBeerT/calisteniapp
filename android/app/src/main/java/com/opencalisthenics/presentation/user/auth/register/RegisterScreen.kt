@@ -1,5 +1,6 @@
 package com.opencalisthenics.presentation.user.auth.register
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -23,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -35,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.opencalisthenics.R
 import com.opencalisthenics.presentation.common.AppButton
+import com.opencalisthenics.presentation.common.LanguageSwitcher
 import com.opencalisthenics.ui.theme.Background
 import com.opencalisthenics.ui.theme.ErrorRed
 import com.opencalisthenics.ui.theme.GrayText
@@ -65,18 +70,30 @@ fun RegisterScreen(
             .fillMaxSize()
             .background(Background)
             .imePadding()
-            .verticalScroll(rememberScrollState()),
-        contentAlignment = Alignment.Center
     ) {
-        Column(
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 32.dp)
-                .clip(RoundedCornerShape(12.dp))
-                .background(Surface)
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
+            contentAlignment = Alignment.Center
         ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 32.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Surface)
+                    .padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = null,
+                modifier = Modifier.size(100.dp)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             Text(
                 text = stringResource(R.string.register_title),
                 fontSize = 28.sp,
@@ -208,7 +225,15 @@ fun RegisterScreen(
                 )
             }
         }
+
+        LanguageSwitcher(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .statusBarsPadding()
+                .padding(end = 8.dp)
+        )
     }
+}
 }
 
 @Preview(showBackground = true)

@@ -24,6 +24,7 @@
 
     <!-- Profile -->
     <string name="profile_title">Perfil</string>
+    <string name="profile_language">Idioma</string>
     <string name="profile_email">Email</string>
     <string name="profile_member_since">Miembro desde %1$s</string>
     <string name="profile_edit">Editar perfil</string>

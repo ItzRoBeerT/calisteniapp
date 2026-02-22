@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -30,6 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.opencalisthenics.R
+import com.opencalisthenics.presentation.common.LanguageSwitcher
 import com.opencalisthenics.presentation.common.UiText
 import com.opencalisthenics.ui.theme.ErrorRed
 import com.opencalisthenics.ui.theme.GrayText
@@ -66,6 +68,34 @@ fun ProfileAccountSection(
                 label = stringResource(R.string.profile_email),
                 value = email.ifEmpty { "..." }
             )
+
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 20.dp),
+                color = Color.White.copy(alpha = 0.06f)
+            )
+
+            // Language row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 4.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Language,
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp),
+                    tint = GrayText
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    text = stringResource(R.string.profile_language),
+                    fontSize = 14.sp,
+                    color = Color.White,
+                    modifier = Modifier.weight(1f)
+                )
+                LanguageSwitcher()
+            }
 
             HorizontalDivider(
                 modifier = Modifier.padding(horizontal = 20.dp),
