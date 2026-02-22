@@ -163,7 +163,8 @@ fun AppNavigation() {
                 workoutId = route.workoutId,
                 onBack = { navController.popBackStack() },
                 onEdit = { id -> navController.navigate(WorkoutEdit(id)) },
-                onStartWorkout = { id -> navController.navigate(WorkoutRunner(id)) }
+                onStartWorkout = { id -> navController.navigate(WorkoutRunner(id)) },
+                onExerciseClick = { id -> navController.navigate(ExerciseDetail(id)) }
             )
         }
 

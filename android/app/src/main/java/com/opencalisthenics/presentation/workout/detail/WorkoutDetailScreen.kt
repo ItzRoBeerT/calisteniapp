@@ -52,6 +52,7 @@ fun WorkoutDetailScreen(
     onBack: () -> Unit,
     onEdit: (Int) -> Unit,
     onStartWorkout: (Int) -> Unit,
+    onExerciseClick: (Int) -> Unit = {},
     viewModel: WorkoutDetailViewModel = viewModel(factory = WorkoutDetailViewModel.factory(workoutId))
 ) {
     val state = viewModel.uiState
@@ -235,7 +236,7 @@ fun WorkoutDetailScreen(
                             fontWeight = FontWeight.Bold
                         )
                         Spacer(modifier = Modifier.height(10.dp))
-                        WorkoutExerciseList(exercises = workout.exercises)
+                        WorkoutExerciseList(exercises = workout.exercises, onExerciseClick = onExerciseClick)
                     }
 
                     Spacer(modifier = Modifier.height(32.dp))

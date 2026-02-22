@@ -1,6 +1,7 @@
 package com.opencalisthenics.presentation.workout.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -32,14 +33,15 @@ import com.opencalisthenics.ui.theme.Primary500
 @Composable
 fun WorkoutExerciseList(
     exercises: List<ExerciseWorkout>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onExerciseClick: (Int) -> Unit = {}
 ) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         exercises.forEach { exercise ->
-            WorkoutExerciseItem(exercise = exercise)
+            WorkoutExerciseItem(exercise = exercise, onExerciseClick = onExerciseClick)
         }
     }
 }
@@ -47,10 +49,16 @@ fun WorkoutExerciseList(
 @Composable
 private fun WorkoutExerciseItem(
     exercise: ExerciseWorkout,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onExerciseClick: (Int) -> Unit = {}
 ) {
+    val clickableModifier = if (exercise.exerciseId != null) {
+        modifier.clickable { onExerciseClick(exercise.exerciseId) }
+    } else {
+        modifier
+    }
     Row(
-        modifier = modifier
+        modifier = clickableModifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
             .background(MaterialTheme.colorScheme.surface)
