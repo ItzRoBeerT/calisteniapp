@@ -7,7 +7,12 @@
 A free, open-source platform for calisthenics training — web app (Next.js) and native Android app (Kotlin/Compose) backed by Supabase.
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/ItzRoBeerT/calisteniapp?style=flat)](https://github.com/ItzRoBeerT/calisteniapp/stargazers)
+![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-06B6D4?logo=tailwindcss&logoColor=white)
+![Android](https://img.shields.io/badge/Android-Kotlin-3DDC84?logo=android&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?logo=supabase&logoColor=white)
 
 ---
 
