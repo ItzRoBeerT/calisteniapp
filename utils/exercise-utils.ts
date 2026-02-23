@@ -1,6 +1,6 @@
 import { Exercise, ExerciseBase, ExerciseTranslation } from '@/types/supabase';
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+ 
 const exercisesData: ExerciseBase[] = require('@/data/exercises.json');
 
 /**

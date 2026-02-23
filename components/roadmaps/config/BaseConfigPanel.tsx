@@ -184,16 +184,18 @@ const BaseConfigPanel: React.FC<BaseConfigPanelProps> = ({
 
         {/* Contenido específico del tipo de nodo (children) */}
         {children && React.Children.map(children, (child, index) => {
-          if (React.isValidElement(child) && child.props['data-tab']) {
+          if (!React.isValidElement(child)) return null;
+          const props = child.props as Record<string, unknown>;
+          if (props['data-tab']) {
             // Solo mostrar el child si su data-tab coincide con activeTab
-            if (child.props['data-tab'] === activeTab) {
-              return React.cloneElement(child, { key: child.props['data-tab'] || `tab-content-${index}` });
+            if (props['data-tab'] === activeTab) {
+              return React.cloneElement(child, { key: String(props['data-tab']) || `tab-content-${index}` });
             }
             return null;
           }
           // Si no tiene data-tab, mostrar siempre (para contenido genérico)
           if (activeTab !== 'basic') {
-            return React.cloneElement(child as React.ReactElement, { key: `generic-content-${index}` });
+            return React.cloneElement(child, { key: `generic-content-${index}` });
           }
           return null;
         })}

@@ -8,9 +8,9 @@ import { getProgressionByExerciseId, type ExerciseProgression } from '@/data/exe
 const EXERCISES_PER_PAGE = 12;
 
 // Load translations dynamically
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+ 
 const esMessages = require('@/messages/es.json');
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+ 
 const enMessages = require('@/messages/en.json');
 
 const translationsByLocale: Record<string, Record<string, ExerciseTranslation>> = {

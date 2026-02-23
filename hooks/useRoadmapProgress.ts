@@ -25,24 +25,16 @@ export function useRoadmapProgress(
 ): UseRoadmapProgressReturn {
   const storageKey = `roadmap-progress-${roadmapId}`;
 
-  const [progress, setProgress] = useState<ProgressState>({});
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // Cargar progreso desde localStorage al montar
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const saved = localStorage.getItem(storageKey);
-        if (saved) {
-          const parsed = JSON.parse(saved);
-          setProgress(parsed);
-        }
-      } catch (error) {
-        console.error('Error loading roadmap progress:', error);
-      }
-      setIsLoaded(true);
+  const [progress, setProgress] = useState<ProgressState>(() => {
+    if (typeof window === 'undefined') return {};
+    try {
+      const saved = localStorage.getItem(storageKey);
+      return saved ? (JSON.parse(saved) as ProgressState) : {};
+    } catch {
+      return {};
     }
-  }, [storageKey]);
+  });
+  const [isLoaded] = useState(true);
 
   // Guardar en localStorage cuando cambia el progreso
   useEffect(() => {

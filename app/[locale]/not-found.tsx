@@ -63,13 +63,6 @@ export default async function NotFound() {
           >
             {t('backHome')}
           </Link>
-
-          <Link
-            href="/roadmaps"
-            className="inline-block px-8 py-3 border-2 border-border text-foreground font-semibold rounded-xl hover:bg-accent transition-colors"
-          >
-            {t('explore')}
-          </Link>
         </div>
       </div>
 

@@ -18,7 +18,7 @@ export function formatDate(date: Date, locale: string): string {
 	return locale === 'es' ? `${dd}/${mm}/${yyyy}` : `${mm}/${dd}/${yyyy}`;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 export function formatRelativeDate(dateStr: string, locale: string, t: (key: any, values?: any) => string): string {
 	const date = new Date(dateStr);
 	const now = new Date();

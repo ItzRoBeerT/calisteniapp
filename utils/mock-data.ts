@@ -1,11 +1,11 @@
 import { Exercise, ExerciseBase, ExerciseTranslation, Workout } from '@/types/supabase';
 import { WorkoutDetail } from '@/types/Workout';
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+ 
 const exercisesBase: ExerciseBase[] = require('@/data/exercises.json');
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+ 
 const esMessages = require('@/messages/es.json');
-// eslint-disable-next-line @typescript-eslint/no-require-imports
+ 
 const enMessages = require('@/messages/en.json');
 
 // Traducciones por locale
