@@ -1,36 +1,159 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# OpenCalisthenics
+
+A free, open-source platform for calisthenics training — web app (Next.js) and native Android app (Kotlin/Compose) backed by Supabase.
+
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/ItzRoBeerT/calisteniapp?style=flat)](https://github.com/ItzRoBeerT/calisteniapp/stargazers)
+
+---
+
+## Table of Contents
+
+- [About](#about)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Available Scripts](#available-scripts-web)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## About
+
+Most fitness apps are locked behind subscriptions or push proprietary workout plans. OpenCalisthenics is a fully open platform where anyone can explore exercises, build custom workouts, and share structured learning roadmaps — no paywall, no account required to browse. It runs fully offline-capable with mock data when Supabase is not configured, making it easy to self-host or contribute.
+
+---
+
+## Features
+
+- **Exercise catalog** — 50+ exercises with difficulty levels, muscle groups, and progression paths
+- **Workout management** — Create, run, and track custom workout routines
+- **Interactive roadmaps** — Node-based learning paths built with a drag-and-drop editor
+- **Blog** — Educational content with multi-locale support
+- **Bilingual** — Spanish (default) and English
+- **No-config mode** — Works with static mock data when Supabase is not configured
+
+---
+
+## Tech Stack
+
+### Web
+
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 15, React 19 RC, TypeScript |
+| Styling | Tailwind CSS (dark theme, custom palette) |
+| State | Zustand 5 |
+| i18n | next-intl |
+| Database / Auth | Supabase (optional — mock data fallback included) |
+| Roadmap builder | ReactFlow / XYFlow |
+
+### Android
+
+| Layer | Technology |
+|---|---|
+| Language | Kotlin |
+| UI | Jetpack Compose + Material 3 |
+| Architecture | MVVM + Clean Architecture |
+| Auth | supabase-kt + Ktor Client |
+| Min / Target SDK | 24 / 36 |
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+ and [pnpm](https://pnpm.io/)
+- (Optional) A [Supabase](https://supabase.com/) project — the app works with mock data without it
+
+### Web app
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Install dependencies
+pnpm install
+
+# Start dev server at http://localhost:3000
+pnpm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#### Environment variables (optional)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create a `.env.local` file at the project root:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-## Learn More
+If these variables are not set the app runs with mock/static data.
 
-To learn more about Next.js, take a look at the following resources:
+### Android app
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Open the `android/` directory in Android Studio, or build from the command line:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+cd android
 
-## Deploy on Vercel
+# Build debug APK
+./gradlew assembleDebug
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Install on connected device or emulator
+./gradlew installDebug
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Add Supabase credentials to `android/local.properties`:
+
+```properties
+SUPABASE_URL=your_supabase_url
+SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+---
+
+## Available Scripts (web)
+
+| Command | Description |
+|---|---|
+| `pnpm run dev` | Start development server |
+| `pnpm run build` | Production build |
+| `pnpm run start` | Start production server |
+| `pnpm run lint` | Run ESLint |
+| `pnpm run sync-exercises` | Sync exercises from external source |
+| `npx tsc --noEmit` | Type-check without emitting |
+
+---
+
+## Project Structure
+
+```
+app/[locale]/          # Next.js locale-prefixed routes (es | en)
+  ├── (auth)/          # Login and register
+  ├── exercises/       # Exercise catalog
+  ├── workouts/        # Workout management
+  ├── roadmaps/        # Roadmap builder and viewer
+  └── blog/            # Blog posts
+
+components/            # Reusable React components grouped by feature
+types/                 # TypeScript interfaces and unions
+stores/                # Zustand client-side state
+actions/               # Next.js server actions
+data/                  # Static JSON data (exercises, roadmaps)
+messages/              # i18n translation files (en.json, es.json)
+android/               # Native Android app (Kotlin/Compose)
+supabase/              # Database schema and seed data
+```
+
+---
+
+## Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions, conventions, and the PR process.
+
+---
+
+## License
+
+OpenCalisthenics is licensed under the MIT license. See the [`LICENSE`](LICENSE) file for more information.
