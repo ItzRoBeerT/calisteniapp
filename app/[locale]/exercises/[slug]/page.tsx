@@ -1,11 +1,12 @@
 import Image from 'next/image';
-import { getExerciseByName } from '@/actions/exercise';
-import { desSlugify } from '@/utils/slugs';
+import { getExerciseByName, getExerciseProgression } from '@/actions/exercise';
+import { desSlugify, createSlug } from '@/utils/slugs';
 import DefaultImage from '@/public/images/default_image.webp';
 import { NotFoundError } from '@/utils/errors';
 import ExerciseProgressionTree from '@/components/exercises/ExerciseProgressionTree';
 import type { ExerciseResource } from '@/types/supabase';
 import { getTranslations } from 'next-intl/server';
+import { redirect } from 'next/navigation';
 
 function getYouTubeEmbedUrl(url: string): string | null {
 	const patterns = [
@@ -32,6 +33,14 @@ export default async function Page({
 	if (!exercise) {
 		throw new NotFoundError(`No se encontró el ejercicio "${desSlugify(slug)}"`);
 	}
+
+	// If the slug doesn't match the exercise name in the current locale, redirect to the correct slug
+	const correctSlug = createSlug(exercise.name);
+	if (correctSlug !== slug) {
+		redirect(`/${locale}/exercises/${correctSlug}`);
+	}
+
+	const progression = await getExerciseProgression(exercise.id);
 
 	return (
 		<div className="mx-auto max-w-6xl py-8 px-4">
@@ -152,7 +161,7 @@ export default async function Page({
 				{/* Columna derecha: Árbol de Progresión */}
 				<div className="lg:sticky lg:top-4 lg:self-start">
 					<div className="rounded-xl bg-surface p-4 shadow-lg">
-						<ExerciseProgressionTree exerciseId={exercise.id} exerciseName={exercise.name} />
+						<ExerciseProgressionTree exerciseId={exercise.id} exerciseName={exercise.name} progression={progression} />
 					</div>
 				</div>
 			</div>

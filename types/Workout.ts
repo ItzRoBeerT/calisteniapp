@@ -32,4 +32,7 @@ export interface WorkoutDetail {
 	is_public?: boolean;
 	exercises: ExerciseWorkout[];
 	tags: string[];
+	likes_count?: number;
+	favorited_at?: string; // ISO timestamp when user favorited this workout
+	created_at?: string; // ISO timestamp when workout was created
 }

@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { Link } from '@/i18n/navigation';
 import DefaultImage from '@/public/images/default_image.webp';
 import { getDifficultyColor } from '@/utils/difficultyColors';
-import { saveWorkoutCompletion } from '@/actions/workout';
+import { saveWorkoutCompletion, getUserWorkouts, getFavoriteWorkoutsWithDetails } from '@/actions/workout';
 
 type Phase = 'select' | 'exercise' | 'rest' | 'complete';
 
@@ -31,10 +31,36 @@ export default function WorkoutRunner({ workouts, initialWorkoutId }: WorkoutRun
 	const [startTime, setStartTime] = useState<Date | null>(initialWorkout ? new Date() : null);
 	const [elapsedTime, setElapsedTime] = useState(0);
 	const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+	const [userWorkouts, setUserWorkouts] = useState<WorkoutDetail[]>([]);
+	const [likedWorkouts, setLikedWorkouts] = useState<WorkoutDetail[]>([]);
+	const [loadingUserData, setLoadingUserData] = useState(false);
 	const timerRef = useRef<NodeJS.Timeout | null>(null);
 
 	const currentExercise = selectedWorkout?.exercises[currentExerciseIndex];
 	const totalExercises = selectedWorkout?.exercises.length || 0;
+
+	// Load user workouts and liked workouts
+	useEffect(() => {
+		const loadUserData = async () => {
+			setLoadingUserData(true);
+			try {
+				const [userWkts, likedWkts] = await Promise.all([
+					getUserWorkouts(),
+					getFavoriteWorkoutsWithDetails(),
+				]);
+				setUserWorkouts(userWkts);
+				setLikedWorkouts(likedWkts);
+			} catch (error) {
+				console.error('Error loading user data:', error);
+			} finally {
+				setLoadingUserData(false);
+			}
+		};
+
+		if (phase === 'select') {
+			loadUserData();
+		}
+	}, [phase]);
 
 	// Elapsed time counter
 	useEffect(() => {
@@ -140,48 +166,183 @@ export default function WorkoutRunner({ workouts, initialWorkoutId }: WorkoutRun
 		return totalSets > 0 ? (completedSets / totalSets) * 100 : 0;
 	};
 
+	const formatDate = (dateString?: string) => {
+		if (!dateString) return '';
+		const date = new Date(dateString);
+		return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+	};
+
 	// Phase: Select workout
 	if (phase === 'select') {
 		return (
-			<div className="max-w-4xl mx-auto">
+			<div className="max-w-6xl mx-auto">
 				<h1 className="text-3xl font-heading font-bold text-foreground mb-8">
 					{t('selectWorkout')}
 				</h1>
-				{workouts.length === 0 ? (
-					<p className="text-foreground/50 text-center py-12">{t('noWorkouts')}</p>
-				) : (
-					<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-						{workouts.map((workout) => (
-							<button
-								key={workout.id}
-								onClick={() => selectWorkout(workout)}
-								className="bg-surface rounded-xl p-5 text-left hover:ring-2 hover:ring-primary-500 transition-all group"
-							>
-								<h3 className="text-lg font-semibold text-foreground group-hover:text-primary-400 transition-colors mb-2">
-									{workout.name}
-								</h3>
-								{workout.description && (
-									<p className="text-foreground/60 text-sm mb-3 line-clamp-2">
-										{workout.description}
-									</p>
-								)}
-								<div className="flex flex-wrap gap-2">
-									{workout.difficulty && (
-										<span className={`px-2 py-1 text-xs rounded-full border ${getDifficultyColor(workout.difficulty)}`}>
-											{workout.difficulty}
-										</span>
-									)}
-									{workout.duration && (
-										<span className="px-2 py-1 text-xs bg-tertiary-500/20 text-tertiary-400 rounded-full border border-tertiary-500/30">
-											{workout.duration} min
-										</span>
-									)}
-									<span className="px-2 py-1 text-xs bg-primary-500/20 text-primary-400 rounded-full border border-primary-500/30">
-										{workout.exercises.length} {t('exercise')}{workout.exercises.length !== 1 ? 's' : ''}
-									</span>
-								</div>
-							</button>
-						))}
+
+				{/* My Workouts Section */}
+				{userWorkouts.length > 0 && (
+					<div className="mb-12">
+						<h2 className="text-2xl font-heading font-bold text-foreground mb-4 flex items-center gap-2">
+							<svg className="w-6 h-6 text-primary-500" fill="currentColor" viewBox="0 0 24 24">
+								<path d="M13 10V3L4 14h7v7l9-11h-7z" />
+							</svg>
+							{t('myWorkouts')}
+						</h2>
+						{loadingUserData ? (
+							<p className="text-foreground/50 text-center py-8">{t('loading')}</p>
+						) : (
+							<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+								{userWorkouts.map((workout) => (
+									<button
+										key={workout.id}
+										onClick={() => selectWorkout(workout)}
+										className="bg-surface rounded-xl p-5 text-left hover:ring-2 hover:ring-primary-500 transition-all group"
+									>
+										<h3 className="text-lg font-semibold text-foreground group-hover:text-primary-400 transition-colors mb-2 line-clamp-2">
+											{workout.name}
+										</h3>
+										{workout.description && (
+											<p className="text-foreground/60 text-sm mb-3 line-clamp-2">
+												{workout.description}
+											</p>
+										)}
+										<div className="flex flex-wrap gap-2 mb-3">
+											{workout.difficulty && (
+												<span className={`px-2 py-1 text-xs rounded-full border ${getDifficultyColor(workout.difficulty)}`}>
+													{workout.difficulty}
+												</span>
+											)}
+											{workout.duration && (
+												<span className="px-2 py-1 text-xs bg-tertiary-500/20 text-tertiary-400 rounded-full border border-tertiary-500/30">
+													{workout.duration} min
+												</span>
+											)}
+											<span className="px-2 py-1 text-xs bg-primary-500/20 text-primary-400 rounded-full border border-primary-500/30">
+												{workout.exercises.length} {t('exercise')}{workout.exercises.length !== 1 ? 's' : ''}
+											</span>
+										</div>
+										<div className="text-xs text-foreground/40 flex justify-between items-center pt-2 border-t border-white/10">
+											<span>{formatDate(workout.created_at)} - Created</span>
+											{workout.likes_count !== undefined && (
+												<span className="flex items-center gap-1 text-foreground/60">
+													<svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+														<path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+													</svg>
+													{workout.likes_count}
+												</span>
+											)}
+										</div>
+									</button>
+								))}
+							</div>
+						)}
+					</div>
+				)}
+
+				{/* Liked Workouts Section */}
+				{likedWorkouts.length > 0 && (
+					<div className="mb-12">
+						<h2 className="text-2xl font-heading font-bold text-foreground mb-4 flex items-center gap-2">
+							<svg className="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+								<path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+							</svg>
+							{t('likedWorkouts')}
+						</h2>
+						{loadingUserData ? (
+							<p className="text-foreground/50 text-center py-8">{t('loading')}</p>
+						) : (
+							<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+								{likedWorkouts.map((workout) => (
+									<button
+										key={workout.id}
+										onClick={() => selectWorkout(workout)}
+										className="bg-surface rounded-xl p-5 text-left hover:ring-2 hover:ring-red-500 transition-all group"
+									>
+										<h3 className="text-lg font-semibold text-foreground group-hover:text-red-400 transition-colors mb-2 line-clamp-2">
+											{workout.name}
+										</h3>
+										{workout.description && (
+											<p className="text-foreground/60 text-sm mb-3 line-clamp-2">
+												{workout.description}
+											</p>
+										)}
+										<div className="flex flex-wrap gap-2 mb-3">
+											{workout.difficulty && (
+												<span className={`px-2 py-1 text-xs rounded-full border ${getDifficultyColor(workout.difficulty)}`}>
+													{workout.difficulty}
+												</span>
+											)}
+											{workout.duration && (
+												<span className="px-2 py-1 text-xs bg-tertiary-500/20 text-tertiary-400 rounded-full border border-tertiary-500/30">
+													{workout.duration} min
+												</span>
+											)}
+											<span className="px-2 py-1 text-xs bg-primary-500/20 text-primary-400 rounded-full border border-primary-500/30">
+												{workout.exercises.length} {t('exercise')}{workout.exercises.length !== 1 ? 's' : ''}
+											</span>
+										</div>
+										<div className="text-xs text-foreground/40 flex justify-between items-center pt-2 border-t border-white/10">
+											<span>{formatDate(workout.favorited_at)} - Liked</span>
+											{workout.likes_count !== undefined && (
+												<span className="flex items-center gap-1 text-red-400">
+													<svg className="w-3 h-3 fill-current" viewBox="0 0 24 24">
+														<path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+													</svg>
+													{workout.likes_count}
+												</span>
+											)}
+										</div>
+									</button>
+								))}
+							</div>
+						)}
+					</div>
+				)}
+
+				{/* All Workouts Section (when no user workouts or liked workouts) */}
+				{userWorkouts.length === 0 && likedWorkouts.length === 0 && (
+					<div>
+						<h2 className="text-2xl font-heading font-bold text-foreground mb-4">
+							{t('allWorkouts')}
+						</h2>
+						{workouts.length === 0 ? (
+							<p className="text-foreground/50 text-center py-12">{t('noWorkouts')}</p>
+						) : (
+							<div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+								{workouts.map((workout) => (
+									<button
+										key={workout.id}
+										onClick={() => selectWorkout(workout)}
+										className="bg-surface rounded-xl p-5 text-left hover:ring-2 hover:ring-primary-500 transition-all group"
+									>
+										<h3 className="text-lg font-semibold text-foreground group-hover:text-primary-400 transition-colors mb-2">
+											{workout.name}
+										</h3>
+										{workout.description && (
+											<p className="text-foreground/60 text-sm mb-3 line-clamp-2">
+												{workout.description}
+											</p>
+										)}
+										<div className="flex flex-wrap gap-2">
+											{workout.difficulty && (
+												<span className={`px-2 py-1 text-xs rounded-full border ${getDifficultyColor(workout.difficulty)}`}>
+													{workout.difficulty}
+												</span>
+											)}
+											{workout.duration && (
+												<span className="px-2 py-1 text-xs bg-tertiary-500/20 text-tertiary-400 rounded-full border border-tertiary-500/30">
+													{workout.duration} min
+												</span>
+											)}
+											<span className="px-2 py-1 text-xs bg-primary-500/20 text-primary-400 rounded-full border border-primary-500/30">
+												{workout.exercises.length} {t('exercise')}{workout.exercises.length !== 1 ? 's' : ''}
+											</span>
+										</div>
+									</button>
+								))}
+							</div>
+						)}
 					</div>
 				)}
 			</div>

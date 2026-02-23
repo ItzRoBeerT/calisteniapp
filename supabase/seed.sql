@@ -75,7 +75,59 @@ INSERT INTO "Exercise" (id, name, description, image, muscle_group, difficulty, 
 (68, 'Flexion con Palmada', 'Flexion pliometrica explosiva. Empuja con fuerza para elevar las manos del suelo y dar una palmada antes de aterrizar.', 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80', ARRAY['chest', 'triceps', 'shoulders'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=IODxDxX7oi4", "title": "Clap Push Up Tutorial"}]'::jsonb),
 (69, 'Fondos Coreanos', 'Fondos con las manos detras del cuerpo en una barra baja. Trabaja intensamente los triceps y hombros.', 'https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80', ARRAY['triceps', 'shoulders', 'core'], 4, '[{"type": "video", "url": "https://www.youtube.com/watch?v=9mKyrPmmPt0", "title": "Korean Dip Tutorial"}]'::jsonb),
 (70, 'Front Lever a Una Pierna', 'Front lever con una pierna extendida y la otra recogida. Progresion avanzada hacia el front lever completo.', 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80', ARRAY['back', 'core'], 4, '[{"type": "video", "url": "https://www.youtube.com/watch?v=HzcWRdP78Wo", "title": "One Leg Front Lever Tutorial"}]'::jsonb),
-(71, 'Planche Recogida Avanzada', 'Planche con caderas extendidas pero rodillas aun recogidas. Progresion entre el tuck planche y el straddle planche.', 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80', ARRAY['shoulders', 'chest', 'core'], 4, '[{"type": "video", "url": "https://youtu.be/oLUHPdRF2vo?t=131", "title": "Advanced Tuck Planche Tutorial"}]'::jsonb)
+(71, 'Planche Recogida Avanzada', 'Planche con caderas extendidas pero rodillas aun recogidas. Progresion entre el tuck planche y el straddle planche.', 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80', ARRAY['shoulders', 'chest', 'core'], 4, '[{"type": "video", "url": "https://youtu.be/oLUHPdRF2vo?t=131", "title": "Advanced Tuck Planche Tutorial"}]'::jsonb),
+(72, 'Bicicleta con Banda', 'Ejercicio de core con movimiento de bicicleta usando banda elastica. Fortalece los abdominales y los flexores de cadera.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 1, '[{"type": "video", "url": "https://www.youtube.com/watch?v=ikgByza4jHo", "title": "Bicycle with Band Tutorial"}]'::jsonb),
+(73, 'Pull Over con Banda', 'Ejercicio de espalda y hombros con banda anclada arriba. Trabaja los dorsales en su rango de movimiento completo.', 'https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80', ARRAY['back', 'shoulders'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=iyloF81IcnA", "title": "Pull Over with Band Tutorial"}]'::jsonb),
+(74, 'Press de Pecho con Banda', 'Version del press de pecho con banda elastica. Activa el pecho, hombros y triceps con resistencia progresiva.', 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80', ARRAY['chest', 'shoulders', 'triceps'], 1, '[{"type": "video", "url": "https://www.youtube.com/watch?v=bHDdxgvS6po", "title": "Chest Press with Band Tutorial"}]'::jsonb),
+(75, 'Estocada con Apertura', 'Combina una estocada con una apertura de pecho usando banda elastica. Trabaja piernas y pecho simultaneamente.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['chest', 'legs'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=aRUL4Pd7nIo", "title": "Lunge Fly Tutorial"}]'::jsonb),
+(76, 'Curl de Biceps con Anclaje Bajo', 'Curl de biceps con banda anclada abajo. Trabaja los biceps con resistencia constante durante todo el recorrido.', 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80', ARRAY['biceps'], 1, '[{"type": "video", "url": "https://www.youtube.com/watch?v=N-mj10Pd_8s", "title": "Bicep Curl Low Anchor Tutorial"}]'::jsonb),
+(77, 'Curl y Press con Banda', 'Combinacion de curl de biceps y press de hombros con banda. Ejercicio compuesto para brazos y hombros.', 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80', ARRAY['biceps', 'shoulders'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=_-Eo2S5j0o8", "title": "Curl Press Tutorial"}]'::jsonb),
+(78, 'Press de Hombros con Banda', 'Press de hombros con banda elastica. Trabaja los deltoides y triceps con resistencia ajustable.', 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80', ARRAY['shoulders', 'triceps'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=UdZTcqJZUfc", "title": "Shoulder Press with Band Tutorial"}]'::jsonb),
+(79, 'Elevacion de Talones con Banda', 'Elevacion de talones con resistencia de banda. Fortalece las pantorrillas con carga adicional.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['legs'], 1, '[{"type": "video", "url": "https://www.youtube.com/watch?v=W2oB4OPTVwQ", "title": "Calf Raise with Band Tutorial"}]'::jsonb),
+(80, 'Giro Ruso con Banda', 'Giro ruso con resistencia de banda elastica. Trabaja los oblicuos y el core rotacional.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=jiQ12Hc-oCA", "title": "Russian Twist with Band Tutorial"}]'::jsonb),
+(81, 'Jalon al Pecho con Banda', 'Jalon de dorsales con banda anclada arriba. Simula el ejercicio de jalon en maquina para trabajar la espalda.', 'https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80', ARRAY['back', 'biceps'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=ybqelSZbR9k", "title": "Lat Pull with Band Tutorial"}]'::jsonb),
+(82, 'Apertura de Pecho con Banda', 'Apertura de pecho con banda elastica. Trabaja el pecho en un rango de movimiento amplio con resistencia constante.', 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80', ARRAY['chest'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=3qbXyq5JJn4", "title": "Chest Fly with Band Tutorial"}]'::jsonb),
+(83, 'Jumping Jacks con Banda', 'Jumping jacks con banda elastica en los pies. Aumenta la resistencia y el reclutamiento muscular del ejercicio clasico.', 'https://images.unsplash.com/photo-1434608519344-49d77a699e1d?w=800&q=80', ARRAY['legs', 'shoulders'], 1, '[{"type": "video", "url": "https://www.youtube.com/watch?v=elSLN1haaZE", "title": "Jumping Jacks with Band Tutorial"}]'::jsonb),
+(84, 'Extension de Triceps con Banda', 'Extension de triceps con banda anclada. Aisla el triceps con resistencia ajustable segun el nivel.', 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80', ARRAY['triceps'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=GbOi03nCGQ8", "title": "Tricep Extension with Band Tutorial"}]'::jsonb),
+(85, 'Estocada con Elevacion Frontal', 'Combina una estocada con elevacion frontal de brazos usando banda. Trabaja piernas y hombros a la vez.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['legs', 'shoulders'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=DIHf04L0byc", "title": "Lunge Front Raise Tutorial"}]'::jsonb),
+(86, 'Remo al Menton con Banda', 'Remo al menton con banda elastica. Trabaja hombros y parte superior de la espalda.', 'https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80', ARRAY['shoulders', 'back'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=ETndAAF3UQE", "title": "Upright Row with Band Tutorial"}]'::jsonb),
+(87, 'Sentadilla Trasera con Banda', 'Sentadilla con banda elastica sobre los hombros. Añade resistencia a la sentadilla clasica para mayor activacion muscular.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['legs', 'glutes'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=uNk9S9--KFk", "title": "Back Squat with Band Tutorial"}]'::jsonb),
+(88, 'Plancha en Cruz con Banda', 'Variante de plancha con banda elastica que trabaja la estabilidad antirotacional del core.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core', 'shoulders'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=B6zRUYtmYr0", "title": "Cross Plank Tutorial"}]'::jsonb),
+(89, 'Patada de Triceps con Banda', 'Patada de triceps con banda elastica. Extiende el codo contra la resistencia para trabajar el triceps.', 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80', ARRAY['triceps'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=JJ8ouKzsNXM", "title": "Tricep Kickback with Band Tutorial"}]'::jsonb),
+(90, 'Estocada y Press', 'Combinacion de estocada y press de hombros con banda. Ejercicio compuesto que trabaja todo el cuerpo.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['legs', 'shoulders', 'triceps'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=HA1LTcH3kTc", "title": "Lunge Press Tutorial"}]'::jsonb),
+(91, 'Elevacion en L con Banda', 'Elevacion lateral y frontal en L usando banda elastica. Trabaja los tres fasciculos del deltoides.', 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80', ARRAY['shoulders'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=XgVXPI5vh2U", "title": "L Raise Tutorial"}]'::jsonb),
+(92, 'Estocada con Banda', 'Estocada clasica con banda elastica en los pies. Añade resistencia para mayor activacion de gluteos y cuadriceps.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['legs', 'glutes'], 1, '[{"type": "video", "url": "https://www.youtube.com/watch?v=PvYiSZ-vHbQ", "title": "Lunge with Band Tutorial"}]'::jsonb),
+(93, 'Giro Oblicuo con Banda', 'Giro oblicuo con banda anclada. Trabaja los oblicuos con resistencia angular para fortalecer el core rotacional.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=8t-X9JlKO4E", "title": "Oblique Twist Tutorial"}]'::jsonb),
+(94, 'Curl de Biceps con Anclaje Alto', 'Curl de biceps con banda anclada en alto. Cambia el angulo de resistencia para mayor activacion muscular.', 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80', ARRAY['biceps'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=JvQDjpd6NcE", "title": "Bicep Curl High Anchor Tutorial"}]'::jsonb),
+(95, 'Sentadilla Clean con Banda', 'Combinacion de sentadilla y clean con banda elastica. Ejercicio olimpico adaptado de alta intensidad.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['legs', 'glutes', 'shoulders', 'core'], 4, '[{"type": "video", "url": "https://www.youtube.com/watch?v=hJy-5YhjxRU", "title": "Squat Clean with Band Tutorial"}]'::jsonb),
+(96, 'Circulos de Brazos con Banda', 'Circulos de brazos con banda elastica. Ejercicio de calentamiento y movilidad que activa los hombros.', 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80', ARRAY['shoulders'], 1, '[{"type": "video", "url": "https://www.youtube.com/watch?v=LojwSM_xUy0", "title": "Arm Circles with Band Tutorial"}]'::jsonb),
+(97, 'Curl de Isquiotibiales con Banda', 'Curl de isquiotibiales con banda elastica. Trabaja los isquiotibiales con resistencia ajustable.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['legs'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=Ljw3VE-uO7U", "title": "Hamstring Curl with Band Tutorial"}]'::jsonb),
+(98, 'Abdominales con Banda', 'Crunch abdominal con resistencia de banda elastica. Aumenta la intensidad de los abdominales clasicos.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 1, '[{"type": "video", "url": "https://www.youtube.com/watch?v=RVDf_3OLnEA", "title": "Crunches with Band Tutorial"}]'::jsonb),
+(99, 'Remo con Banda', 'Remo con banda elastica anclada al frente. Trabaja los musculos de la espalda media y los biceps.', 'https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80', ARRAY['back', 'biceps'], 1, '[{"type": "video", "url": "https://www.youtube.com/watch?v=XQoyjX_ndaA", "title": "Band Row Tutorial"}]'::jsonb),
+(100, 'Flexiones con Resistencia', 'Flexiones con banda elastica añadiendo resistencia. Aumenta la dificultad del push-up clasico significativamente.', 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80', ARRAY['chest', 'triceps', 'shoulders'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=vu4RhVkxldw", "title": "Band Resisted Push Up Tutorial"}]'::jsonb),
+(101, 'Rodillas Altas con Banda', 'Rodillas altas con banda elastica en los pies. Trabaja las piernas y el core con resistencia adicional.', 'https://images.unsplash.com/photo-1434608519344-49d77a699e1d?w=800&q=80', ARRAY['legs', 'core'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=Gi1RVvTQ6fQ", "title": "High Knees with Band Tutorial"}]'::jsonb),
+(102, 'Flexion Diamante con Banda', 'Flexion diamante con banda elastica añadiendo resistencia extra. Mayor enfasis en triceps con carga adicional.', 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80', ARRAY['triceps', 'chest'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=xdKLhwCtUx4", "title": "Diamond Push Up with Band Tutorial"}]'::jsonb),
+(103, 'Thruster con Banda', 'Squat y press de hombros en un movimiento continuo con banda. Ejercicio de alta intensidad para todo el cuerpo.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['legs', 'shoulders', 'core'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=CJdwy1h6z2A", "title": "Thruster with Band Tutorial"}]'::jsonb),
+(104, 'Apertura de Deltoides', 'Apertura lateral de deltoides con banda elastica. Trabaja el deltoides lateral de forma aislada.', 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80', ARRAY['shoulders'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=9ZaJNPMpYGk", "title": "Deltoid Fly Tutorial"}]'::jsonb),
+(105, 'Sentadilla Frontal con Banda', 'Sentadilla frontal con banda elastica. Mayor activacion de cuadriceps que la sentadilla trasera.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['legs', 'glutes', 'core'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=Om6bxjmTNdI", "title": "Front Squat with Band Tutorial"}]'::jsonb),
+(106, 'Toque de Talones con Banda', 'Toque de talones con resistencia de banda. Trabaja los oblicuos y el abdomen lateral.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 1, '[{"type": "video", "url": "https://www.youtube.com/watch?v=QVLSUDe5MAE", "title": "Heel Touches Tutorial"}]'::jsonb),
+(107, 'Peso Muerto Rumano con Banda', 'Peso muerto rumano con banda elastica. Trabaja los isquiotibiales y gluteos con resistencia progresiva.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['legs', 'glutes', 'back'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=eFBYZk91B54", "title": "Romanian Deadlift with Band Tutorial"}]'::jsonb),
+(108, 'Flexion Spiderman con Banda', 'Flexion spiderman con banda elastica. Combina flexion con rotacion de cadera para trabajar pecho y core.', 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80', ARRAY['chest', 'core'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=RZtNSZSBEUI", "title": "Spiderman Push Up Tutorial"}]'::jsonb),
+(109, 'Estocada con Remo', 'Combinacion de estocada con remo de espalda usando banda. Ejercicio compuesto que trabaja piernas y espalda.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['back', 'legs'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=wl4iDmKlugs", "title": "Lunge Row Tutorial"}]'::jsonb),
+(110, 'Sentadilla Lateral con Banda', 'Sentadilla lateral o sumo con banda elastica. Trabaja el interior de los muslos y los gluteos.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['legs', 'glutes'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=Ix_nABnN3CE", "title": "Side Squat with Band Tutorial"}]'::jsonb),
+(111, 'Patada de Flutter con Banda', 'Flutter kick con banda elastica en los tobillos. Trabaja el core inferior con resistencia adicional.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=1np7snhyxRo", "title": "Flutter Kick Tutorial"}]'::jsonb),
+(112, 'Remo Alto con Banda', 'Remo alto con banda hacia los hombros. Trabaja los trapecios y la parte superior de la espalda.', 'https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80', ARRAY['back', 'shoulders'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=-izDZHGjM10", "title": "High Row Tutorial"}]'::jsonb),
+(113, 'Flexion con Palmada con Banda', 'Flexion explosiva con palmada usando banda de resistencia. Combina pliometria con resistencia adicional.', 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80', ARRAY['chest', 'triceps'], 4, '[{"type": "video", "url": "https://www.youtube.com/watch?v=1tuxC9sG5LQ", "title": "Clap Push Up with Band Tutorial"}]'::jsonb),
+(114, 'Sentadilla y Remo', 'Combinacion de sentadilla y remo con banda elastica. Ejercicio compuesto para piernas y espalda.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['back', 'legs'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=X1-_BFAWQbw", "title": "Squat Row Tutorial"}]'::jsonb),
+(115, 'Extension en X con Banda', 'Extension cruzada de brazos con banda. Trabaja pecho, espalda y hombros en un movimiento diagonal.', 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80', ARRAY['chest', 'back', 'shoulders'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=tlMh7rhd2-U", "title": "X Arm Extension Tutorial"}]'::jsonb),
+(116, 'Sentadilla con Giro', 'Sentadilla combinada con giro de tronco usando banda. Trabaja piernas y el core rotacional.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['legs', 'core'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=4bYlLToVYQE", "title": "Squat Twist Tutorial"}]'::jsonb),
+(117, 'Flexion Pike con Banda', 'Flexion pike con banda elastica añadiendo resistencia. Mayor carga para los hombros en posicion invertida.', 'https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80', ARRAY['shoulders', 'triceps'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=6qyJNW0AuBs", "title": "Pike Push Up with Band Tutorial"}]'::jsonb),
+(118, 'Split Squat con Banda', 'Split squat con banda elastica bajo los pies. Trabaja cada pierna unilateralmente con resistencia adicional.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['legs', 'glutes'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=EWvAwC4FdQU", "title": "Split Squat with Band Tutorial"}]'::jsonb),
+(119, 'Crunch Antirotacion con Banda', 'Crunch con resistencia antirotacional de banda. Trabaja la estabilidad del core ante fuerzas rotacionales.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=C46tTtsCi6U", "title": "Anti-Rotation Crunch Tutorial"}]'::jsonb),
+(120, 'Sentadilla Pistola Asistida con Banda', 'Sentadilla pistola asistida con banda elastica. La banda reduce la carga para aprender la tecnica de la pistola.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['legs', 'glutes', 'core'], 4, '[{"type": "video", "url": "https://www.youtube.com/watch?v=zrawScWAi8g", "title": "Pistol Squat with Band Tutorial"}]'::jsonb),
+(121, 'Rodillas al Pecho con Banda', 'Elevacion de rodillas al pecho con resistencia de banda. Trabaja los flexores de cadera y el core.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core', 'legs'], 1, '[{"type": "video", "url": "https://www.youtube.com/watch?v=cFmGU8ZO2Z0", "title": "Knees to Chest Tutorial"}]'::jsonb),
+(122, 'Estocada Levitante con Banda', 'Estocada levitante con banda elastica. Variante avanzada de estocada que trabaja el equilibrio y los gluteos.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['legs', 'glutes'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=8jPq9b4ghio", "title": "Levitating Lunge Tutorial"}]'::jsonb),
+(123, 'Elevacion de Piernas con Banda', 'Elevacion de piernas con resistencia de banda elastica. Trabaja el core inferior con mayor dificultad.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=8RSLrkkIbl4", "title": "Leg Raise with Band Tutorial"}]'::jsonb)
 ON CONFLICT (id) DO UPDATE SET
     name = EXCLUDED.name,
     description = EXCLUDED.description,
@@ -156,6 +208,192 @@ UPDATE "Exercise" SET equipment = ARRAY['none'], category = 'push', type = 'plyo
 UPDATE "Exercise" SET equipment = ARRAY['low_bar', 'parallel_bars'], category = 'push', type = 'dynamic' WHERE id = 69;
 UPDATE "Exercise" SET equipment = ARRAY['pull_up_bar', 'rings'], category = 'skill', type = 'isometric' WHERE id = 70;
 UPDATE "Exercise" SET equipment = ARRAY['parallel_bars'], category = 'skill', type = 'isometric' WHERE id = 71;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'core', type = 'dynamic' WHERE id = 72;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'pull', type = 'dynamic' WHERE id = 73;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'push', type = 'dynamic' WHERE id = 74;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'full_body', type = 'dynamic' WHERE id = 75;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'pull', type = 'dynamic' WHERE id = 76;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'full_body', type = 'dynamic' WHERE id = 77;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'push', type = 'dynamic' WHERE id = 78;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'legs', type = 'dynamic' WHERE id = 79;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'core', type = 'dynamic' WHERE id = 80;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'pull', type = 'dynamic' WHERE id = 81;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'push', type = 'dynamic' WHERE id = 82;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'full_body', type = 'plyometric' WHERE id = 83;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'push', type = 'dynamic' WHERE id = 84;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'full_body', type = 'dynamic' WHERE id = 85;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'pull', type = 'dynamic' WHERE id = 86;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'legs', type = 'dynamic' WHERE id = 87;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'core', type = 'isometric' WHERE id = 88;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'push', type = 'dynamic' WHERE id = 89;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'full_body', type = 'dynamic' WHERE id = 90;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'push', type = 'dynamic' WHERE id = 91;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'legs', type = 'dynamic' WHERE id = 92;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'core', type = 'dynamic' WHERE id = 93;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'pull', type = 'dynamic' WHERE id = 94;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'full_body', type = 'dynamic' WHERE id = 95;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'push', type = 'dynamic' WHERE id = 96;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'legs', type = 'dynamic' WHERE id = 97;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'core', type = 'dynamic' WHERE id = 98;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'pull', type = 'dynamic' WHERE id = 99;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'push', type = 'dynamic' WHERE id = 100;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'full_body', type = 'plyometric' WHERE id = 101;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'push', type = 'dynamic' WHERE id = 102;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'full_body', type = 'dynamic' WHERE id = 103;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'push', type = 'dynamic' WHERE id = 104;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'legs', type = 'dynamic' WHERE id = 105;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'core', type = 'dynamic' WHERE id = 106;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'legs', type = 'dynamic' WHERE id = 107;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'push', type = 'dynamic' WHERE id = 108;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'full_body', type = 'dynamic' WHERE id = 109;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'legs', type = 'dynamic' WHERE id = 110;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'core', type = 'dynamic' WHERE id = 111;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'pull', type = 'dynamic' WHERE id = 112;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'push', type = 'plyometric' WHERE id = 113;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'full_body', type = 'dynamic' WHERE id = 114;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'full_body', type = 'dynamic' WHERE id = 115;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'full_body', type = 'dynamic' WHERE id = 116;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'push', type = 'dynamic' WHERE id = 117;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'legs', type = 'dynamic' WHERE id = 118;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'core', type = 'dynamic' WHERE id = 119;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'legs', type = 'dynamic' WHERE id = 120;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'core', type = 'dynamic' WHERE id = 121;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'legs', type = 'dynamic' WHERE id = 122;
+UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'core', type = 'dynamic' WHERE id = 123;
 
 -- Reset the sequence to continue from the last ID
 SELECT setval('"Exercise_id_seq"', (SELECT MAX(id) FROM "Exercise"));
+
+-- =============================================
+-- Exercise Progressions seed data
+-- Generated from data/exerciseProgressions.ts
+-- =============================================
+INSERT INTO exercise_progressions (exercise_id, prerequisites, variations, progressions) VALUES
+(1, '{21,22,23}', '{24}', '{11,68,17,25}'),
+(2, '{26,10,27,28}', '{12}', '{29,66,67,41,42,6}'),
+(3, '{30,31}', '{32}', '{33,7}'),
+(4, '{34,35}', '{}', '{36,69,37,6}'),
+(5, '{38}', '{39}', '{40,48,49}'),
+(6, '{2,4,41,42}', '{}', '{}'),
+(7, '{3,32,33}', '{}', '{}'),
+(8, '{45,46,47}', '{}', '{}'),
+(9, '{43}', '{}', '{44}'),
+(10, '{26}', '{}', '{27,28,2}'),
+(11, '{1}', '{}', '{17,25}'),
+(12, '{26,10,27,28}', '{2}', '{29}'),
+(13, '{1,3}', '{}', '{}'),
+(14, '{2,52,53}', '{}', '{54}'),
+(15, '{55,56}', '{}', '{}'),
+(16, '{2,39}', '{}', '{}'),
+(17, '{1,11}', '{}', '{25}'),
+(18, '{57,65}', '{}', '{71,58,59}'),
+(19, '{20,51,49}', '{}', '{}'),
+(20, '{50}', '{}', '{51,19}'),
+(21, '{}', '{}', '{22,23,1}'),
+(22, '{21}', '{}', '{23,1}'),
+(23, '{21,22}', '{}', '{1}'),
+(24, '{1}', '{11}', '{17}'),
+(25, '{1,11,17}', '{}', '{}'),
+(26, '{}', '{}', '{10,27,28,2}'),
+(27, '{26,10}', '{28}', '{2}'),
+(28, '{26,10}', '{27}', '{2}'),
+(29, '{2}', '{}', '{41,42,6}'),
+(30, '{}', '{31}', '{3}'),
+(31, '{}', '{30}', '{3}'),
+(32, '{3}', '{}', '{33,7}'),
+(33, '{3,32}', '{7}', '{}'),
+(34, '{}', '{}', '{35,4}'),
+(35, '{34}', '{}', '{4}'),
+(36, '{4}', '{}', '{6}'),
+(37, '{4}', '{36}', '{}'),
+(38, '{}', '{}', '{5}'),
+(39, '{5}', '{}', '{16}'),
+(40, '{5}', '{39}', '{49}'),
+(41, '{2}', '{}', '{42,6}'),
+(42, '{2,41}', '{}', '{6}'),
+(43, '{}', '{}', '{9}'),
+(44, '{43,9}', '{}', '{}'),
+(45, '{1}', '{}', '{46,64,47,8}'),
+(46, '{45}', '{}', '{47,8}'),
+(47, '{45,46}', '{}', '{8}'),
+(48, '{}', '{}', '{5,49}'),
+(49, '{5,48}', '{}', '{19}'),
+(50, '{}', '{}', '{20,51}'),
+(51, '{50,20}', '{}', '{62,19}'),
+(52, '{2}', '{}', '{53,14}'),
+(53, '{2,52}', '{}', '{70,54,14}'),
+(54, '{52,53,70}', '{}', '{14}'),
+(55, '{63}', '{}', '{56,15}'),
+(56, '{55}', '{}', '{15}'),
+(57, '{1}', '{}', '{65,18,71,58,59}'),
+(58, '{57,65,18,71}', '{}', '{59}'),
+(59, '{57,65,18,71,58}', '{}', '{}'),
+(60, '{3,32}', '{}', '{}'),
+(61, '{}', '{}', '{}'),
+(62, '{20,51,49}', '{}', '{}'),
+(63, '{}', '{}', '{55,36}'),
+(64, '{45,46}', '{}', '{47,8}'),
+(65, '{1,57}', '{}', '{18,71,58,59}'),
+(66, '{2,29}', '{}', '{67}'),
+(67, '{2,29,66}', '{}', '{}'),
+(68, '{1,11}', '{42}', '{25}'),
+(69, '{4}', '{36}', '{}'),
+(70, '{52,53}', '{}', '{54,14}'),
+(71, '{57,65,18}', '{}', '{58,59}'),
+-- Resistance band exercises progressions
+(72, '{}', '{}', '{80}'),
+(73, '{99}', '{}', '{81,112}'),
+(74, '{}', '{}', '{100,75,82}'),
+(75, '{74,92}', '{}', '{90}'),
+(76, '{}', '{}', '{77,94}'),
+(77, '{76}', '{}', '{94}'),
+(78, '{86,96}', '{}', '{91,90,103}'),
+(79, '{}', '{61}', '{}'),
+(80, '{72,98}', '{}', '{93}'),
+(81, '{99}', '{}', '{73,112}'),
+(82, '{74}', '{}', '{}'),
+(83, '{}', '{}', '{101}'),
+(84, '{}', '{}', '{89}'),
+(85, '{92,86}', '{}', '{}'),
+(86, '{99}', '{}', '{78,91,85,104}'),
+(87, '{}', '{}', '{105,116,114,103,95}'),
+(88, '{5}', '{}', '{}'),
+(89, '{84}', '{}', '{}'),
+(90, '{92,78}', '{}', '{}'),
+(91, '{86}', '{}', '{}'),
+(92, '{}', '{}', '{75,85,90,109,122}'),
+(93, '{80}', '{}', '{119}'),
+(94, '{76,77}', '{}', '{}'),
+(95, '{87,105}', '{}', '{}'),
+(96, '{}', '{}', '{86,104}'),
+(97, '{}', '{}', '{}'),
+(98, '{}', '{}', '{72,80}'),
+(99, '{}', '{}', '{81,86,112,114,109}'),
+(100, '{1}', '{}', '{102,108,113,117}'),
+(101, '{83}', '{}', '{103}'),
+(102, '{100}', '{}', '{}'),
+(103, '{87,101,78}', '{}', '{95}'),
+(104, '{96,86}', '{}', '{}'),
+(105, '{87}', '{}', '{95,116}'),
+(106, '{}', '{}', '{123}'),
+(107, '{87}', '{}', '{}'),
+(108, '{100}', '{}', '{}'),
+(109, '{92,99}', '{}', '{}'),
+(110, '{}', '{}', '{118,122,120}'),
+(111, '{123}', '{}', '{}'),
+(112, '{99,81}', '{}', '{73}'),
+(113, '{100}', '{}', '{}'),
+(114, '{87,99}', '{}', '{103}'),
+(115, '{99,74}', '{}', '{}'),
+(116, '{87,80}', '{}', '{}'),
+(117, '{100,45}', '{}', '{}'),
+(118, '{92,110}', '{}', '{120}'),
+(119, '{93}', '{}', '{}'),
+(120, '{110,118}', '{}', '{7}'),
+(121, '{}', '{}', '{123,111}'),
+(122, '{92,110}', '{}', '{}'),
+(123, '{106,121}', '{}', '{111}')
+ON CONFLICT (exercise_id) DO UPDATE SET
+    prerequisites = EXCLUDED.prerequisites,
+    variations = EXCLUDED.variations,
+    progressions = EXCLUDED.progressions;

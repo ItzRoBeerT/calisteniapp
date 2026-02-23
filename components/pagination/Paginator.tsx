@@ -1,9 +1,13 @@
+'use client';
+import { useTranslations } from 'next-intl';
+
 export default function Paginator(props: {
 	totalPages: number;
 	currentPage: number;
 	onPageChange: (page: number) => void;
 }) {
 	const { totalPages, currentPage, onPageChange } = props;
+	const t = useTranslations('Paginator');
 
 	const getPagesToShow = () => {
 		const pages: (number | string)[] = [];
@@ -49,7 +53,7 @@ export default function Paginator(props: {
 							}`}
 							disabled={currentPage === 1}
 						>
-							Anterior
+							{t('previous')}
 						</button>
 					</li>
 
@@ -89,7 +93,7 @@ export default function Paginator(props: {
 							}`}
 							disabled={currentPage === totalPages}
 						>
-							Siguiente
+							{t('next')}
 						</button>
 					</li>
 				</ul>

@@ -138,6 +138,18 @@ CREATE TABLE IF NOT EXISTS workout_completions (
 );
 
 -- =============================================
+-- EXERCISE PROGRESSIONS
+-- =============================================
+CREATE TABLE IF NOT EXISTS exercise_progressions (
+    id SERIAL PRIMARY KEY,
+    exercise_id INTEGER NOT NULL REFERENCES "Exercise"(id) ON DELETE CASCADE,
+    prerequisites INTEGER[] DEFAULT '{}',
+    variations INTEGER[] DEFAULT '{}',
+    progressions INTEGER[] DEFAULT '{}'
+);
+CREATE UNIQUE INDEX IF NOT EXISTS exercise_progressions_exercise_id_idx ON exercise_progressions(exercise_id);
+
+-- =============================================
 -- INDEXES for better performance
 -- =============================================
 CREATE INDEX IF NOT EXISTS idx_exercise_difficulty ON "Exercise"(difficulty);
@@ -149,6 +161,7 @@ CREATE INDEX IF NOT EXISTS idx_workout_exercise_workout ON "WorkoutExercise"(wor
 CREATE INDEX IF NOT EXISTS idx_workout_tags_workout ON "WorkoutTags"(workout_id);
 CREATE INDEX IF NOT EXISTS idx_workout_favorites_user ON workout_favorites(user_id);
 CREATE INDEX IF NOT EXISTS idx_workout_completions_user_date ON workout_completions(user_id, completed_at);
+CREATE INDEX IF NOT EXISTS idx_exercise_progressions_exercise ON exercise_progressions(exercise_id);
 
 -- =============================================
 -- ROW LEVEL SECURITY (RLS) Policies
@@ -156,6 +169,7 @@ CREATE INDEX IF NOT EXISTS idx_workout_completions_user_date ON workout_completi
 
 -- Enable RLS on tables
 ALTER TABLE "Exercise" ENABLE ROW LEVEL SECURITY;
+ALTER TABLE exercise_progressions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "Workout" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "WorkoutExercise" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "WorkoutTags" ENABLE ROW LEVEL SECURITY;
@@ -185,6 +199,11 @@ DROP POLICY IF EXISTS "Users can update their own profile" ON "Profile";
 
 -- Exercise: Everyone can read
 CREATE POLICY "Exercises are viewable by everyone" ON "Exercise"
+    FOR SELECT USING (true);
+
+-- Exercise progressions: Everyone can read
+DROP POLICY IF EXISTS "Exercise progressions are viewable by everyone" ON exercise_progressions;
+CREATE POLICY "Exercise progressions are viewable by everyone" ON exercise_progressions
     FOR SELECT USING (true);
 
 -- Workout: Public workouts visible to all, private only to owner
@@ -264,11 +283,13 @@ CREATE POLICY "Users can delete tags of their workouts" ON "WorkoutTags"
 
 -- Workout Favorites: Users can manage their own favorites
 DROP POLICY IF EXISTS "Users can view their own favorites" ON workout_favorites;
+DROP POLICY IF EXISTS "Anyone can view favorites" ON workout_favorites;
 DROP POLICY IF EXISTS "Users can add favorites" ON workout_favorites;
 DROP POLICY IF EXISTS "Users can remove favorites" ON workout_favorites;
 
-CREATE POLICY "Users can view their own favorites" ON workout_favorites
-    FOR SELECT USING ((select auth.uid()) = user_id);
+-- Allow anyone (including anonymous) to read favorites so like counts are always visible
+CREATE POLICY "Anyone can view favorites" ON workout_favorites
+    FOR SELECT USING (true);
 
 CREATE POLICY "Users can add favorites" ON workout_favorites
     FOR INSERT WITH CHECK ((select auth.uid()) = user_id);

@@ -1,5 +1,5 @@
 import { getMockExercises } from './mock-data';
-import { getProgressionByExerciseId } from '@/data/exerciseProgressions';
+import { getProgressionByExerciseId, type ExerciseProgression } from '@/data/exerciseProgressions';
 import type { Exercise } from '@/types/supabase';
 
 // A group of exercises that can be variations of each other at the same level
@@ -69,13 +69,14 @@ export interface ExerciseProgressionData {
  */
 export function getExerciseProgressionData(
 	exerciseId: number,
-	locale: string = 'es'
+	locale: string = 'es',
+	prefetchedProgression?: ExerciseProgression
 ): ExerciseProgressionData | null {
 	const exercises = getMockExercises(locale);
 	const currentExercise = exercises.find((e) => e.id === exerciseId);
 	if (!currentExercise) return null;
 
-	const progression = getProgressionByExerciseId(exerciseId);
+	const progression = prefetchedProgression ?? getProgressionByExerciseId(exerciseId);
 	if (!progression) {
 		// Si no hay progresión definida, retorna solo el ejercicio actual
 		return {
