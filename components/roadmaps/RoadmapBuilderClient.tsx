@@ -278,7 +278,7 @@ function RoadmapBuilder() {
     try {
       // Preparar nodos para guardar (sin callbacks ni estado temporal)
       const nodesToSave = nodes.map((node) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+         
         const { onSelect, selected, mode, ...dataWithoutCallbacks } = node.data;
         return {
           id: node.id,
@@ -365,7 +365,7 @@ function RoadmapBuilder() {
         const response = await fetch(`/api/roadmaps?id=${roadmapId}`);
         const data = await response.json();
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         const importedNodes: Node<AnyNodeData>[] = data.nodes.map((n: any) => ({
           id: n.id,
           type: n.type || n.data?.nodeType || 'topic',
@@ -389,7 +389,7 @@ function RoadmapBuilder() {
           longDash: '16 6',
         };
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         const importedEdges: Edge<BuilderEdgeData>[] = data.edges.map((e: any) => {
           const lineStyle = e.data?.lineStyle || 'solid';
           const strokeDasharray = lineStyleToDasharray[lineStyle];
@@ -682,7 +682,7 @@ function RoadmapBuilder() {
                         <h3 className="font-semibold text-foreground mb-1">{r.title}</h3>
                         <p className="text-sm text-foreground/60 mb-2">{r.description}</p>
                         <div className="flex items-center gap-4 text-xs text-foreground/50">
-                          <span>{t('nodesCount', { count: r.totalNodes })}</span>
+                          <span>{t('nodesCount', { count: r.totalNodes ?? 0 })}</span>
                           {r.updatedAt && (
                             <span>{t('updatedAt', { date: new Date(r.updatedAt).toLocaleDateString() })}</span>
                           )}
