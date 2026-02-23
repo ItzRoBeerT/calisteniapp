@@ -43,8 +43,11 @@ export default function ExercisesList(props: {
 				}
 			})();
 		} else {
+			// eslint-disable-next-line react-hooks/set-state-in-effect
 			setExercises(initalExercises);
+			 
 			setTotalPages(props.totalPages);
+			 
 			setPage(1);
 		}
 	}, [currentFilters, initalExercises, setPage, locale, props.totalPages]);

@@ -141,6 +141,7 @@ export default function FilterPanel({
     fields.forEach((field) => {
       newFilters[field.key] = searchParams.get(field.key) || '';
     });
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setFilters(newFilters);
   }, [searchParams, fields]);
 
