@@ -52,13 +52,13 @@ function DayEntry({
 	dateKey,
 	dayCompletions,
 	selectedDay,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	 
 	t,
 }: {
 	dateKey: string;
 	dayCompletions: Completion[];
 	selectedDay: string | null;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	 
 	t: (key: any, values?: any) => string;
 }) {
 	const locale = useLocale();
