@@ -1,5 +1,9 @@
 # OpenCalisthenics
 
+<p align="center">
+  <img src="public/images/logo.png" alt="OpenCalisthenics logo" width="180" />
+</p>
+
 A free, open-source platform for calisthenics training — web app (Next.js) and native Android app (Kotlin/Compose) backed by Supabase.
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
