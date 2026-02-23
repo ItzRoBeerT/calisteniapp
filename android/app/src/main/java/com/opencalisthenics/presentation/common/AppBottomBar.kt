@@ -98,11 +98,13 @@ private fun RowScope.AppNavItem(
             )
         },
         label = {
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelSmall,
-                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
-            )
+            if (isSelected) {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.labelSmall,
+                    fontWeight = FontWeight.SemiBold
+                )
+            }
         },
         selected = isSelected,
         onClick = onClick,
