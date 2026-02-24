@@ -20,6 +20,32 @@ export interface WorkoutFormData {
 	is_public: boolean;
 }
 
+export interface RecentWorkoutData {
+	name: string;
+	difficulty?: string;
+	exercises: Array<{
+		name: string;
+		sets: number;
+		reps: number;
+		rest: number;
+		muscle_group?: string[];
+		category?: string;
+	}>;
+}
+
+export interface GeneratedWorkout {
+	name: string;
+	description: string;
+	difficulty: string;
+	exercises: Array<{
+		exercise_id: number;
+		name: string;
+		sets: number;
+		reps: number;
+		rest: number;
+	}>;
+}
+
 export interface WorkoutDetail {
 	id: number;
 	name: string;
