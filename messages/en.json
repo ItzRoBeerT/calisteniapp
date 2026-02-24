@@ -408,6 +408,24 @@
 	  "publicDescription": "Visible to all users in workout listings",
 	  "privateDescription": "Only visible to you"
 	},
+	"AIWorkoutGenerator": {
+	  "title": "Generate with AI",
+	  "subtitle": "Let AI select exercises and build a workout for you",
+	  "workoutType": "Workout type",
+	  "push": "Push",
+	  "pull": "Pull",
+	  "legs": "Legs",
+	  "fullBody": "Full Body",
+	  "difficultyAdjustment": "Compared to your last workout",
+	  "easier": "Easier",
+	  "same": "Similar",
+	  "harder": "Harder",
+	  "generate": "Generate",
+	  "generating": "Generating...",
+	  "generatedInfo": "Workout generated! You can edit it before saving.",
+	  "error": "Error generating workout. Please try again.",
+	  "basedOn": "Based on your last workout: {name}"
+	},
 	"WorkoutFilter": {
 	  "difficulty": "Difficulty",
 	  "muscleGroup": "Muscle Group",

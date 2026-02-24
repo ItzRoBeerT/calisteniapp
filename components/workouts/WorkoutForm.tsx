@@ -6,15 +6,18 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
 import { Exercise } from '@/types/supabase';
-import { ExerciseWorkout, WorkoutDetail } from '@/types/Workout';
+import { ExerciseWorkout, WorkoutDetail, RecentWorkoutData, GeneratedWorkout } from '@/types/Workout';
+import AIWorkoutGenerator from './AIWorkoutGenerator';
 
 type WorkoutFormProps = {
   userId?: string;
   existingWorkout?: WorkoutDetail;
   availableExercises: Exercise[];
+  recentWorkout?: RecentWorkoutData | null;
+  isAiEnabled?: boolean;
 };
 
-export default function WorkoutForm({ userId, existingWorkout, availableExercises }: WorkoutFormProps) {
+export default function WorkoutForm({ userId, existingWorkout, availableExercises, recentWorkout, isAiEnabled }: WorkoutFormProps) {
   const t = useTranslations('WorkoutForm');
   const router = useRouter();
   const params = useParams();
@@ -203,10 +206,42 @@ export default function WorkoutForm({ userId, existingWorkout, availableExercise
     }
   };
 
+  const handleAIGenerate = (generated: GeneratedWorkout) => {
+    const exercises: ExerciseWorkout[] = generated.exercises.map((ex) => {
+      const sourceExercise = availableExercises.find((e) => e.id === ex.exercise_id);
+      return {
+        id: `ai-${ex.exercise_id}-${Date.now()}`,
+        exercise_id: ex.exercise_id,
+        name: ex.name,
+        sets: ex.sets,
+        reps: ex.reps,
+        rest: ex.rest,
+        muscle_group: sourceExercise?.muscle_group || [],
+      };
+    });
+
+    setFormState((prev) => ({
+      ...prev,
+      name: generated.name,
+      description: generated.description,
+      difficulty: generated.difficulty,
+      exercises,
+    }));
+  };
+
   const difficultyLevels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {!isEditing && isAiEnabled && (
+        <AIWorkoutGenerator
+          availableExercises={availableExercises}
+          recentWorkout={recentWorkout}
+          locale={locale}
+          onGenerate={handleAIGenerate}
+        />
+      )}
+
       {formState.error && (
         <div className="p-4 bg-red-500/20 text-red-400 rounded-xl border border-red-500/30">
           {formState.error}

@@ -1,6 +1,7 @@
 'use server';
 import { createClient } from '@/utils/supabase/server';
 import { mockWorkoutDetails, mockWorkoutFilters, mockExercises } from '@/utils/mock-data';
+import type { RecentWorkoutData } from '@/types/Workout';
 
 export async function getWorkout(id: string) {
 	const supabase = await createClient();
@@ -742,6 +743,64 @@ export async function getFavoriteWorkoutsWithDetails() {
 	);
 
 	return workoutsWithDetails.filter((w) => w !== null);
+}
+
+export async function getRecentWorkoutForAI(): Promise<RecentWorkoutData | null> {
+	const supabase = await createClient();
+	if (!supabase) return null;
+
+	const { data: { user } } = await supabase.auth.getUser();
+	if (!user) return null;
+
+	// Get the most recent completed workout
+	const { data: completions, error } = await supabase
+		.from('workout_completions')
+		.select('workout_id, workout_name')
+		.eq('user_id', user.id)
+		.order('completed_at', { ascending: false })
+		.limit(1);
+
+	if (error || !completions || completions.length === 0) return null;
+
+	const recentCompletion = completions[0];
+
+	// Fetch the full workout with exercises
+	const { data: exercises } = await supabase
+		.from('WorkoutExercise')
+		.select('exercise_name, sets, reps, rest, exercise_id')
+		.eq('workout_id', recentCompletion.workout_id);
+
+	const { data: workout } = await supabase
+		.from('Workout')
+		.select('difficulty')
+		.eq('id', recentCompletion.workout_id)
+		.single();
+
+	// Enrich with exercise category/muscle_group
+	const exercisesWithDetails = await Promise.all(
+		(exercises || []).map(async (ex) => {
+			if (!ex.exercise_id) return { name: ex.exercise_name, sets: ex.sets, reps: ex.reps, rest: ex.rest };
+			const { data: exerciseData } = await supabase
+				.from('Exercise')
+				.select('muscle_group, category')
+				.eq('id', ex.exercise_id)
+				.single();
+			return {
+				name: ex.exercise_name,
+				sets: ex.sets,
+				reps: ex.reps,
+				rest: ex.rest,
+				muscle_group: exerciseData?.muscle_group || [],
+				category: exerciseData?.category,
+			};
+		})
+	);
+
+	return {
+		name: recentCompletion.workout_name,
+		difficulty: workout?.difficulty,
+		exercises: exercisesWithDetails,
+	};
 }
 
 export async function getWorkoutsByPageWithLikes(page = 1, limit = 12, filters?: any) {

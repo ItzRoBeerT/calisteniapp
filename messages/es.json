@@ -408,6 +408,24 @@
 		"publicDescription": "Visible para todos los usuarios en los listados",
 		"privateDescription": "Solo visible para ti"
 	},
+	"AIWorkoutGenerator": {
+		"title": "Generar con IA",
+		"subtitle": "Deja que la IA seleccione ejercicios y cree un entrenamiento para ti",
+		"workoutType": "Tipo de entrenamiento",
+		"push": "Empuje",
+		"pull": "Tirón",
+		"legs": "Piernas",
+		"fullBody": "Cuerpo completo",
+		"difficultyAdjustment": "Comparado con tu último entrenamiento",
+		"easier": "Más fácil",
+		"same": "Similar",
+		"harder": "Más difícil",
+		"generate": "Generar",
+		"generating": "Generando...",
+		"generatedInfo": "¡Entrenamiento generado! Puedes editarlo antes de guardar.",
+		"error": "Error al generar el entrenamiento. Por favor, inténtalo de nuevo.",
+		"basedOn": "Basado en tu último entrenamiento: {name}"
+	},
 	"WorkoutFilter": {
 		"difficulty": "Dificultad",
 		"muscleGroup": "Grupo Muscular",
