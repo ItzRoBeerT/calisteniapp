@@ -125,7 +125,7 @@ fun WorkoutCard(
                 }
                 if (workout.duration > 0) {
                     Text(
-                        text = stringResource(R.string.workout_duration, workout.duration / 60),
+                        text = stringResource(R.string.workout_duration, workout.duration),
                         color = GrayText,
                         fontSize = 12.sp
                     )
