@@ -143,6 +143,22 @@ fun WorkoutFormScreen(
                 ) {
                     Spacer(modifier = Modifier.height(4.dp))
 
+                    // AI Workout Generator (create mode only, requires API key)
+                    if (!state.isEditMode && state.isAiEnabled) {
+                        AIWorkoutGeneratorSection(
+                            isOpen = state.isAiPanelOpen,
+                            workoutType = state.aiWorkoutType,
+                            difficultyAdjustment = state.aiDifficultyAdjustment,
+                            isGenerating = state.isAiGenerating,
+                            error = state.aiError,
+                            recentWorkoutName = state.recentWorkout?.name,
+                            onToggle = viewModel::onToggleAiPanel,
+                            onWorkoutTypeChanged = viewModel::onAiWorkoutTypeChanged,
+                            onDifficultyAdjustmentChanged = viewModel::onAiDifficultyAdjustmentChanged,
+                            onGenerate = viewModel::onGenerateAIWorkout
+                        )
+                    }
+
                     // Name
                     OutlinedTextField(
                         value = state.name,

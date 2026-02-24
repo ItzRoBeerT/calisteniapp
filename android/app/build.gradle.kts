@@ -28,6 +28,9 @@ android {
 
         buildConfigField("String", "SUPABASE_URL", "\"${localProperties.getProperty("SUPABASE_URL", "")}\"")
         buildConfigField("String", "SUPABASE_ANON_KEY", "\"${localProperties.getProperty("SUPABASE_ANON_KEY", "")}\"")
+        buildConfigField("String", "OPENAI_API_KEY", "\"${localProperties.getProperty("OPENAI_API_KEY", "")}\"")
+        buildConfigField("String", "OPENAI_BASE_URL", "\"${localProperties.getProperty("OPENAI_BASE_URL", "")}\"")
+        buildConfigField("String", "OPENAI_MODEL", "\"${localProperties.getProperty("OPENAI_MODEL", "")}\"")
     }
 
     buildTypes {
