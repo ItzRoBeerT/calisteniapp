@@ -79,7 +79,7 @@ class AIWorkoutRepositoryImpl : AIWorkoutRepository {
                     exercises = exercises.map { ex ->
                         RecentExercise(
                             name = ex.exercise_name ?: "",
-                            sets = ex.sets,
+                            sets = ex.sets ?: 3,
                             reps = ex.reps,
                             rest = ex.rest
                         )
