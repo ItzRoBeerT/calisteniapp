@@ -12,8 +12,9 @@ class GenerateAIWorkoutUseCase(
         exercises: List<Exercise>,
         recentWorkout: RecentWorkoutData?,
         workoutType: String,
-        difficultyAdjustment: String
+        difficultyAdjustment: String,
+        locale: String
     ): Result<GeneratedWorkout> {
-        return aiWorkoutRepository.generate(exercises, recentWorkout, workoutType, difficultyAdjustment)
+        return aiWorkoutRepository.generate(exercises, recentWorkout, workoutType, difficultyAdjustment, locale)
     }
 }

@@ -10,6 +10,7 @@ interface AIWorkoutRepository {
         exercises: List<Exercise>,
         recentWorkout: RecentWorkoutData?,
         workoutType: String,
-        difficultyAdjustment: String
+        difficultyAdjustment: String,
+        locale: String
     ): Result<GeneratedWorkout>
 }

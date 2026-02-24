@@ -2,6 +2,7 @@ package com.opencalisthenics.presentation.workout.form
 
 import android.app.Application
 import androidx.compose.runtime.getValue
+import com.opencalisthenics.presentation.common.LanguageManager
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -55,6 +56,7 @@ data class WorkoutFormUiState(
 )
 
 class WorkoutFormViewModel(
+    private val application: Application,
     private val editWorkoutId: Int? = null,
     private val getExercisesUseCase: GetExercisesUseCase,
     private val createWorkoutUseCase: CreateWorkoutUseCase = CreateWorkoutUseCase(WorkoutRepositoryImpl()),
@@ -248,11 +250,13 @@ class WorkoutFormViewModel(
     fun onGenerateAIWorkout() {
         uiState = uiState.copy(isAiGenerating = true, aiError = null)
         viewModelScope.launch {
+            val locale = LanguageManager.getLanguage(application)
             generateAIWorkoutUseCase(
                 exercises = uiState.availableExercises,
                 recentWorkout = uiState.recentWorkout,
                 workoutType = uiState.aiWorkoutType,
-                difficultyAdjustment = uiState.aiDifficultyAdjustment
+                difficultyAdjustment = uiState.aiDifficultyAdjustment,
+                locale = locale
             ).onSuccess { generated ->
                 val exercises = generated.exercises.map { gen ->
                     val source = uiState.availableExercises.find { it.id == gen.exerciseId }
@@ -341,6 +345,7 @@ class WorkoutFormViewModel(
                     val workoutRepo = WorkoutRepositoryImpl()
                     val aiRepo = AIWorkoutRepositoryImpl()
                     return WorkoutFormViewModel(
+                        application = application,
                         editWorkoutId = editWorkoutId,
                         getExercisesUseCase = GetExercisesUseCase(ExerciseRepositoryImpl(application.applicationContext)),
                         createWorkoutUseCase = CreateWorkoutUseCase(workoutRepo),

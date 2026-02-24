@@ -95,7 +95,8 @@ class AIWorkoutRepositoryImpl : AIWorkoutRepository {
         exercises: List<Exercise>,
         recentWorkout: RecentWorkoutData?,
         workoutType: String,
-        difficultyAdjustment: String
+        difficultyAdjustment: String,
+        locale: String
     ): Result<GeneratedWorkout> {
         if (apiKey.isBlank()) {
             return Result.failure(Exception("AI not configured"))
@@ -125,7 +126,12 @@ class AIWorkoutRepositoryImpl : AIWorkoutRepository {
                 |- If "same": use similar volume""".trimMargin()
             } else ""
 
-            val systemPrompt = """You are a calisthenics workout generator. Generate a ${workoutType.replace("_", " ")} workout using ONLY exercises from the provided list.
+            val languageInstruction = if (locale == "es")
+                "Respond with the workout name and description in Spanish."
+            else
+                "Respond with the workout name and description in English."
+
+            val systemPrompt = """You are a calisthenics workout generator. Generate a ${workoutType.replace("_", " ")} workout using ONLY exercises from the provided list. $languageInstruction
 
 Rules:
 - Select 4-6 exercises from the list
