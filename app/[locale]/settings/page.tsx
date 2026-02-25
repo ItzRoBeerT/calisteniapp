@@ -3,6 +3,7 @@ import { createClient } from '@/utils/supabase/server';
 import { getTranslations } from 'next-intl/server';
 import ProfileForm from '@/components/settings/ProfileForm';
 import ChangePasswordForm from '@/components/settings/ChangePasswordForm';
+import Image from 'next/image';
 
 export default async function SettingsPage() {
 	const supabase = await createClient();
@@ -27,21 +28,21 @@ export default async function SettingsPage() {
 
 	const t = await getTranslations('Settings');
 
-	const initials = (profile?.full_name || profile?.username || user.email || '?')
-		.split(' ')
-		.map((n: string) => n[0])
-		.join('')
-		.toUpperCase()
-		.slice(0, 2);
+	const avatarSeed = encodeURIComponent(profile?.full_name || profile?.username || user.email || '?');
 
 	return (
 		<div className="max-w-2xl mx-auto px-4 py-10">
 			{/* Header with avatar */}
 			<div className="flex items-center gap-5 mb-10">
 				<div className="relative">
-					<div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-400 to-primary-700 flex items-center justify-center text-xl font-bold text-black shadow-lg shadow-primary-500/20">
-						{initials}
-					</div>
+					<Image
+						src={`https://api.dicebear.com/9.x/identicon/svg?seed=${avatarSeed}`}
+						alt="Avatar"
+						width={64}
+						height={64}
+						className="rounded-2xl shadow-lg shadow-primary-500/20"
+						unoptimized
+					/>
 					<div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-secondary-500 border-2 border-background" />
 				</div>
 				<div>

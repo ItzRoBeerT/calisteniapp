@@ -2,6 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
+import Image from 'next/image';
 
 type ProfileHeaderProps = {
 	displayName: string | null;
@@ -22,9 +23,14 @@ export default function ProfileHeader({ displayName, email, initials, memberSinc
 		<div className="flex items-center gap-5">
 			{/* Avatar */}
 			<div className="relative">
-				<div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-400 to-primary-700 flex items-center justify-center text-xl font-bold text-black shadow-lg shadow-primary-500/20">
-					{initials}
-				</div>
+				<Image
+					src={`https://api.dicebear.com/9.x/identicon/svg?seed=${encodeURIComponent(displayName || email)}`}
+					alt={displayName || email}
+					width={64}
+					height={64}
+					className="rounded-2xl shadow-lg shadow-primary-500/20"
+					unoptimized
+				/>
 				<div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-secondary-500 border-2 border-background" />
 			</div>
 
