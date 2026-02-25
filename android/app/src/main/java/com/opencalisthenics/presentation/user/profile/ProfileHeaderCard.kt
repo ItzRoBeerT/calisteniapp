@@ -23,16 +23,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.ImageLoader
+import coil3.compose.AsyncImage
+import coil3.svg.SvgDecoder
 import com.opencalisthenics.R
 import com.opencalisthenics.ui.theme.GrayText
 import com.opencalisthenics.ui.theme.Primary400
@@ -48,6 +53,13 @@ fun ProfileHeaderCard(
     onChangeEmailClick: () -> Unit,
     onChangePasswordClick: () -> Unit
 ) {
+    val context = LocalContext.current
+    val imageLoader = remember {
+        ImageLoader.Builder(context)
+            .components { add(SvgDecoder.Factory()) }
+            .build()
+    }
+
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
@@ -62,24 +74,14 @@ fun ProfileHeaderCard(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Avatar
-            Box(
+            AsyncImage(
+                model = "https://api.dicebear.com/9.x/identicon/svg?seed=${java.net.URLEncoder.encode(email, "UTF-8")}",
+                contentDescription = null,
+                imageLoader = imageLoader,
                 modifier = Modifier
                     .size(96.dp)
                     .clip(CircleShape)
-                    .background(
-                        Brush.linearGradient(
-                            colors = listOf(Primary400, Primary600)
-                        )
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = initials,
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.Black
-                )
-            }
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
