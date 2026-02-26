@@ -25,7 +25,7 @@ export default async function ProfilePage() {
 		supabase
 			.from('profiles')
 			.select('full_name, username')
-			.eq('id', user.id)
+			.eq('user_id', user.id)
 			.single(),
 	]);
 
