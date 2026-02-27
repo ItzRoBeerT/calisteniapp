@@ -31,6 +31,7 @@ android {
         buildConfigField("String", "OPENAI_API_KEY", "\"${localProperties.getProperty("OPENAI_API_KEY", "")}\"")
         buildConfigField("String", "OPENAI_BASE_URL", "\"${localProperties.getProperty("OPENAI_BASE_URL", "")}\"")
         buildConfigField("String", "OPENAI_MODEL", "\"${localProperties.getProperty("OPENAI_MODEL", "")}\"")
+        buildConfigField("String", "EXERCISES_API_URL", "\"${localProperties.getProperty("EXERCISES_API_URL", "")}\"")
     }
 
     buildTypes {
