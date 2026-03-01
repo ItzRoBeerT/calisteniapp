@@ -7,7 +7,7 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "eslint .",
-		"sync-exercises": "tsx scripts/sync-exercises.ts"
+		"generate-images": "tsx scripts/generate-exercise-images.ts"
 	},
 	"dependencies": {
 		"@dnd-kit/core": "^6.3.1",
