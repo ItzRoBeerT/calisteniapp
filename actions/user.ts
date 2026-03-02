@@ -9,7 +9,7 @@ export async function getUserById(userId: string) {
 	}
 
 	let { data, error } = await supabase
-		.from('Profile')
+		.from('profiles')
 		.select('*')
 		.eq('user_id', userId)
 		.single();
