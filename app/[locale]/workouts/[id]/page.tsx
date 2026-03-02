@@ -2,6 +2,7 @@ import { getWorkout } from '@/actions/workout';
 import ExerciseList from '@/components/workouts/ExerciseList';
 import TagList from '@/components/workouts/TagList';
 import DeleteWorkoutButton from '@/components/workouts/DeleteWorkoutButton';
+import WorkoutExportButton from '@/components/workouts/WorkoutExportButton';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -59,17 +60,20 @@ export default async function WorkoutDetailPage({ params }: Props) {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold text-foreground">{workout.name}</h1>
 
-          {isOwner && (
-            <div className="flex gap-2">
-              <Link
-                href={{ pathname: '/workouts/[id]/edit', params: { id } }}
-                className="bg-tertiary-500/20 hover:bg-tertiary-500/30 text-tertiary-400 px-4 py-2 rounded-lg border border-tertiary-500/30 transition-colors"
-              >
-                {t('edit')}
-              </Link>
-              <DeleteWorkoutButton workoutId={workout.id} workoutName={workout.name} />
-            </div>
-          )}
+          <div className="flex items-center gap-2">
+            {isOwner && (
+              <>
+                <Link
+                  href={{ pathname: '/workouts/[id]/edit', params: { id } }}
+                  className="bg-tertiary-500/20 hover:bg-tertiary-500/30 text-tertiary-400 px-4 py-2 rounded-lg border border-tertiary-500/30 transition-colors"
+                >
+                  {t('edit')}
+                </Link>
+                <DeleteWorkoutButton workoutId={workout.id} workoutName={workout.name} />
+              </>
+            )}
+            <WorkoutExportButton workout={workout} />
+          </div>
         </div>
 
         <div className="mb-6">
@@ -88,13 +92,9 @@ export default async function WorkoutDetailPage({ params }: Props) {
             )}
           </div>
 
-          <div>
-            {workout.tags && workout.tags.length > 0 ? (
-              <TagList tags={workout.tags} />
-            ) : (
-              <p className="text-foreground/40">{t('noTags')}</p>
-            )}
-          </div>
+          {workout.tags && workout.tags.length > 0 && (
+            <TagList tags={workout.tags} />
+          )}
         </div>
 
         <div className="mb-6">
@@ -104,7 +104,18 @@ export default async function WorkoutDetailPage({ params }: Props) {
             <p className="text-foreground/40">{t('noExercises')}</p>
           )}
         </div>
-      <BackButton href="/workouts" label={t('backToWorkouts')} />
+      <div className="flex items-center justify-between">
+        <BackButton href="/workouts" label={t('backToWorkouts')} />
+        <Link
+          href={{ pathname: '/workouts/start', query: { id: workout.id } }}
+          className="flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg transition-colors font-medium"
+        >
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+          {t('startWorkout')}
+        </Link>
+      </div>
       </div>
     </div>
   );
