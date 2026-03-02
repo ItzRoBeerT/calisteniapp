@@ -362,7 +362,10 @@
 	  "exportPDF": "Export PDF",
 	  "shareLink": "Copy link",
 	  "linkCopied": "Link copied!",
-	  "startWorkout": "Start Workout"
+	  "startWorkout": "Start Workout",
+	  "sets": "sets",
+	  "reps": "reps",
+	  "rest": "rest"
 	},
 	"EditWorkout": {
 	  "title": "Edit Workout",

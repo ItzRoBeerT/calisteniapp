@@ -362,7 +362,10 @@
 		"exportPDF": "Exportar PDF",
 		"shareLink": "Copiar enlace",
 		"linkCopied": "¡Enlace copiado!",
-		"startWorkout": "Hacer entrenamiento"
+		"startWorkout": "Hacer entrenamiento",
+		"sets": "series",
+		"reps": "reps",
+		"rest": "descanso"
 	},
 	"EditWorkout": {
 		"title": "Editar Entrenamiento",

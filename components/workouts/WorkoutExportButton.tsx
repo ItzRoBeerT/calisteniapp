@@ -1,63 +1,61 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
+import { useRef, useState } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
 import { WorkoutDetail } from '@/types/Workout';
-import { createClient } from '@/utils/supabase/client';
 import { useToastStore } from '@/stores/toast';
 
 type Props = {
   workout: WorkoutDetail;
 };
 
+const esc = (s: string) =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
 export default function WorkoutExportButton({ workout }: Props) {
   const t = useTranslations('WorkoutDetail');
+  const locale = useLocale();
   const addToast = useToastStore((s) => s.addToast);
   const [copied, setCopied] = useState(false);
-  const [username, setUsername] = useState<string | null>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
-    if (!workout.user_id) return;
-    const supabase = createClient();
-    if (!supabase) return;
-    supabase
-      .from('profiles')
-      .select('username')
-      .eq('user_id', workout.user_id)
-      .single()
-      .then(({ data: profile }) => {
-        setUsername(profile?.username || null);
-      });
-  }, [workout.user_id]);
+  const username = workout.username ?? null;
 
   const handleShareLink = async () => {
-    await navigator.clipboard.writeText(window.location.href);
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+    } catch {
+      return;
+    }
     addToast(t('linkCopied'), 'success');
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => setCopied(false), 2000);
   };
 
   const handleExportPDF = () => {
     const exercisesHTML = workout.exercises?.map((ex) => `
       <div class="exercise">
-        <div class="exercise-name">${ex.name}</div>
+        <div class="exercise-name">${esc(ex.name)}</div>
         <div class="exercise-stats">
-          <span class="badge badge-series">${ex.sets} series</span>
-          <span class="badge badge-reps">${ex.reps} reps</span>
-          ${ex.rest ? `<span class="badge badge-rest">${ex.rest}s descanso</span>` : ''}
+          <span class="badge badge-series">${ex.sets} ${esc(t('sets'))}</span>
+          <span class="badge badge-reps">${ex.reps} ${esc(t('reps'))}</span>
+          ${ex.rest ? `<span class="badge badge-rest">${ex.rest}s ${esc(t('rest'))}</span>` : ''}
         </div>
       </div>
     `).join('') ?? '';
 
     const tagsHTML = workout.tags?.length
-      ? workout.tags.map((tag) => `<span class="tag">#${tag}</span>`).join('')
+      ? workout.tags.map((tag) => `<span class="tag">#${esc(tag)}</span>`).join('')
       : '';
 
+    const workoutDate = new Date(workout.updated_at ?? workout.created_at ?? Date.now()).toLocaleDateString(locale);
+
     const html = `<!DOCTYPE html>
-<html lang="es">
+<html lang="${esc(locale)}">
 <head>
   <meta charset="UTF-8" />
-  <title>${workout.name}</title>
+  <title>${esc(workout.name)}</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -120,21 +118,21 @@ export default function WorkoutExportButton({ workout }: Props) {
 <body>
   <div class="header">
     <div class="header-left">
-      <h1>${workout.name}</h1>
-      ${username ? `<p class="username">@${username}</p>` : ''}
+      <h1>${esc(workout.name)}</h1>
+      ${username ? `<p class="username">@${esc(username)}</p>` : ''}
     </div>
     <div class="header-right">
       <div class="header-pills">
-        ${workout.difficulty ? `<span class="pill pill-difficulty">${workout.difficulty}</span>` : ''}
+        ${workout.difficulty ? `<span class="pill pill-difficulty">${esc(workout.difficulty)}</span>` : ''}
         ${workout.duration ? `<span class="pill pill-duration">${workout.duration} min</span>` : ''}
       </div>
       ${tagsHTML ? `<div class="tags">${tagsHTML}</div>` : ''}
     </div>
   </div>
-  ${workout.description ? `<p class="description">${workout.description}</p>` : ''}
-  <h2>${t('exercises')}</h2>
-  ${exercisesHTML || `<p style="color:#aaa;font-size:13px">${t('noExercises')}</p>`}
-  <div class="footer">${username ? `@${username} &mdash; ` : ''}OpenCalisthenic &mdash; ${new Date(workout.updated_at ?? workout.created_at ?? Date.now()).toLocaleDateString('es-ES')}</div>
+  ${workout.description ? `<p class="description">${esc(workout.description)}</p>` : ''}
+  <h2>${esc(t('exercises'))}</h2>
+  ${exercisesHTML || `<p style="color:#aaa;font-size:13px">${esc(t('noExercises'))}</p>`}
+  <div class="footer">${username ? `@${esc(username)} &mdash; ` : ''}OpenCalisthenic &mdash; ${workoutDate}</div>
 </body>
 </html>`;
 
@@ -147,11 +145,22 @@ export default function WorkoutExportButton({ workout }: Props) {
 
     iframe.onload = () => {
       const cw = iframe.contentWindow;
-      if (!cw) return;
-      cw.addEventListener('afterprint', () => {
+      if (!cw) {
         document.body.removeChild(iframe);
         URL.revokeObjectURL(url);
-      });
+        return;
+      }
+
+      let cleaned = false;
+      const cleanup = () => {
+        if (cleaned) return;
+        cleaned = true;
+        if (document.body.contains(iframe)) document.body.removeChild(iframe);
+        URL.revokeObjectURL(url);
+      };
+
+      cw.addEventListener('afterprint', cleanup);
+      setTimeout(cleanup, 10_000);
       cw.print();
     };
 
