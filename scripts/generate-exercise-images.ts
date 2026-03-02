@@ -2,10 +2,11 @@
  * Script para generar imágenes de ejercicios usando OpenAI
  *
  * Uso:
- *   pnpm tsx scripts/generate-exercise-images.ts              # Genera todas las imágenes
- *   pnpm tsx scripts/generate-exercise-images.ts --ids 1,2,3  # Ejercicios específicos
- *   pnpm tsx scripts/generate-exercise-images.ts --dry-run    # Solo muestra prompts
- *   pnpm tsx scripts/generate-exercise-images.ts --skip-existing  # Salta los que ya existen
+ *   pnpm tsx scripts/generate-exercise-images.ts                     # Genera todas las imágenes
+ *   pnpm tsx scripts/generate-exercise-images.ts --limit 1           # Solo una imagen (prueba)
+ *   pnpm tsx scripts/generate-exercise-images.ts --ids 1,2,3         # Ejercicios específicos
+ *   pnpm tsx scripts/generate-exercise-images.ts --dry-run           # Solo muestra prompts
+ *   pnpm tsx scripts/generate-exercise-images.ts --skip-existing     # Salta los que ya existen
  *
  * Variables de entorno requeridas:
  *   OPENAI_API_KEY
@@ -62,6 +63,7 @@ function parseArgs() {
 		ids: null as number[] | null,
 		dryRun: false,
 		skipExisting: false,
+		limit: null as number | null,
 	};
 
 	for (let i = 0; i < args.length; i++) {
@@ -69,6 +71,9 @@ function parseArgs() {
 		if (args[i] === '--skip-existing') result.skipExisting = true;
 		if (args[i] === '--ids' && args[i + 1]) {
 			result.ids = args[i + 1].split(',').map(Number);
+		}
+		if (args[i] === '--limit' && args[i + 1]) {
+			result.limit = Number(args[i + 1]);
 		}
 	}
 
@@ -183,6 +188,10 @@ async function main() {
 	if (args.ids) {
 		exercises = exercises.filter((e) => args.ids!.includes(e.id));
 		console.log(`Filtrando a ${exercises.length} ejercicio(s): IDs ${args.ids.join(', ')}`);
+	}
+	if (args.limit !== null) {
+		exercises = exercises.slice(0, args.limit);
+		console.log(`Limitando a ${exercises.length} ejercicio(s)`);
 	}
 
 	console.log(`\nModo: ${args.dryRun ? 'DRY RUN (solo prompts)' : 'GENERACIÓN REAL'}`);
