@@ -41,7 +41,7 @@ export async function getWorkout(id: string) {
 	let username: string | undefined;
 	if (workout.user_id) {
 		const { data: profile } = await supabase
-			.from('Profile')
+			.from('profiles')
 			.select('username')
 			.eq('user_id', workout.user_id)
 			.single();
@@ -280,6 +280,14 @@ export async function getWorkoutFilters() {
 		durations: uniqueDurations,
 		tags: uniqueTags,
 	};
+}
+
+export async function getUniqueTags(): Promise<string[]> {
+	const supabase = await createClient();
+	if (!supabase) return [];
+
+	const { data } = await supabase.from('WorkoutTags').select('name');
+	return data ? [...new Set(data.map((item) => item.name))] : [];
 }
 
 export async function createWorkout(workoutData: any, userId: string) {
