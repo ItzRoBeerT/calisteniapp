@@ -5,6 +5,7 @@ import { createWorkout, updateWorkout } from '@/actions/workout';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useParams } from 'next/navigation';
+import { useToastStore } from '@/stores/toast';
 import { Exercise } from '@/types/supabase';
 import { ExerciseWorkout, WorkoutDetail, RecentWorkoutData, GeneratedWorkout } from '@/types/Workout';
 import AIWorkoutGenerator from './AIWorkoutGenerator';
@@ -13,16 +14,18 @@ type WorkoutFormProps = {
   userId?: string;
   existingWorkout?: WorkoutDetail;
   availableExercises: Exercise[];
+  availableTags?: string[];
   recentWorkout?: RecentWorkoutData | null;
   isAiEnabled?: boolean;
 };
 
-export default function WorkoutForm({ userId, existingWorkout, availableExercises, recentWorkout, isAiEnabled }: WorkoutFormProps) {
+export default function WorkoutForm({ userId, existingWorkout, availableExercises, availableTags = [], recentWorkout, isAiEnabled }: WorkoutFormProps) {
   const t = useTranslations('WorkoutForm');
   const router = useRouter();
   const params = useParams();
   const locale = params.locale as string;
   const isEditing = !!existingWorkout;
+  const addToast = useToastStore((s) => s.addToast);
 
   const [formState, setFormState] = useState({
     name: existingWorkout?.name || '',
@@ -30,12 +33,28 @@ export default function WorkoutForm({ userId, existingWorkout, availableExercise
     difficulty: existingWorkout?.difficulty || 'Beginner',
     is_public: existingWorkout?.is_public ?? true,
     tags: existingWorkout?.tags || [],
-    exercises: existingWorkout?.exercises || [] as ExerciseWorkout[],
+    exercises: existingWorkout?.exercises.map(ex => ({
+      ...ex,
+      sets: ex.sets ?? 3,
+      reps: ex.reps ?? 10,
+      rest: ex.rest ?? 60,
+    })) || [] as ExerciseWorkout[],
     isSubmitting: false,
     error: ''
   });
 
   const [newTag, setNewTag] = useState('');
+  const [showTagDropdown, setShowTagDropdown] = useState(false);
+  const tagDropdownRef = useRef<HTMLDivElement>(null);
+
+  const filteredTags = useMemo(() => {
+    if (!newTag.trim()) return [];
+    return availableTags.filter(
+      (tag) =>
+        tag.toLowerCase().includes(newTag.toLowerCase()) &&
+        !formState.tags.includes(tag)
+    );
+  }, [newTag, availableTags, formState.tags]);
 
   // Autocomplete state
   const [searchQuery, setSearchQuery] = useState('');
@@ -76,11 +95,14 @@ export default function WorkoutForm({ userId, existingWorkout, availableExercise
     }
   }, [searchQuery, availableExercises, formState.exercises]);
 
-  // Close dropdown when clicking outside
+  // Close dropdowns when clicking outside
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setShowDropdown(false);
+      }
+      if (tagDropdownRef.current && !tagDropdownRef.current.contains(event.target as Node)) {
+        setShowTagDropdown(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -179,8 +201,8 @@ export default function WorkoutForm({ userId, existingWorkout, availableExercise
       if (isEditing && existingWorkout) {
         result = await updateWorkout(String(existingWorkout.id), workoutData);
         if (result) {
+          addToast(t('updateSuccess'), 'success');
           router.push(`/${locale}/workouts/${existingWorkout.id}`);
-          router.refresh();
         } else {
           throw new Error('Error updating workout');
         }
@@ -190,8 +212,8 @@ export default function WorkoutForm({ userId, existingWorkout, availableExercise
         }
         result = await createWorkout(workoutData, userId);
         if (result) {
-          router.push(`/${locale}/workouts`);
-          router.refresh();
+          addToast(t('createSuccess'), 'success');
+          router.push(`/${locale}/workouts/${result.id}`);
         } else {
           throw new Error('Error creating workout');
         }
@@ -340,27 +362,55 @@ export default function WorkoutForm({ userId, existingWorkout, availableExercise
       <div className="bg-surface rounded-xl p-4">
         <h2 className="text-xl font-semibold mb-3 text-foreground">{t('tags')}</h2>
 
-        <div className="flex gap-2 mb-2">
-          <input
-            type="text"
-            value={newTag}
-            onChange={(e) => setNewTag(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                handleAddTag();
-              }
-            }}
-            placeholder={t('addTagPlaceholder')}
-            className="flex-1 p-2 border border-foreground/20 bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder-foreground/40"
-          />
-          <button
-            type="button"
-            onClick={handleAddTag}
-            className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
-          >
-            {t('add')}
-          </button>
+        <div className="relative mb-2" ref={tagDropdownRef}>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={newTag}
+              onChange={(e) => {
+                setNewTag(e.target.value);
+                setShowTagDropdown(true);
+              }}
+              onFocus={() => setShowTagDropdown(true)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  handleAddTag();
+                  setShowTagDropdown(false);
+                } else if (e.key === 'Escape') {
+                  setShowTagDropdown(false);
+                }
+              }}
+              placeholder={t('addTagPlaceholder')}
+              className="flex-1 p-2 border border-foreground/20 bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent placeholder-foreground/40"
+            />
+            <button
+              type="button"
+              onClick={() => { handleAddTag(); setShowTagDropdown(false); }}
+              className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
+            >
+              {t('add')}
+            </button>
+          </div>
+
+          {showTagDropdown && filteredTags.length > 0 && (
+            <div className="absolute z-10 w-full mt-1 bg-surface border border-foreground/20 rounded-xl shadow-lg max-h-48 overflow-auto">
+              {filteredTags.map((tag) => (
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => {
+                    setFormState(prev => ({ ...prev, tags: [...prev.tags, tag] }));
+                    setNewTag('');
+                    setShowTagDropdown(false);
+                  }}
+                  className="w-full px-4 py-2 text-left text-foreground hover:bg-primary-500/20 focus:bg-primary-500/20 focus:outline-none first:rounded-t-xl last:rounded-b-xl text-sm"
+                >
+                  #{tag}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="flex flex-wrap gap-2 mt-2">

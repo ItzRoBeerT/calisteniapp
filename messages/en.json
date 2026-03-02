@@ -358,7 +358,11 @@
 	  "confirmDelete": "Confirm deletion",
 	  "confirmDeleteMessage": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
 	  "cancel": "Cancel",
-	  "deleting": "Deleting..."
+	  "deleting": "Deleting...",
+	  "exportPDF": "Export PDF",
+	  "shareLink": "Copy link",
+	  "linkCopied": "Link copied!",
+	  "startWorkout": "Start Workout"
 	},
 	"EditWorkout": {
 	  "title": "Edit Workout",
@@ -395,6 +399,8 @@
 	  "createWorkout": "Create Workout",
 	  "updateWorkout": "Update Workout",
 	  "submitError": "Error saving workout. Please try again.",
+  "createSuccess": "Workout created successfully",
+  "updateSuccess": "Workout updated successfully",
 	  "searchExercise": "Add exercise",
 	  "searchExercisePlaceholder": "Type to search exercises...",
 	  "noExercisesFound": "No exercises found",

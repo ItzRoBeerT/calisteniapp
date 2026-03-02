@@ -4,7 +4,7 @@ import WorkoutForm from '@/components/workouts/WorkoutForm';
 import { createClient } from '@/utils/supabase/server';
 import BackButton from '@/components/ui/BackButton';
 import { getExercises } from '@/actions/exercise';
-import { getRecentWorkoutForAI } from '@/actions/workout';
+import { getRecentWorkoutForAI, getUniqueTags } from '@/actions/workout';
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations('NewWorkout');
@@ -31,9 +31,10 @@ export default async function NewWorkoutPage({ params }: Props) {
 
   const isAiEnabled = !!process.env.OPENAI_API_KEY;
 
-  const [exercises, recentWorkout] = await Promise.all([
+  const [exercises, recentWorkout, availableTags] = await Promise.all([
     getExercises(locale).then((r) => r || []),
     isAiEnabled ? getRecentWorkoutForAI() : Promise.resolve(null),
+    getUniqueTags(),
   ]);
 
   return (
@@ -43,7 +44,7 @@ export default async function NewWorkoutPage({ params }: Props) {
       <div className="mt-4">
         <h1 className="text-3xl font-bold mb-6 text-foreground">{t('title')}</h1>
 
-        <WorkoutForm userId={userId} availableExercises={exercises} recentWorkout={recentWorkout} isAiEnabled={isAiEnabled} />
+        <WorkoutForm userId={userId} availableExercises={exercises} recentWorkout={recentWorkout} isAiEnabled={isAiEnabled} availableTags={availableTags} />
       </div>
     </div>
   );

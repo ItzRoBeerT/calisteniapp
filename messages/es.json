@@ -358,7 +358,11 @@
 		"confirmDelete": "Confirmar eliminación",
 		"confirmDeleteMessage": "¿Estás seguro de que quieres eliminar \"{name}\"? Esta acción no se puede deshacer.",
 		"cancel": "Cancelar",
-		"deleting": "Eliminando..."
+		"deleting": "Eliminando...",
+		"exportPDF": "Exportar PDF",
+		"shareLink": "Copiar enlace",
+		"linkCopied": "¡Enlace copiado!",
+		"startWorkout": "Hacer entrenamiento"
 	},
 	"EditWorkout": {
 		"title": "Editar Entrenamiento",
@@ -395,6 +399,8 @@
 		"createWorkout": "Crear Entrenamiento",
 		"updateWorkout": "Actualizar Entrenamiento",
 		"submitError": "Error al guardar el entrenamiento. Inténtalo de nuevo.",
+		"createSuccess": "Entrenamiento creado con éxito",
+		"updateSuccess": "Entrenamiento actualizado con éxito",
 		"searchExercise": "Añadir ejercicio",
 		"searchExercisePlaceholder": "Escribe para buscar ejercicios...",
 		"noExercisesFound": "No se encontraron ejercicios",
