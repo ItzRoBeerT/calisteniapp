@@ -767,7 +767,9 @@
 		"emptyTitle": "Start your journey",
 		"emptyDescription": "You haven't completed any workouts yet. Start your first workout and track your progress here.",
 		"startWorkout": "Go to workouts",
-		"showAll": "Show all"
+		"showAll": "Show all",
+		"showMore": "Show more",
+		"loading": "Loading..."
 	},
 	"Settings": {
 		"title": "Settings",

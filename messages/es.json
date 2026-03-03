@@ -767,7 +767,9 @@
 		"emptyTitle": "Comienza tu viaje",
 		"emptyDescription": "Aún no has completado ningún entrenamiento. Empieza tu primer entrenamiento y observa tu progreso aquí.",
 		"startWorkout": "Ir a entrenamientos",
-		"showAll": "Ver todo"
+		"showAll": "Ver todo",
+		"showMore": "Mostrar más",
+		"loading": "Cargando..."
 	},
 	"Settings": {
 		"title": "Ajustes",
