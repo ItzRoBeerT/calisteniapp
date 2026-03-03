@@ -816,7 +816,10 @@
 		"myWorkouts": "My Workouts",
 		"likedWorkouts": "Liked Workouts",
 		"loading": "Loading...",
-		"allWorkouts": "All Workouts"
+		"allWorkouts": "All Workouts",
+		"startWorkout": "Start Workout",
+		"markAsDone": "Mark as Done",
+		"goBack": "Go Back"
 	},
 	"Footer": {
 		"copyright": "All rights reserved.",
