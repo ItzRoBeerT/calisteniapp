@@ -14,7 +14,7 @@ type HeatmapData = {
 };
 
 export function useHeatmapData(
-	completions: Completion[],
+	summaryDates: { completed_at: string }[],
 	selectedYear: number | null,
 ): HeatmapData {
 	const t = useTranslations('Profile');
@@ -41,11 +41,11 @@ export function useHeatmapData(
 			startDate.setDate(startDate.getDate() - startDay);
 		}
 
-		const completionMap = new Map<string, Completion[]>();
-		completions.forEach((c) => {
+		// Only track counts (details are loaded separately)
+		const completionMap = new Map<string, number>();
+		summaryDates.forEach((c) => {
 			const key = getDayKey(new Date(c.completed_at));
-			if (!completionMap.has(key)) completionMap.set(key, []);
-			completionMap.get(key)!.push(c);
+			completionMap.set(key, (completionMap.get(key) ?? 0) + 1);
 		});
 
 		const weeks: DayData[][] = [];
@@ -61,8 +61,7 @@ export function useHeatmapData(
 
 		while (current <= endDate) {
 			const key = getDayKey(current);
-			const dayCompletions = completionMap.get(key) || [];
-			const count = dayCompletions.length;
+			const count = completionMap.get(key) ?? 0;
 
 			if (current >= rangeStart) {
 				totalCount += count;
@@ -74,7 +73,7 @@ export function useHeatmapData(
 				date: new Date(current),
 				key,
 				count,
-				completions: dayCompletions,
+				completions: [], // enriched by WorkoutHeatmap from loaded details
 				row: current.getDay(),
 			});
 
@@ -143,7 +142,7 @@ export function useHeatmapData(
 		}
 
 		return { weeks, monthLabels, maxCount, totalCount, currentStreak, longestStreak, activeDays };
-	}, [completions, selectedYear, isRolling, t]);
+	}, [summaryDates, selectedYear, isRolling, t]);
 }
 
 export function useActivityByMonth(
