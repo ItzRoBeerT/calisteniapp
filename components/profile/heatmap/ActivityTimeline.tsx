@@ -9,6 +9,9 @@ type ActivityTimelineProps = {
 	selectedDay: string | null;
 	onClearSelection: () => void;
 	activityRef: React.Ref<HTMLDivElement>;
+	hasMore: boolean;
+	isPending: boolean;
+	onLoadMore: () => void;
 };
 
 function TimelineHeader({
@@ -52,13 +55,13 @@ function DayEntry({
 	dateKey,
 	dayCompletions,
 	selectedDay,
-	 
+
 	t,
 }: {
 	dateKey: string;
 	dayCompletions: Completion[];
 	selectedDay: string | null;
-	 
+
 	t: (key: any, values?: any) => string;
 }) {
 	const locale = useLocale();
@@ -107,6 +110,9 @@ export default function ActivityTimeline({
 	selectedDay,
 	onClearSelection,
 	activityRef,
+	hasMore,
+	isPending,
+	onLoadMore,
 }: ActivityTimelineProps) {
 	const t = useTranslations('Profile');
 	const locale = useLocale();
@@ -130,7 +136,11 @@ export default function ActivityTimeline({
 					onClearSelection={onClearSelection}
 				/>
 				<div className="relative p-5 text-center py-8">
-					<p className="text-sm text-foreground/40">{t('noWorkouts')}</p>
+					{isPending ? (
+						<p className="text-sm text-foreground/40">{t('loading')}</p>
+					) : (
+						<p className="text-sm text-foreground/40">{t('noWorkouts')}</p>
+					)}
 				</div>
 			</div>
 		);
@@ -173,6 +183,16 @@ export default function ActivityTimeline({
 						</div>
 					</div>
 				))}
+
+				{!selectedDay && hasMore && (
+					<button
+						onClick={onLoadMore}
+						disabled={isPending}
+						className="w-full mt-1 py-2 text-sm text-foreground/50 hover:text-foreground/80 hover:bg-white/[0.04] rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+					>
+						{isPending ? t('loading') : t('showMore')}
+					</button>
+				)}
 			</div>
 		</div>
 	);
