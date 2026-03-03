@@ -150,6 +150,8 @@
     <string name="workout_runner_save_error">Error al guardar el entrenamiento</string>
     <string name="workout_runner_retry_save">Reintentar</string>
     <string name="workout_runner_select">Selecciona un entrenamiento</string>
+    <string name="workout_runner_mark_done">Marcar como hecho</string>
+    <string name="workout_runner_start">Comenzar</string>
 
     <!-- Workout Selection -->
     <string name="workout_selection_title">Selecciona un entrenamiento</string>

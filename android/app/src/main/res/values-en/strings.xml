@@ -144,6 +144,8 @@
     <string name="workout_runner_elapsed">Time: %1$s</string>
     <string name="workout_runner_rest_title">Rest</string>
     <string name="workout_runner_select">Select a workout</string>
+    <string name="workout_runner_mark_done">Mark as done</string>
+    <string name="workout_runner_start">Start workout</string>
 
     <!-- Workout Selection -->
     <string name="workout_selection_title">Select a workout</string>
