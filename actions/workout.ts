@@ -576,6 +576,90 @@ export async function getWorkoutCompletions() {
 	return data || [];
 }
 
+// Lightweight: returns only completed_at for all completions (for heatmap grid)
+export async function getCompletionDates(): Promise<{ completed_at: string }[]> {
+	const supabase = await createClient();
+	if (!supabase) return [];
+	const { data: { user } } = await supabase.auth.getUser();
+	if (!user) return [];
+	const { data, error } = await supabase
+		.from('workout_completions')
+		.select('completed_at')
+		.eq('user_id', user.id)
+		.order('completed_at', { ascending: false });
+	if (error) {
+		console.error('Error fetching completion dates:', error.message);
+		return [];
+	}
+	return data || [];
+}
+
+type CompletionDetail = {
+	completed_at: string;
+	workout_name: string;
+	workout_id: number | null;
+	duration_seconds: number | null;
+	exercises_count: number | null;
+};
+
+// Returns full details for the next N unique calendar days before beforeCursor
+export async function getCompletionDetailsPaginated(
+	beforeCursor?: string,
+	limit: number = 5,
+): Promise<{ completions: CompletionDetail[]; hasMore: boolean }> {
+	const supabase = await createClient();
+	if (!supabase) return { completions: [], hasMore: false };
+	const { data: { user } } = await supabase.auth.getUser();
+	if (!user) return { completions: [], hasMore: false };
+
+	const maxRows = limit * 20 + 1;
+	let query = supabase
+		.from('workout_completions')
+		.select('completed_at, workout_name, workout_id, duration_seconds, exercises_count')
+		.eq('user_id', user.id)
+		.order('completed_at', { ascending: false })
+		.limit(maxRows);
+
+	if (beforeCursor) {
+		query = query.lt('completed_at', beforeCursor);
+	}
+
+	const { data, error } = await query;
+	if (error || !data) return { completions: [], hasMore: false };
+
+	// Stop once we've accumulated `limit` unique UTC days
+	const seenDays = new Set<string>();
+	const result: CompletionDetail[] = [];
+	for (const c of data) {
+		seenDays.add(c.completed_at.slice(0, 10));
+		if (seenDays.size > limit) {
+			return { completions: result, hasMore: true };
+		}
+		result.push(c);
+	}
+	return { completions: result, hasMore: false };
+}
+
+// Returns full details for the UTC range [startISO, endISO) – caller provides range for local day
+export async function getCompletionDetailsBetween(
+	startISO: string,
+	endISO: string,
+): Promise<CompletionDetail[]> {
+	const supabase = await createClient();
+	if (!supabase) return [];
+	const { data: { user } } = await supabase.auth.getUser();
+	if (!user) return [];
+	const { data, error } = await supabase
+		.from('workout_completions')
+		.select('completed_at, workout_name, workout_id, duration_seconds, exercises_count')
+		.eq('user_id', user.id)
+		.gte('completed_at', startISO)
+		.lt('completed_at', endISO)
+		.order('completed_at', { ascending: false });
+	if (error) return [];
+	return data || [];
+}
+
 export async function deleteWorkout(id: string) {
 	const supabase = await createClient();
 
