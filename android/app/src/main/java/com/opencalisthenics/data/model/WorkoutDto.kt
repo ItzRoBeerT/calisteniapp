@@ -22,7 +22,7 @@ data class WorkoutExerciseDto(
     val workout_id: Int,
     val exercise_id: Int? = null,
     val exercise_name: String? = null,
-    val sets: Int = 3,
+    val sets: Int? = 3,
     val reps: Int = 10,
     val rest: Int = 60,
     val order: Int = 0
@@ -34,7 +34,7 @@ data class WorkoutExerciseWithImageDto(
     val workout_id: Int,
     val exercise_id: Int? = null,
     val exercise_name: String? = null,
-    val sets: Int = 3,
+    val sets: Int? = 3,
     val reps: Int = 10,
     val rest: Int = 60,
     val order: Int? = null,

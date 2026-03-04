@@ -1,6 +1,7 @@
 'use server';
 import { createClient } from '@/utils/supabase/server';
 import { mockWorkoutDetails, mockWorkoutFilters, mockExercises } from '@/utils/mock-data';
+import type { RecentWorkoutData } from '@/types/Workout';
 
 export async function getWorkout(id: string) {
 	const supabase = await createClient();
@@ -40,7 +41,7 @@ export async function getWorkout(id: string) {
 	let username: string | undefined;
 	if (workout.user_id) {
 		const { data: profile } = await supabase
-			.from('Profile')
+			.from('profiles')
 			.select('username')
 			.eq('user_id', workout.user_id)
 			.single();
@@ -279,6 +280,14 @@ export async function getWorkoutFilters() {
 		durations: uniqueDurations,
 		tags: uniqueTags,
 	};
+}
+
+export async function getUniqueTags(): Promise<string[]> {
+	const supabase = await createClient();
+	if (!supabase) return [];
+
+	const { data } = await supabase.from('WorkoutTags').select('name');
+	return data ? [...new Set(data.map((item) => item.name))] : [];
 }
 
 export async function createWorkout(workoutData: any, userId: string) {
@@ -567,6 +576,90 @@ export async function getWorkoutCompletions() {
 	return data || [];
 }
 
+// Lightweight: returns only completed_at for all completions (for heatmap grid)
+export async function getCompletionDates(): Promise<{ completed_at: string }[]> {
+	const supabase = await createClient();
+	if (!supabase) return [];
+	const { data: { user } } = await supabase.auth.getUser();
+	if (!user) return [];
+	const { data, error } = await supabase
+		.from('workout_completions')
+		.select('completed_at')
+		.eq('user_id', user.id)
+		.order('completed_at', { ascending: false });
+	if (error) {
+		console.error('Error fetching completion dates:', error.message);
+		return [];
+	}
+	return data || [];
+}
+
+type CompletionDetail = {
+	completed_at: string;
+	workout_name: string;
+	workout_id: number | null;
+	duration_seconds: number | null;
+	exercises_count: number | null;
+};
+
+// Returns full details for the next N unique calendar days before beforeCursor
+export async function getCompletionDetailsPaginated(
+	beforeCursor?: string,
+	limit: number = 5,
+): Promise<{ completions: CompletionDetail[]; hasMore: boolean }> {
+	const supabase = await createClient();
+	if (!supabase) return { completions: [], hasMore: false };
+	const { data: { user } } = await supabase.auth.getUser();
+	if (!user) return { completions: [], hasMore: false };
+
+	const maxRows = limit * 20 + 1;
+	let query = supabase
+		.from('workout_completions')
+		.select('completed_at, workout_name, workout_id, duration_seconds, exercises_count')
+		.eq('user_id', user.id)
+		.order('completed_at', { ascending: false })
+		.limit(maxRows);
+
+	if (beforeCursor) {
+		query = query.lt('completed_at', beforeCursor);
+	}
+
+	const { data, error } = await query;
+	if (error || !data) return { completions: [], hasMore: false };
+
+	// Stop once we've accumulated `limit` unique UTC days
+	const seenDays = new Set<string>();
+	const result: CompletionDetail[] = [];
+	for (const c of data) {
+		seenDays.add(c.completed_at.slice(0, 10));
+		if (seenDays.size > limit) {
+			return { completions: result, hasMore: true };
+		}
+		result.push(c);
+	}
+	return { completions: result, hasMore: false };
+}
+
+// Returns full details for the UTC range [startISO, endISO) – caller provides range for local day
+export async function getCompletionDetailsBetween(
+	startISO: string,
+	endISO: string,
+): Promise<CompletionDetail[]> {
+	const supabase = await createClient();
+	if (!supabase) return [];
+	const { data: { user } } = await supabase.auth.getUser();
+	if (!user) return [];
+	const { data, error } = await supabase
+		.from('workout_completions')
+		.select('completed_at, workout_name, workout_id, duration_seconds, exercises_count')
+		.eq('user_id', user.id)
+		.gte('completed_at', startISO)
+		.lt('completed_at', endISO)
+		.order('completed_at', { ascending: false });
+	if (error) return [];
+	return data || [];
+}
+
 export async function deleteWorkout(id: string) {
 	const supabase = await createClient();
 
@@ -742,6 +835,64 @@ export async function getFavoriteWorkoutsWithDetails() {
 	);
 
 	return workoutsWithDetails.filter((w) => w !== null);
+}
+
+export async function getRecentWorkoutForAI(): Promise<RecentWorkoutData | null> {
+	const supabase = await createClient();
+	if (!supabase) return null;
+
+	const { data: { user } } = await supabase.auth.getUser();
+	if (!user) return null;
+
+	// Get the most recent completed workout
+	const { data: completions, error } = await supabase
+		.from('workout_completions')
+		.select('workout_id, workout_name')
+		.eq('user_id', user.id)
+		.order('completed_at', { ascending: false })
+		.limit(1);
+
+	if (error || !completions || completions.length === 0) return null;
+
+	const recentCompletion = completions[0];
+
+	// Fetch the full workout with exercises
+	const { data: exercises } = await supabase
+		.from('WorkoutExercise')
+		.select('exercise_name, sets, reps, rest, exercise_id')
+		.eq('workout_id', recentCompletion.workout_id);
+
+	const { data: workout } = await supabase
+		.from('Workout')
+		.select('difficulty')
+		.eq('id', recentCompletion.workout_id)
+		.single();
+
+	// Enrich with exercise category/muscle_group
+	const exercisesWithDetails = await Promise.all(
+		(exercises || []).map(async (ex) => {
+			if (!ex.exercise_id) return { name: ex.exercise_name, sets: ex.sets, reps: ex.reps, rest: ex.rest };
+			const { data: exerciseData } = await supabase
+				.from('Exercise')
+				.select('muscle_group, category')
+				.eq('id', ex.exercise_id)
+				.single();
+			return {
+				name: ex.exercise_name,
+				sets: ex.sets,
+				reps: ex.reps,
+				rest: ex.rest,
+				muscle_group: exerciseData?.muscle_group || [],
+				category: exerciseData?.category,
+			};
+		})
+	);
+
+	return {
+		name: recentCompletion.workout_name,
+		difficulty: workout?.difficulty,
+		exercises: exercisesWithDetails,
+	};
 }
 
 export async function getWorkoutsByPageWithLikes(page = 1, limit = 12, filters?: any) {

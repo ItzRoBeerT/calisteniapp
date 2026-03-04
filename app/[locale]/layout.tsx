@@ -1,5 +1,6 @@
 import Header from '@/components/header/Header';
 import Footer from '@/components/footer/Footer';
+import ToastContainer from '@/components/ui/ToastContainer';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
 import { getMessages } from 'next-intl/server';
@@ -30,6 +31,7 @@ export default async function LocaleLayout({
 					{children}
 				</main>
 				<Footer />
+				<ToastContainer />
 			</ErrorBoundary>
 		</NextIntlClientProvider>
 	);

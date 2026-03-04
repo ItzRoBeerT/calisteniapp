@@ -401,7 +401,7 @@ class WorkoutRepositoryImpl : WorkoutRepository {
         id = id,
         exerciseId = exercise_id,
         name = exercise_name ?: "",
-        sets = sets,
+        sets = sets ?: 3,
         reps = reps,
         rest = rest,
         image = exercise?.image ?: ""

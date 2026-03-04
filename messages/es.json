@@ -358,7 +358,14 @@
 		"confirmDelete": "Confirmar eliminación",
 		"confirmDeleteMessage": "¿Estás seguro de que quieres eliminar \"{name}\"? Esta acción no se puede deshacer.",
 		"cancel": "Cancelar",
-		"deleting": "Eliminando..."
+		"deleting": "Eliminando...",
+		"exportPDF": "Exportar PDF",
+		"shareLink": "Copiar enlace",
+		"linkCopied": "¡Enlace copiado!",
+		"startWorkout": "Hacer entrenamiento",
+		"sets": "series",
+		"reps": "reps",
+		"rest": "descanso"
 	},
 	"EditWorkout": {
 		"title": "Editar Entrenamiento",
@@ -395,6 +402,8 @@
 		"createWorkout": "Crear Entrenamiento",
 		"updateWorkout": "Actualizar Entrenamiento",
 		"submitError": "Error al guardar el entrenamiento. Inténtalo de nuevo.",
+		"createSuccess": "Entrenamiento creado con éxito",
+		"updateSuccess": "Entrenamiento actualizado con éxito",
 		"searchExercise": "Añadir ejercicio",
 		"searchExercisePlaceholder": "Escribe para buscar ejercicios...",
 		"noExercisesFound": "No se encontraron ejercicios",
@@ -407,6 +416,24 @@
 		"private": "Privado",
 		"publicDescription": "Visible para todos los usuarios en los listados",
 		"privateDescription": "Solo visible para ti"
+	},
+	"AIWorkoutGenerator": {
+		"title": "Generar con IA",
+		"subtitle": "Deja que la IA seleccione ejercicios y cree un entrenamiento para ti",
+		"workoutType": "Tipo de entrenamiento",
+		"push": "Empuje",
+		"pull": "Tirón",
+		"legs": "Piernas",
+		"fullBody": "Cuerpo completo",
+		"difficultyAdjustment": "Comparado con tu último entrenamiento",
+		"easier": "Más fácil",
+		"same": "Similar",
+		"harder": "Más difícil",
+		"generate": "Generar",
+		"generating": "Generando...",
+		"generatedInfo": "¡Entrenamiento generado! Puedes editarlo antes de guardar.",
+		"error": "Error al generar el entrenamiento. Por favor, inténtalo de nuevo.",
+		"basedOn": "Basado en tu último entrenamiento: {name}"
 	},
 	"WorkoutFilter": {
 		"difficulty": "Dificultad",
@@ -740,7 +767,9 @@
 		"emptyTitle": "Comienza tu viaje",
 		"emptyDescription": "Aún no has completado ningún entrenamiento. Empieza tu primer entrenamiento y observa tu progreso aquí.",
 		"startWorkout": "Ir a entrenamientos",
-		"showAll": "Ver todo"
+		"showAll": "Ver todo",
+		"showMore": "Mostrar más",
+		"loading": "Cargando..."
 	},
 	"Settings": {
 		"title": "Ajustes",
@@ -789,7 +818,10 @@
 		"myWorkouts": "Mis Entrenamientos",
 		"likedWorkouts": "Entrenamientos Favoritos",
 		"loading": "Cargando...",
-		"allWorkouts": "Todos los Entrenamientos"
+		"allWorkouts": "Todos los Entrenamientos",
+		"startWorkout": "Comenzar",
+		"markAsDone": "Marcar como hecho",
+		"goBack": "Volver"
 	},
 	"Footer": {
 		"copyright": "Todos los derechos reservados.",

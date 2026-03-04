@@ -2,20 +2,26 @@ package com.opencalisthenics.presentation.workout.form
 
 import android.app.Application
 import androidx.compose.runtime.getValue
+import com.opencalisthenics.presentation.common.LanguageManager
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.opencalisthenics.BuildConfig
 import com.opencalisthenics.R
+import com.opencalisthenics.data.repository.AIWorkoutRepositoryImpl
 import com.opencalisthenics.data.repository.ExerciseRepositoryImpl
 import com.opencalisthenics.data.repository.WorkoutRepositoryImpl
 import com.opencalisthenics.domain.model.AppError
 import com.opencalisthenics.domain.model.Exercise
 import com.opencalisthenics.domain.model.ExerciseWorkout
+import com.opencalisthenics.domain.model.RecentWorkoutData
 import com.opencalisthenics.domain.model.Workout
 import com.opencalisthenics.domain.usecase.exercise.GetExercisesUseCase
 import com.opencalisthenics.domain.usecase.workout.CreateWorkoutUseCase
+import com.opencalisthenics.domain.usecase.workout.GenerateAIWorkoutUseCase
+import com.opencalisthenics.domain.usecase.workout.GetRecentWorkoutForAIUseCase
 import com.opencalisthenics.domain.usecase.workout.GetWorkoutByIdUseCase
 import com.opencalisthenics.domain.usecase.workout.UpdateWorkoutUseCase
 import com.opencalisthenics.presentation.common.UiText
@@ -38,24 +44,51 @@ data class WorkoutFormUiState(
     val isLoading: Boolean = false,
     val isSaving: Boolean = false,
     val isSaved: Boolean = false,
-    val errorMessage: UiText? = null
+    val errorMessage: UiText? = null,
+    // AI Generator state
+    val isAiEnabled: Boolean = false,
+    val isAiPanelOpen: Boolean = false,
+    val aiWorkoutType: String = "push",
+    val aiDifficultyAdjustment: String = "same",
+    val isAiGenerating: Boolean = false,
+    val aiError: String? = null,
+    val recentWorkout: RecentWorkoutData? = null
 )
 
 class WorkoutFormViewModel(
+    private val application: Application,
     private val editWorkoutId: Int? = null,
     private val getExercisesUseCase: GetExercisesUseCase,
     private val createWorkoutUseCase: CreateWorkoutUseCase = CreateWorkoutUseCase(WorkoutRepositoryImpl()),
     private val updateWorkoutUseCase: UpdateWorkoutUseCase = UpdateWorkoutUseCase(WorkoutRepositoryImpl()),
-    private val getWorkoutByIdUseCase: GetWorkoutByIdUseCase = GetWorkoutByIdUseCase(WorkoutRepositoryImpl())
+    private val getWorkoutByIdUseCase: GetWorkoutByIdUseCase = GetWorkoutByIdUseCase(WorkoutRepositoryImpl()),
+    private val generateAIWorkoutUseCase: GenerateAIWorkoutUseCase = GenerateAIWorkoutUseCase(AIWorkoutRepositoryImpl()),
+    private val getRecentWorkoutForAIUseCase: GetRecentWorkoutForAIUseCase = GetRecentWorkoutForAIUseCase(AIWorkoutRepositoryImpl())
 ) : ViewModel() {
 
-    var uiState by mutableStateOf(WorkoutFormUiState(isEditMode = editWorkoutId != null))
+    var uiState by mutableStateOf(
+        WorkoutFormUiState(
+            isEditMode = editWorkoutId != null,
+            isAiEnabled = BuildConfig.OPENAI_API_KEY.isNotBlank()
+        )
+    )
         private set
 
     init {
         loadExercises()
         if (editWorkoutId != null) {
             loadWorkoutForEdit(editWorkoutId)
+        } else {
+            loadRecentWorkout()
+        }
+    }
+
+    private fun loadRecentWorkout() {
+        viewModelScope.launch {
+            getRecentWorkoutForAIUseCase()
+                .onSuccess { recent ->
+                    uiState = uiState.copy(recentWorkout = recent)
+                }
         }
     }
 
@@ -202,6 +235,60 @@ class WorkoutFormViewModel(
         )
     }
 
+    fun onToggleAiPanel() {
+        uiState = uiState.copy(isAiPanelOpen = !uiState.isAiPanelOpen, aiError = null)
+    }
+
+    fun onAiWorkoutTypeChanged(type: String) {
+        uiState = uiState.copy(aiWorkoutType = type)
+    }
+
+    fun onAiDifficultyAdjustmentChanged(adj: String) {
+        uiState = uiState.copy(aiDifficultyAdjustment = adj)
+    }
+
+    fun onGenerateAIWorkout() {
+        uiState = uiState.copy(isAiGenerating = true, aiError = null)
+        viewModelScope.launch {
+            val locale = LanguageManager.getLanguage(application)
+            generateAIWorkoutUseCase(
+                exercises = uiState.availableExercises,
+                recentWorkout = uiState.recentWorkout,
+                workoutType = uiState.aiWorkoutType,
+                difficultyAdjustment = uiState.aiDifficultyAdjustment,
+                locale = locale
+            ).onSuccess { generated ->
+                val exercises = generated.exercises.map { gen ->
+                    val source = uiState.availableExercises.find { it.id == gen.exerciseId }
+                    ExerciseWorkout(
+                        exerciseId = gen.exerciseId,
+                        name = gen.name,
+                        sets = gen.sets,
+                        reps = gen.reps,
+                        rest = gen.rest,
+                        muscleGroups = source?.muscleGroups ?: emptyList(),
+                        image = source?.image ?: ""
+                    )
+                }
+                uiState = uiState.copy(
+                    name = generated.name,
+                    description = generated.description,
+                    difficulty = generated.difficulty,
+                    exercises = exercises,
+                    estimatedDuration = calculateDuration(exercises),
+                    isAiGenerating = false,
+                    isAiPanelOpen = false,
+                    aiError = null
+                )
+            }.onFailure { e ->
+                uiState = uiState.copy(
+                    isAiGenerating = false,
+                    aiError = e.message ?: "Error generating workout"
+                )
+            }
+        }
+    }
+
     fun onSave() {
         if (uiState.name.isBlank()) {
             uiState = uiState.copy(errorMessage = UiText.StringResource(R.string.workout_form_name))
@@ -256,12 +343,16 @@ class WorkoutFormViewModel(
                 @Suppress("UNCHECKED_CAST")
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
                     val workoutRepo = WorkoutRepositoryImpl()
+                    val aiRepo = AIWorkoutRepositoryImpl()
                     return WorkoutFormViewModel(
+                        application = application,
                         editWorkoutId = editWorkoutId,
                         getExercisesUseCase = GetExercisesUseCase(ExerciseRepositoryImpl(application.applicationContext)),
                         createWorkoutUseCase = CreateWorkoutUseCase(workoutRepo),
                         updateWorkoutUseCase = UpdateWorkoutUseCase(workoutRepo),
-                        getWorkoutByIdUseCase = GetWorkoutByIdUseCase(workoutRepo)
+                        getWorkoutByIdUseCase = GetWorkoutByIdUseCase(workoutRepo),
+                        generateAIWorkoutUseCase = GenerateAIWorkoutUseCase(aiRepo),
+                        getRecentWorkoutForAIUseCase = GetRecentWorkoutForAIUseCase(aiRepo)
                     ) as T
                 }
             }

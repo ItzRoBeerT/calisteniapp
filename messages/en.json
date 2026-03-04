@@ -358,7 +358,14 @@
 	  "confirmDelete": "Confirm deletion",
 	  "confirmDeleteMessage": "Are you sure you want to delete \"{name}\"? This action cannot be undone.",
 	  "cancel": "Cancel",
-	  "deleting": "Deleting..."
+	  "deleting": "Deleting...",
+	  "exportPDF": "Export PDF",
+	  "shareLink": "Copy link",
+	  "linkCopied": "Link copied!",
+	  "startWorkout": "Start Workout",
+	  "sets": "sets",
+	  "reps": "reps",
+	  "rest": "rest"
 	},
 	"EditWorkout": {
 	  "title": "Edit Workout",
@@ -395,6 +402,8 @@
 	  "createWorkout": "Create Workout",
 	  "updateWorkout": "Update Workout",
 	  "submitError": "Error saving workout. Please try again.",
+  "createSuccess": "Workout created successfully",
+  "updateSuccess": "Workout updated successfully",
 	  "searchExercise": "Add exercise",
 	  "searchExercisePlaceholder": "Type to search exercises...",
 	  "noExercisesFound": "No exercises found",
@@ -407,6 +416,24 @@
 	  "private": "Private",
 	  "publicDescription": "Visible to all users in workout listings",
 	  "privateDescription": "Only visible to you"
+	},
+	"AIWorkoutGenerator": {
+	  "title": "Generate with AI",
+	  "subtitle": "Let AI select exercises and build a workout for you",
+	  "workoutType": "Workout type",
+	  "push": "Push",
+	  "pull": "Pull",
+	  "legs": "Legs",
+	  "fullBody": "Full Body",
+	  "difficultyAdjustment": "Compared to your last workout",
+	  "easier": "Easier",
+	  "same": "Similar",
+	  "harder": "Harder",
+	  "generate": "Generate",
+	  "generating": "Generating...",
+	  "generatedInfo": "Workout generated! You can edit it before saving.",
+	  "error": "Error generating workout. Please try again.",
+	  "basedOn": "Based on your last workout: {name}"
 	},
 	"WorkoutFilter": {
 	  "difficulty": "Difficulty",
@@ -740,7 +767,9 @@
 		"emptyTitle": "Start your journey",
 		"emptyDescription": "You haven't completed any workouts yet. Start your first workout and track your progress here.",
 		"startWorkout": "Go to workouts",
-		"showAll": "Show all"
+		"showAll": "Show all",
+		"showMore": "Show more",
+		"loading": "Loading..."
 	},
 	"Settings": {
 		"title": "Settings",
@@ -789,7 +818,10 @@
 		"myWorkouts": "My Workouts",
 		"likedWorkouts": "Liked Workouts",
 		"loading": "Loading...",
-		"allWorkouts": "All Workouts"
+		"allWorkouts": "All Workouts",
+		"startWorkout": "Start Workout",
+		"markAsDone": "Mark as Done",
+		"goBack": "Go Back"
 	},
 	"Footer": {
 		"copyright": "All rights reserved.",

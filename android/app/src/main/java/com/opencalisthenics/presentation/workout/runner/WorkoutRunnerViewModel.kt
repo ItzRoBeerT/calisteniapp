@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 
 enum class RunnerPhase {
     LOADING,
+    PREVIEW,
     EXERCISE,
     REST,
     COMPLETE
@@ -76,10 +77,9 @@ class WorkoutRunnerViewModel(
                     uiState = uiState.copy(
                         workout = workout,
                         totalSets = totalSets,
-                        phase = RunnerPhase.EXERCISE,
+                        phase = RunnerPhase.PREVIEW,
                         isLoading = false
                     )
-                    startElapsedTimer()
                 }
                 .onFailure { e ->
                     uiState = uiState.copy(
@@ -178,6 +178,16 @@ class WorkoutRunnerViewModel(
         }
     }
 
+    fun onStartWorkout() {
+        uiState = uiState.copy(phase = RunnerPhase.EXERCISE)
+        startElapsedTimer()
+    }
+
+    fun onMarkAsDone() {
+        uiState = uiState.copy(isSaved = true)
+        saveCompletion(durationSeconds = 0)
+    }
+
     fun onShowCancelDialog() {
         uiState = uiState.copy(showCancelDialog = true)
     }
@@ -186,7 +196,7 @@ class WorkoutRunnerViewModel(
         uiState = uiState.copy(showCancelDialog = false)
     }
 
-    private fun saveCompletion() {
+    private fun saveCompletion(durationSeconds: Int = uiState.elapsedSeconds) {
         val workout = uiState.workout ?: return
         viewModelScope.launch {
             uiState = uiState.copy(isSaving = true, saveError = null)
@@ -194,7 +204,7 @@ class WorkoutRunnerViewModel(
                 WorkoutCompletion(
                     workoutId = workout.id,
                     workoutName = workout.name,
-                    durationSeconds = uiState.elapsedSeconds,
+                    durationSeconds = durationSeconds,
                     exercisesCount = workout.exercises.size
                 )
             )

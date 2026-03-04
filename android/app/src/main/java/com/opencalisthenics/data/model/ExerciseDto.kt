@@ -5,6 +5,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ExerciseDto(
     val id: Int,
+    val name: String = "",
+    val description: String = "",
     val image: String,
     val difficulty: Int,
     val muscle_group: List<String>,

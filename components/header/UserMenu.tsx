@@ -5,6 +5,7 @@ import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface UserMenuProps {
   userName: string;
@@ -65,9 +66,14 @@ export default function UserMenu({ userName, locale }: UserMenuProps) {
         aria-haspopup="true"
         aria-label={`${t('signedInAs')} ${userName}`}
       >
-        <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-black font-semibold text-sm shadow-md">
-          {getInitials(userName)}
-        </div>
+        <Image
+          src={`https://api.dicebear.com/9.x/identicon/svg?seed=${encodeURIComponent(userName)}`}
+          alt={userName}
+          width={36}
+          height={36}
+          className="rounded-full shadow-md"
+          unoptimized
+        />
         <svg
           className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
           fill="none"

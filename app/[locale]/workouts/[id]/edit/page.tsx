@@ -4,7 +4,7 @@ import { notFound, redirect } from 'next/navigation';
 import WorkoutForm from '@/components/workouts/WorkoutForm';
 import { createClient } from '@/utils/supabase/server';
 import BackButton from '@/components/ui/BackButton';
-import { getWorkout } from '@/actions/workout';
+import { getWorkout, getUniqueTags } from '@/actions/workout';
 import { getExercises } from '@/actions/exercise';
 
 type Props = {
@@ -53,7 +53,10 @@ export default async function EditWorkoutPage({ params }: Props) {
     redirect(`/${locale}/workouts/${id}`);
   }
 
-  const exercises = await getExercises(locale) || [];
+  const [exercises, availableTags] = await Promise.all([
+    getExercises(locale).then((r) => r || []),
+    getUniqueTags(),
+  ]);
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -66,6 +69,7 @@ export default async function EditWorkoutPage({ params }: Props) {
           userId={userId}
           existingWorkout={workout}
           availableExercises={exercises}
+          availableTags={availableTags}
         />
       </div>
     </div>

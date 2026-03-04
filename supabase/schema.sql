@@ -68,39 +68,9 @@ CREATE TABLE IF NOT EXISTS "WorkoutTags" (
     name TEXT NOT NULL
 );
 
--- Also create snake_case version for compatibility
-CREATE TABLE IF NOT EXISTS workout_tags (
-    id SERIAL PRIMARY KEY,
-    workout_id INTEGER REFERENCES "Workout"(id) ON DELETE CASCADE,
-    tag TEXT NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS workout_exercises (
-    id SERIAL PRIMARY KEY,
-    workout_id INTEGER REFERENCES "Workout"(id) ON DELETE CASCADE,
-    exercise_id INTEGER REFERENCES "Exercise"(id) ON DELETE SET NULL,
-    sets INTEGER DEFAULT 3,
-    reps INTEGER DEFAULT 10,
-    rest INTEGER DEFAULT 60,
-    "order" INTEGER DEFAULT 0
-);
-
 -- =============================================
 -- USER PROFILES
 -- =============================================
-CREATE TABLE IF NOT EXISTS "Profile" (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id UUID UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
-    username TEXT UNIQUE,
-    full_name TEXT,
-    avatar_url TEXT,
-    workouts_count INTEGER DEFAULT 0,
-    followers_count INTEGER DEFAULT 0,
-    following_count INTEGER DEFAULT 0,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Also create snake_case version for compatibility
 CREATE TABLE IF NOT EXISTS profiles (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     user_id UUID UNIQUE REFERENCES auth.users(id) ON DELETE CASCADE,
@@ -173,10 +143,7 @@ ALTER TABLE exercise_progressions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "Workout" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "WorkoutExercise" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE "WorkoutTags" ENABLE ROW LEVEL SECURITY;
-ALTER TABLE "Profile" ENABLE ROW LEVEL SECURITY;
 ALTER TABLE workout_favorites ENABLE ROW LEVEL SECURITY;
-ALTER TABLE workout_tags ENABLE ROW LEVEL SECURITY;
-ALTER TABLE workout_exercises ENABLE ROW LEVEL SECURITY;
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE workout_completions ENABLE ROW LEVEL SECURITY;
 
@@ -194,8 +161,8 @@ DROP POLICY IF EXISTS "Workout tags viewable by everyone" ON "WorkoutTags";
 DROP POLICY IF EXISTS "Users can manage tags of their workouts" ON "WorkoutTags";
 DROP POLICY IF EXISTS "Users can update tags of their workouts" ON "WorkoutTags";
 DROP POLICY IF EXISTS "Users can delete tags of their workouts" ON "WorkoutTags";
-DROP POLICY IF EXISTS "Profiles are viewable by everyone" ON "Profile";
-DROP POLICY IF EXISTS "Users can update their own profile" ON "Profile";
+DROP POLICY IF EXISTS "Profiles are viewable by everyone" ON profiles;
+DROP POLICY IF EXISTS "Users can update their own profile" ON profiles;
 
 -- Exercise: Everyone can read
 CREATE POLICY "Exercises are viewable by everyone" ON "Exercise"
@@ -297,93 +264,11 @@ CREATE POLICY "Users can add favorites" ON workout_favorites
 CREATE POLICY "Users can remove favorites" ON workout_favorites
     FOR DELETE USING ((select auth.uid()) = user_id);
 
--- Profile: Everyone can read, owners can modify
-CREATE POLICY "Profiles are viewable by everyone" ON "Profile"
+-- Profiles: Everyone can read, owners can modify
+CREATE POLICY "Profiles are viewable by everyone" ON profiles
     FOR SELECT USING (true);
 
-CREATE POLICY "Users can update their own profile" ON "Profile"
-    FOR UPDATE USING ((select auth.uid()) = user_id);
-
--- workout_tags (snake_case): Follow workout permissions
-DROP POLICY IF EXISTS "workout_tags viewable by everyone" ON workout_tags;
-DROP POLICY IF EXISTS "Users can manage workout_tags of their workouts" ON workout_tags;
-DROP POLICY IF EXISTS "Users can update workout_tags of their workouts" ON workout_tags;
-DROP POLICY IF EXISTS "Users can delete workout_tags of their workouts" ON workout_tags;
-
-CREATE POLICY "workout_tags viewable by everyone" ON workout_tags
-    FOR SELECT USING (true);
-
-CREATE POLICY "Users can manage workout_tags of their workouts" ON workout_tags
-    FOR INSERT WITH CHECK (
-        EXISTS (
-            SELECT 1 FROM "Workout"
-            WHERE "Workout".id = workout_tags.workout_id
-            AND "Workout".user_id = (select auth.uid())
-        )
-    );
-
-CREATE POLICY "Users can update workout_tags of their workouts" ON workout_tags
-    FOR UPDATE USING (
-        EXISTS (
-            SELECT 1 FROM "Workout"
-            WHERE "Workout".id = workout_tags.workout_id
-            AND "Workout".user_id = (select auth.uid())
-        )
-    );
-
-CREATE POLICY "Users can delete workout_tags of their workouts" ON workout_tags
-    FOR DELETE USING (
-        EXISTS (
-            SELECT 1 FROM "Workout"
-            WHERE "Workout".id = workout_tags.workout_id
-            AND "Workout".user_id = (select auth.uid())
-        )
-    );
-
--- workout_exercises (snake_case): Follow workout permissions
-DROP POLICY IF EXISTS "workout_exercises viewable by everyone" ON workout_exercises;
-DROP POLICY IF EXISTS "Users can manage workout_exercises of their workouts" ON workout_exercises;
-DROP POLICY IF EXISTS "Users can update workout_exercises of their workouts" ON workout_exercises;
-DROP POLICY IF EXISTS "Users can delete workout_exercises of their workouts" ON workout_exercises;
-
-CREATE POLICY "workout_exercises viewable by everyone" ON workout_exercises
-    FOR SELECT USING (true);
-
-CREATE POLICY "Users can manage workout_exercises of their workouts" ON workout_exercises
-    FOR INSERT WITH CHECK (
-        EXISTS (
-            SELECT 1 FROM "Workout"
-            WHERE "Workout".id = workout_exercises.workout_id
-            AND "Workout".user_id = (select auth.uid())
-        )
-    );
-
-CREATE POLICY "Users can update workout_exercises of their workouts" ON workout_exercises
-    FOR UPDATE USING (
-        EXISTS (
-            SELECT 1 FROM "Workout"
-            WHERE "Workout".id = workout_exercises.workout_id
-            AND "Workout".user_id = (select auth.uid())
-        )
-    );
-
-CREATE POLICY "Users can delete workout_exercises of their workouts" ON workout_exercises
-    FOR DELETE USING (
-        EXISTS (
-            SELECT 1 FROM "Workout"
-            WHERE "Workout".id = workout_exercises.workout_id
-            AND "Workout".user_id = (select auth.uid())
-        )
-    );
-
--- profiles (snake_case): Everyone can read, owners can modify
-DROP POLICY IF EXISTS "profiles are viewable by everyone" ON profiles;
-DROP POLICY IF EXISTS "Users can update their own profile (profiles)" ON profiles;
-
-CREATE POLICY "profiles are viewable by everyone" ON profiles
-    FOR SELECT USING (true);
-
-CREATE POLICY "Users can update their own profile (profiles)" ON profiles
+CREATE POLICY "Users can update their own profile" ON profiles
     FOR UPDATE USING ((select auth.uid()) = user_id);
 
 -- Workout Completions: Users can manage their own completions
@@ -402,14 +287,6 @@ CREATE POLICY "Users can add completions" ON workout_completions
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-    INSERT INTO public."Profile" (user_id, username, full_name, avatar_url)
-    VALUES (
-        NEW.id,
-        NEW.raw_user_meta_data->>'username',
-        NEW.raw_user_meta_data->>'full_name',
-        NEW.raw_user_meta_data->>'avatar_url'
-    );
-
     INSERT INTO public.profiles (user_id, username, full_name, avatar_url)
     VALUES (
         NEW.id,

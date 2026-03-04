@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import WorkoutHeatmap from '@/components/profile/WorkoutHeatmap';
 import ProfileHeader from '@/components/profile/ProfileHeader';
-import { getWorkoutCompletions } from '@/actions/workout';
+import { getCompletionDates, getCompletionDetailsPaginated } from '@/actions/workout';
 
 export default async function ProfilePage() {
 	const supabase = await createClient();
@@ -20,12 +20,13 @@ export default async function ProfilePage() {
 		redirect('/login');
 	}
 
-	const [completions, profileResult] = await Promise.all([
-		getWorkoutCompletions(),
+	const [summaryDates, initialLoad, profileResult] = await Promise.all([
+		getCompletionDates(),
+		getCompletionDetailsPaginated(undefined, 5),
 		supabase
 			.from('profiles')
 			.select('full_name, username')
-			.eq('id', user.id)
+			.eq('user_id', user.id)
 			.single(),
 	]);
 
@@ -58,7 +59,11 @@ export default async function ProfilePage() {
 			{/* Heatmap & activity */}
 			<section>
 				<Suspense>
-					<WorkoutHeatmap completions={completions} />
+					<WorkoutHeatmap
+						summaryDates={summaryDates}
+						initialDetails={initialLoad.completions}
+						initialHasMore={initialLoad.hasMore}
+					/>
 				</Suspense>
 			</section>
 		</div>

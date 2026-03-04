@@ -23,7 +23,7 @@ export default async function Header() {
 			const { data: userData } = await supabase
 				.from('profiles')
 				.select('full_name, username')
-				.eq('id', user.id)
+				.eq('user_id', user.id)
 				.single();
 
 			if (userData) {

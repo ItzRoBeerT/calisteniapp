@@ -1,14 +1,20 @@
 'use client';
 
+import { useState, useMemo } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { formatDate, formatDuration, formatRelativeDate } from './utils';
 import type { Completion, MonthActivity } from './types';
+
+const PAGE_SIZE = 5;
 
 type ActivityTimelineProps = {
 	activityByMonth: MonthActivity[];
 	selectedDay: string | null;
 	onClearSelection: () => void;
 	activityRef: React.Ref<HTMLDivElement>;
+	hasMore: boolean;
+	isPending: boolean;
+	onLoadMore: () => void;
 };
 
 function TimelineHeader({
@@ -52,13 +58,13 @@ function DayEntry({
 	dateKey,
 	dayCompletions,
 	selectedDay,
-	 
+
 	t,
 }: {
 	dateKey: string;
 	dayCompletions: Completion[];
 	selectedDay: string | null;
-	 
+
 	t: (key: any, values?: any) => string;
 }) {
 	const locale = useLocale();
@@ -107,18 +113,59 @@ export default function ActivityTimeline({
 	selectedDay,
 	onClearSelection,
 	activityRef,
+	hasMore,
+	isPending,
+	onLoadMore,
 }: ActivityTimelineProps) {
 	const t = useTranslations('Profile');
 	const locale = useLocale();
+	const [visibleDays, setVisibleDays] = useState(PAGE_SIZE);
 
-	const filteredActivity = selectedDay
-		? activityByMonth
-			.map((month) => ({
-				...month,
-				sortedDays: month.sortedDays.filter(([dateKey]) => dateKey === selectedDay),
-			}))
-			.filter((month) => month.sortedDays.length > 0)
-		: activityByMonth;
+	const totalLoadedDays = useMemo(
+		() => activityByMonth.reduce((sum, m) => sum + m.sortedDays.length, 0),
+		[activityByMonth],
+	);
+
+	const filteredActivity = useMemo(
+		() =>
+			selectedDay
+				? activityByMonth
+						.map((month) => ({
+							...month,
+							sortedDays: month.sortedDays.filter(([dateKey]) => dateKey === selectedDay),
+						}))
+						.filter((month) => month.sortedDays.length > 0)
+				: activityByMonth,
+		[activityByMonth, selectedDay],
+	);
+
+	const displayActivity = useMemo(() => {
+		if (selectedDay) return filteredActivity;
+		let remaining = visibleDays;
+		const result: typeof filteredActivity = [];
+		for (const month of filteredActivity) {
+			if (remaining <= 0) break;
+			const days = month.sortedDays.slice(0, remaining);
+			if (days.length > 0) result.push({ ...month, sortedDays: days });
+			remaining -= days.length;
+		}
+		return result;
+	}, [filteredActivity, selectedDay, visibleDays]);
+
+	const showMoreButton = !selectedDay && (visibleDays < totalLoadedDays || hasMore);
+
+	const handleShowMore = () => {
+		const nextVisible = visibleDays + PAGE_SIZE;
+		setVisibleDays(nextVisible);
+		if (nextVisible >= totalLoadedDays && hasMore) {
+			onLoadMore();
+		}
+	};
+
+	const handleClearSelection = () => {
+		setVisibleDays(PAGE_SIZE);
+		onClearSelection();
+	};
 
 	if (filteredActivity.length === 0 && selectedDay) {
 		return (
@@ -127,10 +174,14 @@ export default function ActivityTimeline({
 				<TimelineHeader
 					title={formatDate(new Date(selectedDay), locale)}
 					selectedDay={selectedDay}
-					onClearSelection={onClearSelection}
+					onClearSelection={handleClearSelection}
 				/>
 				<div className="relative p-5 text-center py-8">
-					<p className="text-sm text-foreground/40">{t('noWorkouts')}</p>
+					{isPending ? (
+						<p className="text-sm text-foreground/40">{t('loading')}</p>
+					) : (
+						<p className="text-sm text-foreground/40">{t('noWorkouts')}</p>
+					)}
 				</div>
 			</div>
 		);
@@ -145,11 +196,11 @@ export default function ActivityTimeline({
 			<TimelineHeader
 				title={selectedDay ? formatDate(new Date(selectedDay), locale) : t('activityTitle')}
 				selectedDay={selectedDay}
-				onClearSelection={onClearSelection}
+				onClearSelection={handleClearSelection}
 			/>
 
 			<div className="relative p-5">
-				{filteredActivity.map((month) => (
+				{displayActivity.map((month) => (
 					<div key={`${month.year}-${month.monthLabel}`}>
 						{!selectedDay && (
 							<h3 className="text-sm font-medium pb-1 mb-3 border-b border-white/[0.06]">
@@ -173,6 +224,16 @@ export default function ActivityTimeline({
 						</div>
 					</div>
 				))}
+
+				{showMoreButton && (
+					<button
+						onClick={handleShowMore}
+						disabled={isPending}
+						className="w-full mt-1 py-2 text-sm text-foreground/50 hover:text-foreground/80 hover:bg-white/[0.04] rounded-lg transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+					>
+						{isPending ? t('loading') : t('showMore')}
+					</button>
+				)}
 			</div>
 		</div>
 	);

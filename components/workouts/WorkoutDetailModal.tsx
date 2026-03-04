@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import ExerciseList from './ExerciseList';
 import DeleteWorkoutButton from './DeleteWorkoutButton';
+import WorkoutExportButton from './WorkoutExportButton';
 import { getDifficultyColor } from '@/utils/difficultyColors';
 import { WorkoutDetail } from '@/types/Workout';
 
@@ -72,6 +73,16 @@ export default function WorkoutDetailModal({
                 <DeleteWorkoutButton workoutId={workout.id} workoutName={workout.name} />
               </>
             )}
+            <WorkoutExportButton workout={workout} />
+            <Link
+              href={{ pathname: '/workouts/start', query: { id: workout.id } }}
+              className="flex items-center gap-2 bg-primary-500 hover:bg-primary-600 text-white px-3 sm:px-4 py-2 rounded-lg transition-colors text-sm font-medium"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              <span className="hidden sm:inline">{t('startWorkout')}</span>
+            </Link>
             <button
               onClick={onClose}
               className="text-foreground/60 hover:text-foreground transition-colors"

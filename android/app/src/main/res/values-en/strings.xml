@@ -144,6 +144,8 @@
     <string name="workout_runner_elapsed">Time: %1$s</string>
     <string name="workout_runner_rest_title">Rest</string>
     <string name="workout_runner_select">Select a workout</string>
+    <string name="workout_runner_mark_done">Mark as done</string>
+    <string name="workout_runner_start">Start workout</string>
 
     <!-- Workout Selection -->
     <string name="workout_selection_title">Select a workout</string>
@@ -152,6 +154,21 @@
     <string name="workout_selection_empty">You have no personal or saved workouts. Create one or explore the catalog!</string>
     <string name="workout_selection_created">Created on %1$s</string>
     <string name="workout_selection_liked_on">Liked on %1$s</string>
+
+    <!-- AI Workout Generator -->
+    <string name="ai_workout_generate_with_ai">Generate with AI</string>
+    <string name="ai_workout_type">Workout type</string>
+    <string name="ai_workout_type_push">Push</string>
+    <string name="ai_workout_type_pull">Pull</string>
+    <string name="ai_workout_type_legs">Legs</string>
+    <string name="ai_workout_type_full_body">Full Body</string>
+    <string name="ai_workout_difficulty_adj">Compared to your last workout</string>
+    <string name="ai_workout_adj_easier">Easier</string>
+    <string name="ai_workout_adj_same">Similar</string>
+    <string name="ai_workout_adj_harder">Harder</string>
+    <string name="ai_workout_generate">Generate</string>
+    <string name="ai_workout_generating">Generating…</string>
+    <string name="ai_workout_based_on">Based on: %1$s</string>
 
     <!-- Errors -->
     <string name="error_sign_in">Error signing in</string>

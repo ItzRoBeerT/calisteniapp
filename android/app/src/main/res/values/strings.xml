@@ -150,6 +150,8 @@
     <string name="workout_runner_save_error">Error al guardar el entrenamiento</string>
     <string name="workout_runner_retry_save">Reintentar</string>
     <string name="workout_runner_select">Selecciona un entrenamiento</string>
+    <string name="workout_runner_mark_done">Marcar como hecho</string>
+    <string name="workout_runner_start">Comenzar</string>
 
     <!-- Workout Selection -->
     <string name="workout_selection_title">Selecciona un entrenamiento</string>
@@ -158,6 +160,21 @@
     <string name="workout_selection_empty">No tienes entrenamientos propios ni guardados. ¡Crea uno o explora el catálogo!</string>
     <string name="workout_selection_created">Creado el %1$s</string>
     <string name="workout_selection_liked_on">Me gustó el %1$s</string>
+
+    <!-- AI Workout Generator -->
+    <string name="ai_workout_generate_with_ai">Generar con IA</string>
+    <string name="ai_workout_type">Tipo de entrenamiento</string>
+    <string name="ai_workout_type_push">Empuje</string>
+    <string name="ai_workout_type_pull">Tirón</string>
+    <string name="ai_workout_type_legs">Piernas</string>
+    <string name="ai_workout_type_full_body">Cuerpo completo</string>
+    <string name="ai_workout_difficulty_adj">Comparado con tu último entreno</string>
+    <string name="ai_workout_adj_easier">Más fácil</string>
+    <string name="ai_workout_adj_same">Similar</string>
+    <string name="ai_workout_adj_harder">Más difícil</string>
+    <string name="ai_workout_generate">Generar</string>
+    <string name="ai_workout_generating">Generando…</string>
+    <string name="ai_workout_based_on">Basado en: %1$s</string>
 
     <!-- Errors -->
     <string name="error_sign_in">Error al iniciar sesión</string>

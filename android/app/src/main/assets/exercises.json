@@ -1,73 +1,1696 @@
-[
-  { "id": 1, "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80", "difficulty": 1, "muscle_group": ["chest", "shoulders", "triceps"], "category": "push", "type": "dynamic", "equipment": ["none"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=IODxDxX7oi4", "title": "Push Up Tutorial"}] },
-  { "id": 2, "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80", "difficulty": 2, "muscle_group": ["back", "biceps"], "category": "pull", "type": "dynamic", "equipment": ["pull_up_bar"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=30NjUye3y6Q", "title": "Pull Up Tutorial"}] },
-  { "id": 3, "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80", "difficulty": 1, "muscle_group": ["legs", "glutes"], "category": "legs", "type": "dynamic", "equipment": ["none"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=zJBLDJMJiDE", "title": "Full Squat Tutorial"}] },
-  { "id": 4, "image": "https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80", "difficulty": 2, "muscle_group": ["triceps", "chest", "shoulders"], "category": "push", "type": "dynamic", "equipment": ["parallel_bars"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=2z8JmcrW-As", "title": "Dip Tutorial"}] },
-  { "id": 5, "image": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80", "difficulty": 1, "muscle_group": ["core"], "category": "core", "type": "isometric", "equipment": ["none"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=44ScXWFaVBs&feature=youtu.be&t=10s", "title": "Plank Tutorial"}] },
-  { "id": 6, "image": "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=800&q=80", "difficulty": 5, "muscle_group": ["back", "chest", "triceps", "shoulders"], "category": "pull", "type": "dynamic", "equipment": ["pull_up_bar", "rings"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=2FZ9t2vl1kc", "title": "Muscle Up Tutorial"}] },
-  { "id": 7, "image": "https://images.unsplash.com/photo-1434682881908-b43d0467b798?w=800&q=80", "difficulty": 4, "muscle_group": ["legs", "glutes", "core"], "category": "legs", "type": "dynamic", "equipment": ["none"], "resources": [{"type": "video", "url": "https://youtu.be/0SN8ZaxOBpA?t=30s", "title": "Pistol Squat Tutorial"}] },
-  { "id": 8, "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80", "difficulty": 5, "muscle_group": ["shoulders", "triceps", "core"], "category": "push", "type": "dynamic", "equipment": ["none", "wall"], "resources": [{"type": "video", "url": "https://youtu.be/CDCHdKDx0UY?t=69", "title": "Handstand Push Up Tutorial"}] },
-  { "id": 9, "image": "https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=800&q=80", "difficulty": 3, "muscle_group": ["core", "triceps", "shoulders"], "category": "core", "type": "isometric", "equipment": ["parallel_bars", "none"], "resources": [{"type": "video", "url": "https://youtu.be/4bzLorsqBNc?t=17", "title": "L-Sit Tutorial"}] },
-  { "id": 10, "image": "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80", "difficulty": 1, "muscle_group": ["back", "biceps"], "category": "pull", "type": "dynamic", "equipment": ["low_bar", "rings"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=JkG2aQO7sF8", "title": "Row Tutorial"}] },
-  { "id": 11, "image": "https://images.unsplash.com/photo-1598971457999-ca4ef48a9a71?w=800&q=80", "difficulty": 2, "muscle_group": ["triceps", "chest"], "category": "push", "type": "dynamic", "equipment": ["none"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=_4EGPVJuqfA", "title": "Diamond Push Up Tutorial"}] },
-  { "id": 12, "image": "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?w=800&q=80", "difficulty": 2, "muscle_group": ["biceps", "back"], "category": "pull", "type": "dynamic", "equipment": ["pull_up_bar"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=30NjUye3y6Q", "title": "Chin Up Tutorial"}] },
-  { "id": 13, "image": "https://images.unsplash.com/photo-1434608519344-49d77a699e1d?w=800&q=80", "difficulty": 2, "muscle_group": ["legs", "chest", "core", "shoulders"], "category": "full_body", "type": "plyometric", "equipment": ["none"], "resources": [] },
-  { "id": 14, "image": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80", "difficulty": 5, "muscle_group": ["back", "core"], "category": "skill", "type": "isometric", "equipment": ["pull_up_bar", "rings"], "resources": [{"type": "video", "url": "https://youtu.be/ZqCLG0hiRco?t=8", "title": "Front Lever Tutorial"}] },
-  { "id": 15, "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80", "difficulty": 4, "muscle_group": ["shoulders", "chest", "biceps", "core"], "category": "skill", "type": "isometric", "equipment": ["rings", "pull_up_bar"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=HXaG8mJmSnU", "title": "Back Lever Tutorial"}] },
-  { "id": 16, "image": "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=800&q=80", "difficulty": 5, "muscle_group": ["core", "shoulders", "back"], "category": "skill", "type": "isometric", "equipment": ["vertical_pole", "stall_bars"], "resources": [{"type": "video", "url": "https://youtu.be/lczvDH9Fze4?t=204", "title": "Human Flag Tutorial"}] },
-  { "id": 17, "image": "https://images.unsplash.com/photo-1616803689943-5601631c7fec?w=800&q=80", "difficulty": 3, "muscle_group": ["chest", "triceps", "shoulders"], "category": "push", "type": "dynamic", "equipment": ["none"], "resources": [{"type": "video", "url": "https://youtu.be/dyDBGkJWgZE?list=PLBF8536CA2AB746EC&t=19", "title": "Archer Push Up Tutorial"}] },
-  { "id": 18, "image": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80", "difficulty": 4, "muscle_group": ["shoulders", "chest", "core"], "category": "skill", "type": "isometric", "equipment": ["parallel_bars", "none"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=VFYZh24e0RI", "title": "Tuck Planche Tutorial"}] },
-  { "id": 19, "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80", "difficulty": 4, "muscle_group": ["core"], "category": "core", "type": "dynamic", "equipment": ["bench"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=moyFIvRrS0s", "title": "Dragon Flag Tutorial"}] },
-  { "id": 20, "image": "https://images.unsplash.com/photo-1597347316205-36f6c451902a?w=800&q=80", "difficulty": 2, "muscle_group": ["core"], "category": "core", "type": "dynamic", "equipment": ["pull_up_bar"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=at_A-H6JTGk", "title": "Hanging Leg Raise Tutorial"}] },
-  { "id": 21, "image": "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80", "difficulty": 0, "muscle_group": ["chest", "shoulders", "triceps"], "category": "push", "type": "dynamic", "equipment": ["wall"], "resources": [{"type": "video", "url": "https://youtu.be/6jm4R3K4sJA?t=34", "title": "Wall Plank Tutorial"}] },
-  { "id": 22, "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80", "difficulty": 0, "muscle_group": ["chest", "shoulders", "triceps"], "category": "push", "type": "dynamic", "equipment": ["bench", "elevated_surface"], "resources": [{"type": "video", "url": "https://youtu.be/4dF1DOWzf20?t=3m56s", "title": "Incline Push Up Tutorial"}] },
-  { "id": 23, "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80", "difficulty": 1, "muscle_group": ["chest", "shoulders", "triceps"], "category": "push", "type": "dynamic", "equipment": ["none"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=IODxDxX7oi4", "title": "Push Up Tutorial"}] },
-  { "id": 24, "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80", "difficulty": 1, "muscle_group": ["chest", "shoulders"], "category": "push", "type": "dynamic", "equipment": ["none"], "resources": [{"type": "video", "url": "http://www.youtube.com/watch?v=1yMRvsuk9Xg", "title": "Wide Push Up Tutorial"}] },
-  { "id": 25, "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80", "difficulty": 5, "muscle_group": ["chest", "shoulders", "triceps", "core"], "category": "push", "type": "dynamic", "equipment": ["none"], "resources": [{"type": "video", "url": "https://youtu.be/MlRCAJbwjMs?t=65", "title": "One Arm Push Up Tutorial"}] },
-  { "id": 26, "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80", "difficulty": 0, "muscle_group": ["back", "shoulders"], "category": "pull", "type": "dynamic", "equipment": ["pull_up_bar"], "resources": [{"type": "video", "url": "https://youtu.be/FgYoc4O-cio?t=1m21s", "title": "Scapular Pull Tutorial"}] },
-  { "id": 27, "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80", "difficulty": 1, "muscle_group": ["back", "biceps"], "category": "pull", "type": "dynamic", "equipment": ["pull_up_bar"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=gbPURTSxQLY", "title": "Pull Up Negative Tutorial"}] },
-  { "id": 28, "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80", "difficulty": 1, "muscle_group": ["back", "biceps"], "category": "pull", "type": "dynamic", "equipment": ["pull_up_bar", "resistance_band"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=30NjUye3y6Q", "title": "Pull Up Tutorial"}] },
-  { "id": 29, "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80", "difficulty": 3, "muscle_group": ["back", "biceps"], "category": "pull", "type": "dynamic", "equipment": ["pull_up_bar", "weight_belt"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=30NjUye3y6Q", "title": "Weighted Pull Up Tutorial"}] },
-  { "id": 30, "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80", "difficulty": 0, "muscle_group": ["legs", "glutes"], "category": "legs", "type": "dynamic", "equipment": ["support_surface"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=OuR_Fp7AB0c", "title": "Assisted Squat Tutorial"}] },
-  { "id": 31, "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80", "difficulty": 0, "muscle_group": ["legs", "glutes"], "category": "legs", "type": "dynamic", "equipment": ["box", "bench"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=zJBLDJMJiDE", "title": "Box Squat Tutorial"}] },
-  { "id": 32, "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80", "difficulty": 2, "muscle_group": ["legs", "glutes", "core"], "category": "legs", "type": "dynamic", "equipment": ["bench"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=kkdmHTASZg8&feature=youtu.be&t=1m15s", "title": "Bulgarian Split Squat Tutorial"}] },
-  { "id": 33, "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80", "difficulty": 4, "muscle_group": ["legs", "glutes", "core"], "category": "legs", "type": "dynamic", "equipment": ["none"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=_FBuC-VPbRY", "title": "Shrimp Squat Tutorial"}] },
-  { "id": 34, "image": "https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80", "difficulty": 1, "muscle_group": ["triceps", "chest"], "category": "push", "type": "dynamic", "equipment": ["bench"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=jWHKAXYNKfw", "title": "Bench Dip Tutorial"}] },
-  { "id": 35, "image": "https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80", "difficulty": 1, "muscle_group": ["triceps", "chest", "shoulders"], "category": "push", "type": "dynamic", "equipment": ["parallel_bars", "resistance_band"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=2z8JmcrW-As", "title": "Assisted Dip Tutorial"}] },
-  { "id": 36, "image": "https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80", "difficulty": 3, "muscle_group": ["triceps", "chest", "shoulders", "core"], "category": "push", "type": "dynamic", "equipment": ["rings"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=DaNedgnJjB0", "title": "Ring Dip Tutorial"}] },
-  { "id": 37, "image": "https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80", "difficulty": 3, "muscle_group": ["triceps", "chest", "shoulders"], "category": "push", "type": "dynamic", "equipment": ["parallel_bars", "weight_belt"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=2z8JmcrW-As", "title": "Weighted Dip Tutorial"}] },
-  { "id": 38, "image": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80", "difficulty": 0, "muscle_group": ["core"], "category": "core", "type": "isometric", "equipment": ["elevated_surface"], "resources": [{"type": "video", "url": "https://youtu.be/6jm4R3K4sJA?t=34", "title": "Incline Plank Tutorial"}] },
-  { "id": 39, "image": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80", "difficulty": 2, "muscle_group": ["core", "shoulders"], "category": "core", "type": "isometric", "equipment": ["none"], "resources": [{"type": "video", "url": "https://youtu.be/44ScXWFaVBs?t=74", "title": "Side Plank Tutorial"}] },
-  { "id": 40, "image": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80", "difficulty": 2, "muscle_group": ["core", "glutes"], "category": "core", "type": "isometric", "equipment": ["none"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=44ScXWFaVBs&feature=youtu.be&t=10s", "title": "Plank Leg Lift Tutorial"}] },
-  { "id": 41, "image": "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=800&q=80", "difficulty": 3, "muscle_group": ["back", "biceps"], "category": "pull", "type": "dynamic", "equipment": ["pull_up_bar"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=PmdNNN8nLGI", "title": "C2B Pull Up Tutorial"}] },
-  { "id": 42, "image": "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=800&q=80", "difficulty": 4, "muscle_group": ["back", "biceps"], "category": "pull", "type": "plyometric", "equipment": ["pull_up_bar"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=2FZ9t2vl1kc", "title": "Explosive Pull Up Tutorial"}] },
-  { "id": 43, "image": "https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=800&q=80", "difficulty": 2, "muscle_group": ["core", "triceps"], "category": "core", "type": "isometric", "equipment": ["parallel_bars", "none"], "resources": [{"type": "video", "url": "https://youtu.be/IUZJoSP66HI?t=178", "title": "Tuck L-Sit Tutorial"}] },
-  { "id": 44, "image": "https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=800&q=80", "difficulty": 4, "muscle_group": ["core", "triceps", "shoulders"], "category": "core", "type": "isometric", "equipment": ["parallel_bars", "none"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=GbZeD4q_cSE", "title": "V-Sit Tutorial"}] },
-  { "id": 45, "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80", "difficulty": 2, "muscle_group": ["shoulders", "triceps"], "category": "push", "type": "dynamic", "equipment": ["none"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=1Jjjyp4uhks#t=26s", "title": "Pike Push Up Tutorial"}] },
-  { "id": 46, "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80", "difficulty": 3, "muscle_group": ["shoulders", "triceps", "core"], "category": "push", "type": "dynamic", "equipment": ["box", "bench"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=ZnsLpLhywgk&feature=youtu.be&t=50", "title": "Decline Pike Push Up Tutorial"}] },
-  { "id": 47, "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80", "difficulty": 4, "muscle_group": ["shoulders", "triceps", "core"], "category": "push", "type": "dynamic", "equipment": ["wall"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=r-aiCMOOhNQ", "title": "Wall Handstand Push Up Tutorial"}] },
-  { "id": 48, "image": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80", "difficulty": 0, "muscle_group": ["core"], "category": "core", "type": "dynamic", "equipment": ["none"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=44ScXWFaVBs&feature=youtu.be&t=10s", "title": "Dead Bug Tutorial"}] },
-  { "id": 49, "image": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80", "difficulty": 2, "muscle_group": ["core"], "category": "core", "type": "isometric", "equipment": ["none"], "resources": [{"type": "video", "url": "https://youtu.be/XzQe1S91Fr0?t=11", "title": "Hollow Hold Tutorial"}] },
-  { "id": 50, "image": "https://images.unsplash.com/photo-1597347316205-36f6c451902a?w=800&q=80", "difficulty": 1, "muscle_group": ["core"], "category": "core", "type": "dynamic", "equipment": ["pull_up_bar"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=at_A-H6JTGk", "title": "Knee Raise Tutorial"}] },
-  { "id": 51, "image": "https://images.unsplash.com/photo-1597347316205-36f6c451902a?w=800&q=80", "difficulty": 3, "muscle_group": ["core", "back"], "category": "core", "type": "dynamic", "equipment": ["pull_up_bar"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=at_A-H6JTGk", "title": "Toes to Bar Tutorial"}] },
-  { "id": 52, "image": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80", "difficulty": 3, "muscle_group": ["back", "core"], "category": "skill", "type": "isometric", "equipment": ["pull_up_bar", "rings"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=JxlKAuD9gkA", "title": "Tuck Front Lever Tutorial"}] },
-  { "id": 53, "image": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80", "difficulty": 4, "muscle_group": ["back", "core"], "category": "skill", "type": "isometric", "equipment": ["pull_up_bar", "rings"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=NicnELGtOSE", "title": "Advanced Tuck Front Lever Tutorial"}] },
-  { "id": 54, "image": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80", "difficulty": 5, "muscle_group": ["back", "core"], "category": "skill", "type": "isometric", "equipment": ["pull_up_bar", "rings"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=PR-mHqduhtQ", "title": "Straddle Front Lever Tutorial"}] },
-  { "id": 55, "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80", "difficulty": 3, "muscle_group": ["shoulders", "chest", "biceps", "core"], "category": "skill", "type": "isometric", "equipment": ["rings", "pull_up_bar"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=LfyGMZh-Bz4", "title": "Tuck Back Lever Tutorial"}] },
-  { "id": 56, "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80", "difficulty": 4, "muscle_group": ["shoulders", "chest", "biceps", "core"], "category": "skill", "type": "isometric", "equipment": ["rings", "pull_up_bar"], "resources": [{"type": "video", "url": "https://youtu.be/HXaG8mJmSnU?t=215", "title": "Straddle Back Lever Tutorial"}] },
-  { "id": 57, "image": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80", "difficulty": 2, "muscle_group": ["shoulders", "chest", "core"], "category": "push", "type": "isometric", "equipment": ["none", "parallel_bars"], "resources": [{"type": "video", "url": "https://youtu.be/liXL9oE3KzE?t=23", "title": "Planche Lean Tutorial"}] },
-  { "id": 58, "image": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80", "difficulty": 5, "muscle_group": ["shoulders", "chest", "core"], "category": "skill", "type": "isometric", "equipment": ["parallel_bars", "none"], "resources": [{"type": "video", "url": "https://youtu.be/dHLYwZV96zw?t=294", "title": "Straddle Planche Tutorial"}] },
-  { "id": 59, "image": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80", "difficulty": 5, "muscle_group": ["shoulders", "chest", "core"], "category": "skill", "type": "isometric", "equipment": ["parallel_bars", "none"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=acij_BzyXRg", "title": "Full Planche Tutorial"}] },
-  { "id": 60, "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80", "difficulty": 4, "muscle_group": ["legs"], "category": "legs", "type": "dynamic", "equipment": ["anchor_point"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=d8AAPcYxPo8", "title": "Nordic Curl Tutorial"}] },
-  { "id": 61, "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80", "difficulty": 0, "muscle_group": ["legs"], "category": "legs", "type": "dynamic", "equipment": ["none", "step"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=487aR3A7HvM", "title": "Calf Raise Tutorial"}] },
-  { "id": 62, "image": "https://images.unsplash.com/photo-1597347316205-36f6c451902a?w=800&q=80", "difficulty": 4, "muscle_group": ["core"], "category": "core", "type": "dynamic", "equipment": ["pull_up_bar"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=moyFIvRrS0s", "title": "Windshield Wipers Tutorial"}] },
-  { "id": 63, "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80", "difficulty": 2, "muscle_group": ["shoulders", "chest"], "category": "skill", "type": "isometric", "equipment": ["rings", "low_bar"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=5KaDOUeMY98", "title": "German Hang Tutorial"}] },
-  { "id": 64, "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80", "difficulty": 3, "muscle_group": ["shoulders", "core"], "category": "skill", "type": "isometric", "equipment": ["none", "wall"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=N3K9SMNKL7Y", "title": "Handstand Tutorial"}] },
-  { "id": 65, "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80", "difficulty": 3, "muscle_group": ["shoulders", "chest", "triceps", "core"], "category": "push", "type": "dynamic", "equipment": ["none", "parallel_bars"], "resources": [{"type": "video", "url": "http://www.youtube.com/watch?v=Cdmg0CfMZeo", "title": "Pseudo Planche Push Up Tutorial"}] },
-  { "id": 66, "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80", "difficulty": 4, "muscle_group": ["back", "biceps", "core"], "category": "pull", "type": "dynamic", "equipment": ["pull_up_bar"], "resources": [{"type": "video", "url": "https://youtu.be/vdjWgw98EeI?t=1m52s", "title": "Archer Pull Up Tutorial"}] },
-  { "id": 67, "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80", "difficulty": 5, "muscle_group": ["back", "biceps", "core"], "category": "pull", "type": "dynamic", "equipment": ["pull_up_bar"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=vdjWgw98EeI", "title": "One Arm Pull Up Tutorial"}] },
-  { "id": 68, "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80", "difficulty": 3, "muscle_group": ["chest", "triceps", "shoulders"], "category": "push", "type": "plyometric", "equipment": ["none"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=IODxDxX7oi4", "title": "Clap Push Up Tutorial"}] },
-  { "id": 69, "image": "https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80", "difficulty": 4, "muscle_group": ["triceps", "shoulders", "core"], "category": "push", "type": "dynamic", "equipment": ["low_bar", "parallel_bars"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=9mKyrPmmPt0", "title": "Korean Dip Tutorial"}] },
-  { "id": 70, "image": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80", "difficulty": 4, "muscle_group": ["back", "core"], "category": "skill", "type": "isometric", "equipment": ["pull_up_bar", "rings"], "resources": [{"type": "video", "url": "https://www.youtube.com/watch?v=HzcWRdP78Wo", "title": "One Leg Front Lever Tutorial"}] },
-  { "id": 71, "image": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80", "difficulty": 4, "muscle_group": ["shoulders", "chest", "core"], "category": "skill", "type": "isometric", "equipment": ["parallel_bars", "none"], "resources": [{"type": "video", "url": "https://youtu.be/oLUHPdRF2vo?t=131", "title": "Advanced Tuck Planche Tutorial"}] }
-]
+{
+  "version": 1,
+  "exercises": [
+    {
+      "id": 1,
+      "name": "Flexiones",
+      "description": "Ejercicio basico para pecho, hombros y triceps. Colocate en posicion de plancha con las manos a la altura de los hombros y baja el cuerpo hasta que el pecho casi toque el suelo.",
+      "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80",
+      "difficulty": 1,
+      "muscle_group": [
+        "chest",
+        "shoulders",
+        "triceps"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=IODxDxX7oi4",
+          "title": "Push Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Dominadas",
+      "description": "Ejercicio fundamental para espalda y biceps. Cuelgate de una barra con agarre prono y eleva tu cuerpo hasta que la barbilla supere la barra.",
+      "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80",
+      "difficulty": 2,
+      "muscle_group": [
+        "back",
+        "biceps"
+      ],
+      "category": "pull",
+      "type": "dynamic",
+      "equipment": [
+        "pull_up_bar"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=30NjUye3y6Q",
+          "title": "Pull Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Sentadilla",
+      "description": "Sentadilla basica para piernas. Baja las caderas como si fueras a sentarte manteniendo la espalda recta y las rodillas alineadas con los pies.",
+      "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80",
+      "difficulty": 1,
+      "muscle_group": [
+        "legs",
+        "glutes"
+      ],
+      "category": "legs",
+      "type": "dynamic",
+      "equipment": [
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=zJBLDJMJiDE",
+          "title": "Full Squat Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Fondos",
+      "description": "Fondos en paralelas para triceps y pecho. Sujetate en barras paralelas y baja el cuerpo flexionando los codos hasta formar un angulo de 90 grados.",
+      "image": "https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80",
+      "difficulty": 2,
+      "muscle_group": [
+        "triceps",
+        "chest",
+        "shoulders"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "parallel_bars"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=2z8JmcrW-As",
+          "title": "Dip Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Plancha",
+      "description": "Plancha isometrica para core. Manten el cuerpo recto apoyado sobre antebrazos y puntas de los pies, activando el abdomen.",
+      "image": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80",
+      "difficulty": 1,
+      "muscle_group": [
+        "core"
+      ],
+      "category": "core",
+      "type": "isometric",
+      "equipment": [
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=44ScXWFaVBs&feature=youtu.be&t=10s",
+          "title": "Plank Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Muscle Up",
+      "description": "Ejercicio avanzado que combina dominada y fondo. Realiza una dominada explosiva y transiciona sobre la barra para completar un fondo.",
+      "image": "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=800&q=80",
+      "difficulty": 5,
+      "muscle_group": [
+        "back",
+        "chest",
+        "triceps",
+        "shoulders"
+      ],
+      "category": "pull",
+      "type": "dynamic",
+      "equipment": [
+        "pull_up_bar",
+        "rings"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=2FZ9t2vl1kc",
+          "title": "Muscle Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Sentadilla Pistola",
+      "description": "Sentadilla a una pierna. Baja completamente sobre una pierna mientras mantienes la otra extendida al frente.",
+      "image": "https://images.unsplash.com/photo-1434682881908-b43d0467b798?w=800&q=80",
+      "difficulty": 4,
+      "muscle_group": [
+        "legs",
+        "glutes",
+        "core"
+      ],
+      "category": "legs",
+      "type": "dynamic",
+      "equipment": [
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/0SN8ZaxOBpA?t=30s",
+          "title": "Pistol Squat Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Flexion en Pino",
+      "description": "Flexiones en posicion de pino. Realiza una flexion mientras estas en posicion invertida contra una pared o en equilibrio libre.",
+      "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80",
+      "difficulty": 5,
+      "muscle_group": [
+        "shoulders",
+        "triceps",
+        "core"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "none",
+        "wall"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/CDCHdKDx0UY?t=69",
+          "title": "Handstand Push Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "L-Sit",
+      "description": "Posicion isometrica de L. Sientate con las piernas extendidas y eleva todo el cuerpo del suelo usando solo las manos.",
+      "image": "https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=800&q=80",
+      "difficulty": 3,
+      "muscle_group": [
+        "core",
+        "triceps",
+        "shoulders"
+      ],
+      "category": "core",
+      "type": "isometric",
+      "equipment": [
+        "parallel_bars",
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/4bzLorsqBNc?t=17",
+          "title": "L-Sit Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Remo Australiano",
+      "description": "Dominada horizontal para principiantes. Cuelgate de una barra baja con los pies en el suelo y tira del pecho hacia la barra.",
+      "image": "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80",
+      "difficulty": 1,
+      "muscle_group": [
+        "back",
+        "biceps"
+      ],
+      "category": "pull",
+      "type": "dynamic",
+      "equipment": [
+        "low_bar",
+        "rings"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=JkG2aQO7sF8",
+          "title": "Row Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Flexion Diamante",
+      "description": "Flexiones con manos juntas formando un diamante. Mayor enfasis en triceps que las flexiones regulares.",
+      "image": "https://images.unsplash.com/photo-1598971457999-ca4ef48a9a71?w=800&q=80",
+      "difficulty": 2,
+      "muscle_group": [
+        "triceps",
+        "chest"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=_4EGPVJuqfA",
+          "title": "Diamond Push Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Dominadas Supinas",
+      "description": "Dominada con agarre supino. Similar a la dominada pero con las palmas mirando hacia ti, mayor enfasis en biceps.",
+      "image": "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?w=800&q=80",
+      "difficulty": 2,
+      "muscle_group": [
+        "biceps",
+        "back"
+      ],
+      "category": "pull",
+      "type": "dynamic",
+      "equipment": [
+        "pull_up_bar"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=30NjUye3y6Q",
+          "title": "Chin Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Burpee",
+      "description": "Ejercicio de cuerpo completo. Combina una sentadilla, plancha, flexion y salto en un movimiento continuo.",
+      "image": "https://images.unsplash.com/photo-1434608519344-49d77a699e1d?w=800&q=80",
+      "difficulty": 2,
+      "muscle_group": [
+        "legs",
+        "chest",
+        "core",
+        "shoulders"
+      ],
+      "category": "full_body",
+      "type": "plyometric",
+      "equipment": [
+        "none"
+      ],
+      "resources": []
+    },
+    {
+      "id": 14,
+      "name": "Front Lever",
+      "description": "Posicion horizontal colgado de la barra. Manten el cuerpo completamente horizontal mirando hacia arriba.",
+      "image": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80",
+      "difficulty": 5,
+      "muscle_group": [
+        "back",
+        "core"
+      ],
+      "category": "skill",
+      "type": "isometric",
+      "equipment": [
+        "pull_up_bar",
+        "rings"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/ZqCLG0hiRco?t=8",
+          "title": "Front Lever Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Back Lever",
+      "description": "Posicion horizontal invertida en la barra. Manten el cuerpo horizontal mirando hacia el suelo.",
+      "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80",
+      "difficulty": 4,
+      "muscle_group": [
+        "shoulders",
+        "chest",
+        "biceps",
+        "core"
+      ],
+      "category": "skill",
+      "type": "isometric",
+      "equipment": [
+        "rings",
+        "pull_up_bar"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=HXaG8mJmSnU",
+          "title": "Back Lever Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "name": "Bandera Humana",
+      "description": "Bandera humana. Manten el cuerpo horizontal agarrado a un poste vertical.",
+      "image": "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=800&q=80",
+      "difficulty": 5,
+      "muscle_group": [
+        "core",
+        "shoulders",
+        "back"
+      ],
+      "category": "skill",
+      "type": "isometric",
+      "equipment": [
+        "vertical_pole",
+        "stall_bars"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/lczvDH9Fze4?t=204",
+          "title": "Human Flag Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "name": "Flexion Arquero",
+      "description": "Flexion arquero. Una mano cerca del cuerpo mientras la otra se extiende lateralmente.",
+      "image": "https://images.unsplash.com/photo-1616803689943-5601631c7fec?w=800&q=80",
+      "difficulty": 3,
+      "muscle_group": [
+        "chest",
+        "triceps",
+        "shoulders"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/dyDBGkJWgZE?list=PLBF8536CA2AB746EC&t=19",
+          "title": "Archer Push Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "name": "Tuck Planche",
+      "description": "Planche con rodillas recogidas. Equilibrio sobre las manos con el cuerpo elevado y rodillas al pecho.",
+      "image": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80",
+      "difficulty": 4,
+      "muscle_group": [
+        "shoulders",
+        "chest",
+        "core"
+      ],
+      "category": "skill",
+      "type": "isometric",
+      "equipment": [
+        "parallel_bars",
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=VFYZh24e0RI",
+          "title": "Tuck Planche Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "name": "Dragon Flag",
+      "description": "Ejercicio avanzado de core. Acostado boca arriba, eleva las piernas y caderas manteniendo solo los hombros en contacto con el banco.",
+      "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80",
+      "difficulty": 4,
+      "muscle_group": [
+        "core"
+      ],
+      "category": "core",
+      "type": "dynamic",
+      "equipment": [
+        "bench"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=moyFIvRrS0s",
+          "title": "Dragon Flag Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "name": "Elevacion de Piernas Colgado",
+      "description": "Elevacion de piernas colgado. Cuelgate de una barra y eleva las piernas rectas hasta formar un angulo de 90 grados.",
+      "image": "https://images.unsplash.com/photo-1597347316205-36f6c451902a?w=800&q=80",
+      "difficulty": 2,
+      "muscle_group": [
+        "core"
+      ],
+      "category": "core",
+      "type": "dynamic",
+      "equipment": [
+        "pull_up_bar"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=at_A-H6JTGk",
+          "title": "Hanging Leg Raise Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "name": "Flexion en Pared",
+      "description": "Flexion contra la pared. El ejercicio mas basico de la progresion de flexiones, ideal para principiantes absolutos.",
+      "image": "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80",
+      "difficulty": 0,
+      "muscle_group": [
+        "chest",
+        "shoulders",
+        "triceps"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "wall"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/6jm4R3K4sJA?t=34",
+          "title": "Wall Plank Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "name": "Flexion Inclinada",
+      "description": "Flexion inclinada con manos en superficie elevada. Reduce la carga comparado con la flexion estandar.",
+      "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80",
+      "difficulty": 0,
+      "muscle_group": [
+        "chest",
+        "shoulders",
+        "triceps"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "bench",
+        "elevated_surface"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/4dF1DOWzf20?t=3m56s",
+          "title": "Incline Push Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "name": "Flexion de Rodillas",
+      "description": "Flexion con rodillas apoyadas. Version modificada que reduce la carga corporal en aproximadamente un 50%.",
+      "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80",
+      "difficulty": 1,
+      "muscle_group": [
+        "chest",
+        "shoulders",
+        "triceps"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=IODxDxX7oi4",
+          "title": "Push Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "name": "Flexion Abierta",
+      "description": "Flexion con manos mas separadas que el ancho de hombros. Mayor enfasis en el pecho.",
+      "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80",
+      "difficulty": 1,
+      "muscle_group": [
+        "chest",
+        "shoulders"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "http://www.youtube.com/watch?v=1yMRvsuk9Xg",
+          "title": "Wide Push Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "name": "Flexion a Una Mano",
+      "description": "Flexion a una mano. Ejercicio avanzado que requiere gran fuerza y estabilidad del core.",
+      "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80",
+      "difficulty": 5,
+      "muscle_group": [
+        "chest",
+        "shoulders",
+        "triceps",
+        "core"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/MlRCAJbwjMs?t=65",
+          "title": "One Arm Push Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "name": "Dominada Escapular",
+      "description": "Activacion escapular colgado de la barra. Primer paso para construir fuerza de tiron.",
+      "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80",
+      "difficulty": 0,
+      "muscle_group": [
+        "back",
+        "shoulders"
+      ],
+      "category": "pull",
+      "type": "dynamic",
+      "equipment": [
+        "pull_up_bar"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/FgYoc4O-cio?t=1m21s",
+          "title": "Scapular Pull Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "name": "Dominada Negativa",
+      "description": "Dominada negativa. Salta arriba y baja lentamente controlando el movimiento.",
+      "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80",
+      "difficulty": 1,
+      "muscle_group": [
+        "back",
+        "biceps"
+      ],
+      "category": "pull",
+      "type": "dynamic",
+      "equipment": [
+        "pull_up_bar"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=gbPURTSxQLY",
+          "title": "Pull Up Negative Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "name": "Dominada con Banda",
+      "description": "Dominada asistida con banda elastica. La banda reduce el peso corporal que debes levantar.",
+      "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80",
+      "difficulty": 1,
+      "muscle_group": [
+        "back",
+        "biceps"
+      ],
+      "category": "pull",
+      "type": "dynamic",
+      "equipment": [
+        "pull_up_bar",
+        "resistance_band"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=30NjUye3y6Q",
+          "title": "Pull Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "name": "Dominada con Peso",
+      "description": "Dominada con peso adicional. Progresion avanzada para aumentar la fuerza de tiron.",
+      "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80",
+      "difficulty": 3,
+      "muscle_group": [
+        "back",
+        "biceps"
+      ],
+      "category": "pull",
+      "type": "dynamic",
+      "equipment": [
+        "pull_up_bar",
+        "weight_belt"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=30NjUye3y6Q",
+          "title": "Weighted Pull Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "name": "Sentadilla Asistida",
+      "description": "Sentadilla asistida sujetandose de algo. Ideal para aprender la tecnica correcta.",
+      "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80",
+      "difficulty": 0,
+      "muscle_group": [
+        "legs",
+        "glutes"
+      ],
+      "category": "legs",
+      "type": "dynamic",
+      "equipment": [
+        "support_surface"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=OuR_Fp7AB0c",
+          "title": "Assisted Squat Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "name": "Sentadilla en Caja",
+      "description": "Sentadilla a una caja o banco. Ayuda a controlar la profundidad y la tecnica.",
+      "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80",
+      "difficulty": 0,
+      "muscle_group": [
+        "legs",
+        "glutes"
+      ],
+      "category": "legs",
+      "type": "dynamic",
+      "equipment": [
+        "box",
+        "bench"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=zJBLDJMJiDE",
+          "title": "Box Squat Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "name": "Sentadilla Bulgara",
+      "description": "Sentadilla bulgara con pie trasero elevado. Trabaja cada pierna de forma unilateral.",
+      "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80",
+      "difficulty": 2,
+      "muscle_group": [
+        "legs",
+        "glutes",
+        "core"
+      ],
+      "category": "legs",
+      "type": "dynamic",
+      "equipment": [
+        "bench"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=kkdmHTASZg8&feature=youtu.be&t=1m15s",
+          "title": "Bulgarian Split Squat Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "name": "Sentadilla Camaron",
+      "description": "Sentadilla camaron. Variante avanzada de sentadilla a una pierna con la pierna trasera sujeta.",
+      "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80",
+      "difficulty": 4,
+      "muscle_group": [
+        "legs",
+        "glutes",
+        "core"
+      ],
+      "category": "legs",
+      "type": "dynamic",
+      "equipment": [
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=_FBuC-VPbRY",
+          "title": "Shrimp Squat Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "name": "Fondos en Banco",
+      "description": "Fondos en banco. Version mas facil de los fondos usando un banco o silla.",
+      "image": "https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80",
+      "difficulty": 1,
+      "muscle_group": [
+        "triceps",
+        "chest"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "bench"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=jWHKAXYNKfw",
+          "title": "Bench Dip Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "name": "Fondos Asistidos",
+      "description": "Fondos asistidos con banda o maquina. Reduce la carga corporal para construir fuerza.",
+      "image": "https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80",
+      "difficulty": 1,
+      "muscle_group": [
+        "triceps",
+        "chest",
+        "shoulders"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "parallel_bars",
+        "resistance_band"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=2z8JmcrW-As",
+          "title": "Assisted Dip Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "name": "Fondos en Anillas",
+      "description": "Fondos en anillas. Requiere mayor estabilidad y fuerza que los fondos en paralelas.",
+      "image": "https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80",
+      "difficulty": 3,
+      "muscle_group": [
+        "triceps",
+        "chest",
+        "shoulders",
+        "core"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "rings"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=DaNedgnJjB0",
+          "title": "Ring Dip Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "name": "Fondos con Peso",
+      "description": "Fondos con peso adicional. Progresion para aumentar la fuerza de empuje.",
+      "image": "https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80",
+      "difficulty": 3,
+      "muscle_group": [
+        "triceps",
+        "chest",
+        "shoulders"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "parallel_bars",
+        "weight_belt"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=2z8JmcrW-As",
+          "title": "Weighted Dip Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "name": "Plancha Inclinada",
+      "description": "Plancha inclinada con manos en superficie elevada. Version mas facil de la plancha.",
+      "image": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80",
+      "difficulty": 0,
+      "muscle_group": [
+        "core"
+      ],
+      "category": "core",
+      "type": "isometric",
+      "equipment": [
+        "elevated_surface"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/6jm4R3K4sJA?t=34",
+          "title": "Incline Plank Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "name": "Plancha Lateral",
+      "description": "Plancha lateral. Trabaja los oblicuos y la estabilidad lateral del core.",
+      "image": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80",
+      "difficulty": 2,
+      "muscle_group": [
+        "core",
+        "shoulders"
+      ],
+      "category": "core",
+      "type": "isometric",
+      "equipment": [
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/44ScXWFaVBs?t=74",
+          "title": "Side Plank Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "name": "Plancha con Elevacion de Pierna",
+      "description": "Plancha con elevacion de pierna. Aumenta la demanda de estabilidad del core.",
+      "image": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80",
+      "difficulty": 2,
+      "muscle_group": [
+        "core",
+        "glutes"
+      ],
+      "category": "core",
+      "type": "isometric",
+      "equipment": [
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=44ScXWFaVBs&feature=youtu.be&t=10s",
+          "title": "Plank Leg Lift Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "name": "Dominada Alta",
+      "description": "Dominada alta llevando la barra al pecho o mas abajo. Prepara para el muscle up.",
+      "image": "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=800&q=80",
+      "difficulty": 3,
+      "muscle_group": [
+        "back",
+        "biceps"
+      ],
+      "category": "pull",
+      "type": "dynamic",
+      "equipment": [
+        "pull_up_bar"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=PmdNNN8nLGI",
+          "title": "C2B Pull Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "name": "Dominada Explosiva",
+      "description": "Dominada explosiva con fase de vuelo. Desarrolla la potencia necesaria para el muscle up.",
+      "image": "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=800&q=80",
+      "difficulty": 4,
+      "muscle_group": [
+        "back",
+        "biceps"
+      ],
+      "category": "pull",
+      "type": "plyometric",
+      "equipment": [
+        "pull_up_bar"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=2FZ9t2vl1kc",
+          "title": "Explosive Pull Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "name": "L-Sit Recogido",
+      "description": "L-Sit con rodillas recogidas. Primera progresion hacia el L-Sit completo.",
+      "image": "https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=800&q=80",
+      "difficulty": 2,
+      "muscle_group": [
+        "core",
+        "triceps"
+      ],
+      "category": "core",
+      "type": "isometric",
+      "equipment": [
+        "parallel_bars",
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/IUZJoSP66HI?t=178",
+          "title": "Tuck L-Sit Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "name": "V-Sit",
+      "description": "Posicion en V con piernas elevadas por encima de la horizontal. Progresion avanzada del L-Sit.",
+      "image": "https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=800&q=80",
+      "difficulty": 4,
+      "muscle_group": [
+        "core",
+        "triceps",
+        "shoulders"
+      ],
+      "category": "core",
+      "type": "isometric",
+      "equipment": [
+        "parallel_bars",
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=GbZeD4q_cSE",
+          "title": "V-Sit Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "name": "Flexion Pike",
+      "description": "Flexion en pike. Simula el movimiento de la flexion en pino con menos carga.",
+      "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80",
+      "difficulty": 2,
+      "muscle_group": [
+        "shoulders",
+        "triceps"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=1Jjjyp4uhks#t=26s",
+          "title": "Pike Push Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "name": "Flexion Pike Elevada",
+      "description": "Flexion pike con pies elevados. Mayor carga en los hombros que el pike normal.",
+      "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80",
+      "difficulty": 3,
+      "muscle_group": [
+        "shoulders",
+        "triceps",
+        "core"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "box",
+        "bench"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=ZnsLpLhywgk&feature=youtu.be&t=50",
+          "title": "Decline Pike Push Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "name": "Flexion en Pino contra Pared",
+      "description": "Flexion en pino contra la pared. Version asistida de la flexion en pino libre.",
+      "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80",
+      "difficulty": 4,
+      "muscle_group": [
+        "shoulders",
+        "triceps",
+        "core"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "wall"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=r-aiCMOOhNQ",
+          "title": "Wall Handstand Push Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "name": "Dead Bug",
+      "description": "Ejercicio de core tumbado boca arriba moviendo brazos y piernas de forma alterna.",
+      "image": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80",
+      "difficulty": 0,
+      "muscle_group": [
+        "core"
+      ],
+      "category": "core",
+      "type": "dynamic",
+      "equipment": [
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=44ScXWFaVBs&feature=youtu.be&t=10s",
+          "title": "Dead Bug Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 49,
+      "name": "Hollow Body Hold",
+      "description": "Posicion hollow con espalda baja pegada al suelo. Fundamental para gimnasia.",
+      "image": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80",
+      "difficulty": 2,
+      "muscle_group": [
+        "core"
+      ],
+      "category": "core",
+      "type": "isometric",
+      "equipment": [
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/XzQe1S91Fr0?t=11",
+          "title": "Hollow Hold Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 50,
+      "name": "Elevacion de Rodillas",
+      "description": "Elevacion de rodillas colgado. Version mas facil de la elevacion de piernas.",
+      "image": "https://images.unsplash.com/photo-1597347316205-36f6c451902a?w=800&q=80",
+      "difficulty": 1,
+      "muscle_group": [
+        "core"
+      ],
+      "category": "core",
+      "type": "dynamic",
+      "equipment": [
+        "pull_up_bar"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=at_A-H6JTGk",
+          "title": "Knee Raise Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 51,
+      "name": "Toes to Bar",
+      "description": "Llevar los pies a la barra colgado. Progresion avanzada de la elevacion de piernas.",
+      "image": "https://images.unsplash.com/photo-1597347316205-36f6c451902a?w=800&q=80",
+      "difficulty": 3,
+      "muscle_group": [
+        "core",
+        "back"
+      ],
+      "category": "core",
+      "type": "dynamic",
+      "equipment": [
+        "pull_up_bar"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=at_A-H6JTGk",
+          "title": "Toes to Bar Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 52,
+      "name": "Tuck Front Lever",
+      "description": "Front lever con rodillas recogidas al pecho. Primera progresion del front lever.",
+      "image": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80",
+      "difficulty": 3,
+      "muscle_group": [
+        "back",
+        "core"
+      ],
+      "category": "skill",
+      "type": "isometric",
+      "equipment": [
+        "pull_up_bar",
+        "rings"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=JxlKAuD9gkA",
+          "title": "Tuck Front Lever Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 53,
+      "name": "Advanced Tuck Front Lever",
+      "description": "Front lever con rodillas ligeramente extendidas. Progresion intermedia.",
+      "image": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80",
+      "difficulty": 4,
+      "muscle_group": [
+        "back",
+        "core"
+      ],
+      "category": "skill",
+      "type": "isometric",
+      "equipment": [
+        "pull_up_bar",
+        "rings"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=NicnELGtOSE",
+          "title": "Advanced Tuck Front Lever Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 54,
+      "name": "Straddle Front Lever",
+      "description": "Front lever con piernas abiertas. Progresion avanzada hacia el full front lever.",
+      "image": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80",
+      "difficulty": 5,
+      "muscle_group": [
+        "back",
+        "core"
+      ],
+      "category": "skill",
+      "type": "isometric",
+      "equipment": [
+        "pull_up_bar",
+        "rings"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=PR-mHqduhtQ",
+          "title": "Straddle Front Lever Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 55,
+      "name": "Tuck Back Lever",
+      "description": "Back lever con rodillas recogidas. Primera progresion del back lever.",
+      "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80",
+      "difficulty": 3,
+      "muscle_group": [
+        "shoulders",
+        "chest",
+        "biceps",
+        "core"
+      ],
+      "category": "skill",
+      "type": "isometric",
+      "equipment": [
+        "rings",
+        "pull_up_bar"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=LfyGMZh-Bz4",
+          "title": "Tuck Back Lever Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 56,
+      "name": "Straddle Back Lever",
+      "description": "Back lever con piernas abiertas. Progresion hacia el full back lever.",
+      "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80",
+      "difficulty": 4,
+      "muscle_group": [
+        "shoulders",
+        "chest",
+        "biceps",
+        "core"
+      ],
+      "category": "skill",
+      "type": "isometric",
+      "equipment": [
+        "rings",
+        "pull_up_bar"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/HXaG8mJmSnU?t=215",
+          "title": "Straddle Back Lever Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "name": "Planche Lean",
+      "description": "Inclinacion de planche en posicion de flexion. Desarrolla fuerza de empuje.",
+      "image": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80",
+      "difficulty": 2,
+      "muscle_group": [
+        "shoulders",
+        "chest",
+        "core"
+      ],
+      "category": "push",
+      "type": "isometric",
+      "equipment": [
+        "none",
+        "parallel_bars"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/liXL9oE3KzE?t=23",
+          "title": "Planche Lean Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 58,
+      "name": "Straddle Planche",
+      "description": "Planche con piernas abiertas. Progresion avanzada hacia el full planche.",
+      "image": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80",
+      "difficulty": 5,
+      "muscle_group": [
+        "shoulders",
+        "chest",
+        "core"
+      ],
+      "category": "skill",
+      "type": "isometric",
+      "equipment": [
+        "parallel_bars",
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/dHLYwZV96zw?t=294",
+          "title": "Straddle Planche Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 59,
+      "name": "Full Planche",
+      "description": "Planche completa con piernas juntas y extendidas. Uno de los ejercicios mas dificiles.",
+      "image": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80",
+      "difficulty": 5,
+      "muscle_group": [
+        "shoulders",
+        "chest",
+        "core"
+      ],
+      "category": "skill",
+      "type": "isometric",
+      "equipment": [
+        "parallel_bars",
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=acij_BzyXRg",
+          "title": "Full Planche Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 60,
+      "name": "Curl Nordico",
+      "description": "Ejercicio avanzado para isquiotibiales. Arrodillate con los pies anclados y baja el cuerpo hacia el suelo controlando el movimiento con los isquiotibiales.",
+      "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80",
+      "difficulty": 4,
+      "muscle_group": [
+        "legs"
+      ],
+      "category": "legs",
+      "type": "dynamic",
+      "equipment": [
+        "anchor_point"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=d8AAPcYxPo8",
+          "title": "Nordic Curl Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 61,
+      "name": "Elevacion de Talones",
+      "description": "Ejercicio basico para pantorrillas. De pie, eleva los talones del suelo contrayendo los gemelos y baja de forma controlada.",
+      "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80",
+      "difficulty": 0,
+      "muscle_group": [
+        "legs"
+      ],
+      "category": "legs",
+      "type": "dynamic",
+      "equipment": [
+        "none",
+        "step"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=487aR3A7HvM",
+          "title": "Calf Raise Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 62,
+      "name": "Limpiaparabrisas",
+      "description": "Ejercicio avanzado de core rotacional. Colgado de la barra, eleva las piernas y rotalas de lado a lado manteniendo el control.",
+      "image": "https://images.unsplash.com/photo-1597347316205-36f6c451902a?w=800&q=80",
+      "difficulty": 4,
+      "muscle_group": [
+        "core"
+      ],
+      "category": "core",
+      "type": "dynamic",
+      "equipment": [
+        "pull_up_bar"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=moyFIvRrS0s",
+          "title": "Windshield Wipers Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 63,
+      "name": "Colgado Aleman",
+      "description": "Posicion de movilidad en anillas o barra baja. Cuelgate con los brazos detras del cuerpo estirando hombros y pecho.",
+      "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80",
+      "difficulty": 2,
+      "muscle_group": [
+        "shoulders",
+        "chest"
+      ],
+      "category": "skill",
+      "type": "isometric",
+      "equipment": [
+        "rings",
+        "low_bar"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=5KaDOUeMY98",
+          "title": "German Hang Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 64,
+      "name": "Pino",
+      "description": "Equilibrio invertido sobre las manos. Manten el cuerpo recto y alineado mientras te sostienes boca abajo.",
+      "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80",
+      "difficulty": 3,
+      "muscle_group": [
+        "shoulders",
+        "core"
+      ],
+      "category": "skill",
+      "type": "isometric",
+      "equipment": [
+        "none",
+        "wall"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=N3K9SMNKL7Y",
+          "title": "Handstand Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 65,
+      "name": "Flexion Pseudo Planche",
+      "description": "Flexion con manos a la altura de las caderas y cuerpo inclinado hacia adelante. Prepara para la planche.",
+      "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80",
+      "difficulty": 3,
+      "muscle_group": [
+        "shoulders",
+        "chest",
+        "triceps",
+        "core"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "none",
+        "parallel_bars"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "http://www.youtube.com/watch?v=Cdmg0CfMZeo",
+          "title": "Pseudo Planche Push Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 66,
+      "name": "Dominada Arquero",
+      "description": "Dominada unilateral con un brazo estirado lateralmente. Transfiere mas carga a un lado del cuerpo.",
+      "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80",
+      "difficulty": 4,
+      "muscle_group": [
+        "back",
+        "biceps",
+        "core"
+      ],
+      "category": "pull",
+      "type": "dynamic",
+      "equipment": [
+        "pull_up_bar"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/vdjWgw98EeI?t=1m52s",
+          "title": "Archer Pull Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 67,
+      "name": "Dominada a Una Mano",
+      "description": "Dominada completa usando solo un brazo. Uno de los ejercicios de tiron mas avanzados de la calistenia.",
+      "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80",
+      "difficulty": 5,
+      "muscle_group": [
+        "back",
+        "biceps",
+        "core"
+      ],
+      "category": "pull",
+      "type": "dynamic",
+      "equipment": [
+        "pull_up_bar"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=vdjWgw98EeI",
+          "title": "One Arm Pull Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "name": "Flexion con Palmada",
+      "description": "Flexion pliometrica explosiva. Empuja con fuerza para elevar las manos del suelo y dar una palmada antes de aterrizar.",
+      "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80",
+      "difficulty": 3,
+      "muscle_group": [
+        "chest",
+        "triceps",
+        "shoulders"
+      ],
+      "category": "push",
+      "type": "plyometric",
+      "equipment": [
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=IODxDxX7oi4",
+          "title": "Clap Push Up Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 69,
+      "name": "Fondos Coreanos",
+      "description": "Fondos con las manos detras del cuerpo en una barra baja. Trabaja intensamente los triceps y hombros.",
+      "image": "https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80",
+      "difficulty": 4,
+      "muscle_group": [
+        "triceps",
+        "shoulders",
+        "core"
+      ],
+      "category": "push",
+      "type": "dynamic",
+      "equipment": [
+        "low_bar",
+        "parallel_bars"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=9mKyrPmmPt0",
+          "title": "Korean Dip Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 70,
+      "name": "Front Lever a Una Pierna",
+      "description": "Front lever con una pierna extendida y la otra recogida. Progresion avanzada hacia el front lever completo.",
+      "image": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80",
+      "difficulty": 4,
+      "muscle_group": [
+        "back",
+        "core"
+      ],
+      "category": "skill",
+      "type": "isometric",
+      "equipment": [
+        "pull_up_bar",
+        "rings"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://www.youtube.com/watch?v=HzcWRdP78Wo",
+          "title": "One Leg Front Lever Tutorial"
+        }
+      ]
+    },
+    {
+      "id": 71,
+      "name": "Planche Recogida Avanzada",
+      "description": "Planche con caderas extendidas pero rodillas aun recogidas. Progresion entre el tuck planche y el straddle planche.",
+      "image": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80",
+      "difficulty": 4,
+      "muscle_group": [
+        "shoulders",
+        "chest",
+        "core"
+      ],
+      "category": "skill",
+      "type": "isometric",
+      "equipment": [
+        "parallel_bars",
+        "none"
+      ],
+      "resources": [
+        {
+          "type": "video",
+          "url": "https://youtu.be/oLUHPdRF2vo?t=131",
+          "title": "Advanced Tuck Planche Tutorial"
+        }
+      ]
+    }
+  ]
+}
