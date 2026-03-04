@@ -55,10 +55,12 @@ fun WorkoutRunnerScreen(
             .statusBarsPadding()
             .padding(top = 8.dp)
     ) {
-        WorkoutRunnerTopBar(
-            showCancelButton = showCancel,
-            onCancel = viewModel::onShowCancelDialog
-        )
+        if (showCancel) {
+            WorkoutRunnerTopBar(
+                showCancelButton = true,
+                onCancel = viewModel::onShowCancelDialog
+            )
+        }
 
         when (state.phase) {
             RunnerPhase.LOADING -> LoadingPhaseContent(state)

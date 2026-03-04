@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -53,71 +54,79 @@ fun PreviewPhaseContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .navigationBarsPadding()
             .padding(horizontal = 16.dp)
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
-
+        // Title — anchored at top, outside scroll
         Text(
             text = workout.name,
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 26.sp,
             fontWeight = FontWeight.Bold
         )
+        Spacer(modifier = Modifier.height(16.dp))
 
-        if (workout.description.isNotBlank()) {
-            Spacer(modifier = Modifier.height(6.dp))
-            Text(
-                text = workout.description,
-                color = GrayText,
-                fontSize = 14.sp
-            )
-        }
+        // Scrollable content
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(rememberScrollState())
+        ) {
+            if (workout.description.isNotBlank()) {
+                Text(
+                    text = workout.description,
+                    color = GrayText,
+                    fontSize = 14.sp
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
 
-        if (workout.difficulty.isNotBlank() || workout.duration > 0) {
-            Spacer(modifier = Modifier.height(12.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                if (workout.difficulty.isNotBlank()) {
-                    val diffColor = workoutDifficultyColor(workout.difficulty)
-                    Text(
-                        text = workoutDifficultyLabel(workout.difficulty),
-                        color = diffColor,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(50))
-                            .background(diffColor.copy(alpha = 0.15f))
-                            .padding(horizontal = 12.dp, vertical = 5.dp)
-                    )
+            if (workout.difficulty.isNotBlank() || workout.duration > 0) {
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    if (workout.difficulty.isNotBlank()) {
+                        val diffColor = workoutDifficultyColor(workout.difficulty)
+                        Text(
+                            text = workoutDifficultyLabel(workout.difficulty),
+                            color = diffColor,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium,
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(50))
+                                .background(diffColor.copy(alpha = 0.15f))
+                                .padding(horizontal = 12.dp, vertical = 5.dp)
+                        )
+                    }
+                    if (workout.duration > 0) {
+                        Text(
+                            text = stringResource(R.string.workout_duration, workout.duration),
+                            color = MaterialTheme.colorScheme.tertiary,
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Medium,
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(50))
+                                .background(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f))
+                                .padding(horizontal = 12.dp, vertical = 5.dp)
+                        )
+                    }
                 }
-                if (workout.duration > 0) {
-                    Text(
-                        text = stringResource(R.string.workout_duration, workout.duration),
-                        color = MaterialTheme.colorScheme.tertiary,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Medium,
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(50))
-                            .background(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f))
-                            .padding(horizontal = 12.dp, vertical = 5.dp)
-                    )
-                }
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+
+            if (workout.tags.isNotEmpty()) {
+                WorkoutTagList(tags = workout.tags)
+                Spacer(modifier = Modifier.height(10.dp))
+            }
+
+            if (workout.exercises.isNotEmpty()) {
+                HorizontalDivider(color = MaterialTheme.colorScheme.surface)
+                Spacer(modifier = Modifier.height(16.dp))
+                WorkoutExerciseList(exercises = workout.exercises)
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
 
-        if (workout.tags.isNotEmpty()) {
-            Spacer(modifier = Modifier.height(10.dp))
-            WorkoutTagList(tags = workout.tags)
-        }
-
-        if (workout.exercises.isNotEmpty()) {
-            Spacer(modifier = Modifier.height(20.dp))
-            HorizontalDivider(color = MaterialTheme.colorScheme.surface)
-            Spacer(modifier = Modifier.height(16.dp))
-            WorkoutExerciseList(exercises = workout.exercises)
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
+        // Buttons — anchored at bottom, outside scroll
+        Spacer(modifier = Modifier.height(12.dp))
 
         Button(
             onClick = onStart,
@@ -161,26 +170,6 @@ fun PreviewPhaseContent(
             Text(
                 text = stringResource(R.string.workout_runner_mark_done),
                 fontSize = 15.sp
-            )
-        }
-
-        Spacer(modifier = Modifier.height(4.dp))
-
-        TextButton(
-            onClick = onBack,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = null,
-                tint = GrayText,
-                modifier = Modifier.size(16.dp)
-            )
-            Spacer(modifier = Modifier.size(6.dp))
-            Text(
-                text = stringResource(R.string.workout_back),
-                color = GrayText,
-                fontSize = 14.sp
             )
         }
 
