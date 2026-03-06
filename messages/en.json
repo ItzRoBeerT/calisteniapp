@@ -55,6 +55,7 @@
 	  "workouts": "Workouts",
 	  "exercises": "Exercises",
 	  "roadmaps": "Roadmaps",
+	  "blog": "Blog",
 	  "login": "Access",
 	  "register": "Register",
 	  "user": "User",
@@ -74,11 +75,18 @@
 	  "about": "Train with your own body. Discover exercises, create custom routines, and track your progress with roadmaps designed for all levels.",
 	  "hero": {
 		"badge": "Open Source & Free",
-		"titleLine1": "Master your body.",
-		"titleLine2": "Master calisthenics.",
+		"titleLine1": "Train.",
+		"titleLine2": "Progress.",
+		"titleLine3": "Dominate.",
+		"tagline": "Calisthenics. For everyone. Always free.",
+		"login": "Login",
+		"startFree": "Start Free",
 		"exercises": "Exercises",
 		"workouts": "Workouts",
-		"roadmaps": "Roadmaps"
+		"roadmaps": "Roadmaps",
+		"statExercises": "Exercises",
+		"statFree": "Free forever",
+		"statEquipment": "Equipment needed"
 	  },
 	  "featuredSection": {
 		"title": "Why choose calisthenics?",
@@ -113,6 +121,54 @@
 		"roadmapsButton": "View roadmaps",
 		"createWorkout": "Create your workout",
 		"visitBlog": "Visit our blog"
+	  },
+	  "howItWorks": {
+		"title": "How does it work?",
+		"subtitle": "Two paths to reach your goals",
+		"workouts": {
+		  "title": "Create workouts",
+		  "step1": { "title": "Explore exercises", "description": "Browse our library of 60+ exercises organized by category and level" },
+		  "step2": { "title": "Build your routine", "description": "Combine exercises, set your reps, sets, and rest time to your liking" },
+		  "step3": { "title": "Train and track", "description": "Perform the workout and keep a full history of your activity" }
+		},
+		"roadmaps": {
+		  "title": "Follow a roadmap",
+		  "step1": { "title": "Choose your level", "description": "Select a roadmap suited to your starting point, from beginner to advanced" },
+		  "step2": { "title": "Follow the path", "description": "Progress through the marked stages learning techniques and resources in the right order" },
+		  "step3": { "title": "Unlock skills", "description": "Track your progress and discover the skills you can achieve with dedication" }
+		}
+	  },
+	  "featuredExercises": {
+		"title": "Featured exercises",
+		"subtitle": "Some of the most popular movements in calisthenics",
+		"viewAll": "View all exercises",
+		"difficulty": {
+		  "0": "Beginner",
+		  "1": "Basic",
+		  "2": "Intermediate",
+		  "3": "Advanced",
+		  "4": "Expert",
+		  "5": "Elite"
+		},
+		"muscleGroups": {
+		  "chest": "Chest",
+		  "back": "Back",
+		  "shoulders": "Shoulders",
+		  "biceps": "Biceps",
+		  "triceps": "Triceps",
+		  "core": "Core",
+		  "legs": "Legs",
+		  "glutes": "Glutes"
+		}
+	  },
+	  "faq": {
+		"title": "Frequently asked questions",
+		"subtitle": "Everything you need to know to get started",
+		"q1": { "question": "Do I need equipment to start?", "answer": "For most beginner exercises you only need your body. Some progressions require a pull-up bar or parallel bars, which you can easily find in calisthenics parks or sports facilities." },
+		"q2": { "question": "Is it suitable for absolute beginners?", "answer": "Yes. The app includes progressions from zero: wall push-ups, assisted squats, or incline planks. You can start with no prior fitness background." },
+		"q3": { "question": "How often should I train?", "answer": "We recommend starting with 3-4 days per week, alternating work days and rest days. The app's routines and roadmaps are designed with this in mind." },
+		"q4": { "question": "How long until I see results?", "answer": "With consistency, most people notice improvements in strength and endurance within 2-4 weeks. Visible physical changes typically appear between the first and third month." },
+		"q5": { "question": "Is the app free?", "answer": "Yes, OpenCalisthenics is completely free and open source. You can use all features without restrictions or subscriptions." }
 	  }
 	},
 	"ExercisesPage": {

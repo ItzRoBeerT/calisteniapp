@@ -1,10 +1,13 @@
 'use client';
 
-import { useRef, type ComponentProps } from 'react';
-import { motion, useInView, useScroll, useTransform } from 'motion/react';
+import { useRef, useState, type ComponentProps } from 'react';
+import { motion, useInView } from 'motion/react';
 import NavLink from '@/components/header/NavLink';
 import { useTranslations } from 'next-intl';
 import type { Link } from '@/i18n/navigation';
+import type { Exercise } from '@/types/supabase';
+import { createSlug } from '@/utils/slugs';
+import HeroSection from '@/components/home/HeroSection';
 
 type AppHref = ComponentProps<typeof Link>['href'];
 
@@ -126,263 +129,30 @@ function AnimatedCounter({
 	);
 }
 
+const difficultyColor: Record<number, string> = {
+	0: 'text-secondary-400 bg-secondary-900/50 border-secondary-700/30',
+	1: 'text-secondary-400 bg-secondary-900/50 border-secondary-700/30',
+	2: 'text-yellow-400 bg-yellow-900/50 border-yellow-700/30',
+	3: 'text-orange-400 bg-orange-900/50 border-orange-700/30',
+	4: 'text-red-400 bg-red-900/50 border-red-700/30',
+	5: 'text-primary-400 bg-primary-900/50 border-primary-700/30',
+};
+
 export default function HomePageClient({
 	exerciseCount,
+	featuredExercises,
 }: {
 	exerciseCount: number;
+	featuredExercises: Exercise[];
 }) {
 	const t = useTranslations('HomePage');
+	const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-	// Parallax refs and transforms
-	const heroRef = useRef(null);
-	const { scrollYProgress } = useScroll({
-		target: heroRef,
-		offset: ['start start', 'end start'],
-	});
-
-	// Different speeds for depth layers (further back = moves slower/more)
-	const bgBlobsY = useTransform(scrollYProgress, [0, 1], ['0%', '40%']);
-	const gridY = useTransform(scrollYProgress, [0, 1], ['0%', '25%']);
-	const contentY = useTransform(scrollYProgress, [0, 1], ['0%', '15%']);
-	const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+	const heroRef = useRef<HTMLElement>(null);
 
 	return (
 		<div className="w-full">
-			{/* Hero Section - full viewport width breakout with parallax */}
-			<section
-				ref={heroRef}
-				className="relative left-1/2 -ml-[50vw] w-screen overflow-hidden"
-			>
-				<div className="relative flex flex-col items-center gap-8 py-16 pb-24 md:py-24">
-					{/* Atmospheric background effects - deepest parallax layer */}
-					<motion.div
-						className="absolute inset-0 -z-10 overflow-visible"
-						style={{ y: bgBlobsY }}
-					>
-						<div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full bg-primary-700/20 blur-[120px] animate-glow-pulse" />
-						<div className="absolute top-1/4 -right-20 w-[400px] h-[400px] rounded-full bg-tertiary-700/10 blur-[100px] animate-float" />
-						<div className="absolute bottom-0 -left-20 w-[300px] h-[300px] rounded-full bg-secondary-700/10 blur-[80px] animate-float-slow" />
-					</motion.div>
-
-					{/* Animated grid pattern - mid parallax layer */}
-					<motion.div
-						className="absolute inset-0 -z-10 animate-grid-fade"
-						style={{
-							y: gridY,
-							backgroundImage:
-								'linear-gradient(rgba(187,134,252,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(187,134,252,0.3) 1px, transparent 1px)',
-							backgroundSize: '60px 60px',
-						}}
-					/>
-
-					{/* Content - foreground parallax layer with fade-out */}
-					<motion.div
-						className="relative flex flex-col items-center gap-6 max-w-4xl mx-auto px-6"
-						style={{ y: contentY, opacity: heroOpacity }}
-					>
-					{/* Badge - slides down */}
-					<motion.span
-						className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-900/50 border border-primary-700/30 text-primary-300 text-sm font-medium tracking-wider uppercase"
-						initial={{ opacity: 0, y: -20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{
-							duration: 0.6,
-							delay: 0.1,
-							ease: [0.22, 1, 0.36, 1],
-						}}
-					>
-						<span className="w-2 h-2 rounded-full bg-secondary-500 animate-pulse" />
-						{t('hero.badge')}
-					</motion.span>
-
-					{/* Title - line 1 clips in */}
-					<motion.h1
-						className="text-4xl sm:text-5xl md:text-7xl font-bold text-center leading-tight"
-						style={{ fontFamily: 'Orbitron, sans-serif' }}
-					>
-						<motion.span
-							className="block text-white"
-							initial={{ opacity: 0, x: -40 }}
-							animate={{ opacity: 1, x: 0 }}
-							transition={{
-								duration: 0.7,
-								delay: 0.25,
-								ease: [0.22, 1, 0.36, 1],
-							}}
-						>
-							{t('hero.titleLine1')}
-						</motion.span>
-						{/* Title line 2 - gradient with shimmer */}
-						<motion.span
-							className="block relative overflow-hidden"
-							initial={{ opacity: 0, x: 40 }}
-							animate={{ opacity: 1, x: 0 }}
-							transition={{
-								duration: 0.7,
-								delay: 0.4,
-								ease: [0.22, 1, 0.36, 1],
-							}}
-						>
-							<span
-								className="bg-clip-text text-transparent"
-								style={{
-									backgroundImage:
-										'linear-gradient(90deg, #A386FF, #BB86FC, #03DAC5, #A386FF)',
-									backgroundSize: '200% 100%',
-									animation:
-										'gradient-shift 8s ease infinite',
-								}}
-							>
-								{t('hero.titleLine2')}
-							</span>
-						</motion.span>
-					</motion.h1>
-
-					{/* Description - fades up */}
-					<motion.p
-						className="text-center text-lg md:text-xl text-gray-400 max-w-2xl leading-relaxed"
-						style={{ fontFamily: 'Space Grotesk, sans-serif' }}
-						initial={{ opacity: 0, y: 20 }}
-						animate={{ opacity: 1, y: 0 }}
-						transition={{
-							duration: 0.7,
-							delay: 0.55,
-							ease: [0.22, 1, 0.36, 1],
-						}}
-					>
-						{t('about')}
-					</motion.p>
-
-					{/* CTA Buttons - staggered entrance */}
-					<motion.div
-						className="flex flex-col sm:flex-row gap-4 mt-4 w-full sm:w-auto"
-						initial="hidden"
-						animate="visible"
-						variants={{
-							visible: {
-								transition: {
-									staggerChildren: 0.12,
-									delayChildren: 0.7,
-								},
-							},
-						}}
-					>
-						{[
-							{
-								href: '/exercises' as AppHref,
-								gradient:
-									'from-primary-600 to-primary-700',
-								shadow: 'shadow-primary-900/40 hover:shadow-primary-700/50',
-								icon: (
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										className="w-5 h-5 shrink-0"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-										strokeWidth={2}
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
-										/>
-									</svg>
-								),
-								label: t('hero.exercises'),
-							},
-							{
-								href: '/workouts' as AppHref,
-								gradient:
-									'from-secondary-600 to-secondary-700',
-								shadow: 'shadow-secondary-900/40 hover:shadow-secondary-700/50',
-								icon: (
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										className="w-5 h-5 shrink-0"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-										strokeWidth={2}
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											d="M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z"
-										/>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											d="M12 18a3.75 3.75 0 0 0 .495-7.468 5.99 5.99 0 0 0-1.925 3.547 5.975 5.975 0 0 1-2.133-1.001A3.75 3.75 0 0 0 12 18Z"
-										/>
-									</svg>
-								),
-								label: t('hero.workouts'),
-							},
-							{
-								href: '/roadmaps' as AppHref,
-								gradient:
-									'from-tertiary-600 to-tertiary-700',
-								shadow: 'shadow-tertiary-900/40 hover:shadow-tertiary-700/50',
-								icon: (
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										className="w-5 h-5 shrink-0"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
-										strokeWidth={2}
-									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											d="M9 6.75V15m6-6v8.25m.503 3.498 4.875-2.437c.381-.19.622-.58.622-1.006V4.82c0-.836-.88-1.38-1.628-1.006l-3.869 1.934c-.317.159-.69.159-1.006 0L9.503 3.252a1.125 1.125 0 0 0-1.006 0L3.622 5.689C3.24 5.88 3 6.27 3 6.695V19.18c0 .836.88 1.38 1.628 1.006l3.869-1.934c.317-.159.69-.159 1.006 0l4.994 2.497c.317.158.69.158 1.006 0Z"
-										/>
-									</svg>
-								),
-								label: t('hero.roadmaps'),
-							},
-						].map((btn) => (
-							<motion.div
-								key={String(btn.href)}
-								variants={{
-									hidden: {
-										opacity: 0,
-										y: 20,
-										scale: 0.9,
-									},
-									visible: {
-										opacity: 1,
-										y: 0,
-										scale: 1,
-										transition: {
-											duration: 0.5,
-											ease: [0.22, 1, 0.36, 1],
-										},
-									},
-								}}
-								whileHover={{ scale: 1.04, y: -2 }}
-								whileTap={{ scale: 0.97 }}
-							>
-								<NavLink
-									href={btn.href}
-									className={`group relative inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-bold text-lg bg-gradient-to-r ${btn.gradient} text-white shadow-lg ${btn.shadow} transition-shadow duration-300 overflow-hidden`}
-								>
-									{/* Shimmer effect on hover */}
-									<span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-										<span className="absolute inset-0 animate-shimmer bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-									</span>
-									<span className="relative flex items-center gap-3">
-										{btn.icon}
-										{btn.label}
-									</span>
-								</NavLink>
-							</motion.div>
-						))}
-					</motion.div>
-					</motion.div>
-				</div>
-			</section>
+			<HeroSection ref={heroRef} />
 
 			{/* Feature Cards Section */}
 			<AnimatedSection className="py-12 md:py-16">
@@ -642,6 +412,161 @@ export default function HomePageClient({
 				</StaggerContainer>
 			</AnimatedSection>
 
+			{/* How It Works Section */}
+			<AnimatedSection className="py-12 md:py-16">
+				<motion.h2
+					className="text-3xl md:text-4xl font-bold text-center mb-4 text-white"
+					style={{ fontFamily: 'Orbitron, sans-serif' }}
+					initial={{ opacity: 0, y: 30 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: true }}
+					transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+				>
+					{t('howItWorks.title')}
+				</motion.h2>
+				<motion.p
+					className="text-gray-500 text-center mb-10 max-w-xl mx-auto"
+					initial={{ opacity: 0 }}
+					whileInView={{ opacity: 1 }}
+					viewport={{ once: true }}
+					transition={{ duration: 0.6, delay: 0.15 }}
+				>
+					{t('howItWorks.subtitle')}
+				</motion.p>
+
+				<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+					{(['workouts', 'roadmaps'] as const).map((path, colIdx) => (
+						<StaggerContainer
+							key={path}
+							className="p-6 md:p-8 rounded-2xl bg-surface border border-white/5 space-y-6"
+							staggerDelay={0.12}
+						>
+							<StaggerItem>
+								<h3
+									className={`text-lg font-bold mb-0 ${colIdx === 0 ? 'text-secondary-400' : 'text-tertiary-400'}`}
+									style={{ fontFamily: 'Orbitron, sans-serif' }}
+								>
+									{t(`howItWorks.${path}.title`)}
+								</h3>
+							</StaggerItem>
+							{([1, 2, 3] as const).map((step) => (
+								<StaggerItem key={step}>
+									<div className="flex items-start gap-4">
+										<span
+											className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold border ${colIdx === 0 ? 'bg-secondary-900/50 border-secondary-700/30 text-secondary-400' : 'bg-tertiary-900/50 border-tertiary-700/30 text-tertiary-400'}`}
+											style={{ fontFamily: 'Orbitron, sans-serif' }}
+										>
+											{step}
+										</span>
+										<div>
+											<p className="font-semibold text-white text-sm mb-1">
+												{t(`howItWorks.${path}.step${step}.title`)}
+											</p>
+											<p className="text-gray-400 text-sm leading-relaxed">
+												{t(`howItWorks.${path}.step${step}.description`)}
+											</p>
+										</div>
+									</div>
+								</StaggerItem>
+							))}
+						</StaggerContainer>
+					))}
+				</div>
+			</AnimatedSection>
+
+			{/* Featured Exercises Section */}
+			<AnimatedSection className="py-12 md:py-16">
+				<motion.h2
+					className="text-3xl md:text-4xl font-bold text-center mb-4 text-white"
+					style={{ fontFamily: 'Orbitron, sans-serif' }}
+					initial={{ opacity: 0, y: 30 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: true }}
+					transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+				>
+					{t('featuredExercises.title')}
+				</motion.h2>
+				<motion.p
+					className="text-gray-500 text-center mb-10 max-w-xl mx-auto"
+					initial={{ opacity: 0 }}
+					whileInView={{ opacity: 1 }}
+					viewport={{ once: true }}
+					transition={{ duration: 0.6, delay: 0.15 }}
+				>
+					{t('featuredExercises.subtitle')}
+				</motion.p>
+
+				<StaggerContainer
+					className="grid grid-cols-2 md:grid-cols-3 gap-4"
+					staggerDelay={0.08}
+				>
+					{featuredExercises.map((ex) => (
+						<StaggerItem key={ex.id}>
+							<NavLink href={`/exercises/${createSlug(ex.name)}` as AppHref} className="group block">
+								<motion.div
+									className="relative rounded-2xl bg-surface border border-white/5 overflow-hidden transition-colors duration-500 hover:border-primary-500/30"
+									whileHover={{ y: -4, boxShadow: '0 20px 40px -12px rgba(163,134,255,0.15)' }}
+									transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+								>
+									<div className="relative aspect-[4/3] overflow-hidden">
+										{/* eslint-disable-next-line @next/next/no-img-element */}
+										<img
+											src={ex.image}
+											alt={ex.name}
+											className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+										/>
+										<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+										<span
+											className={`absolute top-2 right-2 px-2 py-0.5 rounded-full border text-xs font-medium ${difficultyColor[ex.difficulty] ?? difficultyColor[2]}`}
+										>
+											{t(`featuredExercises.difficulty.${ex.difficulty as 0|1|2|3|4|5}`)}
+										</span>
+									</div>
+									<div className="p-4">
+										<h3
+											className="text-sm font-bold text-white mb-2 group-hover:text-primary-400 transition-colors line-clamp-1"
+											style={{ fontFamily: 'Orbitron, sans-serif' }}
+										>
+											{ex.name}
+										</h3>
+										<div className="flex flex-wrap gap-1">
+											{ex.muscle_group.slice(0, 2).map((mg) => (
+												<span
+													key={mg}
+													className="px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-gray-400 text-xs"
+												>
+													{t(`featuredExercises.muscleGroups.${mg as 'chest'|'back'|'shoulders'|'biceps'|'triceps'|'core'|'legs'|'glutes'}`) || mg}
+												</span>
+											))}
+										</div>
+									</div>
+								</motion.div>
+							</NavLink>
+						</StaggerItem>
+					))}
+				</StaggerContainer>
+
+				<motion.div
+					className="flex justify-center mt-8"
+					initial={{ opacity: 0, y: 16 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: true }}
+					transition={{ duration: 0.5, delay: 0.3 }}
+				>
+					<motion.div whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.97 }}>
+						<NavLink
+							href="/exercises"
+							className="inline-flex items-center gap-2 px-8 py-3 rounded-xl bg-white/5 border border-white/10 text-white font-bold hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+						>
+							{t('featuredExercises.viewAll')}
+							<svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+								<path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+							</svg>
+						</NavLink>
+					</motion.div>
+				</motion.div>
+			</AnimatedSection>
+
 			{/* Stats Section */}
 			<AnimatedSection className="py-12 md:py-16">
 				<div className="relative rounded-3xl overflow-hidden">
@@ -761,6 +686,68 @@ export default function HomePageClient({
 						</StaggerContainer>
 					</div>
 				</div>
+			</AnimatedSection>
+
+			{/* FAQ Section */}
+			<AnimatedSection className="py-12 md:py-16">
+				<motion.h2
+					className="text-3xl md:text-4xl font-bold text-center mb-4 text-white"
+					style={{ fontFamily: 'Orbitron, sans-serif' }}
+					initial={{ opacity: 0, y: 30 }}
+					whileInView={{ opacity: 1, y: 0 }}
+					viewport={{ once: true }}
+					transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+				>
+					{t('faq.title')}
+				</motion.h2>
+				<motion.p
+					className="text-gray-500 text-center mb-10 max-w-xl mx-auto"
+					initial={{ opacity: 0 }}
+					whileInView={{ opacity: 1 }}
+					viewport={{ once: true }}
+					transition={{ duration: 0.6, delay: 0.15 }}
+				>
+					{t('faq.subtitle')}
+				</motion.p>
+
+				<StaggerContainer className="space-y-3 max-w-3xl mx-auto" staggerDelay={0.08}>
+					{([1, 2, 3, 4, 5] as const).map((i) => (
+						<StaggerItem key={i}>
+							<div className="rounded-xl border border-white/5 bg-surface overflow-hidden">
+								<button
+									className="w-full flex items-center justify-between gap-4 px-6 py-4 text-left hover:bg-white/[0.03] transition-colors"
+									onClick={() => setOpenFaq(openFaq === i ? null : i)}
+								>
+									<span className="font-medium text-white text-sm md:text-base">
+										{t(`faq.q${i}.question`)}
+									</span>
+									<motion.svg
+										xmlns="http://www.w3.org/2000/svg"
+										className="w-4 h-4 shrink-0 text-gray-400"
+										fill="none"
+										viewBox="0 0 24 24"
+										stroke="currentColor"
+										strokeWidth={2}
+										animate={{ rotate: openFaq === i ? 180 : 0 }}
+										transition={{ duration: 0.25 }}
+									>
+										<path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+									</motion.svg>
+								</button>
+								<motion.div
+									initial={false}
+									animate={{ height: openFaq === i ? 'auto' : 0, opacity: openFaq === i ? 1 : 0 }}
+									transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+									className="overflow-hidden"
+								>
+									<p className="px-6 pb-4 text-gray-400 text-sm leading-relaxed border-t border-white/5 pt-4">
+										{t(`faq.q${i}.answer`)}
+									</p>
+								</motion.div>
+							</div>
+						</StaggerItem>
+					))}
+				</StaggerContainer>
 			</AnimatedSection>
 
 			{/* CTA Section */}

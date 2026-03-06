@@ -55,6 +55,7 @@
 		"workouts": "Entrenamientos",
 		"exercises": "Ejercicios",
 		"roadmaps": "Roadmaps",
+		"blog": "Blog",
 		"login": "Acceder",
 		"register": "Registrarse",
 		"user": "Usuario",
@@ -74,11 +75,18 @@
 		"about": "Entrena con tu propio cuerpo. Descubre ejercicios, crea rutinas personalizadas y sigue tu progreso con roadmaps diseñados para todos los niveles.",
 		"hero": {
 			"badge": "Open Source y Gratuito",
-			"titleLine1": "Domina tu cuerpo.",
-			"titleLine2": "Domina la calistenia.",
+			"titleLine1": "Entrena.",
+			"titleLine2": "Progresa.",
+			"titleLine3": "Domina.",
+			"tagline": "Calistenia. Para todos. Siempre gratis.",
+			"login": "Acceder",
+		"startFree": "Empezar gratis",
 			"exercises": "Ejercicios",
 			"workouts": "Entrenamientos",
-			"roadmaps": "Roadmaps"
+			"roadmaps": "Roadmaps",
+			"statExercises": "Ejercicios",
+			"statFree": "Siempre gratis",
+			"statEquipment": "Equipo necesario"
 		},
 		"featuredSection": {
 			"title": "¿Por qué elegir la calistenia?",
@@ -113,6 +121,54 @@
 			"roadmapsButton": "Ver roadmaps",
 			"createWorkout": "Crea tu entrenamiento",
 			"visitBlog": "Visita nuestro blog"
+		},
+		"howItWorks": {
+			"title": "¿Cómo funciona?",
+			"subtitle": "Dos caminos para alcanzar tus objetivos",
+			"workouts": {
+				"title": "Crea entrenamientos",
+				"step1": { "title": "Explora ejercicios", "description": "Navega nuestra biblioteca con más de 60 ejercicios organizados por categoría y nivel" },
+				"step2": { "title": "Construye tu rutina", "description": "Combina ejercicios, define series, repeticiones y tiempo de descanso a tu gusto" },
+				"step3": { "title": "Entrena y registra", "description": "Realiza el entrenamiento y lleva un historial completo de tu actividad" }
+			},
+			"roadmaps": {
+				"title": "Sigue un roadmap",
+				"step1": { "title": "Elige tu nivel", "description": "Selecciona un roadmap adaptado a tu punto de partida, desde principiante hasta avanzado" },
+				"step2": { "title": "Sigue el camino", "description": "Avanza por las etapas marcadas aprendiendo técnicas y recursos en el orden correcto" },
+				"step3": { "title": "Desbloquea habilidades", "description": "Marca tu progreso y descubre los skills que podrás conseguir con dedicación" }
+			}
+		},
+		"featuredExercises": {
+			"title": "Ejercicios destacados",
+			"subtitle": "Algunos de los movimientos más populares de la calistenia",
+			"viewAll": "Ver todos los ejercicios",
+			"difficulty": {
+				"0": "Principiante",
+				"1": "Básico",
+				"2": "Intermedio",
+				"3": "Avanzado",
+				"4": "Experto",
+				"5": "Élite"
+			},
+			"muscleGroups": {
+				"chest": "Pecho",
+				"back": "Espalda",
+				"shoulders": "Hombros",
+				"biceps": "Bíceps",
+				"triceps": "Tríceps",
+				"core": "Core",
+				"legs": "Piernas",
+				"glutes": "Glúteos"
+			}
+		},
+		"faq": {
+			"title": "Preguntas frecuentes",
+			"subtitle": "Todo lo que necesitas saber para empezar",
+			"q1": { "question": "¿Necesito equipamiento para empezar?", "answer": "Para la mayoría de ejercicios de principiante solo necesitas tu cuerpo. Algunas progresiones requieren una barra de dominadas o barras paralelas, fáciles de encontrar en parques de calistenia o instalaciones deportivas." },
+			"q2": { "question": "¿Es adecuado para principiantes absolutos?", "answer": "Sí. La app incluye progresiones desde nivel cero: flexiones en pared, sentadillas asistidas o plancha inclinada. Puedes empezar sin ninguna base física previa." },
+			"q3": { "question": "¿Con qué frecuencia debo entrenar?", "answer": "Lo recomendado para comenzar es 3-4 días por semana alternando días de trabajo y descanso. Las rutinas y roadmaps de la app están diseñados teniendo esto en cuenta." },
+			"q4": { "question": "¿Cuánto tiempo tardaré en ver resultados?", "answer": "Con constancia, la mayoría de personas notan mejoras en fuerza y resistencia en 2-4 semanas. Los cambios físicos visibles suelen aparecer entre el primer y el tercer mes." },
+			"q5": { "question": "¿Es gratuita la aplicación?", "answer": "Sí, OpenCalisthenics es completamente gratuita y de código abierto. Puedes usar todas las funciones sin restricciones ni suscripciones." }
 		}
 	},
 	"ExercisesPage": {

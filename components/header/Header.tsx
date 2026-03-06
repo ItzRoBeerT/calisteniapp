@@ -4,6 +4,7 @@ import NavLink from '@/components/header/NavLink';
 import UserMenu from './UserMenu';
 import MobileMenu from './MobileMenu';
 import ScrollProgressBar from './ScrollProgressBar';
+import HeaderBg from './HeaderBg';
 import { getTranslations, getLocale } from 'next-intl/server';
 import Image from 'next/image';
 
@@ -48,8 +49,9 @@ export default async function Header() {
 	};
 
 	return (
-		<header className="relative bg-surface/90 backdrop-blur-md border-b border-white/5 sticky top-0 z-50">
-			<div className="mx-auto px-14 h-[72px] flex items-center">
+		<header className="relative">
+			<HeaderBg />
+			<div className="mx-auto px-14 h-[72px] flex items-center relative">
 				{/* Logo — left */}
 				<div className="flex-1">
 					<Link href="/" className="flex items-center gap-2.5 group w-fit">
