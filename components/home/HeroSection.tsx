@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { animate, utils as animeUtils } from 'animejs';
 import { Link } from '@/i18n/navigation';
+import NavLink from '@/components/header/NavLink';
 import { useTranslations } from 'next-intl';
 
 // ── Anime.js: Dot Grid background ──────────────────────────────────────────
@@ -64,17 +65,19 @@ function HeroDotGrid() {
 }
 
 // ── Anime.js: Letter-by-letter hero title ──────────────────────────────────
-const HERO_WORDS = [
-	{ text: 'ENTRENA', color: 'text-white' },
-	{ text: 'PROGRESA', color: 'text-[#a386ff]' },
-	{ text: 'DOMINA', color: 'text-white' },
-] as const;
+const HERO_COLORS = ['text-white', 'text-[#a386ff]', 'text-white'] as const;
 
 function AnimatedHeroTitle() {
+	const t = useTranslations('HomePage');
 	const wordRefs = useRef<(HTMLSpanElement | null)[]>([]);
+	const words = [
+		{ text: t('hero.titleLine1').toUpperCase(), color: HERO_COLORS[0] },
+		{ text: t('hero.titleLine2').toUpperCase(), color: HERO_COLORS[1] },
+		{ text: t('hero.titleLine3').toUpperCase(), color: HERO_COLORS[2] },
+	];
 
 	useEffect(() => {
-		HERO_WORDS.forEach((_, wi) => {
+		words.forEach((_, wi) => {
 			const letters = wordRefs.current[wi]?.querySelectorAll('.letter');
 			if (!letters?.length) return;
 
@@ -86,6 +89,7 @@ function AnimatedHeroTitle() {
 				ease: 'easeOutExpo',
 			});
 		});
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
@@ -93,7 +97,7 @@ function AnimatedHeroTitle() {
 			className="font-bold leading-none"
 			style={{ fontFamily: 'Orbitron, sans-serif', letterSpacing: '-0.03em', lineHeight: 0.9 }}
 		>
-			{HERO_WORDS.map(({ text, color }, wi) => (
+			{words.map(({ text, color }, wi) => (
 				<span
 					key={wi}
 					ref={(el) => { wordRefs.current[wi] = el; }}
@@ -145,7 +149,7 @@ const HeroSection = forwardRef<HTMLElement>(function HeroSection(_, ref) {
 					transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
 				>
 					<Image
-						src="/images/home_image_2.png"
+						src="/images/home_image.png"
 						alt="Calisthenics athlete"
 						fill
 						className="object-contain object-top object-center"
@@ -177,7 +181,7 @@ const HeroSection = forwardRef<HTMLElement>(function HeroSection(_, ref) {
 					>
 						<Link
 							href="/exercises"
-							className="bg-white hover:bg-gray-100 text-[#0C0C0C] font-bold text-sm px-8 py-[14px] [font-family:'Orbitron',sans-serif] transition-all"
+							className="bg-primary-600 hover:bg-primary-500 text-white font-bold text-sm px-8 py-[14px] [font-family:'Orbitron',sans-serif] transition-all"
 						>
 							{t('hero.startFree')}
 						</Link>
