@@ -100,17 +100,27 @@
 		"features": {
 			"title": "Lo que ofrecemos",
 			"subtitle": "Todo lo que necesitas para comenzar y progresar en la calistenia",
+			"tagline": "Elige tu camino.",
+			"description": "Calistenia completa. Gratis. Open source.",
 			"explore": "Explorar",
 			"feature1": {
 				"title": "Ejercicios",
+				"heading": "EJERCICIOS",
+				"libraryOf": "Biblioteca de {count}+",
+				"cta": "Explorar ejercicios →",
 				"description": "Biblioteca completa con instrucciones paso a paso, variaciones y progresiones para todos los niveles"
 			},
 			"feature2": {
 				"title": "Entrenamientos",
+				"heading": "ENTRENAMIENTOS",
+				"aiSubtitle": "Rutinas con IA integrada",
+				"cta": "Crear entrenamiento →",
 				"description": "Crea, guarda y gestiona tus propias rutinas adaptadas a tus objetivos y nivel de experiencia"
 			},
 			"feature3": {
 				"title": "Roadmaps",
+				"subtitle": "Del cero al experto",
+				"cta": "Ver roadmaps →",
 				"description": "Rutas de aprendizaje visuales que te guían desde principiante hasta avanzado con recursos y seguimiento de progreso"
 			}
 		},

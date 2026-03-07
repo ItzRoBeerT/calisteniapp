@@ -100,17 +100,27 @@
 	  "features": {
 		"title": "What we offer",
 		"subtitle": "Everything you need to start and progress in calisthenics",
+		"tagline": "Choose your path.",
+		"description": "Complete Calisthenics. Free. Open source.",
 		"explore": "Explore",
 		"feature1": {
 		  "title": "Exercises",
+		  "heading": "EXERCISES",
+		  "libraryOf": "Library of {count}+",
+		  "cta": "Explore exercises →",
 		  "description": "Complete library with step-by-step instructions, variations and progressions for all levels"
 		},
 		"feature2": {
 		  "title": "Workouts",
+		  "heading": "WORKOUTS",
+		  "aiSubtitle": "AI-powered routines",
+		  "cta": "Create workout →",
 		  "description": "Create, save and manage your own routines tailored to your goals and experience level"
 		},
 		"feature3": {
 		  "title": "Roadmaps",
+		  "subtitle": "From zero to expert",
+		  "cta": "View roadmaps →",
 		  "description": "Visual learning paths that guide you from beginner to advanced with resources and progress tracking"
 		}
 	  },
