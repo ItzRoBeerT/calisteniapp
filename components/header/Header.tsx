@@ -62,7 +62,7 @@ export default async function Header() {
 							height={44}
 							className="group-hover:scale-105 transition-transform duration-200"
 						/>
-						<span className="font-body text-lg font-semibold tracking-[0.18em] text-white/80 group-hover:text-white transition-colors hidden sm:inline">
+						<span className="font-body text-lg font-semibold tracking-[0.18em] text-white/80 group-hover:text-primary-400 transition-colors hidden sm:inline">
 							OpenCalisthenics
 						</span>
 					</Link>
