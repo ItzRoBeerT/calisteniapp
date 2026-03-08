@@ -511,6 +511,7 @@
 		"apply": "Aplicar"
 	},
 	"ExerciseFilter": {
+		"filters": "Filtros",
 		"difficulty": "Dificultad",
 		"muscleGroup": "Grupo Muscular",
 		"equipment": "Equipamiento",

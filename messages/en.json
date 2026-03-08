@@ -511,6 +511,7 @@
 	  "apply": "Apply"
 	},
 	"ExerciseFilter": {
+	  "filters": "Filters",
 	  "difficulty": "Difficulty",
 	  "muscleGroup": "Muscle Group",
 	  "equipment": "Equipment",

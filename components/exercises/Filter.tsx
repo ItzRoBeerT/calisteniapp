@@ -47,6 +47,7 @@ export default function ExerciseFilter({ allFilters }: ExerciseFilterProps) {
     all: t('all'),
     clear: t('clear'),
     apply: t('apply'),
+    filters: t('filters'),
   };
 
   return (
