@@ -588,6 +588,26 @@
 		"backHome": "Volver al inicio",
 		"explore": "Explorar roadmaps"
 	},
+	"ExerciseCard": {
+		"difficulty": {
+			"0": "Principiante",
+			"1": "Básico",
+			"2": "Intermedio",
+			"3": "Avanzado",
+			"4": "Experto",
+			"5": "Élite"
+		},
+		"muscleGroups": {
+			"chest": "Pecho",
+			"back": "Espalda",
+			"shoulders": "Hombros",
+			"biceps": "Bíceps",
+			"triceps": "Tríceps",
+			"core": "Core",
+			"legs": "Piernas",
+			"glutes": "Glúteos"
+		}
+	},
 	"ExerciseDetail": {
 		"aboutExercise": "Sobre este ejercicio",
 		"instructions": "Instrucciones",

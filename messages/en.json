@@ -588,6 +588,26 @@
 		"backHome": "Back to home",
 		"explore": "Explore roadmaps"
 	},
+	"ExerciseCard": {
+		"difficulty": {
+			"0": "Beginner",
+			"1": "Basic",
+			"2": "Intermediate",
+			"3": "Advanced",
+			"4": "Expert",
+			"5": "Elite"
+		},
+		"muscleGroups": {
+			"chest": "Chest",
+			"back": "Back",
+			"shoulders": "Shoulders",
+			"biceps": "Biceps",
+			"triceps": "Triceps",
+			"core": "Core",
+			"legs": "Legs",
+			"glutes": "Glutes"
+		}
+	},
 	"ExerciseDetail": {
 		"aboutExercise": "About this exercise",
 		"instructions": "Instructions",
