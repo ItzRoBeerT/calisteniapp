@@ -182,7 +182,69 @@
 		}
 	},
 	"ExercisesPage": {
-		"title": "Listado de ejercicios"
+		"title": "Listado de ejercicios",
+		"requestButton": "Pedir ejercicio",
+		"requestModal": {
+			"title": "Pedir un ejercicio",
+			"subtitle": "¿No encuentras lo que buscas? Rellena los campos que conozcas y lo consideraremos para añadirlo.",
+			"contextNote": "Mantenemos una base de datos de ejercicios de calistenia revisada por el equipo. Las solicitudes se evalúan antes de añadirse, para garantizar calidad y coherencia.",
+			"nameLabel": "Nombre del ejercicio",
+			"namePlaceholder": "ej. Flexión a un brazo",
+			"descriptionLabel": "Descripción (opcional)",
+			"descriptionPlaceholder": "Describe brevemente el movimiento...",
+			"categoryLabel": "Categoría",
+			"typeLabel": "Tipo",
+			"difficultyLabel": "Dificultad",
+			"muscleGroupLabel": "Grupos musculares",
+			"equipmentLabel": "Equipamiento",
+			"selectPlaceholder": "— selecciona —",
+			"categories": {
+				"push": "Empuje",
+				"pull": "Tracción",
+				"legs": "Piernas",
+				"core": "Core",
+				"full_body": "Cuerpo completo",
+				"skill": "Habilidad"
+			},
+			"types": {
+				"dynamic": "Dinámico",
+				"isometric": "Isométrico",
+				"plyometric": "Pliométrico"
+			},
+			"difficulties": {
+				"0": "Muy fácil",
+				"1": "Fácil",
+				"2": "Moderado",
+				"3": "Difícil",
+				"4": "Muy difícil",
+				"5": "Elite"
+			},
+			"muscleGroups": {
+				"chest": "Pecho",
+				"back": "Espalda",
+				"shoulders": "Hombros",
+				"biceps": "Bíceps",
+				"triceps": "Tríceps",
+				"core": "Core",
+				"legs": "Piernas",
+				"glutes": "Glúteos"
+			},
+			"equipment": {
+				"none": "Sin equipo",
+				"pull_up_bar": "Barra dominadas",
+				"parallel_bars": "Paralelas",
+				"rings": "Anillas",
+				"resistance_band": "Banda elástica",
+				"bench": "Banco",
+				"wall": "Pared"
+			},
+			"submit": "Enviar solicitud",
+			"sending": "Enviando...",
+			"errorMessage": "Hubo un error al enviar. Inténtalo de nuevo.",
+			"successTitle": "¡Solicitud enviada!",
+			"successMessage": "Gracias por tu aportación. La revisaremos y consideraremos añadirla a la biblioteca.",
+			"close": "Cerrar"
+		}
 	},
 	"RoadmapsPage": {
 		"title": "Roadmaps",

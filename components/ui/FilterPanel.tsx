@@ -146,16 +146,18 @@ export default function FilterPanel({
 
         {/* Clear button (only when collapsed and active) */}
         {!open && hasActiveFilters && (
-          <button
-            type="button"
+          <div
+            role="button"
+            tabIndex={0}
             onClick={(e) => { e.stopPropagation(); clearFilters(); }}
-            className="ml-auto text-[#374151] hover:text-[#6B7280] transition-colors"
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); clearFilters(); } }}
+            className="ml-auto text-[#374151] hover:text-[#6B7280] transition-colors cursor-pointer"
             aria-label={translations.clear}
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
-          </button>
+          </div>
         )}
       </button>
 

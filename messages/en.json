@@ -182,7 +182,69 @@
 	  }
 	},
 	"ExercisesPage": {
-		"title": "List of exercises"
+		"title": "List of exercises",
+		"requestButton": "Request exercise",
+		"requestModal": {
+			"title": "Request an exercise",
+			"subtitle": "Can't find what you're looking for? Fill in the fields you know and we'll consider adding it.",
+			"contextNote": "We maintain a curated calisthenics exercise database. Requests are reviewed by our team before being added, to ensure quality and consistency.",
+			"nameLabel": "Exercise name",
+			"namePlaceholder": "e.g. One arm push-up",
+			"descriptionLabel": "Description (optional)",
+			"descriptionPlaceholder": "Briefly describe the movement...",
+			"categoryLabel": "Category",
+			"typeLabel": "Type",
+			"difficultyLabel": "Difficulty",
+			"muscleGroupLabel": "Muscle groups",
+			"equipmentLabel": "Equipment",
+			"selectPlaceholder": "— select —",
+			"categories": {
+				"push": "Push",
+				"pull": "Pull",
+				"legs": "Legs",
+				"core": "Core",
+				"full_body": "Full body",
+				"skill": "Skill"
+			},
+			"types": {
+				"dynamic": "Dynamic",
+				"isometric": "Isometric",
+				"plyometric": "Plyometric"
+			},
+			"difficulties": {
+				"0": "Very easy",
+				"1": "Easy",
+				"2": "Moderate",
+				"3": "Hard",
+				"4": "Very hard",
+				"5": "Elite"
+			},
+			"muscleGroups": {
+				"chest": "Chest",
+				"back": "Back",
+				"shoulders": "Shoulders",
+				"biceps": "Biceps",
+				"triceps": "Triceps",
+				"core": "Core",
+				"legs": "Legs",
+				"glutes": "Glutes"
+			},
+			"equipment": {
+				"none": "No equipment",
+				"pull_up_bar": "Pull-up bar",
+				"parallel_bars": "Parallel bars",
+				"rings": "Rings",
+				"resistance_band": "Resistance band",
+				"bench": "Bench",
+				"wall": "Wall"
+			},
+			"submit": "Send request",
+			"sending": "Sending...",
+			"errorMessage": "Something went wrong. Please try again.",
+			"successTitle": "Request sent!",
+			"successMessage": "Thanks for your contribution. We'll review it and consider adding it to the library.",
+			"close": "Close"
+		}
 	},
 	"RoadmapsPage": {
 		"title": "Roadmaps",

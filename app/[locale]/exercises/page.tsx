@@ -1,6 +1,7 @@
 import { getExercisesByPage, getFilters } from '@/actions/exercise';
 import ExerciseFilter from '@/components/exercises/Filter';
 import ExercisesList from '@/components/exercises/List';
+import RequestExerciseButton from '@/components/exercises/RequestExerciseButton';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
 
@@ -23,12 +24,15 @@ export default async function ExercisesPage({ params }: Props) {
 
 	return (
 		<>
-			<h1
-				className="text-4xl md:text-5xl font-bold text-white mb-8"
-				style={{ fontFamily: 'Orbitron, sans-serif' }}
-			>
-				{t('title')}
-			</h1>
+			<div className="flex items-center justify-between gap-4 mb-8">
+				<h1
+					className="text-4xl md:text-5xl font-bold text-white"
+					style={{ fontFamily: 'Orbitron, sans-serif' }}
+				>
+					{t('title')}
+				</h1>
+				<RequestExerciseButton />
+			</div>
 			<section>
 				<ExerciseFilter allFilters={filters} />
 			</section>
