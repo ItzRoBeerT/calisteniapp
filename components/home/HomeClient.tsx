@@ -84,29 +84,8 @@ export default function HomeClient({
 			}
 		};
 
-		const onScrollEnd = () => {
-			if (locked || cooldown) return;
-
-			const howItWorks = howItWorksRef.current;
-			const featuresTop = features.getBoundingClientRect().top;
-			const howItWorksTop = howItWorks?.getBoundingClientRect().top ?? Infinity;
-
-			const inHero = featuresTop > 0;
-			const inFeatures = featuresTop <= 0 && howItWorksTop > 0;
-
-			if (inHero && window.scrollY > 0) {
-				snapAndLock(() => window.scrollTo({ top: 0, behavior: 'smooth' }));
-			} else if (inFeatures && featuresTop < 0) {
-				snapAndLock(() => features.scrollIntoView({ behavior: 'smooth', block: 'start' }));
-			}
-		};
-
 		window.addEventListener('wheel', onWheel, { passive: false });
-		window.addEventListener('scrollend', onScrollEnd);
-		return () => {
-			window.removeEventListener('wheel', onWheel);
-			window.removeEventListener('scrollend', onScrollEnd);
-		};
+		return () => window.removeEventListener('wheel', onWheel);
 	}, []);
 
 	return (

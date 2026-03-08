@@ -1,6 +1,7 @@
 'use client';
 
 import type { ComponentProps } from 'react';
+import Image from 'next/image';
 import { motion } from 'motion/react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
@@ -63,11 +64,11 @@ export default function FeaturedExercisesSection({
 								transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
 							>
 								<div className="relative aspect-[4/3] overflow-hidden">
-									{/* eslint-disable-next-line @next/next/no-img-element */}
-									<img
+									<Image
 										src={ex.image}
 										alt={ex.name}
-										className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+										fill
+										className="object-cover transition-transform duration-500 group-hover:scale-105"
 									/>
 									<div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 									<span
