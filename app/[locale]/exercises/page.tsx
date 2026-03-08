@@ -23,7 +23,10 @@ export default async function ExercisesPage({ params }: Props) {
 
 	return (
 		<>
-			<h1 className="text-4xl text-center font-bold">
+			<h1
+				className="text-4xl md:text-5xl font-bold text-white mb-8"
+				style={{ fontFamily: 'Orbitron, sans-serif' }}
+			>
 				{t('title')}
 			</h1>
 			<section>

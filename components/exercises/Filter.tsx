@@ -10,6 +10,7 @@ type ExerciseFilterProps = {
 
 export default function ExerciseFilter({ allFilters }: ExerciseFilterProps) {
   const t = useTranslations('ExerciseFilter');
+  const tCard = useTranslations('ExerciseCard');
 
   const difficultyOptions = [
     { value: 'beginner', label: t('beginner') },
@@ -28,7 +29,7 @@ export default function ExerciseFilter({ allFilters }: ExerciseFilterProps) {
       label: t('muscleGroup'),
       options: allFilters.muscle_group.map((group) => ({
         value: group,
-        label: group,
+        label: tCard(`muscleGroups.${group as 'chest' | 'back' | 'shoulders' | 'biceps' | 'triceps' | 'core' | 'legs' | 'glutes'}`) || group,
       })),
     },
     {

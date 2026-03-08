@@ -29,6 +29,7 @@ export default async function Page({
 	const { slug, locale } = await params;
 	const exercise = await getExerciseByName(desSlugify(slug), locale);
 	const t = await getTranslations('ExerciseDetail');
+	const tCard = await getTranslations('ExerciseCard');
 
 	if (!exercise) {
 		throw new NotFoundError(`No se encontró el ejercicio "${desSlugify(slug)}"`);
@@ -53,7 +54,7 @@ export default async function Page({
 							key={index}
 							className="rounded-full bg-primary-500/10 px-3 py-1 text-sm font-medium text-primary-400"
 						>
-							{muscle}
+							{tCard(`muscleGroups.${muscle as 'chest' | 'back' | 'shoulders' | 'biceps' | 'triceps' | 'core' | 'legs' | 'glutes'}`) || muscle}
 						</span>
 					))}
 
@@ -132,7 +133,7 @@ export default async function Page({
 							<div className="grid grid-cols-2 gap-4 text-gray-400">
 								<div>
 									<p className="font-medium text-white">{t('muscleGroups')}:</p>
-									<p>{exercise.muscle_group?.join(', ') || t('notSpecified')}</p>
+									<p>{exercise.muscle_group?.map((mg: string) => tCard(`muscleGroups.${mg as 'chest' | 'back' | 'shoulders' | 'biceps' | 'triceps' | 'core' | 'legs' | 'glutes'}`) || mg).join(', ') || t('notSpecified')}</p>
 								</div>
 								<div>
 									<p className="font-medium text-white">{t('equipment')}:</p>
