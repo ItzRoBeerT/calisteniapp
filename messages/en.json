@@ -238,6 +238,9 @@
 				"bench": "Bench",
 				"wall": "Wall"
 			},
+			"authRequired": "Sign in to continue",
+			"authMessage": "You need an account to submit exercise requests.",
+			"goToLogin": "Sign in",
 			"submit": "Send request",
 			"sending": "Sending...",
 			"errorMessage": "Something went wrong. Please try again.",

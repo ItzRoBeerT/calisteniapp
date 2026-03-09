@@ -238,6 +238,9 @@
 				"bench": "Banco",
 				"wall": "Pared"
 			},
+			"authRequired": "Inicia sesión para continuar",
+			"authMessage": "Necesitas una cuenta para enviar solicitudes de ejercicios.",
+			"goToLogin": "Iniciar sesión",
 			"submit": "Enviar solicitud",
 			"sending": "Enviando...",
 			"errorMessage": "Hubo un error al enviar. Inténtalo de nuevo.",

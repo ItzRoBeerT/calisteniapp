@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
+import { createClient } from '@/utils/supabase/client';
+import Link from 'next/link';
 
 const MUSCLE_GROUPS = ['chest', 'back', 'shoulders', 'biceps', 'triceps', 'core', 'legs', 'glutes'];
 const EQUIPMENT_OPTIONS = ['none', 'pull_up_bar', 'parallel_bars', 'rings', 'resistance_band', 'bench', 'wall'];
@@ -37,6 +39,7 @@ export default function RequestExerciseButton() {
 	const t = useTranslations('ExercisesPage');
 	const locale = useLocale();
 	const [open, setOpen] = useState(false);
+	const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 	const [submitted, setSubmitted] = useState(false);
 	const [sending, setSending] = useState(false);
 	const [error, setError] = useState('');
@@ -105,7 +108,12 @@ export default function RequestExerciseButton() {
 	return (
 		<>
 			<button
-				onClick={() => setOpen(true)}
+				onClick={async () => {
+					const supabase = createClient();
+					const { data: { user } } = await supabase!.auth.getUser();
+					setIsAuthenticated(!!user);
+					setOpen(true);
+				}}
 				className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-sm font-medium text-[#6B7280] hover:text-primary-600 hover:border-primary-600/20 transition-colors duration-200 shrink-0"
 				style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 			>
@@ -141,7 +149,29 @@ export default function RequestExerciseButton() {
 							</p>
 						</div>
 
-						{submitted ? (
+						{!isAuthenticated ? (
+							<div className="text-center py-10 px-6">
+								<div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-4">
+									<svg className="w-6 h-6 text-[#6B7280]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+										<path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+									</svg>
+								</div>
+								<h3 className="text-lg font-bold text-white mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+									{t('requestModal.authRequired')}
+								</h3>
+								<p className="text-sm text-[#6B7280] mb-6" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+									{t('requestModal.authMessage')}
+								</p>
+								<Link
+									href={`/${locale}/login`}
+									onClick={handleClose}
+									className="inline-block px-6 py-2.5 rounded-xl bg-primary-500/20 border border-primary-500/50 text-primary-400 text-sm font-medium hover:bg-primary-500/30 transition-colors"
+									style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+								>
+									{t('requestModal.goToLogin')}
+								</Link>
+							</div>
+						) : submitted ? (
 							<div className="text-center py-10 px-6">
 								<div className="w-12 h-12 rounded-full bg-primary-500/20 border border-primary-500/30 flex items-center justify-center mx-auto mb-4">
 									<svg className="w-6 h-6 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

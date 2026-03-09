@@ -11,8 +11,11 @@ export async function POST(req: NextRequest) {
 
 	const supabase = await createClient();
 
-	// Get user if logged in (optional)
 	const { data: { user } } = await supabase.auth.getUser();
+
+	if (!user) {
+		return NextResponse.json({ error: 'Autenticación requerida' }, { status: 401 });
+	}
 
 	const { error } = await supabase.from('exercise_requests').insert({
 		name: name.trim(),
