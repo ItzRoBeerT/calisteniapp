@@ -180,7 +180,7 @@ const HeroSection = forwardRef<HTMLElement>(function HeroSection(_, ref) {
 						transition={{ duration: 0.6, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
 					>
 						<Link
-							href="/exercises"
+							href="/register"
 							className="bg-primary-600 hover:bg-primary-500 text-white font-bold text-sm px-8 py-[14px] [font-family:'Orbitron',sans-serif] transition-all"
 						>
 							{t('hero.startFree')}
