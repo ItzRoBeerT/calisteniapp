@@ -62,16 +62,15 @@ export default function StatsSection({ exerciseCount }: { exerciseCount: number 
 	const t = useTranslations('HomePage');
 
 	const stats = [
-		{ countTo: 32, prefix: '', suffix: '%', gradient: 'from-white to-[#A386FF]', label: t('featuredSection.stat1') },
-		{ countTo: 3, prefix: '0–', suffix: '', gradient: 'from-white to-[#32D74B]', label: t('featuredSection.stat2') },
-		{ countTo: 2, prefix: '', suffix: ` ${t('featuredSection.weeks')}`, gradient: 'from-white to-[#03DAC5]', label: t('featuredSection.stat3') },
-		{ countTo: exerciseCount > 0 ? exerciseCount : 60, prefix: '', suffix: '+', gradient: 'from-white to-[#A386FF]', label: t('featuredSection.stat4') },
+		{ countTo: 32, prefix: '', suffix: '%', gradient: 'from-white to-primary-600', label: t('featuredSection.stat1') },
+		{ countTo: 3, prefix: '0–', suffix: '', gradient: 'from-white to-secondary-600', label: t('featuredSection.stat2') },
+		{ countTo: 2, prefix: '', suffix: ` ${t('featuredSection.weeks')}`, gradient: 'from-white to-tertiary-600', label: t('featuredSection.stat3') },
+		{ countTo: exerciseCount > 0 ? exerciseCount : 60, prefix: '', suffix: '+', gradient: 'from-primary-200 to-tertiary-600', label: t('featuredSection.stat4') },
 	];
 
 	return (
 		<AnimatedSection
-			className={`${fullBleed} py-16 md:py-20 px-6 md:px-14`}
-			style={{ background: 'linear-gradient(135deg, #1A0D33 0%, #0D1A0D 50%, #0D1A1A 100%)' }}
+			className={`${fullBleed} py-16 md:py-20 px-6 md:px-14 bg-gradient-to-br from-primary-900/60 via-secondary-900/30 to-tertiary-900/60`}
 		>
 			<motion.h2
 				className="text-3xl md:text-4xl font-bold text-center text-white mb-3 max-w-2xl mx-auto px-4"
