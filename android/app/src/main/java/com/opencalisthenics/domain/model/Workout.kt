@@ -24,6 +24,8 @@ data class ExerciseWorkout(
     val sets: Int = 3,
     val reps: Int = 10,
     val rest: Int = 60,
+    val rir: Int? = null,
+    val supersetGroup: String? = null,
     val muscleGroups: List<String> = emptyList(),
     val image: String = ""
 )
