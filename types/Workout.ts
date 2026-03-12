@@ -5,6 +5,8 @@ export interface ExerciseWorkout {
 	sets: number;
 	reps: number;
 	rest: number;
+	rir?: number | null; // Reps In Reserve: reps left before failure (0 = to failure)
+	superset_group?: string | null; // exercises sharing the same value are performed back-to-back
 	muscle_group?: string[];
 	image?: string;
 }

@@ -56,8 +56,13 @@ CREATE TABLE IF NOT EXISTS "WorkoutExercise" (
     sets INTEGER DEFAULT 3,
     reps INTEGER DEFAULT 10,
     rest INTEGER DEFAULT 60,
-    "order" INTEGER DEFAULT 0
+    "order" INTEGER DEFAULT 0,
+    rir INTEGER DEFAULT NULL,
+    superset_group TEXT DEFAULT NULL
 );
+
+ALTER TABLE "WorkoutExercise" ADD COLUMN IF NOT EXISTS rir INTEGER DEFAULT NULL;
+ALTER TABLE "WorkoutExercise" ADD COLUMN IF NOT EXISTS superset_group TEXT DEFAULT NULL;
 
 -- =============================================
 -- WORKOUT TAGS
