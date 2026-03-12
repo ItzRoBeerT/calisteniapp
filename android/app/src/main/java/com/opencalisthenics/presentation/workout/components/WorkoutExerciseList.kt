@@ -29,6 +29,7 @@ import com.opencalisthenics.R
 import com.opencalisthenics.domain.model.ExerciseWorkout
 import com.opencalisthenics.ui.theme.GrayText
 import com.opencalisthenics.ui.theme.Primary500
+import com.opencalisthenics.ui.theme.Secondary500
 
 @Composable
 fun WorkoutExerciseList(
@@ -36,12 +37,27 @@ fun WorkoutExerciseList(
     modifier: Modifier = Modifier,
     onExerciseClick: (Int) -> Unit = {}
 ) {
+    // Build superset labels (A, B, C…) by group, in order of first appearance
+    val supersetLabels = mutableMapOf<String, String>()
+    var labelCounter = 0
+    exercises.forEach { ex ->
+        val g = ex.supersetGroup
+        if (g != null && g !in supersetLabels) {
+            supersetLabels[g] = ('A' + labelCounter++).toString()
+        }
+    }
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         exercises.forEach { exercise ->
-            WorkoutExerciseItem(exercise = exercise, onExerciseClick = onExerciseClick)
+            val supersetLabel = exercise.supersetGroup?.let { supersetLabels[it] }
+            WorkoutExerciseItem(
+                exercise = exercise,
+                supersetLabel = supersetLabel,
+                onExerciseClick = onExerciseClick
+            )
         }
     }
 }
@@ -49,9 +65,11 @@ fun WorkoutExerciseList(
 @Composable
 private fun WorkoutExerciseItem(
     exercise: ExerciseWorkout,
+    supersetLabel: String?,
     modifier: Modifier = Modifier,
     onExerciseClick: (Int) -> Unit = {}
 ) {
+    val accentColor = if (supersetLabel != null) Secondary500 else Primary500
     val clickableModifier = if (exercise.exerciseId != null) {
         modifier.clickable { onExerciseClick(exercise.exerciseId) }
     } else {
@@ -70,7 +88,7 @@ private fun WorkoutExerciseItem(
             modifier = Modifier
                 .width(3.dp)
                 .height(56.dp)
-                .background(Primary500, RoundedCornerShape(2.dp))
+                .background(accentColor, RoundedCornerShape(2.dp))
         )
 
         // Exercise image
@@ -92,6 +110,19 @@ private fun WorkoutExerciseItem(
                 .weight(1f)
                 .padding(horizontal = 12.dp, vertical = 8.dp)
         ) {
+            if (supersetLabel != null) {
+                Text(
+                    text = stringResource(R.string.workout_superset_label, supersetLabel),
+                    color = Secondary500,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(8.dp))
+                        .background(Secondary500.copy(alpha = 0.12f))
+                        .padding(horizontal = 6.dp, vertical = 1.dp)
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+            }
             Text(
                 text = exercise.name,
                 color = MaterialTheme.colorScheme.onSurface,
@@ -106,10 +137,19 @@ private fun WorkoutExerciseItem(
                     label = stringResource(R.string.workout_sets),
                     value = exercise.sets.toString()
                 )
-                ExerciseStat(
-                    label = stringResource(R.string.workout_reps),
-                    value = exercise.reps.toString()
-                )
+                // RIR or reps — mutually exclusive
+                if (exercise.rir != null) {
+                    ExerciseStat(
+                        label = stringResource(R.string.workout_rir),
+                        value = if (exercise.rir == 0) stringResource(R.string.workout_rir_to_failure)
+                                else exercise.rir.toString()
+                    )
+                } else {
+                    ExerciseStat(
+                        label = stringResource(R.string.workout_reps),
+                        value = exercise.reps.toString()
+                    )
+                }
                 ExerciseStat(
                     label = stringResource(R.string.workout_rest),
                     value = stringResource(R.string.workout_rest_seconds, exercise.rest)

@@ -28,18 +28,55 @@ enum class RunnerPhase {
     COMPLETE
 }
 
+private data class Step(
+    val exerciseIndex: Int,
+    val set: Int,
+    val skipRestAfter: Boolean
+)
+
+private fun computeSteps(exercises: List<ExerciseWorkout>): List<Step> {
+    val steps = mutableListOf<Step>()
+    var i = 0
+    while (i < exercises.size) {
+        val ex = exercises[i]
+        val groupId = ex.supersetGroup
+        if (groupId != null) {
+            val groupIndices = mutableListOf(i)
+            while (i + 1 < exercises.size && exercises[i + 1].supersetGroup == groupId) {
+                i++
+                groupIndices.add(i)
+            }
+            val maxSets = groupIndices.maxOf { exercises[it].sets }
+            for (set in 1..maxSets) {
+                for (k in groupIndices.indices) {
+                    val exIdx = groupIndices[k]
+                    if (set <= exercises[exIdx].sets) {
+                        steps.add(Step(exerciseIndex = exIdx, set = set, skipRestAfter = k < groupIndices.size - 1))
+                    }
+                }
+            }
+        } else {
+            for (set in 1..ex.sets) {
+                steps.add(Step(exerciseIndex = i, set = set, skipRestAfter = false))
+            }
+        }
+        i++
+    }
+    return steps
+}
+
 data class WorkoutRunnerUiState(
     val workout: Workout? = null,
     val phase: RunnerPhase = RunnerPhase.LOADING,
     val currentExerciseIndex: Int = 0,
     val currentSet: Int = 1,
-    val totalSetsCompleted: Int = 0,
-    val totalSets: Int = 0,
+    val progressPercent: Float = 0f,
+    val isInSuperset: Boolean = false,
+    val totalExercises: Int = 0,
     val elapsedSeconds: Int = 0,
     val restSecondsRemaining: Int = 0,
     val restTotalSeconds: Int = 0,
     val showCancelDialog: Boolean = false,
-    val isRestBetweenExercises: Boolean = false,
     val isLoading: Boolean = true,
     val errorMessage: UiText? = null,
     val isSaving: Boolean = false,
@@ -48,9 +85,6 @@ data class WorkoutRunnerUiState(
 ) {
     val currentExercise: ExerciseWorkout?
         get() = workout?.exercises?.getOrNull(currentExerciseIndex)
-
-    val progressPercent: Float
-        get() = if (totalSets > 0) totalSetsCompleted.toFloat() / totalSets else 0f
 }
 
 class WorkoutRunnerViewModel(
@@ -64,6 +98,8 @@ class WorkoutRunnerViewModel(
 
     private var timerJob: Job? = null
     private var restTimerJob: Job? = null
+    private var steps: List<Step> = emptyList()
+    private var currentStepIndex: Int = 0
 
     init {
         loadWorkout()
@@ -73,13 +109,14 @@ class WorkoutRunnerViewModel(
         viewModelScope.launch {
             getWorkoutByIdUseCase(workoutId)
                 .onSuccess { workout ->
-                    val totalSets = workout.exercises.sumOf { it.sets }
+                    steps = computeSteps(workout.exercises)
+                    currentStepIndex = 0
                     uiState = uiState.copy(
                         workout = workout,
-                        totalSets = totalSets,
+                        totalExercises = workout.exercises.size,
                         phase = RunnerPhase.PREVIEW,
                         isLoading = false
-                    )
+                    ).applyStep()
                 }
                 .onFailure { e ->
                     uiState = uiState.copy(
@@ -89,6 +126,16 @@ class WorkoutRunnerViewModel(
                     )
                 }
         }
+    }
+
+    private fun WorkoutRunnerUiState.applyStep(): WorkoutRunnerUiState {
+        val step = steps.getOrNull(currentStepIndex)
+        return copy(
+            currentExerciseIndex = step?.exerciseIndex ?: 0,
+            currentSet = step?.set ?: 1,
+            isInSuperset = step?.let { workout?.exercises?.getOrNull(it.exerciseIndex)?.supersetGroup != null } ?: false,
+            progressPercent = if (steps.isNotEmpty()) currentStepIndex.toFloat() / steps.size else 0f
+        )
     }
 
     private fun startElapsedTimer() {
@@ -102,80 +149,51 @@ class WorkoutRunnerViewModel(
     }
 
     fun onSetDone() {
+        val step = steps.getOrNull(currentStepIndex) ?: return
         val exercise = uiState.currentExercise ?: return
-        val newTotalCompleted = uiState.totalSetsCompleted + 1
+        val isLastStep = currentStepIndex >= steps.size - 1
 
-        if (uiState.currentSet < exercise.sets) {
-            // More sets remaining for this exercise → go to rest
-            uiState = uiState.copy(
-                totalSetsCompleted = newTotalCompleted,
-                currentSet = uiState.currentSet + 1,
-                phase = RunnerPhase.REST,
-                isRestBetweenExercises = false,
-                restSecondsRemaining = exercise.rest,
-                restTotalSeconds = exercise.rest
-            )
-            startRestTimer()
-        } else {
-            // Last set of this exercise
-            val nextIndex = uiState.currentExerciseIndex + 1
-            val workout = uiState.workout ?: return
-
-            if (nextIndex < workout.exercises.size) {
-                // More exercises → rest then next exercise
-                uiState = uiState.copy(
-                    totalSetsCompleted = newTotalCompleted,
-                    phase = RunnerPhase.REST,
-                    isRestBetweenExercises = true,
-                    restSecondsRemaining = exercise.rest,
-                    restTotalSeconds = exercise.rest
-                )
-                startRestTimer(moveToNextExercise = true)
-            } else {
-                // Workout complete
+        when {
+            isLastStep -> {
                 timerJob?.cancel()
-                uiState = uiState.copy(
-                    totalSetsCompleted = newTotalCompleted,
-                    phase = RunnerPhase.COMPLETE
-                )
+                uiState = uiState.copy(phase = RunnerPhase.COMPLETE)
                 saveCompletion()
+            }
+            step.skipRestAfter -> {
+                currentStepIndex++
+                uiState = uiState.copy(phase = RunnerPhase.EXERCISE).applyStep()
+            }
+            else -> {
+                currentStepIndex++
+                val restDuration = if (exercise.rest > 0) exercise.rest else 60
+                uiState = uiState.copy(
+                    phase = RunnerPhase.REST,
+                    restSecondsRemaining = restDuration,
+                    restTotalSeconds = restDuration
+                ).applyStep()
+                startRestTimer()
             }
         }
     }
 
-    private fun startRestTimer(moveToNextExercise: Boolean = false) {
+    private fun startRestTimer() {
         restTimerJob?.cancel()
         restTimerJob = viewModelScope.launch {
             while (uiState.restSecondsRemaining > 0) {
                 delay(1000)
-                uiState = uiState.copy(
-                    restSecondsRemaining = uiState.restSecondsRemaining - 1
-                )
+                uiState = uiState.copy(restSecondsRemaining = uiState.restSecondsRemaining - 1)
             }
-            onRestFinished(moveToNextExercise)
+            onRestFinished()
         }
     }
 
     fun onSkipRest() {
         restTimerJob?.cancel()
-        onRestFinished(uiState.isRestBetweenExercises)
+        onRestFinished()
     }
 
-    private fun onRestFinished(moveToNextExercise: Boolean) {
-        if (moveToNextExercise) {
-            val nextIndex = uiState.currentExerciseIndex + 1
-            uiState = uiState.copy(
-                currentExerciseIndex = nextIndex,
-                currentSet = 1,
-                phase = RunnerPhase.EXERCISE,
-                restSecondsRemaining = 0
-            )
-        } else {
-            uiState = uiState.copy(
-                phase = RunnerPhase.EXERCISE,
-                restSecondsRemaining = 0
-            )
-        }
+    private fun onRestFinished() {
+        uiState = uiState.copy(phase = RunnerPhase.EXERCISE, restSecondsRemaining = 0)
     }
 
     fun onStartWorkout() {
