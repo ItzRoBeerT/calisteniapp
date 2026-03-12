@@ -546,7 +546,11 @@
 		"public": "Público",
 		"private": "Privado",
 		"publicDescription": "Visible para todos los usuarios en los listados",
-		"privateDescription": "Solo visible para ti"
+		"privateDescription": "Solo visible para ti",
+		"rir": "RIR",
+		"rirPlaceholder": "0-5",
+		"superset": "Superserie",
+		"supersetWithNext": "Superserie con el siguiente ejercicio"
 	},
 	"AIWorkoutGenerator": {
 		"title": "Generar con IA",
@@ -973,7 +977,11 @@
 		"allWorkouts": "Todos los Entrenamientos",
 		"startWorkout": "Comenzar",
 		"markAsDone": "Marcar como hecho",
-		"goBack": "Volver"
+		"goBack": "Volver",
+		"rir": "RIR",
+		"rirToFailure": "Al fallo",
+		"superset": "Superserie",
+		"supersetLabel": "Superserie {label}"
 	},
 	"Footer": {
 		"copyright": "Todos los derechos reservados.",

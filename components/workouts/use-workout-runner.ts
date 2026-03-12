@@ -1,11 +1,59 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useRouter } from '@/i18n/navigation';
-import { WorkoutDetail } from '@/types/Workout';
+import { WorkoutDetail, ExerciseWorkout } from '@/types/Workout';
 import { saveWorkoutCompletion, getUserWorkouts, getFavoriteWorkoutsWithDetails } from '@/actions/workout';
 
 export type Phase = 'select' | 'preview' | 'exercise' | 'rest' | 'complete';
+
+type Step = {
+  exerciseIndex: number;
+  set: number;
+  skipRestAfter: boolean; // true = no rest before next step (superset transition)
+};
+
+function computeSteps(exercises: ExerciseWorkout[]): Step[] {
+  const steps: Step[] = [];
+  let i = 0;
+
+  while (i < exercises.length) {
+    const ex = exercises[i];
+    const groupId = ex.superset_group;
+
+    if (groupId) {
+      // Collect consecutive exercises in the same superset group
+      const groupIndices: number[] = [i];
+      while (
+        i + 1 < exercises.length &&
+        exercises[i + 1].superset_group === groupId
+      ) {
+        i++;
+        groupIndices.push(i);
+      }
+
+      const maxSets = Math.max(...groupIndices.map(idx => exercises[idx].sets));
+
+      for (let set = 1; set <= maxSets; set++) {
+        for (let k = 0; k < groupIndices.length; k++) {
+          const exIdx = groupIndices[k];
+          if (set <= exercises[exIdx].sets) {
+            const isLastInGroup = k === groupIndices.length - 1;
+            steps.push({ exerciseIndex: exIdx, set, skipRestAfter: !isLastInGroup });
+          }
+        }
+      }
+    } else {
+      for (let set = 1; set <= ex.sets; set++) {
+        steps.push({ exerciseIndex: i, set, skipRestAfter: false });
+      }
+    }
+
+    i++;
+  }
+
+  return steps;
+}
 
 export function useWorkoutRunner(workouts: WorkoutDetail[], initialWorkoutId?: number) {
 	const router = useRouter();
@@ -16,8 +64,7 @@ export function useWorkoutRunner(workouts: WorkoutDetail[], initialWorkoutId?: n
 
 	const [phase, setPhase] = useState<Phase>(initialWorkout ? 'preview' : 'select');
 	const [selectedWorkout, setSelectedWorkout] = useState<WorkoutDetail | null>(initialWorkout);
-	const [currentExerciseIndex, setCurrentExerciseIndex] = useState(0);
-	const [currentSet, setCurrentSet] = useState(1);
+	const [currentStepIndex, setCurrentStepIndex] = useState(0);
 	const [restTimeRemaining, setRestTimeRemaining] = useState(0);
 	const [startTime, setStartTime] = useState<Date | null>(null);
 	const [elapsedTime, setElapsedTime] = useState(0);
@@ -28,6 +75,14 @@ export function useWorkoutRunner(workouts: WorkoutDetail[], initialWorkoutId?: n
 	const timerRef = useRef<NodeJS.Timeout | null>(null);
 	const completionSavedRef = useRef(false);
 
+	const steps = useMemo(
+		() => (selectedWorkout ? computeSteps(selectedWorkout.exercises) : []),
+		[selectedWorkout]
+	);
+
+	const currentStep = steps[currentStepIndex];
+	const currentExerciseIndex = currentStep?.exerciseIndex ?? 0;
+	const currentSet = currentStep?.set ?? 1;
 	const currentExercise = selectedWorkout?.exercises[currentExerciseIndex];
 	const totalExercises = selectedWorkout?.exercises.length || 0;
 
@@ -93,16 +148,14 @@ export function useWorkoutRunner(workouts: WorkoutDetail[], initialWorkoutId?: n
 
 	const selectWorkout = useCallback((workout: WorkoutDetail) => {
 		setSelectedWorkout(workout);
-		setCurrentExerciseIndex(0);
-		setCurrentSet(1);
+		setCurrentStepIndex(0);
 		setPhase('preview');
 	}, []);
 
 	const startWorkout = useCallback(() => {
 		setStartTime(new Date());
 		setElapsedTime(0);
-		setCurrentExerciseIndex(0);
-		setCurrentSet(1);
+		setCurrentStepIndex(0);
 		setPhase('exercise');
 	}, []);
 
@@ -128,21 +181,23 @@ export function useWorkoutRunner(workouts: WorkoutDetail[], initialWorkoutId?: n
 	}, [initialWorkoutId, router]);
 
 	const handleSetDone = useCallback(() => {
-		if (!currentExercise) return;
+		if (!currentExercise || !currentStep) return;
 
-		if (currentSet < currentExercise.sets) {
-			setCurrentSet((prev) => prev + 1);
-			setRestTimeRemaining(currentExercise.rest || 60);
-			setPhase('rest');
-		} else if (currentExerciseIndex < totalExercises - 1) {
-			setCurrentExerciseIndex((prev) => prev + 1);
-			setCurrentSet(1);
-			setRestTimeRemaining(currentExercise.rest || 60);
-			setPhase('rest');
-		} else {
+		const restDuration = currentExercise.rest || 60;
+		const isLastStep = currentStepIndex >= steps.length - 1;
+
+		if (isLastStep) {
 			setPhase('complete');
+		} else if (currentStep.skipRestAfter) {
+			// Superset: go directly to next exercise without rest
+			setCurrentStepIndex((prev) => prev + 1);
+			setPhase('exercise');
+		} else {
+			setCurrentStepIndex((prev) => prev + 1);
+			setRestTimeRemaining(restDuration);
+			setPhase('rest');
 		}
-	}, [currentExercise, currentSet, currentExerciseIndex, totalExercises]);
+	}, [currentExercise, currentStep, currentStepIndex, steps.length]);
 
 	const skipRest = useCallback(() => {
 		setRestTimeRemaining(0);
@@ -153,8 +208,7 @@ export function useWorkoutRunner(workouts: WorkoutDetail[], initialWorkoutId?: n
 		completionSavedRef.current = false;
 		setPhase('select');
 		setSelectedWorkout(null);
-		setCurrentExerciseIndex(0);
-		setCurrentSet(1);
+		setCurrentStepIndex(0);
 		setRestTimeRemaining(0);
 		setStartTime(null);
 		setElapsedTime(0);
@@ -167,20 +221,8 @@ export function useWorkoutRunner(workouts: WorkoutDetail[], initialWorkoutId?: n
 	};
 
 	const calculateProgress = () => {
-		if (!selectedWorkout) return 0;
-		let totalSets = 0;
-		let completedSets = 0;
-
-		selectedWorkout.exercises.forEach((ex, i) => {
-			totalSets += ex.sets;
-			if (i < currentExerciseIndex) {
-				completedSets += ex.sets;
-			} else if (i === currentExerciseIndex) {
-				completedSets += currentSet - 1;
-			}
-		});
-
-		return totalSets > 0 ? (completedSets / totalSets) * 100 : 0;
+		if (!steps.length) return 0;
+		return (currentStepIndex / steps.length) * 100;
 	};
 
 	const formatDate = (dateString?: string) => {
@@ -195,6 +237,7 @@ export function useWorkoutRunner(workouts: WorkoutDetail[], initialWorkoutId?: n
 		currentExercise,
 		currentExerciseIndex,
 		currentSet,
+		currentStep,
 		restTimeRemaining,
 		elapsedTime,
 		showCancelConfirm,

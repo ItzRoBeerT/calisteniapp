@@ -546,7 +546,11 @@
 	  "public": "Public",
 	  "private": "Private",
 	  "publicDescription": "Visible to all users in workout listings",
-	  "privateDescription": "Only visible to you"
+	  "privateDescription": "Only visible to you",
+	  "rir": "RIR",
+	  "rirPlaceholder": "0-5",
+	  "superset": "Superset",
+	  "supersetWithNext": "Superset with next exercise"
 	},
 	"AIWorkoutGenerator": {
 	  "title": "Generate with AI",
@@ -973,7 +977,11 @@
 		"allWorkouts": "All Workouts",
 		"startWorkout": "Start Workout",
 		"markAsDone": "Mark as Done",
-		"goBack": "Go Back"
+		"goBack": "Go Back",
+		"rir": "RIR",
+		"rirToFailure": "To failure",
+		"superset": "Superset",
+		"supersetLabel": "Superset {label}"
 	},
 	"Footer": {
 		"copyright": "All rights reserved.",
