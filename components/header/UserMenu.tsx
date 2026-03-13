@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useToastStore } from '@/stores/toast';
 
 interface UserMenuProps {
   userName: string;
@@ -18,12 +19,26 @@ export default function UserMenu({ userName, locale }: UserMenuProps) {
   const router = useRouter();
   const supabase = createClient();
   const t = useTranslations('UserMenu');
+  const addToast = useToastStore((s) => s.addToast);
 
   const handleLogout = async () => {
-    if (supabase) {
-      await supabase.auth.signOut();
+    if (!supabase) {
+      setIsOpen(false);
+      router.replace(`/${locale}/login`);
+      router.refresh();
+      return;
     }
+
+    const { error } = await supabase.auth.signOut();
     setIsOpen(false);
+
+    if (error) {
+      addToast(t('logoutError'), 'error');
+      return;
+    }
+
+    addToast(t('logoutSuccess'), 'success');
+    router.replace(`/${locale}/login`);
     router.refresh();
   };
 

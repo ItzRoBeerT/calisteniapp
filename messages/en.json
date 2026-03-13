@@ -69,7 +69,9 @@
 		"settings": "Settings",
 		"myWorkouts": "My workouts",
 		"doWorkout": "Do workout",
-		"logout": "Sign out"
+		"logout": "Sign out",
+		"logoutSuccess": "Successfully signed out",
+		"logoutError": "Could not sign out"
 	},
 	"HomePage": {
 	  "about": "Train with your own body. Discover exercises, create custom routines, and track your progress with roadmaps designed for all levels.",
