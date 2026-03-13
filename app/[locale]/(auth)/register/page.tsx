@@ -1,5 +1,5 @@
-import { SubmitButton } from '../login/submit-button';
-import { signUp } from '../login/actions';
+import { SubmitButton } from '@/components/ui/SubmitButton';
+import { signUp } from '@/actions/user';
 import { Link } from '@/i18n/navigation';
 import { Metadata } from 'next';
 import { getTranslations } from 'next-intl/server';
