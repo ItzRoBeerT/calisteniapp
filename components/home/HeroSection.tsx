@@ -1,12 +1,14 @@
 'use client';
 
-import { useRef, useEffect, forwardRef } from 'react';
+import { useRef, useEffect, forwardRef, useState } from 'react';
 import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { animate, utils as animeUtils } from 'animejs';
 import { Link } from '@/i18n/navigation';
 import NavLink from '@/components/header/NavLink';
 import { useTranslations } from 'next-intl';
+import { createClient } from '@/utils/supabase/client';
+import type { User } from '@supabase/supabase-js';
 
 // ── Anime.js: Dot Grid background ──────────────────────────────────────────
 const DOT_COLS = 28;
@@ -125,6 +127,20 @@ const HeroSection = forwardRef<HTMLElement>(function HeroSection(_, ref) {
 	const t = useTranslations('HomePage');
 	const innerRef = useRef<HTMLElement>(null);
 	const resolvedRef = (ref as React.RefObject<HTMLElement>) ?? innerRef;
+	const [user, setUser] = useState<User | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
+
+	useEffect(() => {
+		const checkUser = async () => {
+			const supabase = createClient();
+			if (supabase) {
+				const { data: { user } } = await supabase.auth.getUser();
+				setUser(user ?? null);
+			}
+			setIsLoading(false);
+		};
+		checkUser();
+	}, []);
 
 	const { scrollYProgress } = useScroll({ target: resolvedRef, offset: ['start start', 'end start'] });
 	// Parallax only on md+ — on mobile transforms cause scroll conflicts
@@ -179,18 +195,45 @@ const HeroSection = forwardRef<HTMLElement>(function HeroSection(_, ref) {
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.6, delay: 0.9, ease: [0.22, 1, 0.36, 1] }}
 					>
-						<Link
-							href="/register"
-							className="bg-primary-600 hover:bg-primary-500 text-white font-bold text-sm px-8 py-[14px] [font-family:'Orbitron',sans-serif] transition-all"
-						>
-							{t('hero.startFree')}
-						</Link>
-						<Link
-							href="/login"
-							className="bg-[#0C0C0C] hover:bg-[#1a1a1a] text-white font-bold text-sm px-8 py-[14px] [font-family:'Orbitron',sans-serif] border border-[#333333] transition-all"
-						>
-							{t('hero.login')} →
-						</Link>
+						{!isLoading && user ? (
+							// Logged in: show 3 feature buttons
+							<>
+								<Link
+									href="/exercises"
+									className="bg-[#A386FF] hover:bg-[#b89fff] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all [font-family:'Orbitron',sans-serif]"
+								>
+									{t('features.feature1.cta')}
+								</Link>
+								<Link
+									href="/workouts"
+									className="bg-[#32D74B] hover:bg-[#4fe063] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all [font-family:'Orbitron',sans-serif]"
+								>
+									{t('features.feature2.cta')}
+								</Link>
+								<Link
+									href="/roadmaps"
+									className="bg-[#03DAC5] hover:bg-[#1de9d5] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all [font-family:'Orbitron',sans-serif]"
+								>
+									{t('features.feature3.cta')}
+								</Link>
+							</>
+						) : (
+							// Not logged in: show auth buttons
+							<>
+								<Link
+									href="/register"
+									className="bg-primary-600 hover:bg-primary-500 text-white font-bold text-sm px-8 py-[14px] [font-family:'Orbitron',sans-serif] transition-all"
+								>
+									{t('hero.startFree')}
+								</Link>
+								<Link
+									href="/login"
+									className="bg-[#0C0C0C] hover:bg-[#1a1a1a] text-white font-bold text-sm px-8 py-[14px] [font-family:'Orbitron',sans-serif] border border-[#333333] transition-all"
+								>
+									{t('hero.login')} →
+								</Link>
+							</>
+						)}
 					</motion.div>
 				</motion.div>
 			</div>
