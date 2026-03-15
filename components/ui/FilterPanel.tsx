@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 
 export type FilterFieldOption = {
@@ -14,7 +14,7 @@ export type FilterField = {
   options: FilterFieldOption[];
   /** Optional suffix to append to option labels (e.g., "min" for duration) */
   suffix?: string;
-  /** Enable multi-select mode with checkboxes */
+  /** Enable multi-select mode */
   multiSelect?: boolean;
 };
 
@@ -26,105 +26,23 @@ type FilterPanelProps = {
     all: string;
     clear: string;
     apply: string;
+    filters?: string;
   };
-  /** Number of columns in the grid (default: number of fields, max 4) */
+  /** Number of columns in the grid (kept for API compat, unused) */
   columns?: 1 | 2 | 3 | 4;
-  /** Whether to apply filters immediately on change (default: false, shows apply/clear buttons) */
+  /** Whether to apply filters immediately on change (default: false) */
   immediate?: boolean;
 };
-
-function MultiSelectDropdown({
-  field,
-  value,
-  onChange,
-  allLabel,
-}: {
-  field: FilterField;
-  value: string;
-  onChange: (value: string) => void;
-  allLabel: string;
-}) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  const selected = value ? value.split(',') : [];
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const toggle = (optionValue: string) => {
-    const newSelected = selected.includes(optionValue)
-      ? selected.filter((v) => v !== optionValue)
-      : [...selected, optionValue];
-    onChange(newSelected.join(','));
-  };
-
-  const displayText =
-    selected.length === 0
-      ? allLabel
-      : selected
-          .map((v) => field.options.find((o) => o.value === v)?.label || v)
-          .join(', ');
-
-  return (
-    <div ref={ref} className="relative">
-      <button
-        type="button"
-        onClick={() => setOpen(!open)}
-        className="w-full p-2 border border-foreground/20 bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-left flex justify-between items-center"
-      >
-        <span className="truncate">{displayText}</span>
-        <svg
-          className={`w-4 h-4 ml-2 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-        </svg>
-      </button>
-      {open && (
-        <div className="absolute z-10 mt-1 w-full bg-background border border-foreground/20 rounded-lg shadow-lg max-h-60 overflow-y-auto">
-          {field.options.map((option) => (
-            <label
-              key={option.value}
-              className="flex items-center gap-2 px-3 py-2 hover:bg-foreground/10 cursor-pointer"
-            >
-              <input
-                type="checkbox"
-                checked={selected.includes(option.value)}
-                onChange={() => toggle(option.value)}
-                className="rounded border-foreground/20 text-primary-500 focus:ring-primary-500"
-              />
-              <span className="text-sm">
-                {option.label}
-                {field.suffix ? ` ${field.suffix}` : ''}
-              </span>
-            </label>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
 
 export default function FilterPanel({
   fields,
   translations,
-  columns,
   immediate = false,
 }: FilterPanelProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Initialize filters from URL params
   const getInitialFilters = () => {
     const initial: Record<string, string> = {};
     fields.forEach((field) => {
@@ -134,8 +52,8 @@ export default function FilterPanel({
   };
 
   const [filters, setFilters] = useState<Record<string, string>>(getInitialFilters);
+  const [open, setOpen] = useState(false);
 
-  // Sync with URL params when they change externally
   useEffect(() => {
     const newFilters: Record<string, string> = {};
     fields.forEach((field) => {
@@ -148,94 +66,177 @@ export default function FilterPanel({
   const handleFilterChange = (key: string, value: string) => {
     const newFilters = { ...filters, [key]: value };
     setFilters(newFilters);
+    if (immediate) applyFiltersToUrl(newFilters);
+  };
 
-    if (immediate) {
-      applyFiltersToUrl(newFilters);
-    }
+  const toggleMulti = (key: string, optionValue: string) => {
+    const current = filters[key] ? filters[key].split(',') : [];
+    const next = current.includes(optionValue)
+      ? current.filter((v) => v !== optionValue)
+      : [...current, optionValue];
+    handleFilterChange(key, next.join(','));
+  };
+
+  const toggleSingle = (key: string, optionValue: string) => {
+    handleFilterChange(key, filters[key] === optionValue ? '' : optionValue);
   };
 
   const applyFiltersToUrl = (filtersToApply: Record<string, string>) => {
     const queryParams = new URLSearchParams();
-
     Object.entries(filtersToApply).forEach(([key, value]) => {
-      if (value) {
-        queryParams.append(key, value);
-      }
+      if (value) queryParams.append(key, value);
     });
-
     const queryString = queryParams.toString();
     router.push(queryString ? `${pathname}?${queryString}` : pathname);
   };
 
-  const applyFilters = () => {
-    applyFiltersToUrl(filters);
-  };
-
   const clearFilters = () => {
-    const clearedFilters: Record<string, string> = {};
-    fields.forEach((field) => {
-      clearedFilters[field.key] = '';
-    });
-    setFilters(clearedFilters);
+    const cleared: Record<string, string> = {};
+    fields.forEach((f) => { cleared[f.key] = ''; });
+    setFilters(cleared);
     router.push(pathname);
   };
 
-  const gridCols = columns || Math.min(fields.length, 4);
-  const gridClass = {
-    1: 'grid-cols-1',
-    2: 'grid-cols-1 md:grid-cols-2',
-    3: 'grid-cols-1 md:grid-cols-3',
-    4: 'grid-cols-1 md:grid-cols-4',
-  }[gridCols];
+  const hasActiveFilters = Object.values(filters).some(Boolean);
+
+  // Collect all active pill labels for the collapsed summary
+  const activeSummary = fields.flatMap((field) => {
+    const values = filters[field.key] ? filters[field.key].split(',') : [];
+    return values.map((v) => field.options.find((o) => o.value === v)?.label ?? v);
+  });
 
   return (
-    <div className="bg-surface p-4 rounded-xl mb-6">
-      <div className={`grid ${gridClass} gap-4`}>
-        {fields.map((field) => (
-          <div key={field.key}>
-            <label className="block text-sm font-medium text-foreground/80 mb-1">
-              {field.label}
-            </label>
-            {field.multiSelect ? (
-              <MultiSelectDropdown
-                field={field}
-                value={filters[field.key] || ''}
-                onChange={(value) => handleFilterChange(field.key, value)}
-                allLabel={translations.all}
-              />
-            ) : (
-              <select
-                value={filters[field.key] || ''}
-                onChange={(e) => handleFilterChange(field.key, e.target.value)}
-                className="w-full p-2 border border-foreground/20 bg-background text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              >
-                <option value="">{translations.all}</option>
-                {field.options.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                    {field.suffix ? ` ${field.suffix}` : ''}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
-        ))}
-      </div>
+    <div className="bg-[#0D0D0D] border border-[#1A1A1A] rounded-xl mb-6 overflow-hidden">
+      {/* Header / toggle */}
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/[0.02] transition-colors"
+      >
+        <svg
+          className={`w-3.5 h-3.5 text-[#555555] shrink-0 transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={2.5}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+        <span
+          className="text-xs font-semibold text-[#555555] uppercase tracking-widest"
+          style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+        >
+          {translations.filters ?? 'Filters'}
+        </span>
 
-      {!immediate && (
-        <div className="flex justify-end mt-4 gap-2">
-          <button
-            onClick={clearFilters}
-            className="px-4 py-2 bg-foreground/10 text-foreground rounded-lg hover:bg-foreground/20 transition-colors"
+        {/* Active filter summary pills (only when collapsed) */}
+        {!open && activeSummary.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 ml-1">
+            {activeSummary.map((label) => (
+              <span
+                key={label}
+                className="px-2 py-0.5 rounded-full bg-primary-500/20 border border-primary-500/50 text-primary-400 text-xs font-medium"
+                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+              >
+                {label}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Clear button (only when collapsed and active) */}
+        {!open && hasActiveFilters && (
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={(e) => { e.stopPropagation(); clearFilters(); }}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); clearFilters(); } }}
+            className="ml-auto text-[#374151] hover:text-[#6B7280] transition-colors cursor-pointer"
+            aria-label={translations.clear}
           >
-            {translations.clear}
-          </button>
-          <button
-            onClick={applyFilters}
-            className="px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
-          >
-            {translations.apply}
-          </button>
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </div>
+        )}
+      </button>
+
+      {/* Expandable content */}
+      {open && (
+        <div className="px-4 pb-4 space-y-4 border-t border-white/5">
+          {fields.map((field) => {
+            const activeValues = filters[field.key] ? filters[field.key].split(',') : [];
+
+            return (
+              <div key={field.key} className="pt-4">
+                <p
+                  className="text-xs font-semibold text-[#555555] uppercase tracking-widest mb-2"
+                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+                >
+                  {field.label}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => handleFilterChange(field.key, '')}
+                    className={`px-3 py-1 rounded-full border text-xs font-medium transition-colors duration-200 ${
+                      activeValues.length === 0
+                        ? 'bg-primary-500/20 border-primary-500/50 text-primary-400'
+                        : 'bg-white/5 border-white/10 text-[#6B7280] hover:border-white/20 hover:text-white'
+                    }`}
+                    style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+                  >
+                    {translations.all}
+                  </button>
+
+                  {field.options.map((option) => {
+                    const isActive = activeValues.includes(option.value);
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() =>
+                          field.multiSelect
+                            ? toggleMulti(field.key, option.value)
+                            : toggleSingle(field.key, option.value)
+                        }
+                        className={`px-3 py-1 rounded-full border text-xs font-medium transition-colors duration-200 ${
+                          isActive
+                            ? 'bg-primary-500/20 border-primary-500/50 text-primary-400'
+                            : 'bg-white/5 border-white/10 text-[#6B7280] hover:border-white/20 hover:text-white'
+                        }`}
+                        style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+                      >
+                        {option.label}
+                        {field.suffix ? ` ${field.suffix}` : ''}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+
+          {!immediate && (
+            <div className="flex justify-end gap-2 pt-3 border-t border-white/5">
+              {hasActiveFilters && (
+                <button
+                  onClick={clearFilters}
+                  className="px-4 py-1.5 rounded-lg border border-white/10 bg-white/5 text-[#6B7280] text-xs font-medium hover:text-white hover:border-white/20 transition-colors"
+                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+                >
+                  {translations.clear}
+                </button>
+              )}
+              <button
+                onClick={() => { applyFiltersToUrl(filters); setOpen(false); }}
+                className="px-4 py-1.5 rounded-lg bg-primary-500/20 border border-primary-500/50 text-primary-400 text-xs font-medium hover:bg-primary-500/30 transition-colors"
+                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
+              >
+                {translations.apply}
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

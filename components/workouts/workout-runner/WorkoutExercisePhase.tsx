@@ -12,6 +12,7 @@ type WorkoutExercisePhaseProps = {
 	progress: number;
 	elapsedTime: number;
 	showCancelConfirm: boolean;
+	isInSuperset?: boolean;
 	onSetDone: () => void;
 	onCancelRequest: () => void;
 	onCancelConfirm: () => void;
@@ -27,6 +28,7 @@ export default function WorkoutExercisePhase({
 	progress,
 	elapsedTime,
 	showCancelConfirm,
+	isInSuperset,
 	onSetDone,
 	onCancelRequest,
 	onCancelConfirm,
@@ -45,11 +47,18 @@ export default function WorkoutExercisePhase({
 				/>
 			</div>
 
-			<p className="text-foreground/40 text-sm text-center mb-2">
-				{t('exercise')} {currentExerciseIndex + 1} {t('of')} {totalExercises}
-			</p>
+			<div className="flex items-center justify-center gap-2 mb-2">
+				{isInSuperset && (
+					<span className="text-xs font-semibold text-secondary-400 bg-secondary-500/15 border border-secondary-500/30 px-2 py-0.5 rounded-full">
+						{t('superset')}
+					</span>
+				)}
+				<p className="text-foreground/40 text-sm text-center">
+					{t('exercise')} {currentExerciseIndex + 1} {t('of')} {totalExercises}
+				</p>
+			</div>
 
-			<div className="bg-surface rounded-xl p-6 mb-6">
+			<div className={`bg-surface rounded-xl p-6 mb-6 ${isInSuperset ? 'border-l-4 border-secondary-500' : ''}`}>
 				{currentExercise.image && (
 					<div className="relative w-full h-48 mb-4 rounded-lg overflow-hidden">
 						<Image
@@ -73,12 +82,23 @@ export default function WorkoutExercisePhase({
 						</p>
 					</div>
 					<div className="w-px bg-white/10" />
-					<div className="text-center">
-						<p className="text-foreground/40 text-xs uppercase tracking-wider mb-1">{t('reps')}</p>
-						<p className="text-3xl font-heading font-bold text-secondary-400">
-							{currentExercise.reps}
-						</p>
-					</div>
+					{currentExercise.rir != null ? (
+						<div className="text-center">
+							<p className="text-foreground/40 text-xs uppercase tracking-wider mb-1">{t('rir')}</p>
+							<p className="text-3xl font-heading font-bold text-orange-400">
+								{currentExercise.rir === 0
+									? <span className="text-lg">{t('rirToFailure')}</span>
+									: currentExercise.rir}
+							</p>
+						</div>
+					) : (
+						<div className="text-center">
+							<p className="text-foreground/40 text-xs uppercase tracking-wider mb-1">{t('reps')}</p>
+							<p className="text-3xl font-heading font-bold text-secondary-400">
+								{currentExercise.reps}
+							</p>
+						</div>
+					)}
 				</div>
 
 				<button

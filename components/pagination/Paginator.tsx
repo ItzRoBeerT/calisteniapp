@@ -37,61 +37,59 @@ export default function Paginator(props: {
 	const pagesToShow = getPagesToShow();
 
 	return (
-		<div className="flex justify-center mt-4">
+		<div className="flex justify-center mt-6">
 			<nav aria-label="Pagination">
-				<ul className="inline-flex items-center gap-2">
-					{/* Botón Anterior */}
+				<ul className="inline-flex items-center gap-1.5">
 					<li>
 						<button
-							onClick={() =>
-								currentPage > 1 && onPageChange(currentPage - 1)
-							}
-							className={`rounded px-4 py-2 ${
-								currentPage === 1
-									? 'bg-gray-300 text-gray-600'
-									: 'bg-white text-gray-800'
-							}`}
+							onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
 							disabled={currentPage === 1}
+							className="px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors"
+							style={{
+								fontFamily: 'Space Grotesk, sans-serif',
+								...(currentPage === 1
+									? { borderColor: 'rgba(255,255,255,0.05)', color: '#374151', cursor: 'not-allowed' }
+									: { borderColor: 'rgba(255,255,255,0.1)', color: '#6B7280', background: 'rgba(255,255,255,0.05)' }),
+							}}
 						>
 							{t('previous')}
 						</button>
 					</li>
 
-					{/* Páginas */}
 					{pagesToShow.map((page, index) => (
 						<li key={index}>
 							{typeof page === 'number' ? (
 								<button
 									onClick={() => onPageChange(page)}
-									className={`rounded px-4 py-2 ${
-										currentPage === page
-											? 'bg-primary-500 text-white'
-											: 'bg-white text-gray-800'
-									}`}
+									className="w-8 h-8 rounded-lg border text-xs font-medium transition-colors"
+									style={{
+										fontFamily: 'Space Grotesk, sans-serif',
+										...(currentPage === page
+											? { background: 'rgba(163,134,255,0.2)', borderColor: 'rgba(163,134,255,0.5)', color: '#a388ff' }
+											: { background: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.1)', color: '#6B7280' }),
+									}}
 								>
 									{page}
 								</button>
 							) : (
-								<span className="px-4 py-2 text-gray-500">
+								<span className="w-8 h-8 flex items-center justify-center text-xs text-[#374151]">
 									{page}
 								</span>
 							)}
 						</li>
 					))}
 
-					{/* Botón Siguiente */}
 					<li>
 						<button
-							onClick={() =>
-								currentPage < totalPages &&
-								onPageChange(currentPage + 1)
-							}
-							className={`rounded px-4 py-2 ${
-								currentPage === totalPages
-									? 'bg-gray-300 text-gray-600'
-									: 'bg-white text-gray-800'
-							}`}
+							onClick={() => currentPage < totalPages && onPageChange(currentPage + 1)}
 							disabled={currentPage === totalPages}
+							className="px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors"
+							style={{
+								fontFamily: 'Space Grotesk, sans-serif',
+								...(currentPage === totalPages
+									? { borderColor: 'rgba(255,255,255,0.05)', color: '#374151', cursor: 'not-allowed' }
+									: { borderColor: 'rgba(255,255,255,0.1)', color: '#6B7280', background: 'rgba(255,255,255,0.05)' }),
+							}}
 						>
 							{t('next')}
 						</button>

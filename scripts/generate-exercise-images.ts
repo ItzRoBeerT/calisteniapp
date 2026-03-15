@@ -158,7 +158,7 @@ async function generateImage(client: OpenAI, prompt: string): Promise<Buffer> {
 		size: '1024x1024',
 	});
 
-	const b64 = response.data[0].b64_json;
+	const b64 = response.data?.[0]?.b64_json;
 	if (!b64) throw new Error('No image data returned from API');
 
 	return Buffer.from(b64, 'base64');

@@ -25,6 +25,8 @@ data class WorkoutExerciseDto(
     val sets: Int? = 3,
     val reps: Int = 10,
     val rest: Int = 60,
+    val rir: Int? = null,
+    val superset_group: String? = null,
     val order: Int = 0
 )
 
@@ -37,6 +39,8 @@ data class WorkoutExerciseWithImageDto(
     val sets: Int? = 3,
     val reps: Int = 10,
     val rest: Int = 60,
+    val rir: Int? = null,
+    val superset_group: String? = null,
     val order: Int? = null,
     @SerialName("Exercise")
     val exercise: ExerciseImageDto? = null

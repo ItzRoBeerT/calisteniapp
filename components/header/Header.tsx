@@ -4,6 +4,7 @@ import NavLink from '@/components/header/NavLink';
 import UserMenu from './UserMenu';
 import MobileMenu from './MobileMenu';
 import ScrollProgressBar from './ScrollProgressBar';
+import HeaderBg from './HeaderBg';
 import { getTranslations, getLocale } from 'next-intl/server';
 import Image from 'next/image';
 
@@ -38,6 +39,7 @@ export default async function Header() {
 		workouts: t('workouts'),
 		exercises: t('exercises'),
 		roadmaps: t('roadmaps'),
+		blog: t('blog'),
 		login: t('login'),
 		register: t('register'),
 		user: t('user'),
@@ -47,54 +49,70 @@ export default async function Header() {
 	};
 
 	return (
-		<header className="relative bg-surface/90 backdrop-blur-md border-b border-white/5 sticky top-0 z-50">
-			<div className="container mx-auto px-4 py-3 flex justify-between items-center">
-				<Link href="/" className="flex items-center gap-2 group">
-					<Image
-						src="/images/logo_light.png"
-						alt="OpenCalisthenics"
-						width={36}
-						height={36}
-						className="group-hover:scale-105 transition-transform duration-200"
-					/>
-					<span className="font-heading text-lg font-bold tracking-wider text-white group-hover:text-primary-500 transition-colors hidden sm:inline">
-						OpenCalisthenics
-					</span>
-				</Link>
+		<header className="relative">
+			<HeaderBg />
+			<div className="mx-auto px-14 h-[72px] flex items-center relative">
+				{/* Logo — left */}
+				<div className="flex-1">
+					<Link href="/" className="flex items-center gap-2.5 group w-fit">
+						<Image
+							src="/images/logo_light.png"
+							alt="OpenCalisthenics"
+							width={44}
+							height={44}
+							className="group-hover:scale-105 transition-transform duration-200"
+						/>
+						<span className="font-body text-lg font-semibold tracking-[0.18em] text-white/80 group-hover:text-primary-400 transition-colors hidden sm:inline">
+							OpenCalisthenics
+						</span>
+					</Link>
+				</div>
 
-				{/* Desktop navigation */}
-				<nav className="hidden md:flex gap-6 items-center">
-					<NavLink
-						href="/workouts"
-						className="text-sm font-medium tracking-wide hover:text-primary-500 transition-colors"
-					>
-						{translations.workouts}
-					</NavLink>
+				{/* Desktop navigation — center */}
+				<nav className="hidden md:flex items-center gap-2">
 					<NavLink
 						href="/exercises"
-						className="text-sm font-medium tracking-wide hover:text-primary-500 transition-colors"
+						className="text-[13px] text-white/40 hover:text-primary-400 transition-colors px-1"
 					>
 						{translations.exercises}
 					</NavLink>
+					<span className="text-white/15 select-none text-[13px]">·</span>
+					<NavLink
+						href="/workouts"
+						className="text-[13px] text-white/40 hover:text-primary-400 transition-colors px-1"
+					>
+						{translations.workouts}
+					</NavLink>
+					<span className="text-white/15 select-none text-[13px]">·</span>
 					<NavLink
 						href="/roadmaps"
-						className="text-sm font-medium tracking-wide hover:text-primary-500 transition-colors"
+						className="text-[13px] text-white/40 hover:text-primary-400 transition-colors px-1"
 					>
 						{translations.roadmaps}
 					</NavLink>
+					<span className="text-white/15 select-none text-[13px]">·</span>
+					<NavLink
+						href="/blog"
+						className="text-[13px] text-white/40 hover:text-primary-400 transition-colors px-1"
+					>
+						{translations.blog}
+					</NavLink>
+				</nav>
+
+				{/* CTA — right */}
+				<div className="flex-1 flex justify-end items-center gap-4">
 					{user ? (
 						<UserMenu userName={userName || translations.user} locale={locale} />
 					) : (
 						<NavLink
 							href="/login"
-							className="bg-primary-600 hover:bg-primary-700 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
+							className="bg-primary-600 hover:bg-primary-500 text-white font-bold text-[13px] px-[22px] py-[9px] rounded transition-all"
 						>
 							{translations.login}
 						</NavLink>
 					)}
-				</nav>
-				{/* Mobile navigation */}
-				<MobileMenu user={user} userName={userName} translations={translations} />
+					<MobileMenu user={user} userName={userName} translations={translations} />
+				</div>
 			</div>
 			<ScrollProgressBar />
 		</header>

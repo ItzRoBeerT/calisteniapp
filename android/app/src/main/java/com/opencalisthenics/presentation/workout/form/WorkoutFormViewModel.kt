@@ -185,6 +185,8 @@ class WorkoutFormViewModel(
             sets = 3,
             reps = 10,
             rest = 60,
+            rir = null,
+            supersetGroup = null,
             muscleGroups = exercise.muscleGroups,
             image = exercise.image
         )
@@ -233,6 +235,29 @@ class WorkoutFormViewModel(
             exercises = updated,
             estimatedDuration = calculateDuration(updated)
         )
+    }
+
+    fun onUpdateExerciseRir(index: Int, rir: Int?) {
+        val updated = uiState.exercises.toMutableList().apply {
+            this[index] = this[index].copy(rir = rir)
+        }
+        uiState = uiState.copy(exercises = updated)
+    }
+
+    fun onToggleSupersetWithNext(index: Int) {
+        val exercises = uiState.exercises.toMutableList()
+        val current = exercises[index]
+        val next = exercises.getOrNull(index + 1) ?: return
+
+        if (current.supersetGroup != null && current.supersetGroup == next.supersetGroup) {
+            exercises[index] = current.copy(supersetGroup = null)
+            exercises[index + 1] = next.copy(supersetGroup = null)
+        } else {
+            val groupId = java.util.UUID.randomUUID().toString()
+            exercises[index] = current.copy(supersetGroup = groupId)
+            exercises[index + 1] = next.copy(supersetGroup = groupId)
+        }
+        uiState = uiState.copy(exercises = exercises)
     }
 
     fun onToggleAiPanel() {

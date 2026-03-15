@@ -55,6 +55,7 @@
 	  "workouts": "Workouts",
 	  "exercises": "Exercises",
 	  "roadmaps": "Roadmaps",
+	  "blog": "Blog",
 	  "login": "Access",
 	  "register": "Register",
 	  "user": "User",
@@ -68,17 +69,26 @@
 		"settings": "Settings",
 		"myWorkouts": "My workouts",
 		"doWorkout": "Do workout",
-		"logout": "Sign out"
+		"logout": "Sign out",
+		"logoutSuccess": "Successfully signed out",
+		"logoutError": "Could not sign out"
 	},
 	"HomePage": {
 	  "about": "Train with your own body. Discover exercises, create custom routines, and track your progress with roadmaps designed for all levels.",
 	  "hero": {
 		"badge": "Open Source & Free",
-		"titleLine1": "Master your body.",
-		"titleLine2": "Master calisthenics.",
+		"titleLine1": "Train.",
+		"titleLine2": "Progress.",
+		"titleLine3": "Dominate.",
+		"tagline": "Calisthenics. For everyone. Always free.",
+		"login": "Login",
+		"startFree": "Start Free",
 		"exercises": "Exercises",
 		"workouts": "Workouts",
-		"roadmaps": "Roadmaps"
+		"roadmaps": "Roadmaps",
+		"statExercises": "Exercises",
+		"statFree": "Free forever",
+		"statEquipment": "Equipment needed"
 	  },
 	  "featuredSection": {
 		"title": "Why choose calisthenics?",
@@ -92,17 +102,27 @@
 	  "features": {
 		"title": "What we offer",
 		"subtitle": "Everything you need to start and progress in calisthenics",
+		"tagline": "Choose your path.",
+		"description": "Complete Calisthenics. Free. Open source.",
 		"explore": "Explore",
 		"feature1": {
 		  "title": "Exercises",
+		  "heading": "EXERCISES",
+		  "libraryOf": "Library of {count}+",
+		  "cta": "Explore exercises →",
 		  "description": "Complete library with step-by-step instructions, variations and progressions for all levels"
 		},
 		"feature2": {
 		  "title": "Workouts",
+		  "heading": "WORKOUTS",
+		  "aiSubtitle": "AI-powered routines",
+		  "cta": "Create workout →",
 		  "description": "Create, save and manage your own routines tailored to your goals and experience level"
 		},
 		"feature3": {
 		  "title": "Roadmaps",
+		  "subtitle": "From zero to expert",
+		  "cta": "View roadmaps →",
 		  "description": "Visual learning paths that guide you from beginner to advanced with resources and progress tracking"
 		}
 	  },
@@ -113,10 +133,123 @@
 		"roadmapsButton": "View roadmaps",
 		"createWorkout": "Create your workout",
 		"visitBlog": "Visit our blog"
+	  },
+	  "howItWorks": {
+		"title": "How does it work?",
+		"subtitle": "Two paths to reach your goals",
+		"workouts": {
+		  "title": "Create workouts",
+		  "step1": { "title": "Explore exercises", "description": "Browse our library of 60+ exercises organized by category and level" },
+		  "step2": { "title": "Build your routine", "description": "Combine exercises, set your reps, sets, and rest time to your liking" },
+		  "step3": { "title": "Train and track", "description": "Perform the workout and keep a full history of your activity" }
+		},
+		"roadmaps": {
+		  "title": "Follow a roadmap",
+		  "step1": { "title": "Choose your level", "description": "Select a roadmap suited to your starting point, from beginner to advanced" },
+		  "step2": { "title": "Follow the path", "description": "Progress through the marked stages learning techniques and resources in the right order" },
+		  "step3": { "title": "Unlock skills", "description": "Track your progress and discover the skills you can achieve with dedication" }
+		}
+	  },
+	  "featuredExercises": {
+		"title": "Featured exercises",
+		"subtitle": "Some of the most popular movements in calisthenics",
+		"viewAll": "View all exercises",
+		"difficulty": {
+		  "0": "Beginner",
+		  "1": "Basic",
+		  "2": "Intermediate",
+		  "3": "Advanced",
+		  "4": "Expert",
+		  "5": "Elite"
+		},
+		"muscleGroups": {
+		  "chest": "Chest",
+		  "back": "Back",
+		  "shoulders": "Shoulders",
+		  "biceps": "Biceps",
+		  "triceps": "Triceps",
+		  "core": "Core",
+		  "legs": "Legs",
+		  "glutes": "Glutes"
+		}
+	  },
+	  "faq": {
+		"title": "Frequently asked questions",
+		"subtitle": "Everything you need to know to get started",
+		"q1": { "question": "Do I need equipment to start?", "answer": "For most beginner exercises you only need your body. Some progressions require a pull-up bar or parallel bars, which you can easily find in calisthenics parks or sports facilities." },
+		"q2": { "question": "Is it suitable for absolute beginners?", "answer": "Yes. The app includes progressions from zero: wall push-ups, assisted squats, or incline planks. You can start with no prior fitness background." },
+		"q3": { "question": "How often should I train?", "answer": "We recommend starting with 3-4 days per week, alternating work days and rest days. The app's routines and roadmaps are designed with this in mind." },
+		"q4": { "question": "How long until I see results?", "answer": "With consistency, most people notice improvements in strength and endurance within 2-4 weeks. Visible physical changes typically appear between the first and third month." },
+		"q5": { "question": "Is the app free?", "answer": "Yes, OpenCalisthenics is completely free and open source. You can use all features without restrictions or subscriptions." }
 	  }
 	},
 	"ExercisesPage": {
-		"title": "List of exercises"
+		"title": "List of exercises",
+		"requestButton": "Request exercise",
+		"requestModal": {
+			"title": "Request an exercise",
+			"subtitle": "Can't find what you're looking for? Fill in the fields you know and we'll consider adding it.",
+			"contextNote": "We maintain a curated calisthenics exercise database. Requests are reviewed by our team before being added, to ensure quality and consistency.",
+			"nameLabel": "Exercise name",
+			"namePlaceholder": "e.g. One arm push-up",
+			"descriptionLabel": "Description (optional)",
+			"descriptionPlaceholder": "Briefly describe the movement...",
+			"categoryLabel": "Category",
+			"typeLabel": "Type",
+			"difficultyLabel": "Difficulty",
+			"muscleGroupLabel": "Muscle groups",
+			"equipmentLabel": "Equipment",
+			"selectPlaceholder": "— select —",
+			"categories": {
+				"push": "Push",
+				"pull": "Pull",
+				"legs": "Legs",
+				"core": "Core",
+				"full_body": "Full body",
+				"skill": "Skill"
+			},
+			"types": {
+				"dynamic": "Dynamic",
+				"isometric": "Isometric",
+				"plyometric": "Plyometric"
+			},
+			"difficulties": {
+				"0": "Very easy",
+				"1": "Easy",
+				"2": "Moderate",
+				"3": "Hard",
+				"4": "Very hard",
+				"5": "Elite"
+			},
+			"muscleGroups": {
+				"chest": "Chest",
+				"back": "Back",
+				"shoulders": "Shoulders",
+				"biceps": "Biceps",
+				"triceps": "Triceps",
+				"core": "Core",
+				"legs": "Legs",
+				"glutes": "Glutes"
+			},
+			"equipment": {
+				"none": "No equipment",
+				"pull_up_bar": "Pull-up bar",
+				"parallel_bars": "Parallel bars",
+				"rings": "Rings",
+				"resistance_band": "Resistance band",
+				"bench": "Bench",
+				"wall": "Wall"
+			},
+			"authRequired": "Sign in to continue",
+			"authMessage": "You need an account to submit exercise requests.",
+			"goToLogin": "Sign in",
+			"submit": "Send request",
+			"sending": "Sending...",
+			"errorMessage": "Something went wrong. Please try again.",
+			"successTitle": "Request sent!",
+			"successMessage": "Thanks for your contribution. We'll review it and consider adding it to the library.",
+			"close": "Close"
+		}
 	},
 	"RoadmapsPage": {
 		"title": "Roadmaps",
@@ -415,7 +548,11 @@
 	  "public": "Public",
 	  "private": "Private",
 	  "publicDescription": "Visible to all users in workout listings",
-	  "privateDescription": "Only visible to you"
+	  "privateDescription": "Only visible to you",
+	  "rir": "RIR",
+	  "rirPlaceholder": "0-5",
+	  "superset": "Superset",
+	  "supersetWithNext": "Superset with next exercise"
 	},
 	"AIWorkoutGenerator": {
 	  "title": "Generate with AI",
@@ -445,6 +582,7 @@
 	  "apply": "Apply"
 	},
 	"ExerciseFilter": {
+	  "filters": "Filters",
 	  "difficulty": "Difficulty",
 	  "muscleGroup": "Muscle Group",
 	  "equipment": "Equipment",
@@ -521,6 +659,26 @@
 		"subtitle": "Sorry, the page you're looking for doesn't exist or has been moved.",
 		"backHome": "Back to home",
 		"explore": "Explore roadmaps"
+	},
+	"ExerciseCard": {
+		"difficulty": {
+			"0": "Beginner",
+			"1": "Basic",
+			"2": "Intermediate",
+			"3": "Advanced",
+			"4": "Expert",
+			"5": "Elite"
+		},
+		"muscleGroups": {
+			"chest": "Chest",
+			"back": "Back",
+			"shoulders": "Shoulders",
+			"biceps": "Biceps",
+			"triceps": "Triceps",
+			"core": "Core",
+			"legs": "Legs",
+			"glutes": "Glutes"
+		}
 	},
 	"ExerciseDetail": {
 		"aboutExercise": "About this exercise",
@@ -821,7 +979,11 @@
 		"allWorkouts": "All Workouts",
 		"startWorkout": "Start Workout",
 		"markAsDone": "Mark as Done",
-		"goBack": "Go Back"
+		"goBack": "Go Back",
+		"rir": "RIR",
+		"rirToFailure": "To failure",
+		"superset": "Superset",
+		"supersetLabel": "Superset {label}"
 	},
 	"Footer": {
 		"copyright": "All rights reserved.",

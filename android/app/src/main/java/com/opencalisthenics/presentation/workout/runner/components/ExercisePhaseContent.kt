@@ -1,5 +1,6 @@
 package com.opencalisthenics.presentation.workout.runner.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,6 +32,7 @@ import com.opencalisthenics.presentation.common.AppButton
 import com.opencalisthenics.presentation.workout.formatDuration
 import com.opencalisthenics.presentation.workout.runner.WorkoutRunnerUiState
 import com.opencalisthenics.ui.theme.GrayText
+import com.opencalisthenics.ui.theme.Secondary500
 
 @Composable
 fun ExercisePhaseContent(
@@ -38,7 +40,6 @@ fun ExercisePhaseContent(
     onSetDone: () -> Unit
 ) {
     val exercise = state.currentExercise ?: return
-    val workout = state.workout ?: return
 
     Column(
         modifier = Modifier
@@ -77,14 +78,29 @@ fun ExercisePhaseContent(
                 text = stringResource(
                     R.string.workout_runner_exercise,
                     state.currentExerciseIndex + 1,
-                    workout.exercises.size
+                    state.totalExercises
                 ),
                 color = GrayText,
                 fontSize = 13.sp
             )
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Superset badge
+        if (state.isInSuperset) {
+            Text(
+                text = stringResource(R.string.workout_superset),
+                color = Secondary500,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Secondary500.copy(alpha = 0.15f))
+                    .padding(horizontal = 10.dp, vertical = 3.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+        }
 
         if (exercise.image.isNotBlank()) {
             AsyncImage(
@@ -118,10 +134,20 @@ fun ExercisePhaseContent(
         Spacer(modifier = Modifier.height(24.dp))
 
         Row(horizontalArrangement = Arrangement.spacedBy(32.dp)) {
-            StatDisplay(
-                label = stringResource(R.string.workout_reps),
-                value = exercise.reps.toString()
-            )
+            // RIR or reps — mutually exclusive
+            if (exercise.rir != null) {
+                StatDisplay(
+                    label = stringResource(R.string.workout_rir),
+                    value = if (exercise.rir == 0) stringResource(R.string.workout_rir_to_failure)
+                            else exercise.rir.toString(),
+                    valueColor = androidx.compose.ui.graphics.Color(0xFFFF9800)
+                )
+            } else {
+                StatDisplay(
+                    label = stringResource(R.string.workout_reps),
+                    value = exercise.reps.toString()
+                )
+            }
             StatDisplay(
                 label = stringResource(R.string.workout_rest),
                 value = stringResource(R.string.workout_rest_seconds, exercise.rest)
@@ -141,11 +167,15 @@ fun ExercisePhaseContent(
 }
 
 @Composable
-fun StatDisplay(label: String, value: String) {
+fun StatDisplay(
+    label: String,
+    value: String,
+    valueColor: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onSurface
+) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = value,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = valueColor,
             fontSize = 24.sp,
             fontWeight = FontWeight.Bold
         )

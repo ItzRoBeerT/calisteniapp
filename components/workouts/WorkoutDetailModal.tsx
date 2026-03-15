@@ -145,6 +145,8 @@ export default function WorkoutDetailModal({
               sets: ex.sets,
               reps: ex.reps,
               rest: ex.rest,
+              rir: ex.rir,
+              superset_group: ex.superset_group,
               image: ex.image,
             }))} />
           ) : (

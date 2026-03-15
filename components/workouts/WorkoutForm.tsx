@@ -38,6 +38,8 @@ export default function WorkoutForm({ userId, existingWorkout, availableExercise
       sets: ex.sets ?? 3,
       reps: ex.reps ?? 10,
       rest: ex.rest ?? 60,
+      rir: ex.rir ?? null,
+      superset_group: ex.superset_group ?? null,
     })) || [] as ExerciseWorkout[],
     isSubmitting: false,
     error: ''
@@ -144,6 +146,8 @@ export default function WorkoutForm({ userId, existingWorkout, availableExercise
       sets: 3,
       reps: 10,
       rest: 60,
+      rir: null,
+      superset_group: null,
       muscle_group: exercise.muscle_group || []
     };
 
@@ -157,6 +161,49 @@ export default function WorkoutForm({ userId, existingWorkout, availableExercise
     inputRef.current?.focus();
   };
 
+  const toggleSuperset = (index: number) => {
+    setFormState(prev => {
+      const exercises = [...prev.exercises];
+      const ex = exercises[index];
+      const nextEx = exercises[index + 1];
+      if (!nextEx) return prev;
+
+      const alreadyLinked = ex.superset_group && ex.superset_group === nextEx.superset_group;
+
+      if (alreadyLinked) {
+        // Unlink: if exactly 2 in group remove both; otherwise split
+        const groupId = ex.superset_group!;
+        const groupIndices = exercises.map((e, i) => e.superset_group === groupId ? i : -1).filter(i => i >= 0);
+        if (groupIndices.length === 2) {
+          exercises[index] = { ...ex, superset_group: null };
+          exercises[index + 1] = { ...nextEx, superset_group: null };
+        } else {
+          // Split at index: after-split items get new group or null
+          const afterSplit = groupIndices.filter(i => i > index);
+          if (afterSplit.length === 1) {
+            exercises[afterSplit[0]] = { ...exercises[afterSplit[0]], superset_group: null };
+          } else {
+            const newGroupId = `ss_${Date.now()}`;
+            afterSplit.forEach(i => {
+              exercises[i] = { ...exercises[i], superset_group: newGroupId };
+            });
+          }
+          const beforeSplit = groupIndices.filter(i => i <= index);
+          if (beforeSplit.length === 1) {
+            exercises[beforeSplit[0]] = { ...exercises[beforeSplit[0]], superset_group: null };
+          }
+        }
+      } else {
+        // Link: join or create group
+        const groupId = ex.superset_group || nextEx.superset_group || `ss_${Date.now()}`;
+        exercises[index] = { ...ex, superset_group: groupId };
+        exercises[index + 1] = { ...nextEx, superset_group: groupId };
+      }
+
+      return { ...prev, exercises };
+    });
+  };
+
   const handleRemoveExercise = (exerciseId: string | number) => {
     setFormState(prev => ({
       ...prev,
@@ -164,7 +211,7 @@ export default function WorkoutForm({ userId, existingWorkout, availableExercise
     }));
   };
 
-  const handleExerciseFieldChange = (index: number, field: 'sets' | 'reps' | 'rest', value: number) => {
+  const handleExerciseFieldChange = (index: number, field: 'sets' | 'reps' | 'rest' | 'rir', value: number | null) => {
     setFormState(prev => {
       const updatedExercises = [...prev.exercises];
       updatedExercises[index] = {
@@ -193,7 +240,9 @@ export default function WorkoutForm({ userId, existingWorkout, availableExercise
           name: ex.name,
           sets: ex.sets,
           reps: ex.reps,
-          rest: ex.rest
+          rest: ex.rest,
+          rir: ex.rir ?? null,
+          superset_group: ex.superset_group ?? null,
         }))
       };
 
@@ -485,69 +534,144 @@ export default function WorkoutForm({ userId, existingWorkout, availableExercise
         {/* Selected Exercises List */}
         {formState.exercises.length > 0 ? (
           <div className="space-y-3">
-            {formState.exercises.map((exercise, index) => (
-              <div
-                key={exercise.id}
-                className="border border-foreground/10 bg-background rounded-xl p-4"
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <div className="font-medium text-lg text-foreground">{exercise.name}</div>
-                    {exercise.muscle_group && exercise.muscle_group.length > 0 && (
-                      <div className="text-xs text-foreground/60 mt-0.5">
-                        {exercise.muscle_group.join(', ')}
-                      </div>
-                    )}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveExercise(exercise.id)}
-                    className="text-red-400 hover:text-red-300 text-sm"
-                  >
-                    {t('remove')}
-                  </button>
-                </div>
+            {formState.exercises.map((exercise, index) => {
+              const isInSuperset = !!exercise.superset_group;
+              const isLinkedWithNext = index < formState.exercises.length - 1 &&
+                !!exercise.superset_group &&
+                exercise.superset_group === formState.exercises[index + 1].superset_group;
+              const isRirMode = exercise.rir !== null && exercise.rir !== undefined;
 
-                <div className="grid grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-foreground/60 mb-1">
-                      {t('sets')}
-                    </label>
-                    <input
-                      type="number"
-                      min="1"
-                      value={exercise.sets}
-                      onChange={(e) => handleExerciseFieldChange(index, 'sets', Number(e.target.value))}
-                      className="w-full p-2 border border-foreground/20 bg-surface text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    />
+              return (
+                <div
+                  key={exercise.id}
+                  className={`border bg-background rounded-xl p-4 ${
+                    isInSuperset
+                      ? 'border-secondary-500/40 border-l-4 border-l-secondary-500'
+                      : 'border-foreground/10'
+                  }`}
+                >
+                  {/* Header */}
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      {isInSuperset && (
+                        <span className="inline-block text-xs font-semibold text-secondary-400 bg-secondary-500/15 border border-secondary-500/30 px-2 py-0.5 rounded-full mb-1">
+                          {t('superset')}
+                        </span>
+                      )}
+                      <div className="font-medium text-lg text-foreground">{exercise.name}</div>
+                      {exercise.muscle_group && exercise.muscle_group.length > 0 && (
+                        <div className="text-xs text-foreground/60 mt-0.5">
+                          {exercise.muscle_group.join(', ')}
+                        </div>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveExercise(exercise.id)}
+                      className="text-red-400 hover:text-red-300 text-sm"
+                    >
+                      {t('remove')}
+                    </button>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-foreground/60 mb-1">
-                      {t('reps')}
-                    </label>
-                    <input
-                      type="number"
-                      min="1"
-                      value={exercise.reps}
-                      onChange={(e) => handleExerciseFieldChange(index, 'reps', Number(e.target.value))}
-                      className="w-full p-2 border border-foreground/20 bg-surface text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    />
+
+                  {/* Sets + Rest + Reps/RIR */}
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium text-foreground/60 mb-1">
+                        {t('sets')}
+                      </label>
+                      <input
+                        type="number"
+                        min="1"
+                        value={exercise.sets}
+                        onChange={(e) => handleExerciseFieldChange(index, 'sets', Number(e.target.value))}
+                        className="w-full p-2 border border-foreground/20 bg-surface text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-foreground/60 mb-1">
+                        {t('rest')}
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        value={exercise.rest}
+                        onChange={(e) => handleExerciseFieldChange(index, 'rest', Number(e.target.value))}
+                        className="w-full p-2 border border-foreground/20 bg-surface text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                      />
+                    </div>
+                    <div>
+                      {/* Reps / RIR toggle */}
+                      <div className="flex rounded-lg overflow-hidden border border-foreground/20 mb-1">
+                        <button
+                          type="button"
+                          onClick={() => handleExerciseFieldChange(index, 'rir', null)}
+                          className={`flex-1 text-xs py-1 font-medium transition-colors ${
+                            !isRirMode
+                              ? 'bg-primary-500 text-white'
+                              : 'text-foreground/40 hover:text-foreground/60'
+                          }`}
+                        >
+                          {t('reps')}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleExerciseFieldChange(index, 'rir', 2)}
+                          className={`flex-1 text-xs py-1 font-medium transition-colors ${
+                            isRirMode
+                              ? 'bg-orange-500 text-white'
+                              : 'text-foreground/40 hover:text-foreground/60'
+                          }`}
+                        >
+                          RIR
+                        </button>
+                      </div>
+                      {isRirMode ? (
+                        <input
+                          type="number"
+                          min="0"
+                          placeholder="0, 1, 2..."
+                          value={exercise.rir ?? ''}
+                          onChange={(e) => handleExerciseFieldChange(
+                            index,
+                            'rir',
+                            e.target.value === '' ? null : Number(e.target.value)
+                          )}
+                          className="w-full p-2 border border-orange-500/40 bg-surface text-foreground rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent placeholder-foreground/30"
+                        />
+                      ) : (
+                        <input
+                          type="number"
+                          min="1"
+                          value={exercise.reps}
+                          onChange={(e) => handleExerciseFieldChange(index, 'reps', Number(e.target.value))}
+                          className="w-full p-2 border border-foreground/20 bg-surface text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                        />
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-foreground/60 mb-1">
-                      {t('rest')}
-                    </label>
-                    <input
-                      type="number"
-                      min="0"
-                      value={exercise.rest}
-                      onChange={(e) => handleExerciseFieldChange(index, 'rest', Number(e.target.value))}
-                      className="w-full p-2 border border-foreground/20 bg-surface text-foreground rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                    />
-                  </div>
+
+                  {/* Superset checkbox */}
+                  {index < formState.exercises.length - 1 && (
+                    <div className="flex items-center gap-2 mt-3 pt-3 border-t border-foreground/10">
+                      <input
+                        type="checkbox"
+                        id={`superset-${exercise.id}`}
+                        checked={!!isLinkedWithNext}
+                        onChange={() => toggleSuperset(index)}
+                        className="w-4 h-4 rounded border-foreground/30 bg-background accent-secondary-500 cursor-pointer"
+                      />
+                      <label
+                        htmlFor={`superset-${exercise.id}`}
+                        className="text-sm text-foreground/60 cursor-pointer select-none"
+                      >
+                        {t('supersetWithNext')}
+                      </label>
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <p className="text-foreground/40 italic">

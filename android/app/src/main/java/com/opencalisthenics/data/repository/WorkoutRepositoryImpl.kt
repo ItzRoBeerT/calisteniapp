@@ -132,6 +132,8 @@ class WorkoutRepositoryImpl : WorkoutRepository {
                     sets = ex.sets,
                     reps = ex.reps,
                     rest = ex.rest,
+                    rir = ex.rir,
+                    superset_group = ex.supersetGroup,
                     order = index
                 )
             }
@@ -179,6 +181,8 @@ class WorkoutRepositoryImpl : WorkoutRepository {
                     sets = ex.sets,
                     reps = ex.reps,
                     rest = ex.rest,
+                    rir = ex.rir,
+                    superset_group = ex.supersetGroup,
                     order = index
                 )
             }
@@ -404,6 +408,8 @@ class WorkoutRepositoryImpl : WorkoutRepository {
         sets = sets ?: 3,
         reps = reps,
         rest = rest,
+        rir = rir,
+        supersetGroup = superset_group,
         image = exercise?.image ?: ""
     )
 

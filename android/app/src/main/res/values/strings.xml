@@ -98,8 +98,15 @@
     <string name="workout_duration">%1$d min</string>
     <string name="workout_sets">Series</string>
     <string name="workout_reps">Repeticiones</string>
+    <string name="workout_rir">Fallo (RIR)</string>
+    <string name="workout_rir_to_failure">Fallo</string>
     <string name="workout_rest">Descanso</string>
     <string name="workout_rest_seconds">%1$ds</string>
+    <string name="workout_superset">Superserie</string>
+    <string name="workout_superset_label">Superserie %1$s</string>
+    <string name="workout_form_reps_mode">Reps</string>
+    <string name="workout_form_rir_mode">RIR</string>
+    <string name="workout_form_superset_with_next">Superserie con siguiente</string>
     <string name="workout_exercises">Ejercicios</string>
     <string name="workout_tags">Tags</string>
     <string name="workout_edit">Editar</string>

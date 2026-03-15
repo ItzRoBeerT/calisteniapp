@@ -36,6 +36,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -57,6 +59,7 @@ import com.opencalisthenics.presentation.common.AppButton
 import com.opencalisthenics.ui.theme.Background
 import com.opencalisthenics.ui.theme.ErrorRed
 import com.opencalisthenics.ui.theme.GrayText
+import com.opencalisthenics.ui.theme.Secondary500
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -355,10 +358,13 @@ fun WorkoutFormScreen(
                     state.exercises.forEachIndexed { index, exercise ->
                         ExerciseFormItem(
                             exercise = exercise,
+                            isLast = index == state.exercises.lastIndex,
                             onRemove = { viewModel.onRemoveExercise(index) },
                             onSetsChange = { viewModel.onUpdateExerciseSets(index, it) },
                             onRepsChange = { viewModel.onUpdateExerciseReps(index, it) },
-                            onRestChange = { viewModel.onUpdateExerciseRest(index, it) }
+                            onRestChange = { viewModel.onUpdateExerciseRest(index, it) },
+                            onRirChange = { viewModel.onUpdateExerciseRir(index, it) },
+                            onToggleSupersetWithNext = { viewModel.onToggleSupersetWithNext(index) }
                         )
                     }
 
@@ -407,11 +413,17 @@ fun WorkoutFormScreen(
 @Composable
 private fun ExerciseFormItem(
     exercise: com.opencalisthenics.domain.model.ExerciseWorkout,
+    isLast: Boolean,
     onRemove: () -> Unit,
     onSetsChange: (Int) -> Unit,
     onRepsChange: (Int) -> Unit,
-    onRestChange: (Int) -> Unit
+    onRestChange: (Int) -> Unit,
+    onRirChange: (Int?) -> Unit,
+    onToggleSupersetWithNext: () -> Unit
 ) {
+    val isRirMode = exercise.rir != null
+    val isInSuperset = exercise.supersetGroup != null
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -447,7 +459,40 @@ private fun ExerciseFormItem(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Sets / Reps / Rest controls
+        // Reps / RIR mode toggle
+        Row(
+            modifier = Modifier
+                .clip(RoundedCornerShape(6.dp))
+                .background(MaterialTheme.colorScheme.background)
+        ) {
+            listOf<Pair<String, Boolean>>(
+                stringResource(R.string.workout_form_reps_mode) to false,
+                stringResource(R.string.workout_form_rir_mode) to true
+            ).forEach { (label, isRir) ->
+                val selected = isRirMode == isRir
+                Text(
+                    text = label,
+                    color = if (selected) MaterialTheme.colorScheme.primary else GrayText,
+                    fontSize = 12.sp,
+                    fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(
+                            if (selected) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                            else androidx.compose.ui.graphics.Color.Transparent
+                        )
+                        .clickable {
+                            if (isRir && !isRirMode) onRirChange(5)
+                            else if (!isRir && isRirMode) onRirChange(null)
+                        }
+                        .padding(horizontal = 12.dp, vertical = 6.dp)
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Sets / Reps-or-RIR / Rest controls
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
@@ -457,17 +502,51 @@ private fun ExerciseFormItem(
                 value = exercise.sets,
                 onValueChange = onSetsChange
             )
-            NumberControl(
-                label = stringResource(R.string.workout_reps),
-                value = exercise.reps,
-                onValueChange = onRepsChange
-            )
+            if (isRirMode) {
+                NumberControl(
+                    label = stringResource(R.string.workout_rir),
+                    value = exercise.rir ?: 5,
+                    onValueChange = { onRirChange(it.coerceAtLeast(0)) },
+                    minValue = 0
+                )
+            } else {
+                NumberControl(
+                    label = stringResource(R.string.workout_reps),
+                    value = exercise.reps,
+                    onValueChange = onRepsChange
+                )
+            }
             NumberControl(
                 label = stringResource(R.string.workout_rest),
                 value = exercise.rest,
                 onValueChange = onRestChange,
                 step = 15
             )
+        }
+
+        // Superset with next toggle (hidden for last exercise)
+        if (!isLast) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.clickable { onToggleSupersetWithNext() }
+            ) {
+                Checkbox(
+                    checked = isInSuperset,
+                    onCheckedChange = { onToggleSupersetWithNext() },
+                    colors = CheckboxDefaults.colors(
+                        checkedColor = Secondary500,
+                        uncheckedColor = GrayText
+                    ),
+                    modifier = Modifier.size(20.dp)
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = stringResource(R.string.workout_form_superset_with_next),
+                    color = if (isInSuperset) Secondary500 else GrayText,
+                    fontSize = 12.sp
+                )
+            }
         }
     }
 }
@@ -477,7 +556,8 @@ private fun NumberControl(
     label: String,
     value: Int,
     onValueChange: (Int) -> Unit,
-    step: Int = 1
+    step: Int = 1,
+    minValue: Int = 1
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -491,7 +571,7 @@ private fun NumberControl(
             verticalAlignment = Alignment.CenterVertically
         ) {
             IconButton(
-                onClick = { onValueChange(value - step) },
+                onClick = { onValueChange((value - step).coerceAtLeast(minValue)) },
                 modifier = Modifier.size(28.dp)
             ) {
                 Icon(

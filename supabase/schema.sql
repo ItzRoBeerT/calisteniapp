@@ -56,8 +56,13 @@ CREATE TABLE IF NOT EXISTS "WorkoutExercise" (
     sets INTEGER DEFAULT 3,
     reps INTEGER DEFAULT 10,
     rest INTEGER DEFAULT 60,
-    "order" INTEGER DEFAULT 0
+    "order" INTEGER DEFAULT 0,
+    rir INTEGER DEFAULT NULL,
+    superset_group TEXT DEFAULT NULL
 );
+
+ALTER TABLE "WorkoutExercise" ADD COLUMN IF NOT EXISTS rir INTEGER DEFAULT NULL;
+ALTER TABLE "WorkoutExercise" ADD COLUMN IF NOT EXISTS superset_group TEXT DEFAULT NULL;
 
 -- =============================================
 -- WORKOUT TAGS
@@ -118,6 +123,24 @@ CREATE TABLE IF NOT EXISTS exercise_progressions (
     progressions INTEGER[] DEFAULT '{}'
 );
 CREATE UNIQUE INDEX IF NOT EXISTS exercise_progressions_exercise_id_idx ON exercise_progressions(exercise_id);
+
+-- =============================================
+-- EXERCISE REQUESTS
+-- =============================================
+CREATE TABLE IF NOT EXISTS exercise_requests (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT,
+    muscle_group TEXT[] DEFAULT '{}',
+    category TEXT,
+    type TEXT,
+    difficulty INTEGER CHECK (difficulty >= 0 AND difficulty <= 5),
+    equipment TEXT[] DEFAULT '{}',
+    locale TEXT,
+    user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+    status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 
 -- =============================================
 -- INDEXES for better performance
@@ -270,6 +293,18 @@ CREATE POLICY "Profiles are viewable by everyone" ON profiles
 
 CREATE POLICY "Users can update their own profile" ON profiles
     FOR UPDATE USING ((select auth.uid()) = user_id);
+
+-- Exercise Requests: Anyone can submit, only owner can view their own
+ALTER TABLE exercise_requests ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users can submit exercise requests" ON exercise_requests;
+DROP POLICY IF EXISTS "Users can view their own requests" ON exercise_requests;
+
+CREATE POLICY "Users can submit exercise requests" ON exercise_requests
+    FOR INSERT WITH CHECK (true);
+
+CREATE POLICY "Users can view their own requests" ON exercise_requests
+    FOR SELECT USING ((select auth.uid()) = user_id OR user_id IS NULL);
 
 -- Workout Completions: Users can manage their own completions
 DROP POLICY IF EXISTS "Users can view their own completions" ON workout_completions;

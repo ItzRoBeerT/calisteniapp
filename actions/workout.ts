@@ -76,6 +76,8 @@ export async function getWorkout(id: string) {
 			sets: item.sets,
 			reps: item.reps,
 			rest: item.rest,
+			rir: item.rir ?? null,
+			superset_group: item.superset_group ?? null,
 			image: item.Exercise?.image,
 		})) || [];
 
@@ -193,6 +195,8 @@ export async function getWorkoutsByPage(page = 1, limit = 12, filters?: any) {
 					sets: item.sets,
 					reps: item.reps,
 					rest: item.rest,
+					rir: item.rir ?? null,
+					superset_group: item.superset_group ?? null,
 					image: item.Exercise?.image,
 				})) || [];
 
@@ -328,6 +332,8 @@ export async function createWorkout(workoutData: any, userId: string) {
 				sets: exercise.sets,
 				reps: exercise.reps,
 				rest: exercise.rest || 60,
+				rir: exercise.rir ?? null,
+				superset_group: exercise.superset_group ?? null,
 				order: index,
 			})
 		);
@@ -409,6 +415,8 @@ export async function updateWorkout(id: string, workoutData: any) {
 				sets: exercise.sets,
 				reps: exercise.reps,
 				rest: exercise.rest || 60,
+				rir: exercise.rir ?? null,
+				superset_group: exercise.superset_group ?? null,
 				order: index,
 			})
 		);
@@ -750,6 +758,8 @@ export async function getUserWorkouts() {
 					sets: item.sets,
 					reps: item.reps,
 					rest: item.rest,
+					rir: item.rir ?? null,
+					superset_group: item.superset_group ?? null,
 					image: item.Exercise?.image,
 				})) || [];
 
@@ -821,6 +831,8 @@ export async function getFavoriteWorkoutsWithDetails() {
 					sets: item.sets,
 					reps: item.reps,
 					rest: item.rest,
+					rir: item.rir ?? null,
+					superset_group: item.superset_group ?? null,
 					image: item.Exercise?.image,
 				})) || [];
 
@@ -1000,6 +1012,8 @@ export async function getWorkoutsByPageWithLikes(page = 1, limit = 12, filters?:
 					sets: item.sets,
 					reps: item.reps,
 					rest: item.rest,
+					rir: item.rir ?? null,
+					superset_group: item.superset_group ?? null,
 					image: item.Exercise?.image,
 				})) || [];
 

@@ -55,6 +55,7 @@
 		"workouts": "Entrenamientos",
 		"exercises": "Ejercicios",
 		"roadmaps": "Roadmaps",
+		"blog": "Blog",
 		"login": "Acceder",
 		"register": "Registrarse",
 		"user": "Usuario",
@@ -68,17 +69,26 @@
 		"settings": "Configuración",
 		"myWorkouts": "Mis entrenamientos",
 		"doWorkout": "Hacer entrenamiento",
-		"logout": "Cerrar sesión"
+		"logout": "Cerrar sesión",
+		"logoutSuccess": "Sesión cerrada correctamente",
+		"logoutError": "No se pudo cerrar la sesión"
 	},
 	"HomePage": {
 		"about": "Entrena con tu propio cuerpo. Descubre ejercicios, crea rutinas personalizadas y sigue tu progreso con roadmaps diseñados para todos los niveles.",
 		"hero": {
 			"badge": "Open Source y Gratuito",
-			"titleLine1": "Domina tu cuerpo.",
-			"titleLine2": "Domina la calistenia.",
+			"titleLine1": "Entrena.",
+			"titleLine2": "Progresa.",
+			"titleLine3": "Domina.",
+			"tagline": "Calistenia. Para todos. Siempre gratis.",
+			"login": "Acceder",
+		"startFree": "Empezar gratis",
 			"exercises": "Ejercicios",
 			"workouts": "Entrenamientos",
-			"roadmaps": "Roadmaps"
+			"roadmaps": "Roadmaps",
+			"statExercises": "Ejercicios",
+			"statFree": "Siempre gratis",
+			"statEquipment": "Equipo necesario"
 		},
 		"featuredSection": {
 			"title": "¿Por qué elegir la calistenia?",
@@ -92,17 +102,27 @@
 		"features": {
 			"title": "Lo que ofrecemos",
 			"subtitle": "Todo lo que necesitas para comenzar y progresar en la calistenia",
+			"tagline": "Elige tu camino.",
+			"description": "Calistenia completa. Gratis. Open source.",
 			"explore": "Explorar",
 			"feature1": {
 				"title": "Ejercicios",
+				"heading": "EJERCICIOS",
+				"libraryOf": "Biblioteca de {count}+",
+				"cta": "Explorar ejercicios →",
 				"description": "Biblioteca completa con instrucciones paso a paso, variaciones y progresiones para todos los niveles"
 			},
 			"feature2": {
 				"title": "Entrenamientos",
+				"heading": "ENTRENAMIENTOS",
+				"aiSubtitle": "Rutinas con IA integrada",
+				"cta": "Crear entrenamiento →",
 				"description": "Crea, guarda y gestiona tus propias rutinas adaptadas a tus objetivos y nivel de experiencia"
 			},
 			"feature3": {
 				"title": "Roadmaps",
+				"subtitle": "Del cero al experto",
+				"cta": "Ver roadmaps →",
 				"description": "Rutas de aprendizaje visuales que te guían desde principiante hasta avanzado con recursos y seguimiento de progreso"
 			}
 		},
@@ -113,10 +133,123 @@
 			"roadmapsButton": "Ver roadmaps",
 			"createWorkout": "Crea tu entrenamiento",
 			"visitBlog": "Visita nuestro blog"
+		},
+		"howItWorks": {
+			"title": "¿Cómo funciona?",
+			"subtitle": "Dos caminos para alcanzar tus objetivos",
+			"workouts": {
+				"title": "Crea entrenamientos",
+				"step1": { "title": "Explora ejercicios", "description": "Navega nuestra biblioteca con más de 60 ejercicios organizados por categoría y nivel" },
+				"step2": { "title": "Construye tu rutina", "description": "Combina ejercicios, define series, repeticiones y tiempo de descanso a tu gusto" },
+				"step3": { "title": "Entrena y registra", "description": "Realiza el entrenamiento y lleva un historial completo de tu actividad" }
+			},
+			"roadmaps": {
+				"title": "Sigue un roadmap",
+				"step1": { "title": "Elige tu nivel", "description": "Selecciona un roadmap adaptado a tu punto de partida, desde principiante hasta avanzado" },
+				"step2": { "title": "Sigue el camino", "description": "Avanza por las etapas marcadas aprendiendo técnicas y recursos en el orden correcto" },
+				"step3": { "title": "Desbloquea habilidades", "description": "Marca tu progreso y descubre los skills que podrás conseguir con dedicación" }
+			}
+		},
+		"featuredExercises": {
+			"title": "Ejercicios destacados",
+			"subtitle": "Algunos de los movimientos más populares de la calistenia",
+			"viewAll": "Ver todos los ejercicios",
+			"difficulty": {
+				"0": "Principiante",
+				"1": "Básico",
+				"2": "Intermedio",
+				"3": "Avanzado",
+				"4": "Experto",
+				"5": "Élite"
+			},
+			"muscleGroups": {
+				"chest": "Pecho",
+				"back": "Espalda",
+				"shoulders": "Hombros",
+				"biceps": "Bíceps",
+				"triceps": "Tríceps",
+				"core": "Core",
+				"legs": "Piernas",
+				"glutes": "Glúteos"
+			}
+		},
+		"faq": {
+			"title": "Preguntas frecuentes",
+			"subtitle": "Todo lo que necesitas saber para empezar",
+			"q1": { "question": "¿Necesito equipamiento para empezar?", "answer": "Para la mayoría de ejercicios de principiante solo necesitas tu cuerpo. Algunas progresiones requieren una barra de dominadas o barras paralelas, fáciles de encontrar en parques de calistenia o instalaciones deportivas." },
+			"q2": { "question": "¿Es adecuado para principiantes absolutos?", "answer": "Sí. La app incluye progresiones desde nivel cero: flexiones en pared, sentadillas asistidas o plancha inclinada. Puedes empezar sin ninguna base física previa." },
+			"q3": { "question": "¿Con qué frecuencia debo entrenar?", "answer": "Lo recomendado para comenzar es 3-4 días por semana alternando días de trabajo y descanso. Las rutinas y roadmaps de la app están diseñados teniendo esto en cuenta." },
+			"q4": { "question": "¿Cuánto tiempo tardaré en ver resultados?", "answer": "Con constancia, la mayoría de personas notan mejoras en fuerza y resistencia en 2-4 semanas. Los cambios físicos visibles suelen aparecer entre el primer y el tercer mes." },
+			"q5": { "question": "¿Es gratuita la aplicación?", "answer": "Sí, OpenCalisthenics es completamente gratuita y de código abierto. Puedes usar todas las funciones sin restricciones ni suscripciones." }
 		}
 	},
 	"ExercisesPage": {
-		"title": "Listado de ejercicios"
+		"title": "Listado de ejercicios",
+		"requestButton": "Pedir ejercicio",
+		"requestModal": {
+			"title": "Pedir un ejercicio",
+			"subtitle": "¿No encuentras lo que buscas? Rellena los campos que conozcas y lo consideraremos para añadirlo.",
+			"contextNote": "Mantenemos una base de datos de ejercicios de calistenia revisada por el equipo. Las solicitudes se evalúan antes de añadirse, para garantizar calidad y coherencia.",
+			"nameLabel": "Nombre del ejercicio",
+			"namePlaceholder": "ej. Flexión a un brazo",
+			"descriptionLabel": "Descripción (opcional)",
+			"descriptionPlaceholder": "Describe brevemente el movimiento...",
+			"categoryLabel": "Categoría",
+			"typeLabel": "Tipo",
+			"difficultyLabel": "Dificultad",
+			"muscleGroupLabel": "Grupos musculares",
+			"equipmentLabel": "Equipamiento",
+			"selectPlaceholder": "— selecciona —",
+			"categories": {
+				"push": "Empuje",
+				"pull": "Tracción",
+				"legs": "Piernas",
+				"core": "Core",
+				"full_body": "Cuerpo completo",
+				"skill": "Habilidad"
+			},
+			"types": {
+				"dynamic": "Dinámico",
+				"isometric": "Isométrico",
+				"plyometric": "Pliométrico"
+			},
+			"difficulties": {
+				"0": "Muy fácil",
+				"1": "Fácil",
+				"2": "Moderado",
+				"3": "Difícil",
+				"4": "Muy difícil",
+				"5": "Elite"
+			},
+			"muscleGroups": {
+				"chest": "Pecho",
+				"back": "Espalda",
+				"shoulders": "Hombros",
+				"biceps": "Bíceps",
+				"triceps": "Tríceps",
+				"core": "Core",
+				"legs": "Piernas",
+				"glutes": "Glúteos"
+			},
+			"equipment": {
+				"none": "Sin equipo",
+				"pull_up_bar": "Barra dominadas",
+				"parallel_bars": "Paralelas",
+				"rings": "Anillas",
+				"resistance_band": "Banda elástica",
+				"bench": "Banco",
+				"wall": "Pared"
+			},
+			"authRequired": "Inicia sesión para continuar",
+			"authMessage": "Necesitas una cuenta para enviar solicitudes de ejercicios.",
+			"goToLogin": "Iniciar sesión",
+			"submit": "Enviar solicitud",
+			"sending": "Enviando...",
+			"errorMessage": "Hubo un error al enviar. Inténtalo de nuevo.",
+			"successTitle": "¡Solicitud enviada!",
+			"successMessage": "Gracias por tu aportación. La revisaremos y consideraremos añadirla a la biblioteca.",
+			"close": "Cerrar"
+		}
 	},
 	"RoadmapsPage": {
 		"title": "Roadmaps",
@@ -415,7 +548,11 @@
 		"public": "Público",
 		"private": "Privado",
 		"publicDescription": "Visible para todos los usuarios en los listados",
-		"privateDescription": "Solo visible para ti"
+		"privateDescription": "Solo visible para ti",
+		"rir": "RIR",
+		"rirPlaceholder": "0-5",
+		"superset": "Superserie",
+		"supersetWithNext": "Superserie con el siguiente ejercicio"
 	},
 	"AIWorkoutGenerator": {
 		"title": "Generar con IA",
@@ -445,6 +582,7 @@
 		"apply": "Aplicar"
 	},
 	"ExerciseFilter": {
+		"filters": "Filtros",
 		"difficulty": "Dificultad",
 		"muscleGroup": "Grupo Muscular",
 		"equipment": "Equipamiento",
@@ -521,6 +659,26 @@
 		"subtitle": "Lo sentimos, la página que buscas no existe o ha sido movida.",
 		"backHome": "Volver al inicio",
 		"explore": "Explorar roadmaps"
+	},
+	"ExerciseCard": {
+		"difficulty": {
+			"0": "Principiante",
+			"1": "Básico",
+			"2": "Intermedio",
+			"3": "Avanzado",
+			"4": "Experto",
+			"5": "Élite"
+		},
+		"muscleGroups": {
+			"chest": "Pecho",
+			"back": "Espalda",
+			"shoulders": "Hombros",
+			"biceps": "Bíceps",
+			"triceps": "Tríceps",
+			"core": "Core",
+			"legs": "Piernas",
+			"glutes": "Glúteos"
+		}
 	},
 	"ExerciseDetail": {
 		"aboutExercise": "Sobre este ejercicio",
@@ -821,7 +979,11 @@
 		"allWorkouts": "Todos los Entrenamientos",
 		"startWorkout": "Comenzar",
 		"markAsDone": "Marcar como hecho",
-		"goBack": "Volver"
+		"goBack": "Volver",
+		"rir": "RIR",
+		"rirToFailure": "Al fallo",
+		"superset": "Superserie",
+		"supersetLabel": "Superserie {label}"
 	},
 	"Footer": {
 		"copyright": "Todos los derechos reservados.",

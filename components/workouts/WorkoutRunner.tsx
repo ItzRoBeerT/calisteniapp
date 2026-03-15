@@ -20,6 +20,7 @@ export default function WorkoutRunner({ workouts, initialWorkoutId }: WorkoutRun
 		currentExercise,
 		currentExerciseIndex,
 		currentSet,
+		currentStep,
 		restTimeRemaining,
 		elapsedTime,
 		showCancelConfirm,
@@ -110,6 +111,7 @@ export default function WorkoutRunner({ workouts, initialWorkoutId }: WorkoutRun
 			progress={calculateProgress()}
 			elapsedTime={elapsedTime}
 			showCancelConfirm={showCancelConfirm}
+			isInSuperset={!!currentExercise.superset_group}
 			onSetDone={handleSetDone}
 			onCancelRequest={() => setShowCancelConfirm(true)}
 			onCancelConfirm={() => { setShowCancelConfirm(false); resetToSelection(); }}

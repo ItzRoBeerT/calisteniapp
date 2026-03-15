@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { updateProfile } from '@/app/[locale]/profile/actions';
-import { SubmitButton } from '@/app/[locale]/(auth)/login/submit-button';
+import { SubmitButton } from '@/components/ui/SubmitButton';
 
 interface ProfileFormProps {
 	email: string;

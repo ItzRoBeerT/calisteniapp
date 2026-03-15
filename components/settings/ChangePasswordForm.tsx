@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { changePassword } from '@/app/[locale]/profile/actions';
-import { SubmitButton } from '@/app/[locale]/(auth)/login/submit-button';
+import { SubmitButton } from '@/components/ui/SubmitButton';
 
 export default function ChangePasswordForm() {
 	const t = useTranslations('Settings');

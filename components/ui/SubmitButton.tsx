@@ -3,6 +3,7 @@
 import { useFormStatus } from 'react-dom';
 import { type ComponentProps, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useToastStore } from '@/stores/toast';
 
 type Props = Omit<ComponentProps<'button'>, 'formAction'> & {
   pendingText?: string;
@@ -13,44 +14,46 @@ export function SubmitButton({ children, pendingText, formAction, ...props }: Pr
   const { pending } = useFormStatus();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
-  
+  const addToast = useToastStore((s) => s.addToast);
+
   const isPending = pending;
 
   const handleClick = async () => {
-    // Clear previous error messages
     setErrorMessage(null);
   };
 
-  // Modify the formAction to handle errors
   const wrappedAction = async (fd: FormData) => {
     if (!formAction) return;
     try {
       setErrorMessage(null);
-      
+
       const result = await formAction(fd);
-      
-      // Handle errors or success messages
+
       if (result?.error) {
         setErrorMessage(result.error);
+        addToast(result.error, 'error');
         return;
       }
-      
-      // Handle success with redirect
-      if (result?.success && result?.redirect) {
+
+      if (typeof result?.success === 'string') {
+        addToast(result.success, 'success');
+      }
+
+      if (result?.redirect) {
         setErrorMessage(null);
-        setTimeout(() => {
-          router.push(result.redirect as string);
-        }, 2000);
-        return result.success;
+        router.push(result.redirect);
+        router.refresh();
+        return;
       }
     } catch (error) {
-      // Re-throw Next.js redirect errors - they're not actual errors
       if (error && typeof error === 'object' && 'digest' in error &&
           typeof (error as { digest?: string }).digest === 'string' &&
           (error as { digest: string }).digest.startsWith('NEXT_REDIRECT')) {
         throw error;
       }
-      setErrorMessage('An unexpected error occurred');
+      const unexpectedError = 'An unexpected error occurred';
+      setErrorMessage(unexpectedError);
+      addToast(unexpectedError, 'error');
       console.error('Form submission error:', error);
     }
   };
@@ -62,9 +65,9 @@ export function SubmitButton({ children, pendingText, formAction, ...props }: Pr
           <span className="block sm:inline">{errorMessage}</span>
         </div>
       )}
-      <button 
-        {...props} 
-        type="submit" 
+      <button
+        {...props}
+        type="submit"
         aria-disabled={isPending}
         formAction={wrappedAction as unknown as (formData: FormData) => void | Promise<void>}
         onClick={handleClick}
