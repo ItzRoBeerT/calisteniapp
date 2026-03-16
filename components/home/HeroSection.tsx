@@ -66,56 +66,174 @@ function HeroDotGrid() {
 	);
 }
 
-// ── Anime.js: Letter-by-letter hero title ──────────────────────────────────
-const HERO_COLORS = ['text-white', 'text-[#a386ff]', 'text-white'] as const;
-
-function AnimatedHeroTitle() {
-	const t = useTranslations('HomePage');
-	const wordRefs = useRef<(HTMLSpanElement | null)[]>([]);
-	const words = [
-		{ text: t('hero.titleLine1').toUpperCase(), color: HERO_COLORS[0] },
-		{ text: t('hero.titleLine2').toUpperCase(), color: HERO_COLORS[1] },
-		{ text: t('hero.titleLine3').toUpperCase(), color: HERO_COLORS[2] },
-	];
+// ── Anime.js: Letter-by-letter line ────────────────────────────────────────
+function AnimatedLine({ text, color, delay }: { text: string; color: string; delay: number }) {
+	const spanRef = useRef<HTMLSpanElement>(null);
 
 	useEffect(() => {
-		words.forEach((_, wi) => {
-			const letters = wordRefs.current[wi]?.querySelectorAll('.letter');
-			if (!letters?.length) return;
-
-			animate(Array.from(letters), {
-				translateY: ['110%', '0%'],
-				opacity: [0, 1],
-				delay: animeUtils.stagger(45, { start: wi * 160 + 80 }),
-				duration: 750,
-				ease: 'easeOutExpo',
-			});
+		const letters = spanRef.current?.querySelectorAll('.letter');
+		if (!letters?.length) return;
+		animate(Array.from(letters), {
+			translateY: ['110%', '0%'],
+			opacity: [0, 1],
+			delay: animeUtils.stagger(45, { start: delay }),
+			duration: 750,
+			ease: 'easeOutExpo',
 		});
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
+		<span
+			ref={spanRef}
+			className="block font-bold overflow-hidden text-[13vw] md:text-[120px] lg:text-[140px]"
+			style={{ color, fontFamily: 'Orbitron, sans-serif', letterSpacing: '-0.03em', lineHeight: 0.9 }}
+		>
+			{text.split('').map((char, i) => (
+				<span
+					key={i}
+					className="letter inline-block opacity-0"
+					style={{ willChange: 'transform, opacity', transform: 'translateY(110%)' }}
+				>
+					{char}
+				</span>
+			))}
+		</span>
+	);
+}
+
+// ── Canvas: Particle text — single line ────────────────────────────────────
+interface Particle {
+	tx: number; ty: number;
+	x:  number; y:  number;
+	color: string;
+	delay: number;
+}
+
+function ParticleLine({ text, color }: { text: string; color: string }) {
+	const canvasRef    = useRef<HTMLCanvasElement>(null);
+	const containerRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const canvas    = canvasRef.current;
+		const container = containerRef.current;
+		if (!canvas || !container) return;
+
+		let animId:    number;
+		let cancelled = false;
+
+		const easeOutExpo = (x: number) => x >= 1 ? 1 : 1 - Math.pow(2, -10 * x);
+
+		const init = async () => {
+			await document.fonts.load('bold 140px "Orbitron"');
+			if (cancelled) return;
+
+			const ctx = canvas.getContext('2d');
+			if (!ctx) return;
+
+			const W          = container.clientWidth;
+			const vw         = window.innerWidth;
+			const fontSize   = vw < 768 ? vw * 0.13 : vw < 1024 ? 120 : 140;
+			const H          = Math.ceil(fontSize * 1.1);
+			const particleGap = vw < 768 ? 3 : 4;
+
+			canvas.width        = W;
+			canvas.height       = H;
+			canvas.style.width  = `${W}px`;
+			canvas.style.height = `${H}px`;
+
+			const off    = document.createElement('canvas');
+			off.width    = W;
+			off.height   = H;
+			const offCtx = off.getContext('2d')!;
+
+			offCtx.font          = `bold ${fontSize}px "Orbitron", sans-serif`;
+			offCtx.letterSpacing = `${(-0.03 * fontSize).toFixed(1)}px`;
+			offCtx.textBaseline  = 'top';
+			offCtx.fillStyle     = color;
+			offCtx.fillText(text, 0, 0);
+
+			const { data } = offCtx.getImageData(0, 0, W, H);
+			const particles: Particle[] = [];
+
+			for (let py = 0; py < H; py += particleGap) {
+				for (let px = 0; px < W; px += particleGap) {
+					const idx = (py * W + px) * 4;
+					if (data[idx + 3] > 100) {
+						particles.push({
+							tx:    px,
+							ty:    py,
+							x:     Math.random() * W * 3 - W,
+							y:     Math.random() * H * 6 - H * 2,
+							color: `rgb(${data[idx]},${data[idx + 1]},${data[idx + 2]})`,
+							delay: Math.random() * 700,
+						});
+					}
+				}
+			}
+
+			const DURATION  = 1200;
+			let startTime: number | null = null;
+
+			const render = (now: number) => {
+				if (cancelled) return;
+				if (!startTime) startTime = now;
+				ctx.clearRect(0, 0, W, H);
+				let allDone = true;
+
+				for (const p of particles) {
+					const elapsed = now - startTime - p.delay;
+					let cx: number, cy: number;
+
+					if (elapsed <= 0) {
+						cx = p.x; cy = p.y;
+						allDone = false;
+					} else {
+						const progress = Math.min(elapsed / DURATION, 1);
+						const e = easeOutExpo(progress);
+						cx = p.x + (p.tx - p.x) * e;
+						cy = p.y + (p.ty - p.y) * e;
+						if (progress < 1) allDone = false;
+					}
+
+					ctx.fillStyle = p.color;
+					ctx.fillRect(cx, cy, 2, 2);
+				}
+
+				if (!allDone) animId = requestAnimationFrame(render);
+			};
+
+			animId = requestAnimationFrame(render);
+		};
+
+		init();
+		return () => { cancelled = true; cancelAnimationFrame(animId); };
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	return (
+		<div ref={containerRef} className="w-full overflow-hidden" style={{ lineHeight: 0 }}>
+			<canvas ref={canvasRef} className="block" />
+		</div>
+	);
+}
+
+// ── Combined hero title ──────────────────────────────────────────────────────
+function ParticleHeroTitle() {
+	const t = useTranslations('HomePage');
+	const line1 = t('hero.titleLine1').toUpperCase();
+	const line2 = t('hero.titleLine2').toUpperCase();
+	const line3 = t('hero.titleLine3').toUpperCase();
+
+	return (
 		<h1
 			className="font-bold leading-none"
 			style={{ fontFamily: 'Orbitron, sans-serif', letterSpacing: '-0.03em', lineHeight: 0.9 }}
+			aria-label={`${line1} ${line2} ${line3}`}
 		>
-			{words.map(({ text, color }, wi) => (
-				<span
-					key={wi}
-					ref={(el) => { wordRefs.current[wi] = el; }}
-					className={`block ${color} text-[13vw] md:text-[120px] lg:text-[140px] overflow-hidden`}
-				>
-					{text.split('').map((char, li) => (
-						<span
-							key={li}
-							className="letter inline-block opacity-0"
-							style={{ willChange: 'transform, opacity', transform: 'translateY(110%)' }}
-						>
-							{char}
-						</span>
-					))}
-				</span>
-			))}
+			<AnimatedLine text={line1} color="#FFFFFF" delay={80} />
+			<ParticleLine text={line2} color="#a386ff" />
+			<AnimatedLine text={line3} color="#FFFFFF" delay={480} />
 		</h1>
 	);
 }
@@ -177,7 +295,7 @@ const HeroSection = forwardRef<HTMLElement>(function HeroSection(_, ref) {
 					className="relative z-10 flex flex-col justify-center px-8 md:px-14 lg:px-[56px] py-16 md:py-20"
 					style={{ y: contentY, opacity: heroOpacity }}
 				>
-					<AnimatedHeroTitle />
+					<ParticleHeroTitle />
 
 					<motion.p
 						className="text-[#808080] text-sm mt-6 mb-7"
