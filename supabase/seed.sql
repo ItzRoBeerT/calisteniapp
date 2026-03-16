@@ -127,7 +127,18 @@ INSERT INTO "Exercise" (id, name, description, image, muscle_group, difficulty, 
 (120, 'Sentadilla Pistola Asistida con Banda', 'Sentadilla pistola asistida con banda elastica. La banda reduce la carga para aprender la tecnica de la pistola.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['legs', 'glutes', 'core'], 4, '[{"type": "video", "url": "https://www.youtube.com/watch?v=zrawScWAi8g", "title": "Pistol Squat with Band Tutorial"}]'::jsonb),
 (121, 'Rodillas al Pecho con Banda', 'Elevacion de rodillas al pecho con resistencia de banda. Trabaja los flexores de cadera y el core.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core', 'legs'], 1, '[{"type": "video", "url": "https://www.youtube.com/watch?v=cFmGU8ZO2Z0", "title": "Knees to Chest Tutorial"}]'::jsonb),
 (122, 'Estocada Levitante con Banda', 'Estocada levitante con banda elastica. Variante avanzada de estocada que trabaja el equilibrio y los gluteos.', 'https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80', ARRAY['legs', 'glutes'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=8jPq9b4ghio", "title": "Levitating Lunge Tutorial"}]'::jsonb),
-(123, 'Elevacion de Piernas con Banda', 'Elevacion de piernas con resistencia de banda elastica. Trabaja el core inferior con mayor dificultad.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=8RSLrkkIbl4", "title": "Leg Raise with Band Tutorial"}]'::jsonb)
+(123, 'Elevacion de Piernas con Banda', 'Elevacion de piernas con resistencia de banda elastica. Trabaja el core inferior con mayor dificultad.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=8RSLrkkIbl4", "title": "Leg Raise with Band Tutorial"}]'::jsonb),
+(124, 'Crunch', 'Tumbado boca arriba, eleva los hombros del suelo contrayendo el abdomen sin tirar del cuello.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 1, '[{"type": "video", "url": "https://www.youtube.com/watch?v=Xyd_fa5zoEU", "title": "Crunch Tutorial"}]'::jsonb),
+(125, 'Crunch con Piernas Elevadas', 'Realiza el crunch con las piernas elevadas a 90 grados para aumentar la activacion del abdomen.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 1, '[{"type": "video", "url": "https://www.youtube.com/watch?v=5ER5Of4MOPI", "title": "Legs Up Crunch Tutorial"}]'::jsonb),
+(126, 'Situps', 'Desde tumbado boca arriba, sube el torso completo hasta quedar sentado y baja de forma controlada.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 1, '[{"type": "video", "url": "https://www.youtube.com/watch?v=1fbU_MkV7NE", "title": "Sit Up Tutorial"}]'::jsonb),
+(127, 'Elevacion de Rodillas Tumbado', 'Tumbado boca arriba, lleva las rodillas hacia el pecho manteniendo el control del movimiento.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 1, '[{"type": "video", "url": "https://www.youtube.com/watch?v=JB2oyawG9KI", "title": "Knee Tuck Tutorial"}]'::jsonb),
+(128, 'Elevacion de Piernas Tumbado', 'Con las piernas estiradas, elevalas y bajalas lentamente sin despegar la zona lumbar del suelo.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=l4kQd9eWclE", "title": "Lying Leg Raise Tutorial"}]'::jsonb),
+(129, 'Russian Twist', 'Sentado e inclinado hacia atras, gira el torso de lado a lado para trabajar los oblicuos.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=wkD8rjkodUI", "title": "Russian Twist Tutorial"}]'::jsonb),
+(130, 'Bicicleta', 'Tumbado boca arriba, lleva alternadamente el codo hacia la rodilla contraria con control.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=9FGilxCbdz8", "title": "Bicycle Crunch Tutorial"}]'::jsonb),
+(131, 'Toe Touches', 'Con las piernas elevadas hacia el techo, intenta tocar las puntas de los pies contrayendo el abdomen.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=QhY2D4wM4f8", "title": "Toe Touches Tutorial"}]'::jsonb),
+(132, 'Flutter Kicks', 'Realiza pequenas patadas alternas con piernas estiradas cerca del suelo, manteniendo el core activo.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core'], 2, '[{"type": "video", "url": "https://www.youtube.com/watch?v=ANVdMDaYRts", "title": "Flutter Kicks Tutorial"}]'::jsonb),
+(133, 'Plancha con Pies Elevados', 'Plancha abdominal con los pies en una superficie elevada para aumentar la carga sobre el core y hombros.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core', 'shoulders'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=Qm66wQ6wYjg", "title": "Decline Plank Tutorial"}]'::jsonb),
+(134, 'Plancha con Toque de Hombros', 'En posicion de flexion, alterna toques de hombro minimizando la rotacion de la cadera.', 'https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80', ARRAY['core', 'shoulders'], 3, '[{"type": "video", "url": "https://www.youtube.com/watch?v=U1xW9z6M4xQ", "title": "Shoulder Tap Plank Tutorial"}]'::jsonb)
 ON CONFLICT (id) DO UPDATE SET
     name = EXCLUDED.name,
     description = EXCLUDED.description,
@@ -260,6 +271,17 @@ UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'legs', t
 UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'core', type = 'dynamic' WHERE id = 121;
 UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'legs', type = 'dynamic' WHERE id = 122;
 UPDATE "Exercise" SET equipment = ARRAY['resistance_band'], category = 'core', type = 'dynamic' WHERE id = 123;
+UPDATE "Exercise" SET equipment = ARRAY['none'], category = 'core', type = 'dynamic' WHERE id = 124;
+UPDATE "Exercise" SET equipment = ARRAY['none'], category = 'core', type = 'dynamic' WHERE id = 125;
+UPDATE "Exercise" SET equipment = ARRAY['none'], category = 'core', type = 'dynamic' WHERE id = 126;
+UPDATE "Exercise" SET equipment = ARRAY['none'], category = 'core', type = 'dynamic' WHERE id = 127;
+UPDATE "Exercise" SET equipment = ARRAY['none'], category = 'core', type = 'dynamic' WHERE id = 128;
+UPDATE "Exercise" SET equipment = ARRAY['none'], category = 'core', type = 'dynamic' WHERE id = 129;
+UPDATE "Exercise" SET equipment = ARRAY['none'], category = 'core', type = 'dynamic' WHERE id = 130;
+UPDATE "Exercise" SET equipment = ARRAY['none'], category = 'core', type = 'dynamic' WHERE id = 131;
+UPDATE "Exercise" SET equipment = ARRAY['none'], category = 'core', type = 'dynamic' WHERE id = 132;
+UPDATE "Exercise" SET equipment = ARRAY['elevated_surface'], category = 'core', type = 'isometric' WHERE id = 133;
+UPDATE "Exercise" SET equipment = ARRAY['none'], category = 'core', type = 'dynamic' WHERE id = 134;
 
 -- Reset the sequence to continue from the last ID
 SELECT setval('"Exercise_id_seq"', (SELECT MAX(id) FROM "Exercise"));
@@ -392,7 +414,18 @@ INSERT INTO exercise_progressions (exercise_id, prerequisites, variations, progr
 (120, '{110,118}', '{}', '{7}'),
 (121, '{}', '{}', '{123,111}'),
 (122, '{92,110}', '{}', '{}'),
-(123, '{106,121}', '{}', '{111}')
+(123, '{106,121}', '{}', '{111}'),
+(124, '{}', '{}', '{125,126,127}'),
+(125, '{124}', '{}', '{128}'),
+(126, '{124}', '{}', '{}'),
+(127, '{124}', '{}', '{128}'),
+(128, '{125,127}', '{}', '{20}'),
+(129, '{124}', '{}', '{130}'),
+(130, '{129}', '{}', '{132}'),
+(131, '{124}', '{}', '{}'),
+(132, '{130}', '{}', '{}'),
+(133, '{5}', '{}', '{}'),
+(134, '{5}', '{}', '{133}')
 ON CONFLICT (exercise_id) DO UPDATE SET
     prerequisites = EXCLUDED.prerequisites,
     variations = EXCLUDED.variations,
