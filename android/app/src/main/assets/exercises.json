@@ -5,7 +5,7 @@
       "id": 1,
       "name": "Flexiones",
       "description": "Ejercicio basico para pecho, hombros y triceps. Colocate en posicion de plancha con las manos a la altura de los hombros y baja el cuerpo hasta que el pecho casi toque el suelo.",
-      "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_001.jpg?download=true",
       "difficulty": 1,
       "muscle_group": [
         "chest",
@@ -29,7 +29,7 @@
       "id": 2,
       "name": "Dominadas",
       "description": "Ejercicio fundamental para espalda y biceps. Cuelgate de una barra con agarre prono y eleva tu cuerpo hasta que la barbilla supere la barra.",
-      "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_002.jpg?download=true",
       "difficulty": 2,
       "muscle_group": [
         "back",
@@ -52,7 +52,7 @@
       "id": 3,
       "name": "Sentadilla",
       "description": "Sentadilla basica para piernas. Baja las caderas como si fueras a sentarte manteniendo la espalda recta y las rodillas alineadas con los pies.",
-      "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_003.jpg?download=true",
       "difficulty": 1,
       "muscle_group": [
         "legs",
@@ -75,7 +75,7 @@
       "id": 4,
       "name": "Fondos",
       "description": "Fondos en paralelas para triceps y pecho. Sujetate en barras paralelas y baja el cuerpo flexionando los codos hasta formar un angulo de 90 grados.",
-      "image": "https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_004.jpg?download=true",
       "difficulty": 2,
       "muscle_group": [
         "triceps",
@@ -99,7 +99,7 @@
       "id": 5,
       "name": "Plancha",
       "description": "Plancha isometrica para core. Manten el cuerpo recto apoyado sobre antebrazos y puntas de los pies, activando el abdomen.",
-      "image": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_005.jpg?download=true",
       "difficulty": 1,
       "muscle_group": [
         "core"
@@ -121,7 +121,7 @@
       "id": 6,
       "name": "Muscle Up",
       "description": "Ejercicio avanzado que combina dominada y fondo. Realiza una dominada explosiva y transiciona sobre la barra para completar un fondo.",
-      "image": "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_006.jpg?download=true",
       "difficulty": 5,
       "muscle_group": [
         "back",
@@ -147,7 +147,7 @@
       "id": 7,
       "name": "Sentadilla Pistola",
       "description": "Sentadilla a una pierna. Baja completamente sobre una pierna mientras mantienes la otra extendida al frente.",
-      "image": "https://images.unsplash.com/photo-1434682881908-b43d0467b798?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_007.jpg?download=true",
       "difficulty": 4,
       "muscle_group": [
         "legs",
@@ -171,7 +171,7 @@
       "id": 8,
       "name": "Flexion en Pino",
       "description": "Flexiones en posicion de pino. Realiza una flexion mientras estas en posicion invertida contra una pared o en equilibrio libre.",
-      "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_008.jpg?download=true",
       "difficulty": 5,
       "muscle_group": [
         "shoulders",
@@ -196,7 +196,7 @@
       "id": 9,
       "name": "L-Sit",
       "description": "Posicion isometrica de L. Sientate con las piernas extendidas y eleva todo el cuerpo del suelo usando solo las manos.",
-      "image": "https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_009.jpg?download=true",
       "difficulty": 3,
       "muscle_group": [
         "core",
@@ -221,7 +221,7 @@
       "id": 10,
       "name": "Remo Australiano",
       "description": "Dominada horizontal para principiantes. Cuelgate de una barra baja con los pies en el suelo y tira del pecho hacia la barra.",
-      "image": "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_010.jpg?download=true",
       "difficulty": 1,
       "muscle_group": [
         "back",
@@ -245,7 +245,7 @@
       "id": 11,
       "name": "Flexion Diamante",
       "description": "Flexiones con manos juntas formando un diamante. Mayor enfasis en triceps que las flexiones regulares.",
-      "image": "https://images.unsplash.com/photo-1598971457999-ca4ef48a9a71?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_011.jpg?download=true",
       "difficulty": 2,
       "muscle_group": [
         "triceps",
@@ -268,7 +268,7 @@
       "id": 12,
       "name": "Dominadas Supinas",
       "description": "Dominada con agarre supino. Similar a la dominada pero con las palmas mirando hacia ti, mayor enfasis en biceps.",
-      "image": "https://images.unsplash.com/photo-1605296867304-46d5465a13f1?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_012.jpg?download=true",
       "difficulty": 2,
       "muscle_group": [
         "biceps",
@@ -291,7 +291,7 @@
       "id": 13,
       "name": "Burpee",
       "description": "Ejercicio de cuerpo completo. Combina una sentadilla, plancha, flexion y salto en un movimiento continuo.",
-      "image": "https://images.unsplash.com/photo-1434608519344-49d77a699e1d?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_013.jpg?download=true",
       "difficulty": 2,
       "muscle_group": [
         "legs",
@@ -310,7 +310,7 @@
       "id": 14,
       "name": "Front Lever",
       "description": "Posicion horizontal colgado de la barra. Manten el cuerpo completamente horizontal mirando hacia arriba.",
-      "image": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_014.jpg?download=true",
       "difficulty": 5,
       "muscle_group": [
         "back",
@@ -334,7 +334,7 @@
       "id": 15,
       "name": "Back Lever",
       "description": "Posicion horizontal invertida en la barra. Manten el cuerpo horizontal mirando hacia el suelo.",
-      "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_015.jpg?download=true",
       "difficulty": 4,
       "muscle_group": [
         "shoulders",
@@ -360,7 +360,7 @@
       "id": 16,
       "name": "Bandera Humana",
       "description": "Bandera humana. Manten el cuerpo horizontal agarrado a un poste vertical.",
-      "image": "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_016.jpg?download=true",
       "difficulty": 5,
       "muscle_group": [
         "core",
@@ -385,7 +385,7 @@
       "id": 17,
       "name": "Flexion Arquero",
       "description": "Flexion arquero. Una mano cerca del cuerpo mientras la otra se extiende lateralmente.",
-      "image": "https://images.unsplash.com/photo-1616803689943-5601631c7fec?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_017.jpg?download=true",
       "difficulty": 3,
       "muscle_group": [
         "chest",
@@ -409,7 +409,7 @@
       "id": 18,
       "name": "Tuck Planche",
       "description": "Planche con rodillas recogidas. Equilibrio sobre las manos con el cuerpo elevado y rodillas al pecho.",
-      "image": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_018.jpg?download=true",
       "difficulty": 4,
       "muscle_group": [
         "shoulders",
@@ -434,7 +434,7 @@
       "id": 19,
       "name": "Dragon Flag",
       "description": "Ejercicio avanzado de core. Acostado boca arriba, eleva las piernas y caderas manteniendo solo los hombros en contacto con el banco.",
-      "image": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_019.jpg?download=true",
       "difficulty": 4,
       "muscle_group": [
         "core"
@@ -456,7 +456,7 @@
       "id": 20,
       "name": "Elevacion de Piernas Colgado",
       "description": "Elevacion de piernas colgado. Cuelgate de una barra y eleva las piernas rectas hasta formar un angulo de 90 grados.",
-      "image": "https://images.unsplash.com/photo-1597347316205-36f6c451902a?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_020.jpg?download=true",
       "difficulty": 2,
       "muscle_group": [
         "core"
@@ -478,7 +478,7 @@
       "id": 21,
       "name": "Flexion en Pared",
       "description": "Flexion contra la pared. El ejercicio mas basico de la progresion de flexiones, ideal para principiantes absolutos.",
-      "image": "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_010.jpg?download=true",
       "difficulty": 0,
       "muscle_group": [
         "chest",
@@ -502,7 +502,7 @@
       "id": 22,
       "name": "Flexion Inclinada",
       "description": "Flexion inclinada con manos en superficie elevada. Reduce la carga comparado con la flexion estandar.",
-      "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_001.jpg?download=true",
       "difficulty": 0,
       "muscle_group": [
         "chest",
@@ -527,7 +527,7 @@
       "id": 23,
       "name": "Flexion de Rodillas",
       "description": "Flexion con rodillas apoyadas. Version modificada que reduce la carga corporal en aproximadamente un 50%.",
-      "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_001.jpg?download=true",
       "difficulty": 1,
       "muscle_group": [
         "chest",
@@ -551,7 +551,7 @@
       "id": 24,
       "name": "Flexion Abierta",
       "description": "Flexion con manos mas separadas que el ancho de hombros. Mayor enfasis en el pecho.",
-      "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_001.jpg?download=true",
       "difficulty": 1,
       "muscle_group": [
         "chest",
@@ -574,7 +574,7 @@
       "id": 25,
       "name": "Flexion a Una Mano",
       "description": "Flexion a una mano. Ejercicio avanzado que requiere gran fuerza y estabilidad del core.",
-      "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_001.jpg?download=true",
       "difficulty": 5,
       "muscle_group": [
         "chest",
@@ -599,7 +599,7 @@
       "id": 26,
       "name": "Dominada Escapular",
       "description": "Activacion escapular colgado de la barra. Primer paso para construir fuerza de tiron.",
-      "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_002.jpg?download=true",
       "difficulty": 0,
       "muscle_group": [
         "back",
@@ -622,7 +622,7 @@
       "id": 27,
       "name": "Dominada Negativa",
       "description": "Dominada negativa. Salta arriba y baja lentamente controlando el movimiento.",
-      "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_002.jpg?download=true",
       "difficulty": 1,
       "muscle_group": [
         "back",
@@ -645,7 +645,7 @@
       "id": 28,
       "name": "Dominada con Banda",
       "description": "Dominada asistida con banda elastica. La banda reduce el peso corporal que debes levantar.",
-      "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_002.jpg?download=true",
       "difficulty": 1,
       "muscle_group": [
         "back",
@@ -669,7 +669,7 @@
       "id": 29,
       "name": "Dominada con Peso",
       "description": "Dominada con peso adicional. Progresion avanzada para aumentar la fuerza de tiron.",
-      "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_002.jpg?download=true",
       "difficulty": 3,
       "muscle_group": [
         "back",
@@ -693,7 +693,7 @@
       "id": 30,
       "name": "Sentadilla Asistida",
       "description": "Sentadilla asistida sujetandose de algo. Ideal para aprender la tecnica correcta.",
-      "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_003.jpg?download=true",
       "difficulty": 0,
       "muscle_group": [
         "legs",
@@ -716,7 +716,7 @@
       "id": 31,
       "name": "Sentadilla en Caja",
       "description": "Sentadilla a una caja o banco. Ayuda a controlar la profundidad y la tecnica.",
-      "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_003.jpg?download=true",
       "difficulty": 0,
       "muscle_group": [
         "legs",
@@ -740,7 +740,7 @@
       "id": 32,
       "name": "Sentadilla Bulgara",
       "description": "Sentadilla bulgara con pie trasero elevado. Trabaja cada pierna de forma unilateral.",
-      "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_003.jpg?download=true",
       "difficulty": 2,
       "muscle_group": [
         "legs",
@@ -764,7 +764,7 @@
       "id": 33,
       "name": "Sentadilla Camaron",
       "description": "Sentadilla camaron. Variante avanzada de sentadilla a una pierna con la pierna trasera sujeta.",
-      "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_003.jpg?download=true",
       "difficulty": 4,
       "muscle_group": [
         "legs",
@@ -788,7 +788,7 @@
       "id": 34,
       "name": "Fondos en Banco",
       "description": "Fondos en banco. Version mas facil de los fondos usando un banco o silla.",
-      "image": "https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_004.jpg?download=true",
       "difficulty": 1,
       "muscle_group": [
         "triceps",
@@ -811,7 +811,7 @@
       "id": 35,
       "name": "Fondos Asistidos",
       "description": "Fondos asistidos con banda o maquina. Reduce la carga corporal para construir fuerza.",
-      "image": "https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_004.jpg?download=true",
       "difficulty": 1,
       "muscle_group": [
         "triceps",
@@ -836,7 +836,7 @@
       "id": 36,
       "name": "Fondos en Anillas",
       "description": "Fondos en anillas. Requiere mayor estabilidad y fuerza que los fondos en paralelas.",
-      "image": "https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_004.jpg?download=true",
       "difficulty": 3,
       "muscle_group": [
         "triceps",
@@ -861,7 +861,7 @@
       "id": 37,
       "name": "Fondos con Peso",
       "description": "Fondos con peso adicional. Progresion para aumentar la fuerza de empuje.",
-      "image": "https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_004.jpg?download=true",
       "difficulty": 3,
       "muscle_group": [
         "triceps",
@@ -886,7 +886,7 @@
       "id": 38,
       "name": "Plancha Inclinada",
       "description": "Plancha inclinada con manos en superficie elevada. Version mas facil de la plancha.",
-      "image": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_005.jpg?download=true",
       "difficulty": 0,
       "muscle_group": [
         "core"
@@ -908,7 +908,7 @@
       "id": 39,
       "name": "Plancha Lateral",
       "description": "Plancha lateral. Trabaja los oblicuos y la estabilidad lateral del core.",
-      "image": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_005.jpg?download=true",
       "difficulty": 2,
       "muscle_group": [
         "core",
@@ -931,7 +931,7 @@
       "id": 40,
       "name": "Plancha con Elevacion de Pierna",
       "description": "Plancha con elevacion de pierna. Aumenta la demanda de estabilidad del core.",
-      "image": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_005.jpg?download=true",
       "difficulty": 2,
       "muscle_group": [
         "core",
@@ -954,7 +954,7 @@
       "id": 41,
       "name": "Dominada Alta",
       "description": "Dominada alta llevando la barra al pecho o mas abajo. Prepara para el muscle up.",
-      "image": "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_006.jpg?download=true",
       "difficulty": 3,
       "muscle_group": [
         "back",
@@ -977,7 +977,7 @@
       "id": 42,
       "name": "Dominada Explosiva",
       "description": "Dominada explosiva con fase de vuelo. Desarrolla la potencia necesaria para el muscle up.",
-      "image": "https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_006.jpg?download=true",
       "difficulty": 4,
       "muscle_group": [
         "back",
@@ -1000,7 +1000,7 @@
       "id": 43,
       "name": "L-Sit Recogido",
       "description": "L-Sit con rodillas recogidas. Primera progresion hacia el L-Sit completo.",
-      "image": "https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_009.jpg?download=true",
       "difficulty": 2,
       "muscle_group": [
         "core",
@@ -1024,7 +1024,7 @@
       "id": 44,
       "name": "V-Sit",
       "description": "Posicion en V con piernas elevadas por encima de la horizontal. Progresion avanzada del L-Sit.",
-      "image": "https://images.unsplash.com/photo-1599058917765-a780eda07a3e?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_009.jpg?download=true",
       "difficulty": 4,
       "muscle_group": [
         "core",
@@ -1049,7 +1049,7 @@
       "id": 45,
       "name": "Flexion Pike",
       "description": "Flexion en pike. Simula el movimiento de la flexion en pino con menos carga.",
-      "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_008.jpg?download=true",
       "difficulty": 2,
       "muscle_group": [
         "shoulders",
@@ -1072,7 +1072,7 @@
       "id": 46,
       "name": "Flexion Pike Elevada",
       "description": "Flexion pike con pies elevados. Mayor carga en los hombros que el pike normal.",
-      "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_008.jpg?download=true",
       "difficulty": 3,
       "muscle_group": [
         "shoulders",
@@ -1097,7 +1097,7 @@
       "id": 47,
       "name": "Flexion en Pino contra Pared",
       "description": "Flexion en pino contra la pared. Version asistida de la flexion en pino libre.",
-      "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_008.jpg?download=true",
       "difficulty": 4,
       "muscle_group": [
         "shoulders",
@@ -1121,7 +1121,7 @@
       "id": 48,
       "name": "Dead Bug",
       "description": "Ejercicio de core tumbado boca arriba moviendo brazos y piernas de forma alterna.",
-      "image": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_005.jpg?download=true",
       "difficulty": 0,
       "muscle_group": [
         "core"
@@ -1143,7 +1143,7 @@
       "id": 49,
       "name": "Hollow Body Hold",
       "description": "Posicion hollow con espalda baja pegada al suelo. Fundamental para gimnasia.",
-      "image": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_005.jpg?download=true",
       "difficulty": 2,
       "muscle_group": [
         "core"
@@ -1165,7 +1165,7 @@
       "id": 50,
       "name": "Elevacion de Rodillas",
       "description": "Elevacion de rodillas colgado. Version mas facil de la elevacion de piernas.",
-      "image": "https://images.unsplash.com/photo-1597347316205-36f6c451902a?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_020.jpg?download=true",
       "difficulty": 1,
       "muscle_group": [
         "core"
@@ -1187,7 +1187,7 @@
       "id": 51,
       "name": "Toes to Bar",
       "description": "Llevar los pies a la barra colgado. Progresion avanzada de la elevacion de piernas.",
-      "image": "https://images.unsplash.com/photo-1597347316205-36f6c451902a?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_020.jpg?download=true",
       "difficulty": 3,
       "muscle_group": [
         "core",
@@ -1210,7 +1210,7 @@
       "id": 52,
       "name": "Tuck Front Lever",
       "description": "Front lever con rodillas recogidas al pecho. Primera progresion del front lever.",
-      "image": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_014.jpg?download=true",
       "difficulty": 3,
       "muscle_group": [
         "back",
@@ -1234,7 +1234,7 @@
       "id": 53,
       "name": "Advanced Tuck Front Lever",
       "description": "Front lever con rodillas ligeramente extendidas. Progresion intermedia.",
-      "image": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_014.jpg?download=true",
       "difficulty": 4,
       "muscle_group": [
         "back",
@@ -1258,7 +1258,7 @@
       "id": 54,
       "name": "Straddle Front Lever",
       "description": "Front lever con piernas abiertas. Progresion avanzada hacia el full front lever.",
-      "image": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_014.jpg?download=true",
       "difficulty": 5,
       "muscle_group": [
         "back",
@@ -1282,7 +1282,7 @@
       "id": 55,
       "name": "Tuck Back Lever",
       "description": "Back lever con rodillas recogidas. Primera progresion del back lever.",
-      "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_015.jpg?download=true",
       "difficulty": 3,
       "muscle_group": [
         "shoulders",
@@ -1308,7 +1308,7 @@
       "id": 56,
       "name": "Straddle Back Lever",
       "description": "Back lever con piernas abiertas. Progresion hacia el full back lever.",
-      "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_015.jpg?download=true",
       "difficulty": 4,
       "muscle_group": [
         "shoulders",
@@ -1334,7 +1334,7 @@
       "id": 57,
       "name": "Planche Lean",
       "description": "Inclinacion de planche en posicion de flexion. Desarrolla fuerza de empuje.",
-      "image": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_018.jpg?download=true",
       "difficulty": 2,
       "muscle_group": [
         "shoulders",
@@ -1359,7 +1359,7 @@
       "id": 58,
       "name": "Straddle Planche",
       "description": "Planche con piernas abiertas. Progresion avanzada hacia el full planche.",
-      "image": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_018.jpg?download=true",
       "difficulty": 5,
       "muscle_group": [
         "shoulders",
@@ -1384,7 +1384,7 @@
       "id": 59,
       "name": "Full Planche",
       "description": "Planche completa con piernas juntas y extendidas. Uno de los ejercicios mas dificiles.",
-      "image": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_018.jpg?download=true",
       "difficulty": 5,
       "muscle_group": [
         "shoulders",
@@ -1409,7 +1409,7 @@
       "id": 60,
       "name": "Curl Nordico",
       "description": "Ejercicio avanzado para isquiotibiales. Arrodillate con los pies anclados y baja el cuerpo hacia el suelo controlando el movimiento con los isquiotibiales.",
-      "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_003.jpg?download=true",
       "difficulty": 4,
       "muscle_group": [
         "legs"
@@ -1431,7 +1431,7 @@
       "id": 61,
       "name": "Elevacion de Talones",
       "description": "Ejercicio basico para pantorrillas. De pie, eleva los talones del suelo contrayendo los gemelos y baja de forma controlada.",
-      "image": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_003.jpg?download=true",
       "difficulty": 0,
       "muscle_group": [
         "legs"
@@ -1454,7 +1454,7 @@
       "id": 62,
       "name": "Limpiaparabrisas",
       "description": "Ejercicio avanzado de core rotacional. Colgado de la barra, eleva las piernas y rotalas de lado a lado manteniendo el control.",
-      "image": "https://images.unsplash.com/photo-1597347316205-36f6c451902a?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_020.jpg?download=true",
       "difficulty": 4,
       "muscle_group": [
         "core"
@@ -1476,7 +1476,7 @@
       "id": 63,
       "name": "Colgado Aleman",
       "description": "Posicion de movilidad en anillas o barra baja. Cuelgate con los brazos detras del cuerpo estirando hombros y pecho.",
-      "image": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_015.jpg?download=true",
       "difficulty": 2,
       "muscle_group": [
         "shoulders",
@@ -1500,7 +1500,7 @@
       "id": 64,
       "name": "Pino",
       "description": "Equilibrio invertido sobre las manos. Manten el cuerpo recto y alineado mientras te sostienes boca abajo.",
-      "image": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_008.jpg?download=true",
       "difficulty": 3,
       "muscle_group": [
         "shoulders",
@@ -1524,7 +1524,7 @@
       "id": 65,
       "name": "Flexion Pseudo Planche",
       "description": "Flexion con manos a la altura de las caderas y cuerpo inclinado hacia adelante. Prepara para la planche.",
-      "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_001.jpg?download=true",
       "difficulty": 3,
       "muscle_group": [
         "shoulders",
@@ -1550,7 +1550,7 @@
       "id": 66,
       "name": "Dominada Arquero",
       "description": "Dominada unilateral con un brazo estirado lateralmente. Transfiere mas carga a un lado del cuerpo.",
-      "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_002.jpg?download=true",
       "difficulty": 4,
       "muscle_group": [
         "back",
@@ -1574,7 +1574,7 @@
       "id": 67,
       "name": "Dominada a Una Mano",
       "description": "Dominada completa usando solo un brazo. Uno de los ejercicios de tiron mas avanzados de la calistenia.",
-      "image": "https://images.unsplash.com/photo-1597452485669-2c7bb5fef90d?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_002.jpg?download=true",
       "difficulty": 5,
       "muscle_group": [
         "back",
@@ -1598,7 +1598,7 @@
       "id": 68,
       "name": "Flexion con Palmada",
       "description": "Flexion pliometrica explosiva. Empuja con fuerza para elevar las manos del suelo y dar una palmada antes de aterrizar.",
-      "image": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_001.jpg?download=true",
       "difficulty": 3,
       "muscle_group": [
         "chest",
@@ -1622,7 +1622,7 @@
       "id": 69,
       "name": "Fondos Coreanos",
       "description": "Fondos con las manos detras del cuerpo en una barra baja. Trabaja intensamente los triceps y hombros.",
-      "image": "https://images.unsplash.com/photo-1598266663439-2056e6900339?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_004.jpg?download=true",
       "difficulty": 4,
       "muscle_group": [
         "triceps",
@@ -1647,7 +1647,7 @@
       "id": 70,
       "name": "Front Lever a Una Pierna",
       "description": "Front lever con una pierna extendida y la otra recogida. Progresion avanzada hacia el front lever completo.",
-      "image": "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_014.jpg?download=true",
       "difficulty": 4,
       "muscle_group": [
         "back",
@@ -1671,7 +1671,7 @@
       "id": 71,
       "name": "Planche Recogida Avanzada",
       "description": "Planche con caderas extendidas pero rodillas aun recogidas. Progresion entre el tuck planche y el straddle planche.",
-      "image": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&q=80",
+      "image": "https://huggingface.co/buckets/RafaelJaime/OpenCalisthenics/resolve/image_018.jpg?download=true",
       "difficulty": 4,
       "muscle_group": [
         "shoulders",
