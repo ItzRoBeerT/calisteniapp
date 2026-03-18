@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { animate, utils as animeUtils } from 'animejs';
 import { Link } from '@/i18n/navigation';
-import NavLink from '@/components/header/NavLink';
 import { useTranslations } from 'next-intl';
 import { createClient } from '@/utils/supabase/client';
 import type { User } from '@supabase/supabase-js';
@@ -86,8 +85,8 @@ function AnimatedLine({ text, color, delay }: { text: string; color: string; del
 	return (
 		<span
 			ref={spanRef}
-			className="block font-bold overflow-hidden text-[13vw] md:text-[120px] lg:text-[140px]"
-			style={{ color, fontFamily: 'Orbitron, sans-serif', letterSpacing: '-0.03em', lineHeight: 0.9 }}
+			className="block font-bold overflow-hidden text-[13vw] md:text-[120px] lg:text-[140px] font-orbitron"
+			style={{ color, letterSpacing: '-0.03em', lineHeight: 1, display: 'block' }}
 		>
 			{text.split('').map((char, i) => (
 				<span
@@ -111,47 +110,52 @@ interface Particle {
 }
 
 function ParticleLine({ text, color }: { text: string; color: string }) {
-	const canvasRef    = useRef<HTMLCanvasElement>(null);
+	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		const canvas    = canvasRef.current;
+		const canvas = canvasRef.current;
 		const container = containerRef.current;
 		if (!canvas || !container) return;
 
-		let animId:    number;
+		let animId: number;
 		let cancelled = false;
 
 		const easeOutExpo = (x: number) => x >= 1 ? 1 : 1 - Math.pow(2, -10 * x);
 
 		const init = async () => {
-			await document.fonts.load('bold 140px "Orbitron"');
+			await document.fonts.ready;
 			if (cancelled) return;
 
 			const ctx = canvas.getContext('2d');
 			if (!ctx) return;
 
-			const W          = container.clientWidth;
-			const vw         = window.innerWidth;
-			const fontSize   = vw < 768 ? vw * 0.13 : vw < 1024 ? 120 : 140;
-			const H          = Math.ceil(fontSize * 1.1);
+			const W = container.clientWidth;
+			const vw = window.innerWidth;
+			const fontSize = vw < 768 ? vw * 0.13 : vw < 1024 ? 120 : 140;
+			const lineHeight = Math.ceil(fontSize * 0.9);
+			const H = lineHeight;
 			const particleGap = vw < 768 ? 3 : 4;
 
-			canvas.width        = W;
-			canvas.height       = H;
-			canvas.style.width  = `${W}px`;
+			container.style.height = `${lineHeight}px`;
+
+			canvas.width = W;
+			canvas.height = H;
+			canvas.style.width = `${W}px`;
 			canvas.style.height = `${H}px`;
 
-			const off    = document.createElement('canvas');
-			off.width    = W;
-			off.height   = H;
+			const off = document.createElement('canvas');
+			off.width = W;
+			off.height = H;
 			const offCtx = off.getContext('2d')!;
+			const orbitronFont = getComputedStyle(document.documentElement)
+				.getPropertyValue('--font-orbitron')
+				.trim();
 
-			offCtx.font          = `bold ${fontSize}px "Orbitron", sans-serif`;
-			offCtx.letterSpacing = `${(-0.03 * fontSize).toFixed(1)}px`;
-			offCtx.textBaseline  = 'top';
-			offCtx.fillStyle     = color;
-			offCtx.fillText(text, 0, 0);
+			offCtx.font = `700 ${fontSize}px ${orbitronFont || 'sans-serif'}`;
+			offCtx.textBaseline = 'middle';
+			offCtx.fillStyle = color;
+			offCtx.fillText(text, 0, H / 2);
 
 			const { data } = offCtx.getImageData(0, 0, W, H);
 			const particles: Particle[] = [];
@@ -161,10 +165,10 @@ function ParticleLine({ text, color }: { text: string; color: string }) {
 					const idx = (py * W + px) * 4;
 					if (data[idx + 3] > 100) {
 						particles.push({
-							tx:    px,
-							ty:    py,
-							x:     Math.random() * W * 3 - W,
-							y:     Math.random() * H * 6 - H * 2,
+							tx: px,
+							ty: py,
+							x: Math.random() * W * 3 - W,
+							y: Math.random() * H * 6 - H * 2,
 							color: `rgb(${data[idx]},${data[idx + 1]},${data[idx + 2]})`,
 							delay: Math.random() * 700,
 						});
@@ -172,7 +176,7 @@ function ParticleLine({ text, color }: { text: string; color: string }) {
 				}
 			}
 
-			const DURATION  = 1200;
+			const DURATION = 1200;
 			let startTime: number | null = null;
 
 			const render = (now: number) => {
@@ -183,10 +187,12 @@ function ParticleLine({ text, color }: { text: string; color: string }) {
 
 				for (const p of particles) {
 					const elapsed = now - startTime - p.delay;
-					let cx: number, cy: number;
+					let cx: number;
+					let cy: number;
 
 					if (elapsed <= 0) {
-						cx = p.x; cy = p.y;
+						cx = p.x;
+						cy = p.y;
 						allDone = false;
 					} else {
 						const progress = Math.min(elapsed / DURATION, 1);
@@ -207,12 +213,19 @@ function ParticleLine({ text, color }: { text: string; color: string }) {
 		};
 
 		init();
-		return () => { cancelled = true; cancelAnimationFrame(animId); };
+
+		return () => {
+			cancelled = true;
+			cancelAnimationFrame(animId);
+		};
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
-		<div ref={containerRef} className="w-full overflow-hidden" style={{ lineHeight: 0 }}>
+		<div
+			ref={containerRef}
+			className="w-full overflow-hidden flex items-center font-orbitron"
+		>
 			<canvas ref={canvasRef} className="block" />
 		</div>
 	);
@@ -227,13 +240,19 @@ function ParticleHeroTitle() {
 
 	return (
 		<h1
-			className="font-bold leading-none"
-			style={{ fontFamily: 'Orbitron, sans-serif', letterSpacing: '-0.03em', lineHeight: 0.9 }}
+			className="font-bold flex flex-col gap-0 font-orbitron"
+			style={{ letterSpacing: '-0.03em', lineHeight: 1 }}
 			aria-label={`${line1} ${line2} ${line3}`}
 		>
-			<AnimatedLine text={line1} color="#FFFFFF" delay={80} />
-			<ParticleLine text={line2} color="#a386ff" />
-			<AnimatedLine text={line3} color="#FFFFFF" delay={480} />
+			<span style={{ display: 'block', lineHeight: 1 }}>
+				<AnimatedLine text={line1} color="#FFFFFF" delay={80} />
+			</span>
+			<span style={{ display: 'block', lineHeight: 1 }}>
+				<ParticleLine text={line2} color="#a386ff" />
+			</span>
+			<span style={{ display: 'block', lineHeight: 1 }}>
+				<AnimatedLine text={line3} color="#FFFFFF" delay={480} />
+			</span>
 		</h1>
 	);
 }
@@ -318,19 +337,19 @@ const HeroSection = forwardRef<HTMLElement>(function HeroSection(_, ref) {
 							<>
 								<Link
 									href="/exercises"
-									className="bg-[#A386FF] hover:bg-[#b89fff] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all [font-family:'Orbitron',sans-serif]"
+									className="bg-[#A386FF] hover:bg-[#b89fff] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all font-orbitron"
 								>
 									{t('features.feature1.cta')}
 								</Link>
 								<Link
 									href="/workouts"
-									className="bg-[#32D74B] hover:bg-[#4fe063] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all [font-family:'Orbitron',sans-serif]"
+									className="bg-[#32D74B] hover:bg-[#4fe063] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all font-orbitron"
 								>
 									{t('features.feature2.cta')}
 								</Link>
 								<Link
 									href="/roadmaps"
-									className="bg-[#03DAC5] hover:bg-[#1de9d5] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all [font-family:'Orbitron',sans-serif]"
+									className="bg-[#03DAC5] hover:bg-[#1de9d5] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all font-orbitron"
 								>
 									{t('features.feature3.cta')}
 								</Link>
@@ -340,13 +359,13 @@ const HeroSection = forwardRef<HTMLElement>(function HeroSection(_, ref) {
 							<>
 								<Link
 									href="/register"
-									className="bg-primary-600 hover:bg-primary-500 text-white font-bold text-sm px-8 py-[14px] [font-family:'Orbitron',sans-serif] transition-all"
+									className="bg-primary-600 hover:bg-primary-500 text-white font-bold text-sm px-8 py-[14px] font-orbitron transition-all"
 								>
 									{t('hero.startFree')}
 								</Link>
 								<Link
 									href="/login"
-									className="bg-[#0C0C0C] hover:bg-[#1a1a1a] text-white font-bold text-sm px-8 py-[14px] [font-family:'Orbitron',sans-serif] border border-[#333333] transition-all"
+									className="bg-[#0C0C0C] hover:bg-[#1a1a1a] text-white font-bold text-sm px-8 py-[14px] font-orbitron border border-[#333333] transition-all"
 								>
 									{t('hero.login')} →
 								</Link>

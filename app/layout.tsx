@@ -1,8 +1,13 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Inter, Orbitron } from 'next/font/google';
 import './[locale]/globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
+const orbitron = Orbitron({
+  subsets: ['latin'],
+  weight: ['400', '700', '900'],
+  variable: '--font-orbitron',
+});
 
 export const metadata: Metadata = {
   title: 'OpenCalisthenics',
@@ -16,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className="h-full">
-      <body className={`${inter.className} flex flex-col min-h-screen bg-background text-foreground`}>
+      <body className={`${inter.className} ${orbitron.variable} flex flex-col min-h-screen bg-background text-foreground`}>
         {children}
       </body>
     </html>

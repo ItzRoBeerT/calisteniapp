@@ -8,6 +8,9 @@ export default {
 	],
 	theme: {
 		extend: {
+			fontFamily: {
+				orbitron: ['var(--font-orbitron)'],
+			},
 			colors: {
 				background: '#121212',
 				surface: '#1E1E1E',
