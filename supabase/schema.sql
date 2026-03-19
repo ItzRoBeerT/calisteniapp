@@ -287,6 +287,10 @@ CREATE POLICY "Users can add favorites" ON workout_favorites
 CREATE POLICY "Users can remove favorites" ON workout_favorites
     FOR DELETE USING ((select auth.uid()) = user_id);
 
+-- Explicit table grants for API roles
+GRANT SELECT ON TABLE workout_favorites TO anon;
+GRANT SELECT ON TABLE workout_favorites TO authenticated;
+
 -- Profiles: Everyone can read, owners can modify
 CREATE POLICY "Profiles are viewable by everyone" ON profiles
     FOR SELECT USING (true);
