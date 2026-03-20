@@ -15,6 +15,13 @@ type WorkoutFilterProps = {
 export default function WorkoutFilter({ allFilters }: WorkoutFilterProps) {
   const t = useTranslations('WorkoutFilter');
 
+  const durationRanges = [
+    { value: '0-15', label: '0 - 15 min' },
+    { value: '15-45', label: '15 - 45 min' },
+    { value: '45-90', label: '45 - 1:30 h' },
+    { value: '90+', label: '+1:30 h' },
+  ];
+
   const fields: FilterField[] = [
     {
       key: 'difficulty',
@@ -29,11 +36,7 @@ export default function WorkoutFilter({ allFilters }: WorkoutFilterProps) {
     {
       key: 'duration',
       label: t('duration'),
-      options: allFilters.durations.map((d) => ({
-        value: d.toString(),
-        label: d.toString(),
-      })),
-      suffix: 'min',
+      options: durationRanges,
     },
     {
       key: 'tag',
