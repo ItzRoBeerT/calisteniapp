@@ -1,10 +1,11 @@
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
-import { Space_Grotesk } from 'next/font/google';
+import { Orbitron } from 'next/font/google';
 
-const spaceGrotesk = Space_Grotesk({
+const orbitron = Orbitron({
   subsets: ['latin'],
-  weight: ['700'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
 });
 
 export default async function NotFound() {
@@ -32,7 +33,7 @@ export default async function NotFound() {
 
       {/* 404 Text */}
       <h1
-        className={spaceGrotesk.className}
+        className={orbitron.className}
         style={{
           fontSize: 'clamp(8rem, 20vw, 16rem)',
           fontWeight: 700,
