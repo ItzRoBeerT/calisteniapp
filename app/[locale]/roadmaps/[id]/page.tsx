@@ -16,22 +16,20 @@ export default function RoadmapDetailPage({
 
   const [roadmap, setRoadmap] = useState<Roadmap | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<'notFound' | 'loadError' | null>(null);
 
   useEffect(() => {
     const fetchRoadmap = async () => {
       try {
         const response = await fetch(`/api/roadmaps?id=${encodeURIComponent(id)}`);
         if (!response.ok) {
-          if (response.status === 404) {
-            throw new Error('Roadmap no encontrado');
-          }
-          throw new Error('Error al cargar el roadmap');
+          setError(response.status === 404 ? 'notFound' : 'loadError');
+          return;
         }
         const data = await response.json();
         setRoadmap(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Error desconocido');
+      } catch {
+        setError('loadError');
       } finally {
         setLoading(false);
       }
@@ -64,10 +62,10 @@ export default function RoadmapDetailPage({
             className="text-2xl font-bold text-foreground mb-2"
             style={{ fontFamily: "'Orbitron', sans-serif" }}
           >
-            {error || 'Roadmap no encontrado'}
+            {t(error === 'loadError' ? 'loadError' : 'notFound')}
           </h1>
           <p className="text-foreground/60 mb-6">
-            El roadmap que buscas no existe o ha sido eliminado.
+            {t('notFoundDescription')}
           </p>
           <Link
             href="/roadmaps"
@@ -76,7 +74,7 @@ export default function RoadmapDetailPage({
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            Volver a roadmaps
+            {t('backToRoadmaps')}
           </Link>
         </div>
       </main>
@@ -92,7 +90,7 @@ export default function RoadmapDetailPage({
             <Link
               href="/roadmaps"
               className="p-2 rounded-lg hover:bg-white/10 transition-colors"
-              title="Volver a roadmaps"
+              title={t('backToRoadmaps')}
             >
               <svg className="w-5 h-5 text-foreground/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />

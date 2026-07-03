@@ -16,7 +16,6 @@
 		"@dnd-kit/utilities": "^3.2.2",
 		"@supabase/ssr": "^0.5.1",
 		"@supabase/supabase-js": "^2.46.1",
-		"@xyflow/react": "^12.8.5",
 		"animejs": "^4.3.6",
 		"cytoscape": "^3.33.1",
 		"motion": "^12.34.0",
