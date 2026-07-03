@@ -8,29 +8,13 @@ import type { RoadmapResource, NodeProgress } from './Roadmap';
 
 export type RoadmapNodeType =
   | 'title'
-  | 'paragraph'
-  | 'label'
   | 'topic'
   | 'subtopic'
   | 'image'
   | 'video'
-  | 'button'
-  | 'resourceButton'
-  | 'todo'
-  | 'checklist'
-  | 'legend'
-  | 'linksGroup'
-  | 'horizontalLine'
-  | 'verticalLine'
   | 'section';
 
-export type RoadmapNodeCategory =
-  | 'text'
-  | 'content'
-  | 'interactive'
-  | 'list'
-  | 'decorative'
-  | 'container';
+export type RoadmapNodeCategory = 'text' | 'content' | 'container';
 
 // ============================================
 // TIPO BASE - PADRE DE TODOS LOS NODOS
@@ -66,22 +50,6 @@ export interface TitleNodeData extends BaseNodeData {
   fontWeight?: number; // Default: 700
   color?: string;
   textAlign?: 'left' | 'center' | 'right';
-}
-
-export interface ParagraphNodeData extends BaseNodeData {
-  nodeType: 'paragraph';
-  fontSize?: number; // Default: 14
-  color?: string;
-  textAlign?: 'left' | 'center' | 'right';
-  lineHeight?: number; // Default: 1.5
-}
-
-export interface LabelNodeData extends BaseNodeData {
-  nodeType: 'label';
-  fontSize?: number; // Default: 12
-  color?: string;
-  backgroundColor?: string;
-  padding?: number;
 }
 
 // ============================================
@@ -129,95 +97,6 @@ export interface VideoNodeData extends BaseNodeData {
 }
 
 // ============================================
-// NODOS INTERACTIVOS
-// ============================================
-
-export interface ButtonNodeData extends BaseNodeData {
-  nodeType: 'button';
-  url: string;
-  backgroundColor?: string;
-  textColor?: string;
-  icon?: CalistenicsIconType;
-  variant?: 'solid' | 'outline' | 'ghost';
-}
-
-export interface ResourceButtonNodeData extends BaseNodeData {
-  nodeType: 'resourceButton';
-  url: string;
-  badgeText?: string;
-  badgeTextColor?: string;
-  badgeBackgroundColor?: string;
-  backgroundColor?: string;
-  textColor?: string;
-  icon?: CalistenicsIconType;
-}
-
-export interface TodoNodeData extends BaseNodeData {
-  nodeType: 'todo';
-  checked: boolean;
-  onCheckedChange?: (checked: boolean) => void;
-}
-
-export interface ChecklistItem {
-  id: string;
-  text: string;
-  checked: boolean;
-}
-
-export interface ChecklistNodeData extends BaseNodeData {
-  nodeType: 'checklist';
-  items: ChecklistItem[];
-  onItemChange?: (itemId: string, checked: boolean) => void;
-}
-
-// ============================================
-// NODOS DE LISTA
-// ============================================
-
-export interface LegendItem {
-  id: string;
-  icon: CalistenicsIconType;
-  label: string;
-  color?: string;
-}
-
-export interface LegendNodeData extends BaseNodeData {
-  nodeType: 'legend';
-  items: LegendItem[];
-  orientation?: 'vertical' | 'horizontal';
-}
-
-export interface LinkItem {
-  id: string;
-  label: string;
-  url: string;
-  icon?: CalistenicsIconType;
-}
-
-export interface LinksGroupNodeData extends BaseNodeData {
-  nodeType: 'linksGroup';
-  items: LinkItem[];
-}
-
-// ============================================
-// NODOS DECORATIVOS
-// ============================================
-
-export interface HorizontalLineNodeData extends BaseNodeData {
-  nodeType: 'horizontalLine';
-  color?: string;
-  thickness?: number; // Default: 2
-  lineStyle?: 'solid' | 'dashed' | 'dotted';
-}
-
-export interface VerticalLineNodeData extends BaseNodeData {
-  nodeType: 'verticalLine';
-  color?: string;
-  thickness?: number; // Default: 2
-  lineStyle?: 'solid' | 'dashed' | 'dotted';
-}
-
-// ============================================
 // NODOS CONTENEDOR
 // ============================================
 
@@ -235,20 +114,10 @@ export interface SectionNodeData extends BaseNodeData {
 
 export type AnyNodeData =
   | TitleNodeData
-  | ParagraphNodeData
-  | LabelNodeData
   | TopicNodeData
   | SubTopicNodeData
   | ImageNodeData
   | VideoNodeData
-  | ButtonNodeData
-  | ResourceButtonNodeData
-  | TodoNodeData
-  | ChecklistNodeData
-  | LegendNodeData
-  | LinksGroupNodeData
-  | HorizontalLineNodeData
-  | VerticalLineNodeData
   | SectionNodeData;
 
 // ============================================
@@ -276,32 +145,14 @@ export interface NodeTemplate {
 // TYPE GUARDS
 // ============================================
 
-export function isTextNode(
-  data: AnyNodeData
-): data is TitleNodeData | ParagraphNodeData | LabelNodeData {
-  return ['title', 'paragraph', 'label'].includes(data.nodeType);
+export function isTextNode(data: AnyNodeData): data is TitleNodeData {
+  return data.nodeType === 'title';
 }
 
 export function isContentNode(
   data: AnyNodeData
 ): data is TopicNodeData | SubTopicNodeData | ImageNodeData | VideoNodeData {
   return ['topic', 'subtopic', 'image', 'video'].includes(data.nodeType);
-}
-
-export function isInteractiveNode(
-  data: AnyNodeData
-): data is ButtonNodeData | ResourceButtonNodeData | TodoNodeData | ChecklistNodeData {
-  return ['button', 'resourceButton', 'todo', 'checklist'].includes(data.nodeType);
-}
-
-export function isListNode(data: AnyNodeData): data is LegendNodeData | LinksGroupNodeData {
-  return ['legend', 'linksGroup'].includes(data.nodeType);
-}
-
-export function isDecorativeNode(
-  data: AnyNodeData
-): data is HorizontalLineNodeData | VerticalLineNodeData {
-  return ['horizontalLine', 'verticalLine'].includes(data.nodeType);
 }
 
 export function isSectionNode(data: AnyNodeData): data is SectionNodeData {
@@ -316,11 +167,8 @@ export const nodeCategories: Record<
   RoadmapNodeCategory,
   { label: string; description: string }
 > = {
-  text: { label: 'Texto', description: 'Títulos, párrafos y etiquetas' },
-  content: { label: 'Contenido', description: 'Temas, subtemas e imágenes' },
-  interactive: { label: 'Interactivos', description: 'Botones, checkboxes y tareas' },
-  list: { label: 'Listas', description: 'Leyendas y grupos de enlaces' },
-  decorative: { label: 'Decorativos', description: 'Líneas divisorias' },
+  text: { label: 'Texto', description: 'Títulos' },
+  content: { label: 'Contenido', description: 'Temas, subtemas, imágenes y videos' },
   container: { label: 'Contenedores', description: 'Secciones para agrupar' },
 };
 
@@ -330,19 +178,44 @@ export const nodeCategories: Record<
 
 export const nodeTypeToCategory: Record<RoadmapNodeType, RoadmapNodeCategory> = {
   title: 'text',
-  paragraph: 'text',
-  label: 'text',
   topic: 'content',
   subtopic: 'content',
   image: 'content',
   video: 'content',
-  button: 'interactive',
-  resourceButton: 'interactive',
-  todo: 'interactive',
-  checklist: 'interactive',
-  legend: 'list',
-  linksGroup: 'list',
-  horizontalLine: 'decorative',
-  verticalLine: 'decorative',
   section: 'container',
 };
+
+// ============================================
+// NORMALIZACIÓN DE TIPOS LEGACY
+// ============================================
+
+// Tipos eliminados del builder o de versiones anteriores del roadmap.
+// Los roadmaps guardados con esos tipos degradan al tipo core más cercano;
+// los decorativos (líneas) se descartan.
+const legacyTypeMap: Record<string, RoadmapNodeType | null> = {
+  milestone: 'topic',
+  default: 'topic',
+  paragraph: 'title',
+  label: 'title',
+  button: 'subtopic',
+  resourceButton: 'subtopic',
+  todo: 'subtopic',
+  checklist: 'subtopic',
+  legend: 'subtopic',
+  linksGroup: 'subtopic',
+  horizontalLine: null,
+  verticalLine: null,
+};
+
+const coreNodeTypes: RoadmapNodeType[] = ['title', 'topic', 'subtopic', 'image', 'video', 'section'];
+
+// Devuelve el tipo core equivalente, o null si el nodo debe descartarse
+export function normalizeNodeType(type: string | undefined): RoadmapNodeType | null {
+  if (type && (coreNodeTypes as string[]).includes(type)) {
+    return type as RoadmapNodeType;
+  }
+  if (type && type in legacyTypeMap) {
+    return legacyTypeMap[type];
+  }
+  return 'topic';
+}

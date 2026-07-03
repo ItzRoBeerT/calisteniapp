@@ -17,7 +17,4 @@ export { default as TextConfigPanel } from './TextConfigPanel';
 export { default as ContentConfigPanel } from './ContentConfigPanel';
 export { default as ImageConfigPanel } from './ImageConfigPanel';
 export { default as VideoConfigPanel } from './VideoConfigPanel';
-export { default as InteractiveConfigPanel } from './InteractiveConfigPanel';
-export { default as ListConfigPanel } from './ListConfigPanel';
-export { default as LineConfigPanel } from './LineConfigPanel';
 export { default as SectionConfigPanel } from './SectionConfigPanel';

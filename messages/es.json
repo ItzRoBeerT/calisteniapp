@@ -292,27 +292,14 @@
 		"categories": {
 			"text": "Texto",
 			"content": "Contenido",
-			"interactive": "Interactivos",
-			"list": "Listas",
-			"decorative": "Decorativos",
 			"container": "Contenedores"
 		},
 		"nodeTypes": {
 			"title": "Título",
-			"paragraph": "Párrafo",
-			"label": "Etiqueta",
 			"topic": "Tema",
 			"subtopic": "Subtema",
 			"image": "Imagen",
 			"video": "Video",
-			"button": "Botón",
-			"resourceButton": "Botón de recurso",
-			"todo": "Tarea",
-			"checklist": "Lista de tareas",
-			"legend": "Leyenda",
-			"linksGroup": "Grupo de enlaces",
-			"horizontalLine": "Línea horizontal",
-			"verticalLine": "Línea vertical",
 			"section": "Sección"
 		},
 		"tabs": {
@@ -434,6 +421,10 @@
 		"noContent": "Selecciona un nodo para ver su contenido",
 		"noResources": "No hay recursos disponibles",
 		"free": "Gratis",
+		"notFound": "Roadmap no encontrado",
+		"notFoundDescription": "El roadmap que buscas no existe o ha sido eliminado.",
+		"loadError": "Error al cargar el roadmap",
+		"backToRoadmaps": "Volver a roadmaps",
 		"status": {
 			"not_started": "Pendiente",
 			"in_progress": "En Progreso",

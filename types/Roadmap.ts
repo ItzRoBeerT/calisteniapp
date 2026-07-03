@@ -1,13 +1,11 @@
 import type { Node, Edge } from 'reactflow';
+import type { RoadmapNodeType } from './RoadmapNodes';
 
 // Tipos de recursos disponibles
 export type ResourceType = 'video' | 'article' | 'documentation' | 'course' | 'tool' | 'github' | 'exercise' | 'workout' | 'post';
 
 // Estados de progreso de un nodo
 export type NodeProgress = 'not_started' | 'in_progress' | 'completed' | 'skipped';
-
-// Tipos de nodos en el roadmap
-export type RoadmapNodeType = 'title' | 'topic' | 'subtopic' | 'milestone';
 
 // Recurso individual (video, artículo, etc.)
 export interface RoadmapResource {
@@ -84,12 +82,6 @@ export interface UserRoadmapProgress {
   startedAt: string;
   lastAccessedAt: string;
   completionPercentage: number;
-}
-
-// Props para el componente ViewerNode
-export interface ViewerNodeProps {
-  data: RoadmapNodeData;
-  selected?: boolean;
 }
 
 // Props para el panel de detalles
