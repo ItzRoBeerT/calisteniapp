@@ -150,7 +150,6 @@ const ResourceCard = ({ resource }: { resource: RoadmapResource }) => {
       <div className="flex-1 min-w-0">
         <h4
           className="text-sm font-semibold text-foreground truncate group-hover:text-primary-300 transition-colors"
-          style={{ fontFamily: "'Space Grotesk', sans-serif" }}
         >
           {resource.title}
         </h4>
@@ -170,7 +169,6 @@ const ResourceCard = ({ resource }: { resource: RoadmapResource }) => {
         {resource.description && (
           <p
             className="text-xs text-foreground/60 mt-2 line-clamp-2"
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
             {resource.description}
           </p>

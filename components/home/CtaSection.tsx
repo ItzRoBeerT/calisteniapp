@@ -14,8 +14,7 @@ export default function CtaSection() {
 		<AnimatedSection className={`${fullBleed} bg-[#080808] py-16 md:py-20 px-6 md:px-14`}>
 			<div className="flex flex-col items-center text-center max-w-3xl mx-auto gap-6 md:gap-8">
 				<motion.h2
-					className="text-3xl md:text-4xl lg:text-5xl font-bold text-white"
-					style={{ fontFamily: 'Orbitron, sans-serif' }}
+					className="text-3xl md:text-4xl lg:text-5xl font-bold text-white font-heading"
 					initial={{ opacity: 0, y: 30 }}
 					whileInView={{ opacity: 1, y: 0 }}
 					viewport={{ once: true }}
@@ -25,7 +24,7 @@ export default function CtaSection() {
 				</motion.h2>
 				<motion.p
 					className="text-[#6B7280] text-base md:text-lg leading-relaxed px-2"
-					style={{ fontFamily: 'Space Grotesk, sans-serif', lineHeight: 1.5 }}
+					style={{ lineHeight: 1.5 }}
 					initial={{ opacity: 0 }}
 					whileInView={{ opacity: 1 }}
 					viewport={{ once: true }}

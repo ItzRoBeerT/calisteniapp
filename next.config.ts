@@ -6,17 +6,11 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'nachogst.com',
+        hostname: 'huggingface.co',
+        pathname: '/buckets/RafaelJaime/OpenCalisthenics/**',
       },
       {
-        protocol: 'https',
-        hostname: 'rjcaojecsabejmtnkidn.supabase.co',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-      {
+        // Profile pic
         protocol: 'https',
         hostname: 'api.dicebear.com',
       },

@@ -12,8 +12,7 @@ const HowItWorksSection = forwardRef<HTMLDivElement>(function HowItWorksSection(
 		<div ref={ref}>
 			<AnimatedSection className="py-16 md:py-20 px-0">
 				<motion.h2
-					className="text-3xl md:text-4xl font-bold text-center mb-3 text-white"
-					style={{ fontFamily: 'Orbitron, sans-serif' }}
+					className="text-3xl md:text-4xl font-bold text-center mb-3 text-white font-heading"
 					initial={{ opacity: 0, y: 30 }}
 					whileInView={{ opacity: 1, y: 0 }}
 					viewport={{ once: true }}
@@ -23,7 +22,6 @@ const HowItWorksSection = forwardRef<HTMLDivElement>(function HowItWorksSection(
 				</motion.h2>
 				<motion.p
 					className="text-[#555555] text-sm md:text-base text-center mb-10 md:mb-12 max-w-xl mx-auto px-4"
-					style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 					initial={{ opacity: 0 }}
 					whileInView={{ opacity: 1 }}
 					viewport={{ once: true }}
@@ -40,8 +38,7 @@ const HowItWorksSection = forwardRef<HTMLDivElement>(function HowItWorksSection(
 					>
 						<StaggerItem>
 							<h3
-								className="text-base md:text-lg font-bold text-[#32D74B]"
-								style={{ fontFamily: 'Orbitron, sans-serif' }}
+								className="text-base md:text-lg font-bold text-[#32D74B] font-heading"
 							>
 								{t('howItWorks.workouts.title')}
 							</h3>
@@ -50,21 +47,18 @@ const HowItWorksSection = forwardRef<HTMLDivElement>(function HowItWorksSection(
 							<StaggerItem key={step}>
 								<div className="flex items-start gap-4">
 									<span
-										className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border bg-[#32D74B]/10 border-[#32D74B]/30 text-[#32D74B]"
-										style={{ fontFamily: 'Orbitron, sans-serif' }}
+										className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border bg-[#32D74B]/10 border-[#32D74B]/30 text-[#32D74B] font-heading"
 									>
 										{String(step).padStart(2, '0')}
 									</span>
 									<div>
 										<p
 											className="font-semibold text-white text-sm mb-1"
-											style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 										>
 											{t(`howItWorks.workouts.step${step}.title`)}
 										</p>
 										<p
 											className="text-[#6B7280] text-sm leading-relaxed"
-											style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 										>
 											{t(`howItWorks.workouts.step${step}.description`)}
 										</p>
@@ -81,8 +75,7 @@ const HowItWorksSection = forwardRef<HTMLDivElement>(function HowItWorksSection(
 					>
 						<StaggerItem>
 							<h3
-								className="text-base md:text-lg font-bold text-[#03DAC5]"
-								style={{ fontFamily: 'Orbitron, sans-serif' }}
+								className="text-base md:text-lg font-bold text-[#03DAC5] font-heading"
 							>
 								{t('howItWorks.roadmaps.title')}
 							</h3>
@@ -91,21 +84,18 @@ const HowItWorksSection = forwardRef<HTMLDivElement>(function HowItWorksSection(
 							<StaggerItem key={step}>
 								<div className="flex items-start gap-4">
 									<span
-										className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border bg-[#03DAC5]/10 border-[#03DAC5]/30 text-[#03DAC5]"
-										style={{ fontFamily: 'Orbitron, sans-serif' }}
+										className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold border bg-[#03DAC5]/10 border-[#03DAC5]/30 text-[#03DAC5] font-heading"
 									>
 										{String(step).padStart(2, '0')}
 									</span>
 									<div>
 										<p
 											className="font-semibold text-white text-sm mb-1"
-											style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 										>
 											{t(`howItWorks.roadmaps.step${step}.title`)}
 										</p>
 										<p
 											className="text-[#6B7280] text-sm leading-relaxed"
-											style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 										>
 											{t(`howItWorks.roadmaps.step${step}.description`)}
 										</p>

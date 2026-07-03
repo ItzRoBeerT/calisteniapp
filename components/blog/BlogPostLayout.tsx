@@ -82,7 +82,7 @@ export function BlogPostLayout({
 					<div
 						className="absolute select-none pointer-events-none"
 						style={{
-							fontFamily: 'Orbitron, sans-serif',
+							fontFamily: 'var(--font-heading), sans-serif',
 							fontSize: 'clamp(5rem, 18vw, 12rem)',
 							fontWeight: 700,
 							color: 'rgba(187,134,252,0.038)',
@@ -111,7 +111,7 @@ export function BlogPostLayout({
 						<h1
 							className="rv rv-d2 font-bold text-white leading-tight mb-8"
 							style={{
-								fontFamily: 'Orbitron, sans-serif',
+								fontFamily: 'var(--font-heading), sans-serif',
 								fontSize: 'clamp(1.9rem, 5.5vw, 3.6rem)',
 								textShadow: '0 0 80px rgba(187,134,252,0.22)',
 								lineHeight: 1.12,
@@ -188,7 +188,7 @@ export function BlogPostLayout({
 							>
 								<span
 									style={{
-										fontFamily: 'Orbitron, sans-serif',
+										fontFamily: 'var(--font-heading), sans-serif',
 										fontSize: '3.4rem',
 										fontWeight: 700,
 										float: 'left',

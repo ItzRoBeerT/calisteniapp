@@ -1,13 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import WorkoutCard from './Card';
 import Paginator from '@/components/pagination/Paginator';
-import { getWorkoutsByPage } from '@/actions/workout';
+import { getWorkoutsByPageWithLikes } from '@/actions/workout';
 import Loader from '@/components/styles/Loader';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import { WorkoutDetail } from '@/types/Workout';
+import { useSearchParams } from 'next/navigation';
 
 type WorkoutsListProps = {
   initialWorkouts: unknown[];
@@ -18,15 +19,29 @@ type WorkoutsListProps = {
 
 export default function WorkoutsList({ initialWorkouts, totalPages, userId, favoriteIds = [] }: WorkoutsListProps) {
   const t = useTranslations('WorkoutsPage');
+  const searchParams = useSearchParams();
   const [workouts, setWorkouts] = useState<unknown[]>(initialWorkouts);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [totalPagesState, setTotalPagesState] = useState(totalPages);
 
+  useEffect(() => {
+    setWorkouts(initialWorkouts);
+    setTotalPagesState(totalPages);
+    setCurrentPage(1);
+  }, [initialWorkouts, totalPages]);
+
+  const getActiveFilters = () => ({
+    difficulty: searchParams.get('difficulty') || undefined,
+    muscleGroup: searchParams.get('muscleGroup') || undefined,
+    duration: searchParams.get('duration') || undefined,
+    tag: searchParams.get('tag') || undefined,
+  });
+
   const loadWorkouts = async (page: number) => {
     setIsLoading(true);
     try {
-      const data = await getWorkoutsByPage(page);
+      const data = await getWorkoutsByPageWithLikes(page, 12, getActiveFilters());
       if (data) {
         setWorkouts(data.workouts);
         setTotalPagesState(data.totalPages);

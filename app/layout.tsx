@@ -1,8 +1,16 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Space_Grotesk, Orbitron } from 'next/font/google';
 import './[locale]/globals.css';
 
-const inter = Inter({ subsets: ['latin'] });
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  variable: '--font-space-grotesk',
+});
+const orbitron = Orbitron({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '900'],
+  variable: '--font-heading',
+});
 
 export const metadata: Metadata = {
   title: 'OpenCalisthenics',
@@ -16,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className="h-full">
-      <body className={`${inter.className} flex flex-col min-h-screen bg-background text-foreground`}>
+      <body className={`${spaceGrotesk.variable} ${orbitron.variable} font-sans flex flex-col min-h-screen bg-background text-foreground`}>
         {children}
       </body>
     </html>

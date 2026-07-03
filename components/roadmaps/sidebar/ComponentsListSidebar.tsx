@@ -77,7 +77,6 @@ const ComponentsListSidebar: React.FC<ComponentsListSidebarProps> = ({
           </svg>
           <span
             className="text-sm font-semibold text-foreground/90"
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
             Componentes
           </span>
@@ -128,7 +127,6 @@ const ComponentsListSidebar: React.FC<ComponentsListSidebarProps> = ({
                     flex-1 text-sm truncate
                     ${isSelected ? 'text-primary-400 font-medium' : 'text-foreground/70'}
                   `}
-                  style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                 >
                   {node.data.label || 'Sin nombre'}
                 </span>

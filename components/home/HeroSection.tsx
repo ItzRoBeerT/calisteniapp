@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'motion/react';
 import { animate, utils as animeUtils } from 'animejs';
 import { Link } from '@/i18n/navigation';
-import NavLink from '@/components/header/NavLink';
 import { useTranslations } from 'next-intl';
 import { createClient } from '@/utils/supabase/client';
 import type { User } from '@supabase/supabase-js';
@@ -66,56 +65,194 @@ function HeroDotGrid() {
 	);
 }
 
-// ── Anime.js: Letter-by-letter hero title ──────────────────────────────────
-const HERO_COLORS = ['text-white', 'text-[#a386ff]', 'text-white'] as const;
-
-function AnimatedHeroTitle() {
-	const t = useTranslations('HomePage');
-	const wordRefs = useRef<(HTMLSpanElement | null)[]>([]);
-	const words = [
-		{ text: t('hero.titleLine1').toUpperCase(), color: HERO_COLORS[0] },
-		{ text: t('hero.titleLine2').toUpperCase(), color: HERO_COLORS[1] },
-		{ text: t('hero.titleLine3').toUpperCase(), color: HERO_COLORS[2] },
-	];
+// ── Anime.js: Letter-by-letter line ────────────────────────────────────────
+function AnimatedLine({ text, color, delay }: { text: string; color: string; delay: number }) {
+	const spanRef = useRef<HTMLSpanElement>(null);
 
 	useEffect(() => {
-		words.forEach((_, wi) => {
-			const letters = wordRefs.current[wi]?.querySelectorAll('.letter');
-			if (!letters?.length) return;
-
-			animate(Array.from(letters), {
-				translateY: ['110%', '0%'],
-				opacity: [0, 1],
-				delay: animeUtils.stagger(45, { start: wi * 160 + 80 }),
-				duration: 750,
-				ease: 'easeOutExpo',
-			});
+		const letters = spanRef.current?.querySelectorAll('.letter');
+		if (!letters?.length) return;
+		animate(Array.from(letters), {
+			translateY: ['110%', '0%'],
+			opacity: [0, 1],
+			delay: animeUtils.stagger(45, { start: delay }),
+			duration: 750,
+			ease: 'easeOutExpo',
 		});
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
-		<h1
-			className="font-bold leading-none"
-			style={{ fontFamily: 'Orbitron, sans-serif', letterSpacing: '-0.03em', lineHeight: 0.9 }}
+		<span
+			ref={spanRef}
+			className="block font-bold overflow-hidden text-[13vw] md:text-[120px] lg:text-[140px] font-heading"
+			style={{ color, letterSpacing: '-0.03em', lineHeight: 1, display: 'block' }}
 		>
-			{words.map(({ text, color }, wi) => (
+			{text.split('').map((char, i) => (
 				<span
-					key={wi}
-					ref={(el) => { wordRefs.current[wi] = el; }}
-					className={`block ${color} text-[13vw] md:text-[120px] lg:text-[140px] overflow-hidden`}
+					key={i}
+					className="letter inline-block opacity-0"
+					style={{ willChange: 'transform, opacity', transform: 'translateY(110%)' }}
 				>
-					{text.split('').map((char, li) => (
-						<span
-							key={li}
-							className="letter inline-block opacity-0"
-							style={{ willChange: 'transform, opacity', transform: 'translateY(110%)' }}
-						>
-							{char}
-						</span>
-					))}
+					{char}
 				</span>
 			))}
+		</span>
+	);
+}
+
+// ── Canvas: Particle text — single line ────────────────────────────────────
+interface Particle {
+	tx: number; ty: number;
+	x:  number; y:  number;
+	color: string;
+	delay: number;
+}
+
+function ParticleLine({ text, color }: { text: string; color: string }) {
+	const canvasRef = useRef<HTMLCanvasElement>(null);
+	const containerRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const canvas = canvasRef.current;
+		const container = containerRef.current;
+		if (!canvas || !container) return;
+
+		let animId: number;
+		let cancelled = false;
+
+		const easeOutExpo = (x: number) => x >= 1 ? 1 : 1 - Math.pow(2, -10 * x);
+
+		const init = async () => {
+			await document.fonts.ready;
+			if (cancelled) return;
+
+			const ctx = canvas.getContext('2d');
+			if (!ctx) return;
+
+			const W = container.clientWidth;
+			const vw = window.innerWidth;
+			const fontSize = vw < 768 ? vw * 0.13 : vw < 1024 ? 120 : 140;
+			const lineHeight = Math.ceil(fontSize * 0.9);
+			const H = lineHeight;
+			const particleGap = vw < 768 ? 3 : 4;
+
+			container.style.height = `${lineHeight}px`;
+
+			canvas.width = W;
+			canvas.height = H;
+			canvas.style.width = `${W}px`;
+			canvas.style.height = `${H}px`;
+
+			const off = document.createElement('canvas');
+			off.width = W;
+			off.height = H;
+			const offCtx = off.getContext('2d')!;
+			const orbitronFont = getComputedStyle(document.documentElement)
+				.getPropertyValue('--font-heading')
+				.trim();
+
+			offCtx.font = `700 ${fontSize}px ${orbitronFont || 'sans-serif'}`;
+			offCtx.textBaseline = 'middle';
+			offCtx.fillStyle = color;
+			offCtx.fillText(text, 0, H / 2);
+
+			const { data } = offCtx.getImageData(0, 0, W, H);
+			const particles: Particle[] = [];
+
+			for (let py = 0; py < H; py += particleGap) {
+				for (let px = 0; px < W; px += particleGap) {
+					const idx = (py * W + px) * 4;
+					if (data[idx + 3] > 100) {
+						particles.push({
+							tx: px,
+							ty: py,
+							x: Math.random() * W * 3 - W,
+							y: Math.random() * H * 6 - H * 2,
+							color: `rgb(${data[idx]},${data[idx + 1]},${data[idx + 2]})`,
+							delay: Math.random() * 700,
+						});
+					}
+				}
+			}
+
+			const DURATION = 1200;
+			let startTime: number | null = null;
+
+			const render = (now: number) => {
+				if (cancelled) return;
+				if (!startTime) startTime = now;
+				ctx.clearRect(0, 0, W, H);
+				let allDone = true;
+
+				for (const p of particles) {
+					const elapsed = now - startTime - p.delay;
+					let cx: number;
+					let cy: number;
+
+					if (elapsed <= 0) {
+						cx = p.x;
+						cy = p.y;
+						allDone = false;
+					} else {
+						const progress = Math.min(elapsed / DURATION, 1);
+						const e = easeOutExpo(progress);
+						cx = p.x + (p.tx - p.x) * e;
+						cy = p.y + (p.ty - p.y) * e;
+						if (progress < 1) allDone = false;
+					}
+
+					ctx.fillStyle = p.color;
+					ctx.fillRect(cx, cy, 2, 2);
+				}
+
+				if (!allDone) animId = requestAnimationFrame(render);
+			};
+
+			animId = requestAnimationFrame(render);
+		};
+
+		init();
+
+		return () => {
+			cancelled = true;
+			cancelAnimationFrame(animId);
+		};
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	return (
+		<div
+			ref={containerRef}
+			className="w-full overflow-hidden flex items-center font-heading"
+		>
+			<canvas ref={canvasRef} className="block" />
+		</div>
+	);
+}
+
+// ── Combined hero title ──────────────────────────────────────────────────────
+function ParticleHeroTitle() {
+	const t = useTranslations('HomePage');
+	const line1 = t('hero.titleLine1').toUpperCase();
+	const line2 = t('hero.titleLine2').toUpperCase();
+	const line3 = t('hero.titleLine3').toUpperCase();
+
+	return (
+		<h1
+			className="font-bold flex flex-col gap-0 font-heading"
+			style={{ letterSpacing: '-0.03em', lineHeight: 1 }}
+			aria-label={`${line1} ${line2} ${line3}`}
+		>
+			<span style={{ display: 'block', lineHeight: 1 }}>
+				<AnimatedLine text={line1} color="#FFFFFF" delay={80} />
+			</span>
+			<span style={{ display: 'block', lineHeight: 1 }}>
+				<ParticleLine text={line2} color="#a386ff" />
+			</span>
+			<span style={{ display: 'block', lineHeight: 1 }}>
+				<AnimatedLine text={line3} color="#FFFFFF" delay={480} />
+			</span>
 		</h1>
 	);
 }
@@ -177,11 +314,10 @@ const HeroSection = forwardRef<HTMLElement>(function HeroSection(_, ref) {
 					className="relative z-10 flex flex-col justify-center px-8 md:px-14 lg:px-[56px] py-16 md:py-20"
 					style={{ y: contentY, opacity: heroOpacity }}
 				>
-					<AnimatedHeroTitle />
+					<ParticleHeroTitle />
 
 					<motion.p
 						className="text-[#808080] text-sm mt-6 mb-7"
-						style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 						initial={{ opacity: 0, y: 10 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.6, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
@@ -200,19 +336,19 @@ const HeroSection = forwardRef<HTMLElement>(function HeroSection(_, ref) {
 							<>
 								<Link
 									href="/exercises"
-									className="bg-[#A386FF] hover:bg-[#b89fff] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all [font-family:'Orbitron',sans-serif]"
+									className="bg-[#A386FF] hover:bg-[#b89fff] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all font-heading"
 								>
 									{t('features.feature1.cta')}
 								</Link>
 								<Link
 									href="/workouts"
-									className="bg-[#32D74B] hover:bg-[#4fe063] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all [font-family:'Orbitron',sans-serif]"
+									className="bg-[#32D74B] hover:bg-[#4fe063] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all font-heading"
 								>
 									{t('features.feature2.cta')}
 								</Link>
 								<Link
 									href="/roadmaps"
-									className="bg-[#03DAC5] hover:bg-[#1de9d5] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all [font-family:'Orbitron',sans-serif]"
+									className="bg-[#03DAC5] hover:bg-[#1de9d5] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all font-heading"
 								>
 									{t('features.feature3.cta')}
 								</Link>
@@ -222,13 +358,13 @@ const HeroSection = forwardRef<HTMLElement>(function HeroSection(_, ref) {
 							<>
 								<Link
 									href="/register"
-									className="bg-primary-600 hover:bg-primary-500 text-white font-bold text-sm px-8 py-[14px] [font-family:'Orbitron',sans-serif] transition-all"
+									className="bg-primary-600 hover:bg-primary-500 text-white font-bold text-sm px-8 py-[14px] font-heading transition-all"
 								>
 									{t('hero.startFree')}
 								</Link>
 								<Link
 									href="/login"
-									className="bg-[#0C0C0C] hover:bg-[#1a1a1a] text-white font-bold text-sm px-8 py-[14px] [font-family:'Orbitron',sans-serif] border border-[#333333] transition-all"
+									className="bg-[#0C0C0C] hover:bg-[#1a1a1a] text-white font-bold text-sm px-8 py-[14px] font-heading border border-[#333333] transition-all"
 								>
 									{t('hero.login')} →
 								</Link>

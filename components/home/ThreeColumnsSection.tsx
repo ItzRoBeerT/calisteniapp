@@ -95,13 +95,13 @@ const ThreeColumnsSection = forwardRef<HTMLElement, ThreeColumnsSectionProps>(
 				>
 					<span
 						className="text-white font-bold"
-						style={{ fontFamily: 'Orbitron, sans-serif', fontSize: 18 }}
+						style={{ fontFamily: 'var(--font-heading), sans-serif', fontSize: 18 }}
 					>
 						{t('features.tagline')}
 					</span>
 					<span
 						className="text-[#444444]"
-						style={{ fontFamily: 'Space Grotesk, sans-serif', fontSize: 13 }}
+						style={{ fontSize: 13 }}
 					>
 						{t('features.description')}
 					</span>
@@ -119,15 +119,15 @@ const ThreeColumnsSection = forwardRef<HTMLElement, ThreeColumnsSectionProps>(
 						<div>
 							<h2
 								className="font-bold text-white text-3xl md:text-4xl"
-								style={{ fontFamily: 'Orbitron, sans-serif', lineHeight: 1 }}
+								style={{ fontFamily: 'var(--font-heading), sans-serif', lineHeight: 1 }}
 							>
 								{t('features.feature1.heading')}
 							</h2>
-							<p className="text-[#A386FF] font-semibold mt-2 text-base md:text-lg" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+							<p className="text-[#A386FF] font-semibold mt-2 text-base md:text-lg">
 								{t('features.feature1.libraryOf', { count: exerciseCount > 0 ? exerciseCount : 50 })}
 							</p>
 						</div>
-						<p className="text-[#6B7280] leading-relaxed max-w-xs text-sm" style={{ fontFamily: 'Space Grotesk, sans-serif', lineHeight: 1.6 }}>
+						<p className="text-[#6B7280] leading-relaxed max-w-xs text-sm" style={{ lineHeight: 1.6 }}>
 							{t('features.feature1.description')}
 						</p>
 						<Link
@@ -151,15 +151,15 @@ const ThreeColumnsSection = forwardRef<HTMLElement, ThreeColumnsSectionProps>(
 						<div>
 							<h2
 								className="font-bold text-white text-3xl md:text-4xl"
-								style={{ fontFamily: 'Orbitron, sans-serif', lineHeight: 1 }}
+								style={{ fontFamily: 'var(--font-heading), sans-serif', lineHeight: 1 }}
 							>
 								{t('features.feature2.heading')}
 							</h2>
-							<p className="text-[#32D74B] font-semibold mt-2 text-base md:text-lg" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+							<p className="text-[#32D74B] font-semibold mt-2 text-base md:text-lg">
 								{t('features.feature2.aiSubtitle')}
 							</p>
 						</div>
-						<p className="text-[#6B7280] leading-relaxed max-w-xs text-sm" style={{ fontFamily: 'Space Grotesk, sans-serif', lineHeight: 1.6 }}>
+						<p className="text-[#6B7280] leading-relaxed max-w-xs text-sm" style={{ lineHeight: 1.6 }}>
 							{t('features.feature2.description')}
 						</p>
 						<Link
@@ -183,15 +183,15 @@ const ThreeColumnsSection = forwardRef<HTMLElement, ThreeColumnsSectionProps>(
 						<div>
 							<h2
 								className="font-bold text-white text-3xl md:text-4xl"
-								style={{ fontFamily: 'Orbitron, sans-serif', lineHeight: 1 }}
+								style={{ fontFamily: 'var(--font-heading), sans-serif', lineHeight: 1 }}
 							>
 								ROADMAPS
 							</h2>
-							<p className="text-[#03DAC5] font-semibold mt-2 text-base md:text-lg" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+							<p className="text-[#03DAC5] font-semibold mt-2 text-base md:text-lg">
 								{t('features.feature3.subtitle')}
 							</p>
 						</div>
-						<p className="text-[#6B7280] leading-relaxed max-w-xs text-sm" style={{ fontFamily: 'Space Grotesk, sans-serif', lineHeight: 1.6 }}>
+						<p className="text-[#6B7280] leading-relaxed max-w-xs text-sm" style={{ lineHeight: 1.6 }}>
 							{t('features.feature3.description')}
 						</p>
 						<Link

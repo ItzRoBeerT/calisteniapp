@@ -50,8 +50,7 @@ const ExerciseCard = React.memo(function ExerciseCard({ exercise }: { exercise: 
 				</div>
 				<div className="p-3 md:p-4">
 					<h2
-						className="text-xs md:text-sm font-bold text-white mb-2 group-hover:text-primary-400 transition-colors line-clamp-1"
-						style={{ fontFamily: 'Orbitron, sans-serif' }}
+						className="text-xs md:text-sm font-bold text-white mb-2 group-hover:text-primary-400 transition-colors line-clamp-1 font-heading"
 					>
 						{exercise.name}
 					</h2>
@@ -60,7 +59,6 @@ const ExerciseCard = React.memo(function ExerciseCard({ exercise }: { exercise: 
 							<span
 								key={mg}
 								className="px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[#6B7280] text-xs"
-								style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 							>
 								{t(`muscleGroups.${mg as MuscleGroup}`) || mg}
 							</span>

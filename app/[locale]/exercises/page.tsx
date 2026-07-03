@@ -26,8 +26,7 @@ export default async function ExercisesPage({ params }: Props) {
 		<>
 			<div className="flex items-center justify-between gap-4 mb-8">
 				<h1
-					className="text-4xl md:text-5xl font-bold text-white"
-					style={{ fontFamily: 'Orbitron, sans-serif' }}
+					className="text-4xl md:text-5xl font-bold text-white font-heading"
 				>
 					{t('title')}
 				</h1>

@@ -39,13 +39,11 @@ export default function RoadmapProgress({
         <div>
           <h3
             className="text-sm font-semibold text-foreground/60 uppercase tracking-wider"
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
             {t('progressBar.title')}
           </h3>
           <p
             className="text-xs text-foreground/40 mt-0.5"
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
             {t('progressBar.completed', { count: completedNodes, total: totalNodes })}
           </p>
@@ -56,8 +54,7 @@ export default function RoadmapProgress({
           <span
             className={`text-3xl font-bold tabular-nums ${
               percentage >= 100 ? 'text-secondary-400' : 'text-primary-400'
-            }`}
-            style={{ fontFamily: "'Orbitron', sans-serif" }}
+            } font-heading`}
           >
             {percentage}
           </span>
@@ -161,7 +158,6 @@ export default function RoadmapProgress({
           </svg>
           <span
             className="text-sm text-secondary-400 font-medium"
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
             {t('progressBar.complete')}
           </span>

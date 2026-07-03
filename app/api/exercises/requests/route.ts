@@ -11,6 +11,10 @@ export async function POST(req: NextRequest) {
 
 	const supabase = await createClient();
 
+	if (!supabase) {
+		return NextResponse.json({ error: 'Servicio no disponible' }, { status: 503 });
+	}
+
 	const { data: { user } } = await supabase.auth.getUser();
 
 	if (!user) {

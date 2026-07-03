@@ -47,7 +47,7 @@ export default function BlogList() {
 								<div
 									className="shrink-0 w-12 text-right font-bold leading-none pt-1 text-gray-700 group-hover:text-primary-500/50 transition-colors duration-300"
 									style={{
-										fontFamily: 'Orbitron, sans-serif',
+										fontFamily: 'var(--font-heading), sans-serif',
 										fontSize: '1.75rem',
 									}}
 								>
@@ -59,7 +59,7 @@ export default function BlogList() {
 									<h2
 										className="font-bold text-white mb-3 group-hover:text-primary-200 transition-colors duration-300"
 										style={{
-											fontFamily: 'Orbitron, sans-serif',
+											fontFamily: 'var(--font-heading), sans-serif',
 											fontSize: 'clamp(0.95rem, 2.2vw, 1.25rem)',
 											lineHeight: 1.3,
 										}}

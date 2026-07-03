@@ -1,11 +1,5 @@
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
-import { Space_Grotesk } from 'next/font/google';
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  weight: ['700'],
-});
 
 export default async function NotFound() {
   const t = await getTranslations('NotFound');
@@ -32,7 +26,7 @@ export default async function NotFound() {
 
       {/* 404 Text */}
       <h1
-        className={spaceGrotesk.className}
+        className="font-heading"
         style={{
           fontSize: 'clamp(8rem, 20vw, 16rem)',
           fontWeight: 700,

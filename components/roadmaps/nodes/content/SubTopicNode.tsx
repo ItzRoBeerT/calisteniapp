@@ -159,7 +159,6 @@ const SubTopicNode: React.FC<SubTopicNodeProps> = ({ data, selected = false }) =
           )}
           <span
             className="font-medium text-xs leading-tight text-center"
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
             {data.label}
           </span>

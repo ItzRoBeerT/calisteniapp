@@ -11,7 +11,17 @@ export const metadata: Metadata = {
   description: 'Gestiona tus entrenamientos personalizados para mejorar tu fuerza y rendimiento',
 };
 
-export default async function WorkoutsPage() {
+type WorkoutsPageProps = {
+  searchParams: Promise<{
+    difficulty?: string;
+    muscleGroup?: string;
+    duration?: string;
+    tag?: string;
+  }>;
+};
+
+export default async function WorkoutsPage({ searchParams }: WorkoutsPageProps) {
+  const activeFilters = await searchParams;
   const supabase = await createClient();
   let userId: string | undefined;
 
@@ -20,8 +30,8 @@ export default async function WorkoutsPage() {
     userId = user?.id;
   }
 
-  const [data, filters, favoriteIds] = await Promise.all([
-    getWorkoutsByPageWithLikes(1),
+  const [data, availableFilters, favoriteIds] = await Promise.all([
+    getWorkoutsByPageWithLikes(1, 12, activeFilters),
     getWorkoutFilters(),
     userId ? getFavoriteWorkoutIds() : Promise.resolve([]),
   ]);
@@ -51,7 +61,7 @@ export default async function WorkoutsPage() {
         )}
       </div>
       <section>
-        <WorkoutFilter allFilters={filters} />
+        <WorkoutFilter allFilters={availableFilters} />
       </section>
       <section>
         <WorkoutsList

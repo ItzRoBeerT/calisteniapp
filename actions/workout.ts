@@ -3,6 +3,29 @@ import { createClient } from '@/utils/supabase/server';
 import { mockWorkoutDetails, mockWorkoutFilters, mockExercises } from '@/utils/mock-data';
 import type { RecentWorkoutData } from '@/types/Workout';
 
+type DurationRange = {
+	min: number;
+	max?: number;
+};
+
+function parseDurationRange(range?: string): DurationRange | null {
+	if (!range) return null;
+
+	if (range.endsWith('+')) {
+		const min = Number(range.replace('+', ''));
+		if (Number.isNaN(min)) return null;
+		return { min };
+	}
+
+	const [minRaw, maxRaw] = range.split('-');
+	const min = Number(minRaw);
+	const max = Number(maxRaw);
+
+	if (Number.isNaN(min) || Number.isNaN(max)) return null;
+
+	return { min, max };
+}
+
 export async function getWorkout(id: string) {
 	const supabase = await createClient();
 
@@ -111,8 +134,15 @@ export async function getWorkoutsByPage(page = 1, limit = 12, filters?: any) {
 				);
 			}
 			if (filters.duration) {
+				const durationRange = parseDurationRange(filters.duration);
 				filteredWorkouts = filteredWorkouts.filter(
-					(w) => w.duration === Number(filters.duration)
+					(w) => {
+						if (!durationRange || !w.duration) return false;
+						if (durationRange.max === undefined) {
+							return w.duration >= durationRange.min;
+						}
+						return w.duration >= durationRange.min && w.duration < durationRange.max;
+					}
 				);
 			}
 			if (filters.tag) {
@@ -160,6 +190,15 @@ export async function getWorkoutsByPage(page = 1, limit = 12, filters?: any) {
 		}
 		if (filters.muscleGroups) {
 			query = query.contains('muscle_groups', [filters.muscleGroups]);
+		}
+		if (filters.duration) {
+			const durationRange = parseDurationRange(filters.duration);
+			if (durationRange) {
+				query = query.gte('duration', durationRange.min);
+				if (durationRange.max !== undefined) {
+					query = query.lt('duration', durationRange.max);
+				}
+			}
 		}
 	}
 
@@ -926,8 +965,15 @@ export async function getWorkoutsByPageWithLikes(page = 1, limit = 12, filters?:
 				);
 			}
 			if (filters.duration) {
+				const durationRange = parseDurationRange(filters.duration);
 				filteredWorkouts = filteredWorkouts.filter(
-					(w) => w.duration === Number(filters.duration)
+					(w) => {
+						if (!durationRange || !w.duration) return false;
+						if (durationRange.max === undefined) {
+							return w.duration >= durationRange.min;
+						}
+						return w.duration >= durationRange.min && w.duration < durationRange.max;
+					}
 				);
 			}
 			if (filters.tag) {
@@ -976,6 +1022,15 @@ export async function getWorkoutsByPageWithLikes(page = 1, limit = 12, filters?:
 		}
 		if (filters.muscleGroups) {
 			query = query.contains('muscle_groups', [filters.muscleGroups]);
+		}
+		if (filters.duration) {
+			const durationRange = parseDurationRange(filters.duration);
+			if (durationRange) {
+				query = query.gte('duration', durationRange.min);
+				if (durationRange.max !== undefined) {
+					query = query.lt('duration', durationRange.max);
+				}
+			}
 		}
 	}
 

@@ -38,7 +38,7 @@ const TitleNode: React.FC<TitleNodeProps> = ({ data, selected = false }) => {
             fontSize,
             fontWeight,
             color,
-            fontFamily: "'Orbitron', 'Space Grotesk', sans-serif",
+            fontFamily: 'var(--font-heading), sans-serif',
             lineHeight: 1.2,
             margin: 0,
             textAlign,

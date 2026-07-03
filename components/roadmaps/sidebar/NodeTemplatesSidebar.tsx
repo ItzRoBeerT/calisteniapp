@@ -154,7 +154,6 @@ const NodeTemplatesSidebar: React.FC<NodeTemplatesSidebarProps> = ({ onDragStart
                 {/* Label */}
                 <span
                   className="flex-1 text-left text-sm text-foreground/80"
-                  style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                 >
                   {categoryLabels[category.id]}
                 </span>
@@ -188,7 +187,6 @@ const NodeTemplatesSidebar: React.FC<NodeTemplatesSidebarProps> = ({ onDragStart
                       {/* Nombre del template */}
                       <span
                         className="text-sm text-foreground/70 group-hover:text-foreground/90 transition-colors"
-                        style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                       >
                         {templateLabels[template.type] || template.label}
                       </span>
