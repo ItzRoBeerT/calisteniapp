@@ -46,9 +46,6 @@ const ProgressButton = ({
             : 'border-foreground/20 text-foreground/50 hover:border-foreground/40 hover:text-foreground/70'
         }
       `}
-      style={{
-        fontFamily: "'Space Grotesk', sans-serif",
-      }}
     >
       {label}
     </button>
@@ -120,8 +117,7 @@ export default function NodeDetailPanel({
           <div className="flex justify-between items-start gap-4">
             <div className="flex-1 min-w-0">
               <h2
-                className="text-xl font-bold text-foreground truncate"
-                style={{ fontFamily: "'Orbitron', sans-serif" }}
+                className="text-xl font-bold text-foreground truncate font-heading"
               >
                 {content?.title || node?.label || t('noTitle')}
               </h2>
@@ -150,7 +146,6 @@ export default function NodeDetailPanel({
               <section className="space-y-3">
                 <h3
                   className="text-sm font-semibold text-foreground/60 uppercase tracking-wider"
-                  style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                 >
                   {t('progress')}
                 </h3>
@@ -172,13 +167,11 @@ export default function NodeDetailPanel({
                 <section className="space-y-3">
                   <h3
                     className="text-sm font-semibold text-foreground/60 uppercase tracking-wider"
-                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                   >
                     {t('description')}
                   </h3>
                   <p
                     className="text-foreground/80 leading-relaxed"
-                    style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                   >
                     {content.description}
                   </p>
@@ -198,14 +191,12 @@ export default function NodeDetailPanel({
                       </span>
                       <h3
                         className="text-sm font-semibold text-tertiary-400"
-                        style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                       >
                         {t('tips')}
                       </h3>
                     </div>
                     <p
                       className="text-sm text-foreground/70 leading-relaxed"
-                      style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                     >
                       {content.tips}
                     </p>
@@ -217,7 +208,6 @@ export default function NodeDetailPanel({
               <section className="space-y-3">
                 <h3
                   className="text-sm font-semibold text-foreground/60 uppercase tracking-wider"
-                  style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                 >
                   {t('resources')} ({content.resources?.length || 0})
                 </h3>

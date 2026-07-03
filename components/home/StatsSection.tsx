@@ -73,8 +73,7 @@ export default function StatsSection({ exerciseCount }: { exerciseCount: number 
 			className={`${fullBleed} py-16 md:py-20 px-6 md:px-14 bg-gradient-to-br from-primary-900/60 via-secondary-900/30 to-tertiary-900/60`}
 		>
 			<motion.h2
-				className="text-3xl md:text-4xl font-bold text-center text-white mb-3 max-w-2xl mx-auto px-4"
-				style={{ fontFamily: 'Orbitron, sans-serif' }}
+				className="text-3xl md:text-4xl font-bold text-center text-white mb-3 max-w-2xl mx-auto px-4 font-heading"
 				initial={{ opacity: 0, y: 30 }}
 				whileInView={{ opacity: 1, y: 0 }}
 				viewport={{ once: true }}
@@ -84,7 +83,6 @@ export default function StatsSection({ exerciseCount }: { exerciseCount: number 
 			</motion.h2>
 			<motion.p
 				className="text-[#666666] text-sm md:text-base text-center mb-10 md:mb-12 max-w-lg mx-auto px-4"
-				style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 				initial={{ opacity: 0 }}
 				whileInView={{ opacity: 1 }}
 				viewport={{ once: true }}
@@ -106,14 +104,13 @@ export default function StatsSection({ exerciseCount }: { exerciseCount: number 
 							transition={{ duration: 0.25 }}
 						>
 							<p
-								className={`text-4xl md:text-5xl font-bold bg-gradient-to-b ${stat.gradient} bg-clip-text text-transparent mb-3`}
-								style={{ fontFamily: 'Orbitron, sans-serif' }}
+								className={`text-4xl md:text-5xl font-bold bg-gradient-to-b ${stat.gradient} bg-clip-text text-transparent mb-3 font-heading`}
 							>
 								<CountUp countTo={stat.countTo} prefix={stat.prefix} suffix={stat.suffix} />
 							</p>
 							<p
 								className="text-[#AAAAAA] text-xs md:text-sm leading-snug"
-								style={{ fontFamily: 'Space Grotesk, sans-serif', lineHeight: 1.4 }}
+								style={{ lineHeight: 1.4 }}
 							>
 								{stat.label}
 							</p>

@@ -2,15 +2,8 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Orbitron } from 'next/font/google';
 import esMessages from '@/messages/es.json';
 import enMessages from '@/messages/en.json';
-
-const orbitron = Orbitron({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-});
 
 const translations = {
   es: esMessages.NotFound,
@@ -40,7 +33,7 @@ export default function GlobalNotFound() {
 
       {/* 404 Text */}
       <h1
-        className={orbitron.className}
+        className="font-heading"
         style={{
           fontSize: 'clamp(8rem, 20vw, 16rem)',
           fontWeight: 900,

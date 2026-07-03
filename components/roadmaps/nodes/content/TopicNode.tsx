@@ -145,7 +145,6 @@ const TopicNode: React.FC<TopicNodeProps> = ({ data, selected = false }) => {
           )}
           <span
             className="font-medium text-sm leading-tight text-center"
-            style={{ fontFamily: "'Space Grotesk', sans-serif" }}
           >
             {data.label}
           </span>

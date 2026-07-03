@@ -9,7 +9,9 @@ export default {
 	theme: {
 		extend: {
 			fontFamily: {
-				orbitron: ['var(--font-orbitron)'],
+				// Tokens de tipografía: heading para titulares, sans (por defecto) para el resto
+				sans: ['var(--font-space-grotesk)', 'system-ui', 'sans-serif'],
+				heading: ['var(--font-heading)', 'sans-serif'],
 			},
 			colors: {
 				background: '#121212',

@@ -124,7 +124,6 @@ export default function FilterPanel({
         </svg>
         <span
           className="text-xs font-semibold text-[#555555] uppercase tracking-widest"
-          style={{ fontFamily: 'Space Grotesk, sans-serif' }}
         >
           {translations.filters ?? 'Filters'}
         </span>
@@ -136,7 +135,6 @@ export default function FilterPanel({
               <span
                 key={label}
                 className="px-2 py-0.5 rounded-full bg-primary-500/20 border border-primary-500/50 text-primary-400 text-xs font-medium"
-                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
               >
                 {label}
               </span>
@@ -171,7 +169,6 @@ export default function FilterPanel({
               <div key={field.key} className="pt-4">
                 <p
                   className="text-xs font-semibold text-[#555555] uppercase tracking-widest mb-2"
-                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                 >
                   {field.label}
                 </p>
@@ -184,7 +181,6 @@ export default function FilterPanel({
                         ? 'bg-primary-500/20 border-primary-500/50 text-primary-400'
                         : 'bg-white/5 border-white/10 text-[#6B7280] hover:border-white/20 hover:text-white'
                     }`}
-                    style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                   >
                     {translations.all}
                   </button>
@@ -205,7 +201,6 @@ export default function FilterPanel({
                             ? 'bg-primary-500/20 border-primary-500/50 text-primary-400'
                             : 'bg-white/5 border-white/10 text-[#6B7280] hover:border-white/20 hover:text-white'
                         }`}
-                        style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                       >
                         {option.label}
                         {field.suffix ? ` ${field.suffix}` : ''}
@@ -223,7 +218,6 @@ export default function FilterPanel({
                 <button
                   onClick={clearFilters}
                   className="px-4 py-1.5 rounded-lg border border-white/10 bg-white/5 text-[#6B7280] text-xs font-medium hover:text-white hover:border-white/20 transition-colors"
-                  style={{ fontFamily: 'Space Grotesk, sans-serif' }}
                 >
                   {translations.clear}
                 </button>
@@ -231,7 +225,6 @@ export default function FilterPanel({
               <button
                 onClick={() => { applyFiltersToUrl(filters); setOpen(false); }}
                 className="px-4 py-1.5 rounded-lg bg-primary-500/20 border border-primary-500/50 text-primary-400 text-xs font-medium hover:bg-primary-500/30 transition-colors"
-                style={{ fontFamily: 'Space Grotesk, sans-serif' }}
               >
                 {translations.apply}
               </button>

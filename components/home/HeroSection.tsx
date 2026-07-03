@@ -85,7 +85,7 @@ function AnimatedLine({ text, color, delay }: { text: string; color: string; del
 	return (
 		<span
 			ref={spanRef}
-			className="block font-bold overflow-hidden text-[13vw] md:text-[120px] lg:text-[140px] font-orbitron"
+			className="block font-bold overflow-hidden text-[13vw] md:text-[120px] lg:text-[140px] font-heading"
 			style={{ color, letterSpacing: '-0.03em', lineHeight: 1, display: 'block' }}
 		>
 			{text.split('').map((char, i) => (
@@ -149,7 +149,7 @@ function ParticleLine({ text, color }: { text: string; color: string }) {
 			off.height = H;
 			const offCtx = off.getContext('2d')!;
 			const orbitronFont = getComputedStyle(document.documentElement)
-				.getPropertyValue('--font-orbitron')
+				.getPropertyValue('--font-heading')
 				.trim();
 
 			offCtx.font = `700 ${fontSize}px ${orbitronFont || 'sans-serif'}`;
@@ -224,7 +224,7 @@ function ParticleLine({ text, color }: { text: string; color: string }) {
 	return (
 		<div
 			ref={containerRef}
-			className="w-full overflow-hidden flex items-center font-orbitron"
+			className="w-full overflow-hidden flex items-center font-heading"
 		>
 			<canvas ref={canvasRef} className="block" />
 		</div>
@@ -240,7 +240,7 @@ function ParticleHeroTitle() {
 
 	return (
 		<h1
-			className="font-bold flex flex-col gap-0 font-orbitron"
+			className="font-bold flex flex-col gap-0 font-heading"
 			style={{ letterSpacing: '-0.03em', lineHeight: 1 }}
 			aria-label={`${line1} ${line2} ${line3}`}
 		>
@@ -318,7 +318,6 @@ const HeroSection = forwardRef<HTMLElement>(function HeroSection(_, ref) {
 
 					<motion.p
 						className="text-[#808080] text-sm mt-6 mb-7"
-						style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 						initial={{ opacity: 0, y: 10 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 0.6, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
@@ -337,19 +336,19 @@ const HeroSection = forwardRef<HTMLElement>(function HeroSection(_, ref) {
 							<>
 								<Link
 									href="/exercises"
-									className="bg-[#A386FF] hover:bg-[#b89fff] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all font-orbitron"
+									className="bg-[#A386FF] hover:bg-[#b89fff] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all font-heading"
 								>
 									{t('features.feature1.cta')}
 								</Link>
 								<Link
 									href="/workouts"
-									className="bg-[#32D74B] hover:bg-[#4fe063] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all font-orbitron"
+									className="bg-[#32D74B] hover:bg-[#4fe063] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all font-heading"
 								>
 									{t('features.feature2.cta')}
 								</Link>
 								<Link
 									href="/roadmaps"
-									className="bg-[#03DAC5] hover:bg-[#1de9d5] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all font-orbitron"
+									className="bg-[#03DAC5] hover:bg-[#1de9d5] text-[#080808] font-bold text-sm px-6 py-3 rounded-md transition-all font-heading"
 								>
 									{t('features.feature3.cta')}
 								</Link>
@@ -359,13 +358,13 @@ const HeroSection = forwardRef<HTMLElement>(function HeroSection(_, ref) {
 							<>
 								<Link
 									href="/register"
-									className="bg-primary-600 hover:bg-primary-500 text-white font-bold text-sm px-8 py-[14px] font-orbitron transition-all"
+									className="bg-primary-600 hover:bg-primary-500 text-white font-bold text-sm px-8 py-[14px] font-heading transition-all"
 								>
 									{t('hero.startFree')}
 								</Link>
 								<Link
 									href="/login"
-									className="bg-[#0C0C0C] hover:bg-[#1a1a1a] text-white font-bold text-sm px-8 py-[14px] font-orbitron border border-[#333333] transition-all"
+									className="bg-[#0C0C0C] hover:bg-[#1a1a1a] text-white font-bold text-sm px-8 py-[14px] font-heading border border-[#333333] transition-all"
 								>
 									{t('hero.login')} →
 								</Link>

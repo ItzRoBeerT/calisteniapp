@@ -21,8 +21,7 @@ export default function FeaturedExercisesSection({
 	return (
 		<AnimatedSection className="py-16 md:py-20">
 			<motion.h2
-				className="text-3xl md:text-4xl font-bold text-center mb-3 text-white"
-				style={{ fontFamily: 'Orbitron, sans-serif' }}
+				className="text-3xl md:text-4xl font-bold text-center mb-3 text-white font-heading"
 				initial={{ opacity: 0, y: 30 }}
 				whileInView={{ opacity: 1, y: 0 }}
 				viewport={{ once: true }}
@@ -32,7 +31,6 @@ export default function FeaturedExercisesSection({
 			</motion.h2>
 			<motion.p
 				className="text-[#555555] text-sm md:text-base text-center mb-10 md:mb-12 max-w-xl mx-auto px-4"
-				style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 				initial={{ opacity: 0 }}
 				whileInView={{ opacity: 1 }}
 				viewport={{ once: true }}

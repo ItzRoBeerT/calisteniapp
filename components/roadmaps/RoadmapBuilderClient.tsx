@@ -482,8 +482,7 @@ function RoadmapBuilder() {
       {/* Toolbar */}
       <div className="flex items-center justify-between p-4 bg-surface border-b border-foreground/10">
         <h1
-          className="text-xl font-bold text-foreground"
-          style={{ fontFamily: "'Orbitron', sans-serif" }}
+          className="text-xl font-bold text-foreground font-heading"
         >
           {t('title')}
         </h1>

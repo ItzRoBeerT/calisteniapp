@@ -90,8 +90,7 @@ const ImageNode: React.FC<ImageNodeProps> = ({ data, selected = false }) => {
             style={{
               borderBottomLeftRadius: borderRadius,
               borderBottomRightRadius: borderRadius,
-              fontFamily: "'Space Grotesk', sans-serif",
-            }}
+              }}
           >
             {data.label}
           </div>

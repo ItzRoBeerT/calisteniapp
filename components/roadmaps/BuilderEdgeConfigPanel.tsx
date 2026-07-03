@@ -208,8 +208,7 @@ export default function BuilderEdgeConfigPanel({
       {/* Header */}
       <div className="p-4 border-b border-foreground/10 flex items-center justify-between">
         <h3
-          className="font-semibold text-foreground"
-          style={{ fontFamily: "'Orbitron', sans-serif" }}
+          className="font-semibold text-foreground font-heading"
         >
           Estilo de Conexión
         </h3>

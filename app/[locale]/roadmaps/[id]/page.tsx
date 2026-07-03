@@ -61,8 +61,7 @@ export default function RoadmapDetailPage({
             </svg>
           </div>
           <h1
-            className="text-2xl font-bold text-foreground mb-2"
-            style={{ fontFamily: "'Orbitron', sans-serif" }}
+            className="text-2xl font-bold text-foreground mb-2 font-heading"
           >
             {error || 'Roadmap no encontrado'}
           </h1>
@@ -99,8 +98,7 @@ export default function RoadmapDetailPage({
               </svg>
             </Link>
             <h1
-              className="text-2xl sm:text-3xl font-bold text-foreground"
-              style={{ fontFamily: "'Orbitron', sans-serif" }}
+              className="text-2xl sm:text-3xl font-bold text-foreground font-heading"
             >
               {roadmap.title}
             </h1>
@@ -113,7 +111,6 @@ export default function RoadmapDetailPage({
         </div>
         <p
           className="text-foreground/60 max-w-2xl ml-10"
-          style={{ fontFamily: "'Space Grotesk', sans-serif" }}
         >
           {roadmap.description}
         </p>

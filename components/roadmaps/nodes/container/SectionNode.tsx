@@ -40,8 +40,7 @@ const SectionNode: React.FC<SectionNodeProps> = ({ data, selected = false }) => 
           style={{
             backgroundColor: 'rgba(30, 30, 30, 0.95)',
             color: '#BB86FC',
-            fontFamily: "'Space Grotesk', sans-serif",
-          }}
+            }}
         >
           {data.label}
         </div>
@@ -67,8 +66,7 @@ const SectionNode: React.FC<SectionNodeProps> = ({ data, selected = false }) => 
         style={{
           backgroundColor: 'rgba(187, 134, 252, 0.2)',
           color: 'rgba(187, 134, 252, 0.8)',
-          fontFamily: "'Space Grotesk', sans-serif",
-        }}
+          }}
       >
         Sección
       </div>

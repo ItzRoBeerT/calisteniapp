@@ -46,7 +46,6 @@ export default function Paginator(props: {
 							disabled={currentPage === 1}
 							className="px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors"
 							style={{
-								fontFamily: 'Space Grotesk, sans-serif',
 								...(currentPage === 1
 									? { borderColor: 'rgba(255,255,255,0.05)', color: '#374151', cursor: 'not-allowed' }
 									: { borderColor: 'rgba(255,255,255,0.1)', color: '#6B7280', background: 'rgba(255,255,255,0.05)' }),
@@ -63,7 +62,6 @@ export default function Paginator(props: {
 									onClick={() => onPageChange(page)}
 									className="w-8 h-8 rounded-lg border text-xs font-medium transition-colors"
 									style={{
-										fontFamily: 'Space Grotesk, sans-serif',
 										...(currentPage === page
 											? { background: 'rgba(163,134,255,0.2)', borderColor: 'rgba(163,134,255,0.5)', color: '#a388ff' }
 											: { background: 'rgba(255,255,255,0.05)', borderColor: 'rgba(255,255,255,0.1)', color: '#6B7280' }),
@@ -85,7 +83,6 @@ export default function Paginator(props: {
 							disabled={currentPage === totalPages}
 							className="px-3 py-1.5 rounded-lg border text-xs font-medium transition-colors"
 							style={{
-								fontFamily: 'Space Grotesk, sans-serif',
 								...(currentPage === totalPages
 									? { borderColor: 'rgba(255,255,255,0.05)', color: '#374151', cursor: 'not-allowed' }
 									: { borderColor: 'rgba(255,255,255,0.1)', color: '#6B7280', background: 'rgba(255,255,255,0.05)' }),

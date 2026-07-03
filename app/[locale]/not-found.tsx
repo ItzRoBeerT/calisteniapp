@@ -1,12 +1,5 @@
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
-import { Orbitron } from 'next/font/google';
-
-const orbitron = Orbitron({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-});
 
 export default async function NotFound() {
   const t = await getTranslations('NotFound');
@@ -33,7 +26,7 @@ export default async function NotFound() {
 
       {/* 404 Text */}
       <h1
-        className={orbitron.className}
+        className="font-heading"
         style={{
           fontSize: 'clamp(8rem, 20vw, 16rem)',
           fontWeight: 700,

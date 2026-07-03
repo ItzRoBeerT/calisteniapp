@@ -95,8 +95,7 @@ export default function RoadmapsList() {
 
                 <div className="relative">
                   <h2
-                    className="text-lg font-bold mb-2 text-foreground group-hover:text-primary-400 transition-colors"
-                    style={{ fontFamily: "'Orbitron', sans-serif" }}
+                    className="text-lg font-bold mb-2 text-foreground group-hover:text-primary-400 transition-colors font-heading"
                   >
                     {roadmap.title}
                   </h2>
@@ -104,7 +103,6 @@ export default function RoadmapsList() {
                   {roadmap.description && (
                     <p
                       className="text-sm text-foreground/60 mb-4 line-clamp-2"
-                      style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                     >
                       {roadmap.description}
                     </p>
@@ -160,7 +158,6 @@ export default function RoadmapsList() {
                 </div>
                 <span
                   className="text-sm font-medium text-foreground/60 group-hover:text-primary-400 transition-colors"
-                  style={{ fontFamily: "'Space Grotesk', sans-serif" }}
                 >
                   Crear nuevo roadmap
                 </span>

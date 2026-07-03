@@ -46,13 +46,11 @@ const BaseConfigPanel: React.FC<BaseConfigPanelProps> = ({
   return (
     <div
       className="w-80 h-full flex flex-col border-l border-foreground/10 bg-surface/95 backdrop-blur-md"
-      style={{ fontFamily: "'Space Grotesk', sans-serif" }}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-foreground/10">
         <h3
-          className="text-lg font-semibold text-foreground"
-          style={{ fontFamily: "'Orbitron', sans-serif" }}
+          className="text-lg font-semibold text-foreground font-heading"
         >
           {title}
         </h3>

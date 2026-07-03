@@ -28,7 +28,6 @@ function TagCheckbox({
 					? 'bg-primary-500/20 border-primary-500/50 text-primary-400'
 					: 'bg-white/5 border-white/10 text-[#6B7280] hover:border-white/20'
 			}`}
-			style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 		>
 			{label}
 		</button>
@@ -115,7 +114,6 @@ export default function RequestExerciseButton() {
 					setOpen(true);
 				}}
 				className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-sm font-medium text-[#6B7280] hover:text-primary-600 hover:border-primary-600/20 transition-colors duration-200 shrink-0"
-				style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 			>
 				<svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
 					<path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
@@ -141,10 +139,10 @@ export default function RequestExerciseButton() {
 									<path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
 								</svg>
 							</button>
-							<h3 className="text-xl font-bold text-white pr-8" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+							<h3 className="text-xl font-bold text-white pr-8 font-heading">
 								{t('requestModal.title')}
 							</h3>
-							<p className="text-xs text-[#555555] mt-1" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+							<p className="text-xs text-[#555555] mt-1">
 								{t('requestModal.subtitle')}
 							</p>
 						</div>
@@ -156,17 +154,16 @@ export default function RequestExerciseButton() {
 										<path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
 									</svg>
 								</div>
-								<h3 className="text-lg font-bold text-white mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+								<h3 className="text-lg font-bold text-white mb-2 font-heading">
 									{t('requestModal.authRequired')}
 								</h3>
-								<p className="text-sm text-[#6B7280] mb-6" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+								<p className="text-sm text-[#6B7280] mb-6">
 									{t('requestModal.authMessage')}
 								</p>
 								<Link
 									href={`/${locale}/login`}
 									onClick={handleClose}
 									className="inline-block px-6 py-2.5 rounded-xl bg-primary-500/20 border border-primary-500/50 text-primary-400 text-sm font-medium hover:bg-primary-500/30 transition-colors"
-									style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 								>
 									{t('requestModal.goToLogin')}
 								</Link>
@@ -178,16 +175,15 @@ export default function RequestExerciseButton() {
 										<path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
 									</svg>
 								</div>
-								<h3 className="text-lg font-bold text-white mb-2" style={{ fontFamily: 'Orbitron, sans-serif' }}>
+								<h3 className="text-lg font-bold text-white mb-2 font-heading">
 									{t('requestModal.successTitle')}
 								</h3>
-								<p className="text-sm text-[#6B7280] mb-6" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+								<p className="text-sm text-[#6B7280] mb-6">
 									{t('requestModal.successMessage')}
 								</p>
 								<button
 									onClick={handleClose}
 									className="px-6 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-[#6B7280] hover:text-white hover:border-white/20 transition-colors"
-									style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 								>
 									{t('requestModal.close')}
 								</button>
@@ -200,14 +196,14 @@ export default function RequestExerciseButton() {
 									<svg className="w-4 h-4 text-primary-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
 										<path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
 									</svg>
-									<p className="text-xs text-[#6B7280]" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+									<p className="text-xs text-[#6B7280]">
 										{t('requestModal.contextNote')}
 									</p>
 								</div>
 
 								{/* Name */}
 								<div>
-									<label className={labelClass} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+									<label className={labelClass}>
 										{t('requestModal.nameLabel')} <span className="text-primary-500">*</span>
 									</label>
 									<input
@@ -217,13 +213,12 @@ export default function RequestExerciseButton() {
 										placeholder={t('requestModal.namePlaceholder')}
 										required
 										className={inputClass}
-										style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 									/>
 								</div>
 
 								{/* Description */}
 								<div>
-									<label className={labelClass} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+									<label className={labelClass}>
 										{t('requestModal.descriptionLabel')}
 									</label>
 									<textarea
@@ -232,21 +227,19 @@ export default function RequestExerciseButton() {
 										placeholder={t('requestModal.descriptionPlaceholder')}
 										rows={2}
 										className={`${inputClass} resize-none`}
-										style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 									/>
 								</div>
 
 								{/* Category + Type */}
 								<div className="grid grid-cols-2 gap-3">
 									<div>
-										<label className={labelClass} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+										<label className={labelClass}>
 											{t('requestModal.categoryLabel')}
 										</label>
 										<select
 											value={category}
 											onChange={(e) => setCategory(e.target.value)}
 											className={`${inputClass} appearance-none`}
-											style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 										>
 											<option value="">{t('requestModal.selectPlaceholder')}</option>
 											{CATEGORIES.map((c) => (
@@ -255,14 +248,13 @@ export default function RequestExerciseButton() {
 										</select>
 									</div>
 									<div>
-										<label className={labelClass} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+										<label className={labelClass}>
 											{t('requestModal.typeLabel')}
 										</label>
 										<select
 											value={type}
 											onChange={(e) => setType(e.target.value)}
 											className={`${inputClass} appearance-none`}
-											style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 										>
 											<option value="">{t('requestModal.selectPlaceholder')}</option>
 											{TYPES.map((tp) => (
@@ -274,14 +266,13 @@ export default function RequestExerciseButton() {
 
 								{/* Difficulty */}
 								<div>
-									<label className={labelClass} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+									<label className={labelClass}>
 										{t('requestModal.difficultyLabel')}
 									</label>
 									<select
 										value={difficulty}
 										onChange={(e) => setDifficulty(e.target.value)}
 										className={`${inputClass} appearance-none`}
-										style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 									>
 										<option value="">{t('requestModal.selectPlaceholder')}</option>
 										{[1, 2, 3, 4, 5].map((d) => (
@@ -292,7 +283,7 @@ export default function RequestExerciseButton() {
 
 								{/* Muscle groups */}
 								<div>
-									<label className={labelClass} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+									<label className={labelClass}>
 										{t('requestModal.muscleGroupLabel')}
 									</label>
 									<div className="flex flex-wrap gap-2">
@@ -309,7 +300,7 @@ export default function RequestExerciseButton() {
 
 								{/* Equipment */}
 								<div>
-									<label className={labelClass} style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+									<label className={labelClass}>
 										{t('requestModal.equipmentLabel')}
 									</label>
 									<div className="flex flex-wrap gap-2">
@@ -329,7 +320,7 @@ export default function RequestExerciseButton() {
 							{/* Footer fijo */}
 							<div className="px-6 py-4 border-t border-white/5 shrink-0 space-y-3">
 								{error && (
-									<p className="text-xs text-red-400" style={{ fontFamily: 'Space Grotesk, sans-serif' }}>
+									<p className="text-xs text-red-400">
 										{error}
 									</p>
 								)}
@@ -337,7 +328,6 @@ export default function RequestExerciseButton() {
 									type="submit"
 									disabled={sending || !name.trim()}
 									className="w-full py-2.5 rounded-xl bg-primary-500/20 border border-primary-500/50 text-primary-400 text-sm font-medium hover:bg-primary-500/30 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-									style={{ fontFamily: 'Space Grotesk, sans-serif' }}
 								>
 									{sending ? t('requestModal.sending') : t('requestModal.submit')}
 								</button>
