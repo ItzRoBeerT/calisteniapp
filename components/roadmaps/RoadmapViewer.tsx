@@ -11,8 +11,8 @@ import ReactFlow, {
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 
-import ViewerNode from './ViewerNode';
 import { viewerNodeTypes } from './nodes';
+import { normalizeRoadmapGraph } from './normalizeRoadmap';
 import type { AnyNodeData } from '@/types/RoadmapNodes';
 
 // Estilos CSS específicos para React Flow en el visor de roadmaps
@@ -94,13 +94,8 @@ import RoadmapProgress from './RoadmapProgress';
 import { useRoadmapProgress } from '@/hooks/useRoadmapProgress';
 import type { RoadmapViewerProps, RoadmapNodeData, NodeProgress, RoadmapResource } from '@/types/Roadmap';
 
-// Registro de tipos de nodos personalizados - combina nuevos tipos con fallback
-const nodeTypes = {
-  ...viewerNodeTypes,
-  // Fallbacks para compatibilidad con roadmaps legacy
-  default: ViewerNode,
-  milestone: ViewerNode,
-};
+// Registro de tipos de nodos del viewer (los tipos legacy se normalizan antes de renderizar)
+const nodeTypes = viewerNodeTypes;
 
 // Estilos personalizados para el MiniMap
 const miniMapNodeColor = (node: { data?: RoadmapNodeData | AnyNodeData }) => {
@@ -129,18 +124,20 @@ const miniMapNodeColor = (node: { data?: RoadmapNodeData | AnyNodeData }) => {
   // Color por tipo de nodo
   const nodeType = data.nodeType;
   if (nodeType === 'section') return 'rgba(187, 134, 252, 0.3)';
-  if (nodeType === 'horizontalLine' || nodeType === 'verticalLine') return '#8E8E93';
 
   return '#64748b'; // Gris por defecto
 };
 
 // Tipos de nodos que NO deben mostrar detalles ni contarse en progreso
-const nonProgressNodeTypes = ['title', 'paragraph', 'label', 'horizontalLine', 'verticalLine', 'section', 'image', 'video'];
+const nonProgressNodeTypes = ['title', 'section', 'image', 'video'];
 
 export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapViewerProps) {
+  // Normalizar tipos legacy al set core antes de renderizar
+  const normalized = normalizeRoadmapGraph(roadmap.nodes, roadmap.edges);
+
   // Estado de nodos y edges
-  const [nodes, setNodes, onNodesChange] = useNodesState(roadmap.nodes);
-  const [edges] = useEdgesState(roadmap.edges);
+  const [nodes, setNodes, onNodesChange] = useNodesState(normalized.nodes);
+  const [edges] = useEdgesState(normalized.edges);
 
   // Estado de selección
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);

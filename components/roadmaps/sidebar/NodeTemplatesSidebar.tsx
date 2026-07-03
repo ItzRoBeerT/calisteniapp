@@ -23,24 +23,6 @@ const categoryIcons: Record<RoadmapNodeCategory, React.ReactNode> = {
             d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
     </svg>
   ),
-  interactive: (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-            d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
-    </svg>
-  ),
-  list: (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-            d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-    </svg>
-  ),
-  decorative: (
-    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-            d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
-    </svg>
-  ),
   container: (
     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -74,49 +56,26 @@ const NodeTemplatesSidebar: React.FC<NodeTemplatesSidebarProps> = ({ onDragStart
   const categoryLabels: Record<RoadmapNodeCategory, string> = {
     text: t('categories.text'),
     content: t('categories.content'),
-    interactive: t('categories.interactive'),
-    list: t('categories.list'),
-    decorative: t('categories.decorative'),
     container: t('categories.container'),
   };
 
   // Mapeo de tipos de nodo a traducciones
   const templateLabels: Record<string, string> = {
     title: t('nodeTypes.title'),
-    paragraph: t('nodeTypes.paragraph'),
-    label: t('nodeTypes.label'),
     topic: t('nodeTypes.topic'),
     subtopic: t('nodeTypes.subtopic'),
     image: t('nodeTypes.image'),
     video: t('nodeTypes.video'),
-    button: t('nodeTypes.button'),
-    resourceButton: t('nodeTypes.resourceButton'),
-    todo: t('nodeTypes.todo'),
-    checklist: t('nodeTypes.checklist'),
-    legend: t('nodeTypes.legend'),
-    linksGroup: t('nodeTypes.linksGroup'),
-    horizontalLine: t('nodeTypes.horizontalLine'),
-    verticalLine: t('nodeTypes.verticalLine'),
     section: t('nodeTypes.section'),
   };
 
   // Iconos específicos para cada tipo de template
   const templateIcons: Record<string, string> = {
     title: 'H1',
-    paragraph: 'p',
-    label: 'L',
     topic: '■',
     subtopic: '□',
     image: '🖼️',
     video: '▶️',
-    button: '🔘',
-    resourceButton: '↗',
-    todo: '✓',
-    checklist: '☑',
-    legend: '⚖️',
-    linksGroup: '🔗',
-    horizontalLine: '─',
-    verticalLine: '│',
     section: '▢',
   };
 

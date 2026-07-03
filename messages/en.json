@@ -325,27 +325,14 @@
 		"categories": {
 			"text": "Text",
 			"content": "Content",
-			"interactive": "Interactive",
-			"list": "Lists",
-			"decorative": "Decorative",
 			"container": "Containers"
 		},
 		"nodeTypes": {
 			"title": "Title",
-			"paragraph": "Paragraph",
-			"label": "Label",
 			"topic": "Topic",
 			"subtopic": "Subtopic",
 			"image": "Image",
 			"video": "Video",
-			"button": "Button",
-			"resourceButton": "Resource Button",
-			"todo": "Todo",
-			"checklist": "Checklist",
-			"legend": "Legend",
-			"linksGroup": "Links Group",
-			"horizontalLine": "Horizontal Line",
-			"verticalLine": "Vertical Line",
 			"section": "Section"
 		},
 		"tabs": {

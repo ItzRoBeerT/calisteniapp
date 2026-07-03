@@ -14,40 +14,20 @@ interface ComponentsListSidebarProps {
 // Mapeo de tipo de nodo a etiqueta legible
 const nodeTypeLabels: Record<RoadmapNodeType, string> = {
   title: 'Título',
-  paragraph: 'Párrafo',
-  label: 'Etiqueta',
   topic: 'Tema',
   subtopic: 'Subtema',
   image: 'Imagen',
   video: 'Video',
-  button: 'Botón',
-  resourceButton: 'Recurso',
-  todo: 'Tarea',
-  checklist: 'Checklist',
-  legend: 'Leyenda',
-  linksGroup: 'Enlaces',
-  horizontalLine: 'Línea H',
-  verticalLine: 'Línea V',
   section: 'Sección',
 };
 
 // Colores por tipo de nodo
 const nodeTypeColors: Record<RoadmapNodeType, string> = {
   title: '#BB86FC',
-  paragraph: '#BB86FC',
-  label: '#64748b',
   topic: '#BB86FC',
   subtopic: '#9A64D6',
   image: '#64748b',
   video: '#FF3B30',
-  button: '#BB86FC',
-  resourceButton: '#32D74B',
-  todo: '#BB86FC',
-  checklist: '#BB86FC',
-  legend: '#FF9F0A',
-  linksGroup: '#64D2FF',
-  horizontalLine: '#8E8E93',
-  verticalLine: '#8E8E93',
   section: 'rgba(187, 134, 252, 0.5)',
 };
 

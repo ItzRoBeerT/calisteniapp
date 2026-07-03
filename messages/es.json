@@ -292,27 +292,14 @@
 		"categories": {
 			"text": "Texto",
 			"content": "Contenido",
-			"interactive": "Interactivos",
-			"list": "Listas",
-			"decorative": "Decorativos",
 			"container": "Contenedores"
 		},
 		"nodeTypes": {
 			"title": "Título",
-			"paragraph": "Párrafo",
-			"label": "Etiqueta",
 			"topic": "Tema",
 			"subtopic": "Subtema",
 			"image": "Imagen",
 			"video": "Video",
-			"button": "Botón",
-			"resourceButton": "Botón de recurso",
-			"todo": "Tarea",
-			"checklist": "Lista de tareas",
-			"legend": "Leyenda",
-			"linksGroup": "Grupo de enlaces",
-			"horizontalLine": "Línea horizontal",
-			"verticalLine": "Línea vertical",
 			"section": "Sección"
 		},
 		"tabs": {
