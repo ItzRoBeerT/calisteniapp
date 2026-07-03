@@ -23,6 +23,7 @@ import 'reactflow/dist/style.css';
 
 import type { AnyNodeData, NodeTemplate } from '@/types/RoadmapNodes';
 import { builderNodeTypes } from './nodes';
+import { normalizeRoadmapGraph } from './normalizeRoadmap';
 import { NodeConfigRouter } from './config';
 import { ComponentsListSidebar, NodeTemplatesSidebar } from './sidebar';
 import BuilderEdgeConfigPanel, { type BuilderEdgeData } from './BuilderEdgeConfigPanel';
@@ -31,7 +32,7 @@ import { SaveIcon, ImportIcon, ClearIcon, CloseIcon, LoadingSpinner } from './Bu
 const nodeTypes = builderNodeTypes;
 
 // Tipos de nodos de texto (su tamaño se controla solo con NodeResizer)
-const TEXT_NODE_TYPES = ['title', 'paragraph', 'label'];
+const TEXT_NODE_TYPES = ['title'];
 
 function RoadmapBuilder() {
   const t = useTranslations('RoadmapBuilder');
@@ -420,8 +421,11 @@ function RoadmapBuilder() {
           };
         });
 
-        setNodes(importedNodes);
-        setEdges(importedEdges);
+        // Normalizar tipos legacy/eliminados al set core
+        const normalized = normalizeRoadmapGraph(importedNodes, importedEdges);
+
+        setNodes(normalized.nodes);
+        setEdges(normalized.edges);
         setSelectedNodeId(null);
         setSelectedEdgeId(null);
         setRoadmapId(data.id || null);
