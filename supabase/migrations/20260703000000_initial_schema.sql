@@ -1,3 +1,6 @@
+-- Migración inicial generada desde supabase/schema.sql (mantener ambos en sincronía:
+-- los cambios de schema nuevos van en una migración nueva Y se reflejan en schema.sql).
+
 -- =============================================
 -- OpenCalisthenics Database Schema for Supabase
 -- =============================================

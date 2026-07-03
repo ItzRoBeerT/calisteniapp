@@ -10,6 +10,12 @@ pnpm run build        # Production build
 pnpm run lint         # Run ESLint
 pnpm run sync-exercises  # Sync exercises from external source (tsx scripts/sync-exercises.ts)
 npx tsc --noEmit     # Type check without emitting
+
+# Local Supabase stack (Docker required) — see docs/local-development.md
+pnpm db:start        # Start Postgres+Auth+Storage+Studio, applies migrations + seed
+pnpm db:stop         # Stop the stack
+pnpm db:reset        # Recreate DB from supabase/migrations/ + supabase/seed.sql
+pnpm db:status       # Show local URLs and keys
 ```
 
 ## Architecture Overview

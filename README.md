@@ -76,7 +76,7 @@ Most fitness apps are locked behind subscriptions or push proprietary workout pl
 ### Prerequisites
 
 - Node.js 18+ and [pnpm](https://pnpm.io/)
-- (Optional) A [Supabase](https://supabase.com/) project — the app works with mock data without it
+- (Optional) [Docker](https://www.docker.com/) to run the full Supabase stack locally, or a [Supabase](https://supabase.com/) cloud project — the app works with mock data without either
 
 ### Web app
 
@@ -98,6 +98,16 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
 If these variables are not set the app runs with mock/static data.
+
+#### Local Supabase (optional, requires Docker)
+
+Run the full backend locally — Postgres, Auth, Storage and Studio — with schema and seed data applied automatically:
+
+```bash
+pnpm db:start   # first run downloads the Docker images
+```
+
+Copy the printed `API URL` and `anon key` into your `.env`, then `pnpm run dev`. See [docs/local-development.md](docs/local-development.md) for the full guide.
 
 ### Android app
 
