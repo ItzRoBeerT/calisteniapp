@@ -266,6 +266,10 @@
 		"noContent": "Select a node to view its content",
 		"noResources": "No resources available",
 		"free": "Free",
+		"notFound": "Roadmap not found",
+		"notFoundDescription": "The roadmap you are looking for does not exist or has been deleted.",
+		"loadError": "Error loading the roadmap",
+		"backToRoadmaps": "Back to roadmaps",
 		"status": {
 			"not_started": "Pending",
 			"in_progress": "In Progress",

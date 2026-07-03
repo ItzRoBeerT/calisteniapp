@@ -434,6 +434,10 @@
 		"noContent": "Selecciona un nodo para ver su contenido",
 		"noResources": "No hay recursos disponibles",
 		"free": "Gratis",
+		"notFound": "Roadmap no encontrado",
+		"notFoundDescription": "El roadmap que buscas no existe o ha sido eliminado.",
+		"loadError": "Error al cargar el roadmap",
+		"backToRoadmaps": "Volver a roadmaps",
 		"status": {
 			"not_started": "Pendiente",
 			"in_progress": "En Progreso",
