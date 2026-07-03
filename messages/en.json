@@ -253,7 +253,21 @@
 	},
 	"RoadmapsPage": {
 		"title": "Roadmaps",
-		"description": "Welcome to the Roadmaps page. Here you can find guides and learning paths for calisthenics."
+		"description": "Welcome to the Roadmaps page. Here you can find guides and learning paths for calisthenics.",
+		"empty": "No roadmaps available yet.",
+		"createFirst": "Create the first roadmap",
+		"createNew": "Create new roadmap",
+		"myRoadmaps": "My roadmaps",
+		"publicRoadmaps": "Public roadmaps",
+		"template": "Official",
+		"nodesCount": "{count} nodes",
+		"by": "By {author}",
+		"edit": "Edit",
+		"delete": "Delete",
+		"confirmDelete": "Delete \"{title}\"? This cannot be undone.",
+		"deleteError": "Could not delete the roadmap.",
+		"loadError": "Error loading roadmaps.",
+		"retry": "Retry"
 	},
 	"RoadmapViewer": {
 		"close": "Close",

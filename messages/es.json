@@ -253,7 +253,21 @@
 	},
 	"RoadmapsPage": {
 		"title": "Roadmaps",
-		"description": "Bienvenido a la página de Roadmaps. Aquí podrás encontrar guías y rutas de aprendizaje para calistenia."
+		"description": "Bienvenido a la página de Roadmaps. Aquí podrás encontrar guías y rutas de aprendizaje para calistenia.",
+		"empty": "No hay roadmaps disponibles.",
+		"createFirst": "Crear primer roadmap",
+		"createNew": "Crear nuevo roadmap",
+		"myRoadmaps": "Mis roadmaps",
+		"publicRoadmaps": "Roadmaps públicos",
+		"template": "Oficial",
+		"nodesCount": "{count} nodos",
+		"by": "Por {author}",
+		"edit": "Editar",
+		"delete": "Eliminar",
+		"confirmDelete": "¿Eliminar \"{title}\"? Esta acción no se puede deshacer.",
+		"deleteError": "No se pudo eliminar el roadmap.",
+		"loadError": "Error al cargar los roadmaps.",
+		"retry": "Reintentar"
 	},
 	"RoadmapBuilder": {
 		"components": "Componentes",

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import ReactFlow, {
   Background,
@@ -361,9 +362,10 @@ function RoadmapBuilder() {
 
   // Importar roadmap desde el servidor
   const handleImportRoadmap = useCallback(
-    async (roadmapId: string) => {
+    async (roadmapId: string, silent = false) => {
       try {
-        const response = await fetch(`/api/roadmaps?id=${roadmapId}`);
+        const response = await fetch(`/api/roadmaps?id=${encodeURIComponent(roadmapId)}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
 
          
@@ -430,7 +432,9 @@ function RoadmapBuilder() {
         setSelectedEdgeId(null);
         setRoadmapId(data.id || null);
         setShowImportModal(false);
-        alert(t('importSuccess', { title: data.title ?? t('untitledRoadmap') }));
+        if (!silent) {
+          alert(t('importSuccess', { title: data.title ?? t('untitledRoadmap') }));
+        }
       } catch (error) {
         console.error('Error importing roadmap:', error);
         alert(t('importError'));
@@ -438,6 +442,17 @@ function RoadmapBuilder() {
     },
     [setNodes, setEdges, t]
   );
+
+  // Editar un roadmap existente llegando con ?id=<slug> desde el listado
+  const searchParams = useSearchParams();
+  const autoLoadedRef = useRef(false);
+  useEffect(() => {
+    const editId = searchParams.get('id');
+    if (editId && !autoLoadedRef.current) {
+      autoLoadedRef.current = true;
+      handleImportRoadmap(editId, true);
+    }
+  }, [searchParams, handleImportRoadmap]);
 
   // Limpiar canvas
   const handleClear = useCallback(() => {
