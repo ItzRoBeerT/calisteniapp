@@ -1,7 +1,7 @@
 import { WorkoutDetail } from '@/types/Workout';
+import { esc } from '@/utils/print-html';
 
-export const esc = (s: string) =>
-  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+export { esc, printHTML } from '@/utils/print-html';
 
 type PDFLabels = {
   sets: string;
@@ -99,34 +99,3 @@ export function generateWorkoutHTML(workout: WorkoutDetail, locale: string, labe
 </html>`;
 }
 
-export function printHTML(html: string): void {
-  const blob = new Blob([html], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-
-  const iframe = document.createElement('iframe');
-  iframe.style.cssText = 'position:fixed;width:1px;height:1px;left:-9999px;top:-9999px;border:0;';
-  document.body.appendChild(iframe);
-
-  iframe.onload = () => {
-    const cw = iframe.contentWindow;
-    if (!cw) {
-      document.body.removeChild(iframe);
-      URL.revokeObjectURL(url);
-      return;
-    }
-
-    let cleaned = false;
-    const cleanup = () => {
-      if (cleaned) return;
-      cleaned = true;
-      if (document.body.contains(iframe)) document.body.removeChild(iframe);
-      URL.revokeObjectURL(url);
-    };
-
-    cw.addEventListener('afterprint', cleanup);
-    setTimeout(cleanup, 10_000);
-    cw.print();
-  };
-
-  iframe.src = url;
-}

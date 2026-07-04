@@ -68,10 +68,17 @@ export interface Roadmap {
   nodes: RoadmapNode[];
   edges: RoadmapEdge[];
   isPublic: boolean;
+  isTemplate?: boolean;
+  locale?: string;
   category?: string;
   totalNodes: number;
   completedNodes: number;
   thumbnailUrl?: string;
+}
+
+// Resumen para listados (la API añade isOwner para el usuario actual)
+export interface RoadmapSummary extends Omit<Roadmap, 'nodes' | 'edges'> {
+  isOwner?: boolean;
 }
 
 // Progreso del usuario en un roadmap

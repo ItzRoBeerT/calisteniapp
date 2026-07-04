@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import ReactFlow, {
   Background,
@@ -266,11 +267,21 @@ function RoadmapBuilder() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [nodes, edges, selectedNodeId, selectedEdgeId, setNodes, setEdges]);
 
+  // Modal de guardado (nombre + visibilidad)
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [saveName, setSaveName] = useState('');
+  const [saveIsPublic, setSaveIsPublic] = useState(true);
+
+  const handleOpenSave = useCallback(() => {
+    setSaveName(roadmapId || t('defaultName'));
+    setShowSaveModal(true);
+  }, [roadmapId, t]);
+
   // Guardar roadmap en el servidor
   const handleSave = useCallback(async () => {
-    const defaultName = roadmapId || t('defaultName');
-    const name = prompt(t('savePrompt'), defaultName);
+    const name = saveName.trim();
     if (!name) return;
+    setShowSaveModal(false);
 
     const sanitizedName = name.toLowerCase().replace(/[^a-z0-9-_]/g, '-').replace(/-+/g, '-');
 
@@ -296,7 +307,7 @@ function RoadmapBuilder() {
         id: sanitizedName,
         title: name,
         description: t('defaultDescription'),
-        isPublic: true,
+        isPublic: saveIsPublic,
         totalNodes: nodes.length,
         completedNodes: 0,
         nodes: nodesToSave,
@@ -336,7 +347,7 @@ function RoadmapBuilder() {
     } finally {
       setIsSaving(false);
     }
-  }, [nodes, edges, roadmapId, t]);
+  }, [nodes, edges, saveName, saveIsPublic, t]);
 
   // Cargar lista de roadmaps disponibles
   const loadAvailableRoadmaps = useCallback(async () => {
@@ -361,9 +372,10 @@ function RoadmapBuilder() {
 
   // Importar roadmap desde el servidor
   const handleImportRoadmap = useCallback(
-    async (roadmapId: string) => {
+    async (roadmapId: string, silent = false) => {
       try {
-        const response = await fetch(`/api/roadmaps?id=${roadmapId}`);
+        const response = await fetch(`/api/roadmaps?id=${encodeURIComponent(roadmapId)}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
 
          
@@ -429,8 +441,11 @@ function RoadmapBuilder() {
         setSelectedNodeId(null);
         setSelectedEdgeId(null);
         setRoadmapId(data.id || null);
+        setSaveIsPublic(data.isPublic ?? true);
         setShowImportModal(false);
-        alert(t('importSuccess', { title: data.title ?? t('untitledRoadmap') }));
+        if (!silent) {
+          alert(t('importSuccess', { title: data.title ?? t('untitledRoadmap') }));
+        }
       } catch (error) {
         console.error('Error importing roadmap:', error);
         alert(t('importError'));
@@ -438,6 +453,17 @@ function RoadmapBuilder() {
     },
     [setNodes, setEdges, t]
   );
+
+  // Editar un roadmap existente llegando con ?id=<slug> desde el listado
+  const searchParams = useSearchParams();
+  const autoLoadedRef = useRef(false);
+  useEffect(() => {
+    const editId = searchParams.get('id');
+    if (editId && !autoLoadedRef.current) {
+      autoLoadedRef.current = true;
+      handleImportRoadmap(editId, true);
+    }
+  }, [searchParams, handleImportRoadmap]);
 
   // Limpiar canvas
   const handleClear = useCallback(() => {
@@ -511,7 +537,7 @@ function RoadmapBuilder() {
           </button>
 
           <button
-            onClick={handleSave}
+            onClick={handleOpenSave}
             disabled={isSaving || nodes.length === 0}
             className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600
                        text-white rounded-lg transition-colors text-sm font-medium
@@ -642,6 +668,56 @@ function RoadmapBuilder() {
           />
         )}
       </div>
+
+      {/* Save Modal */}
+      {showSaveModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-surface border border-foreground/10 rounded-xl shadow-2xl max-w-md w-full p-6">
+            <h2 className="text-xl font-bold text-foreground mb-4">{t('saveTitle')}</h2>
+
+            <label className="block text-sm text-foreground/70 mb-1">{t('nameLabel')}</label>
+            <input
+              type="text"
+              value={saveName}
+              onChange={(e) => setSaveName(e.target.value)}
+              autoFocus
+              className="w-full px-3 py-2 mb-4 bg-background border border-foreground/20 rounded-lg
+                       text-foreground focus:border-primary-500 focus:outline-none"
+            />
+
+            <label className="flex items-start gap-3 mb-6 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={saveIsPublic}
+                onChange={(e) => setSaveIsPublic(e.target.checked)}
+                className="mt-1 accent-primary-500"
+              />
+              <span>
+                <span className="block text-sm text-foreground">{t('publicLabel')}</span>
+                <span className="block text-xs text-foreground/50">{t('publicHint')}</span>
+              </span>
+            </label>
+
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowSaveModal(false)}
+                className="px-4 py-2 text-sm rounded-lg bg-foreground/10 hover:bg-foreground/20
+                         text-foreground/70 transition-colors"
+              >
+                {t('cancel')}
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={!saveName.trim()}
+                className="px-4 py-2 text-sm rounded-lg bg-primary-500 hover:bg-primary-600 text-white
+                         font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {t('save')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Import Modal */}
       {showImportModal && (
