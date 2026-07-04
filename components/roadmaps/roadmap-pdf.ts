@@ -114,12 +114,141 @@ function childHTML(child: LinearNode, labels: RoadmapPDFLabels): string {
   </div>`;
 }
 
+// Defaults visuales por tipo de nodo (coinciden con sidebar/templates.ts)
+const SCHEMATIC_DEFAULTS: Record<
+  string,
+  { w: number; h: number; fill: string; stroke: string; text: string; radius: number }
+> = {
+  title: { w: 200, h: 50, fill: '#ffffff', stroke: '#7e4ab2', text: '#4a2f6d', radius: 8 },
+  topic: { w: 160, h: 60, fill: '#BB86FC', stroke: '#7e4ab2', text: '#ffffff', radius: 12 },
+  subtopic: { w: 140, h: 50, fill: '#9A64D6', stroke: '#6d3fae', text: '#ffffff', radius: 10 },
+  image: { w: 200, h: 150, fill: '#eef2ff', stroke: '#c4b5fd', text: '#555555', radius: 8 },
+  video: { w: 320, h: 180, fill: '#1a1a2e', stroke: '#333355', text: '#ffffff', radius: 8 },
+  section: { w: 400, h: 300, fill: 'rgba(126,74,178,0.06)', stroke: '#c4b5fd', text: '#7e4ab2', radius: 14 },
+};
+
+type SchematicBox = {
+  id: string;
+  type: string;
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  label: string;
+  fill: string;
+  stroke: string;
+  text: string;
+  radius: number;
+};
+
+function num(v: unknown): number | undefined {
+  return typeof v === 'number' && Number.isFinite(v) ? v : undefined;
+}
+
+// Recorta un label a lo que cabe en el ancho del nodo (aprox.)
+function truncateLabel(label: string, width: number, fontSize: number): string {
+  const max = Math.max(3, Math.floor(width / (fontSize * 0.56)));
+  return label.length > max ? label.slice(0, max - 1) + '…' : label;
+}
+
+// Genera un SVG vectorial con el mismo esquema del roadmap (nodos + conexiones).
+function roadmapSchematicSVG(roadmap: Roadmap): string {
+  const nodes = (roadmap.nodes ?? []) as unknown as Array<{
+    id: string;
+    type?: string;
+    position?: { x: number; y: number };
+    width?: number | null;
+    height?: number | null;
+    style?: { width?: number | string; height?: number | string };
+    data?: { nodeType?: string; label?: string; color?: string; width?: number; height?: number };
+  }>;
+
+  const boxes: SchematicBox[] = [];
+  for (const n of nodes) {
+    if (!n.position) continue;
+    const type = n.data?.nodeType ?? n.type ?? 'topic';
+    const def = SCHEMATIC_DEFAULTS[type] ?? SCHEMATIC_DEFAULTS.topic;
+    const w = num(n.data?.width) ?? num(n.width) ?? num(n.style?.width) ?? def.w;
+    const h = num(n.data?.height) ?? num(n.height) ?? num(n.style?.height) ?? def.h;
+    const fill = (type === 'topic' || type === 'subtopic' || type === 'section') && n.data?.color
+      ? n.data.color
+      : def.fill;
+    boxes.push({
+      id: n.id,
+      type,
+      x: n.position.x,
+      y: n.position.y,
+      w,
+      h,
+      label: n.data?.label ?? '',
+      fill,
+      stroke: def.stroke,
+      text: def.text,
+      radius: def.radius,
+    });
+  }
+
+  if (boxes.length === 0) return '';
+
+  const byId = new Map(boxes.map((b) => [b.id, b]));
+
+  // Bounds con padding
+  const pad = 40;
+  const minX = Math.min(...boxes.map((b) => b.x)) - pad;
+  const minY = Math.min(...boxes.map((b) => b.y)) - pad;
+  const maxX = Math.max(...boxes.map((b) => b.x + b.w)) + pad;
+  const maxY = Math.max(...boxes.map((b) => b.y + b.h)) + pad;
+  const vbW = maxX - minX;
+  const vbH = maxY - minY;
+
+  // Conexiones (centro a centro; los nodos las tapan en el borde)
+  const edgesSVG = roadmap.edges
+    .map((e) => {
+      const s = byId.get(e.source);
+      const t = byId.get(e.target);
+      if (!s || !t) return '';
+      const sx = s.x + s.w / 2;
+      const sy = s.y + s.h / 2;
+      const tx = t.x + t.w / 2;
+      const ty = t.y + t.h / 2;
+      const my = (sy + ty) / 2;
+      return `<path d="M${sx} ${sy} C ${sx} ${my}, ${tx} ${my}, ${tx} ${ty}" fill="none" stroke="#c4b5fd" stroke-width="2" />`;
+    })
+    .join('');
+
+  // Secciones primero (fondo), luego el resto
+  const order = (b: SchematicBox) => (b.type === 'section' ? 0 : 1);
+  const sorted = [...boxes].sort((a, b) => order(a) - order(b));
+
+  const nodesSVG = sorted
+    .map((b) => {
+      const isSection = b.type === 'section';
+      const fontSize = isSection ? 15 : b.type === 'title' ? 15 : 13;
+      const rect = `<rect x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}" rx="${b.radius}" ry="${b.radius}" fill="${b.fill}" stroke="${b.stroke}" stroke-width="${isSection ? 2 : 1.5}"${isSection ? ' stroke-dasharray="6 4"' : ''} />`;
+      if (!b.label) return rect;
+      // Sección: label arriba-izquierda; resto: centrado
+      const tx = isSection ? b.x + 12 : b.x + b.w / 2;
+      const ty = isSection ? b.y + 22 : b.y + b.h / 2;
+      const anchor = isSection ? 'start' : 'middle';
+      const baseline = isSection ? 'auto' : 'central';
+      const label = truncateLabel(b.label, b.w - (isSection ? 24 : 16), fontSize);
+      return `${rect}<text x="${tx}" y="${ty}" font-family="'Segoe UI', Arial, sans-serif" font-size="${fontSize}" font-weight="${isSection ? 700 : 600}" fill="${b.text}" text-anchor="${anchor}" dominant-baseline="${baseline}">${esc(label)}</text>`;
+    })
+    .join('');
+
+  return `<svg class="schematic-svg" viewBox="${minX} ${minY} ${vbW} ${vbH}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+    ${edgesSVG}
+    ${nodesSVG}
+  </svg>`;
+}
+
 export function generateRoadmapHTML(
   roadmap: Roadmap,
   locale: string,
   labels: RoadmapPDFLabels
 ): string {
   const steps = linearizeRoadmap(roadmap);
+  const schematic = roadmapSchematicSVG(roadmap);
   const date = new Date(roadmap.updatedAt ?? Date.now()).toLocaleDateString(locale);
 
   const stepsHTML = steps
@@ -188,21 +317,45 @@ export function generateRoadmapHTML(
     .sub-image img { max-width: 100%; max-height: 260px; border-radius: 6px; }
     .step, .tips, .sub { break-inside: avoid; }
     .footer { margin-top: 36px; font-size: 11px; color: #aaa; text-align: center; }
+    /* Esquema del roadmap en la portada */
+    .schematic { margin: 24px 0 8px; text-align: center; }
+    .schematic-svg { width: 100%; max-height: 620px; height: auto; }
+    /* Detalles arrancan en página nueva */
+    .details { break-before: page; page-break-before: always; }
+    /* Tabla envolvente: thead/tfoot se repiten en cada página impresa y
+       reservan su altura, creando margen superior/inferior uniforme por
+       página SIN la cabecera/pie del navegador. */
+    .print-wrap { width: 100%; border-collapse: collapse; }
+    .print-wrap > tbody > tr > td,
+    .print-wrap > thead > tr > td,
+    .print-wrap > tfoot > tr > td { padding: 0; }
+    .page-pad-top, .page-pad-bottom { height: 0; }
     @media print {
+      /* margin:0 evita que el navegador dibuje su cabecera/pie (título + blob:). */
       @page { margin: 0; }
-      body { padding: 1.5cm 2cm; }
+      body { padding: 0 2cm; max-width: none; margin: 0; }
+      .page-pad-top, .page-pad-bottom { height: 1.5cm; }
     }
   </style>
 </head>
 <body>
-  <div class="cover">
-    <h1>${esc(roadmap.title)}</h1>
-    <div class="meta">${roadmap.author ? `${esc(labels.by)} ${esc(roadmap.author)} · ` : ''}${esc(date)}</div>
-    ${roadmap.description ? `<p class="description">${esc(roadmap.description)}</p>` : ''}
-  </div>
-  <h2>${esc(labels.steps)}</h2>
-  ${stepsHTML}
-  <div class="footer">OpenCalisthenics — ${esc(date)}</div>
+  <table class="print-wrap">
+    <thead><tr><td><div class="page-pad-top"></div></td></tr></thead>
+    <tfoot><tr><td><div class="page-pad-bottom"></div></td></tr></tfoot>
+    <tbody><tr><td>
+      <div class="cover">
+        <h1>${esc(roadmap.title)}</h1>
+        <div class="meta">${roadmap.author ? `${esc(labels.by)} ${esc(roadmap.author)} · ` : ''}${esc(date)}</div>
+        ${roadmap.description ? `<p class="description">${esc(roadmap.description)}</p>` : ''}
+      </div>
+      ${schematic ? `<div class="schematic">${schematic}</div>` : ''}
+      <div class="details">
+        <h2>${esc(labels.steps)}</h2>
+        ${stepsHTML}
+      </div>
+      <div class="footer">OpenCalisthenics — ${esc(date)}</div>
+    </td></tr></tbody>
+  </table>
 </body>
 </html>`;
 }
