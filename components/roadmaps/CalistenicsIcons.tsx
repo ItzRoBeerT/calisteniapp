@@ -43,231 +43,276 @@ interface IconProps {
   size?: number;
 }
 
+// Wrapper base: trazo bold redondeado, estilo unificado
+const Svg: React.FC<IconProps & { children: React.ReactNode }> = ({ className = '', size = 24, children }) => (
+  <svg
+    className={className}
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    {children}
+  </svg>
+);
+
+// Cabeza sólida reutilizable
+const Head = ({ cx, cy, r = 2 }: { cx: number; cy: number; r?: number }) => (
+  <circle cx={cx} cy={cy} r={r} fill="currentColor" stroke="none" />
+);
+
 // Iconos de ejercicios de calistenia
 export const CalistenicsIcons: Record<CalistenicsIconType, React.FC<IconProps>> = {
-  pushup: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M4 14h2v4H4z" />
-      <path d="M18 14h2v4h-2z" />
-      <path d="M6 14v-2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2" />
-      <circle cx="12" cy="6" r="2" />
-      <path d="M10 10h4" />
-    </svg>
+  // Flexión: cuerpo horizontal empujando del suelo
+  pushup: (p) => (
+    <Svg {...p}>
+      <path d="M3 18h18" />
+      <Head cx={5} cy={9.5} r={2} />
+      <path d="M7 10.5 16 13" />
+      <path d="M16 13l5 3" />
+      <path d="M8.5 11v6" />
+    </Svg>
   ),
-  pullup: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  // Dominada: colgado de barra, brazos arriba
+  pullup: (p) => (
+    <Svg {...p}>
       <path d="M4 4h16" />
-      <path d="M8 4v4" />
-      <path d="M16 4v4" />
-      <circle cx="12" cy="10" r="2" />
-      <path d="M10 12v6" />
-      <path d="M14 12v6" />
-      <path d="M8 20h2" />
-      <path d="M14 20h2" />
-    </svg>
+      <path d="M8.5 6 12 9" />
+      <path d="M15.5 6 12 9" />
+      <Head cx={12} cy={10.5} r={2} />
+      <path d="M12 12.5v4" />
+      <path d="M12 16.5 10 20" />
+      <path d="M12 16.5 14 20" />
+    </Svg>
   ),
-  squat: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="5" r="2" />
+  // Sentadilla: de pie, rodillas flexionadas, brazos al frente
+  squat: (p) => (
+    <Svg {...p}>
+      <Head cx={10} cy={5} r={2} />
+      <path d="M10 7l1 5" />
+      <path d="M10.5 8.5 16 8.5" />
+      <path d="M11 12h5" />
+      <path d="M16 12v7" />
+      <path d="M11 12 8 19" />
+    </Svg>
+  ),
+  // Fondos: entre barras paralelas, codos flexionados
+  dip: (p) => (
+    <Svg {...p}>
+      <path d="M3 12h5" />
+      <path d="M16 12h5" />
+      <Head cx={12} cy={6} r={2} />
+      <path d="M12 8v7" />
+      <path d="M12 9 7 11" />
+      <path d="M12 9 17 11" />
+      <path d="M12 15 9 19" />
+      <path d="M12 15 15 19" />
+    </Svg>
+  ),
+  // Plancha: apoyo en antebrazos, cuerpo recto
+  plank: (p) => (
+    <Svg {...p}>
+      <path d="M3 18h18" />
+      <Head cx={5} cy={10.5} r={2} />
+      <path d="M7 11.5 19 15.5" />
+      <path d="M6 12.5v5" />
+      <path d="M6 17.5h4" />
+      <path d="M19 15.5 21 17.5" />
+    </Svg>
+  ),
+  // Zancada: paso adelante, rodilla flexionada
+  lunge: (p) => (
+    <Svg {...p}>
+      <Head cx={11} cy={4} r={2} />
+      <path d="M11 6v5" />
+      <path d="M11 8 14.5 9.5" />
+      <path d="M11 11h5" />
+      <path d="M16 11v7" />
+      <path d="M11 11 7 15l1 4" />
+    </Svg>
+  ),
+  // Burpee: salto explosivo con brazos arriba
+  burpee: (p) => (
+    <Svg {...p}>
+      <Head cx={12} cy={4} r={2} />
+      <path d="M12 6 8 3" />
+      <path d="M12 6 16 3" />
+      <path d="M12 6v7" />
+      <path d="M12 13 9 18" />
+      <path d="M12 13 15 18" />
+      <path d="M6 21q6-4 12 0" />
+    </Svg>
+  ),
+  // Muscle-up: transición por encima de la barra
+  muscleup: (p) => (
+    <Svg {...p}>
+      <path d="M4 10h16" />
+      <Head cx={12} cy={5} r={2} />
       <path d="M12 7v3" />
-      <path d="M8 14l4-4 4 4" />
-      <path d="M8 14v4l-2 2" />
-      <path d="M16 14v4l2 2" />
-    </svg>
+      <path d="M12 8 9 10" />
+      <path d="M12 8 15 10" />
+      <path d="M10.5 10 10 16" />
+      <path d="M13.5 10 14 16" />
+    </Svg>
   ),
-  dip: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M4 8h4" />
-      <path d="M16 8h4" />
-      <path d="M6 8v8" />
-      <path d="M18 8v8" />
-      <circle cx="12" cy="6" r="2" />
-      <path d="M12 8v4" />
-      <path d="M10 12h4" />
-      <path d="M10 16l2 4 2-4" />
-    </svg>
+  // Pino: invertido, manos en el suelo, piernas arriba
+  handstand: (p) => (
+    <Svg {...p}>
+      <path d="M4 20h16" />
+      <Head cx={12} cy={16.5} r={2} />
+      <path d="M12 14.5v-5" />
+      <path d="M12 9.5 9 4" />
+      <path d="M12 9.5 15 4" />
+      <path d="M11 15 8 20" />
+      <path d="M13 15 16 20" />
+    </Svg>
   ),
-  plank: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="6" cy="12" r="2" />
-      <path d="M8 12h10" />
-      <path d="M4 16l2-2" />
-      <path d="M18 12v4" />
-      <path d="M20 16h-4" />
-    </svg>
+  // Pistol: sentadilla a una pierna, otra extendida
+  pistol: (p) => (
+    <Svg {...p}>
+      <Head cx={10} cy={4} r={2} />
+      <path d="M10 6l1 5" />
+      <path d="M10.5 7.5 15 7" />
+      <path d="M11 11h4" />
+      <path d="M15 11v7" />
+      <path d="M11 11 18.5 9.5" />
+    </Svg>
   ),
-  lunge: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="4" r="2" />
-      <path d="M12 6v4" />
-      <path d="M8 10l4 4 4-8" />
-      <path d="M6 18l2-4" />
-      <path d="M18 14l-2 6" />
-    </svg>
+  // Front lever: cuerpo horizontal, agarre en barra
+  lever: (p) => (
+    <Svg {...p}>
+      <path d="M6 3v18" />
+      <path d="M9 10 6 7" />
+      <path d="M9 12 6 13" />
+      <Head cx={10.5} cy={11} r={2} />
+      <path d="M12.5 11H20" />
+      <path d="M20 11l1.5-1" />
+    </Svg>
   ),
-  burpee: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="4" r="2" />
-      <path d="M12 6v2" />
-      <path d="M8 8h8" />
-      <path d="M10 12l2 2 2-2" />
-      <path d="M8 16h8" />
-      <path d="M10 20v-4" />
-      <path d="M14 20v-4" />
-    </svg>
+  // Human flag: poste vertical, cuerpo en horizontal
+  flag: (p) => (
+    <Svg {...p}>
+      <path d="M5 3v18" />
+      <path d="M8 8 5 6" />
+      <path d="M8 8 5 11" />
+      <Head cx={9.5} cy={8} r={2} />
+      <path d="M11.5 8 20 10.5" />
+      <path d="M20 10.5 21.5 9.5" />
+    </Svg>
   ),
-  muscleup: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M4 6h16" />
-      <path d="M8 6v2" />
-      <path d="M16 6v2" />
-      <circle cx="12" cy="10" r="2" />
-      <path d="M10 12l-2 4" />
-      <path d="M14 12l2 4" />
-      <path d="M10 18v2" />
-      <path d="M14 18v2" />
-    </svg>
+  // Inicio: botón play
+  start: (p) => (
+    <Svg {...p}>
+      <circle cx={12} cy={12} r={9} />
+      <path d="M10 8.5 16 12l-6 3.5z" fill="currentColor" stroke="none" />
+    </Svg>
   ),
-  handstand: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="18" r="2" />
-      <path d="M12 16v-6" />
-      <path d="M8 10l4-6 4 6" />
-      <path d="M8 4v2" />
-      <path d="M16 4v2" />
-    </svg>
+  // Meta: bandera de cuadros
+  finish: (p) => (
+    <Svg {...p}>
+      <path d="M6 3v18" />
+      <path d="M6 4h13v9H6z" />
+      <path d="M6 8.5h13" />
+      <path d="M12.5 4v9" />
+      <path d="M6 4h6.5v4.5H6zM12.5 8.5H19V13h-6.5z" fill="currentColor" stroke="none" />
+    </Svg>
   ),
-  pistol: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="4" r="2" />
-      <path d="M12 6v4" />
-      <path d="M10 10h4" />
-      <path d="M12 10v4l-4 6" />
-      <path d="M14 14l4 2" />
-    </svg>
+  // Descanso: luna de recuperación
+  rest: (p) => (
+    <Svg {...p}>
+      <path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a7 7 0 1 0 10.5 10.5z" />
+      <path d="M15 4h4l-4 4h4" />
+    </Svg>
   ),
-  lever: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M4 8h2" />
-      <path d="M5 8v8" />
-      <circle cx="8" cy="10" r="2" />
-      <path d="M10 10h10" />
-      <path d="M14 8v4" />
-      <path d="M18 8v4" />
-    </svg>
+  // Calentamiento: llama
+  warmup: (p) => (
+    <Svg {...p}>
+      <path d="M12 2c1 3.5 4.5 4.5 4.5 9a4.5 4.5 0 1 1-9 0c0-2.2 1.3-3.3 2.4-4.6C10.7 7 11 5.5 12 2z" />
+      <path d="M12 21a2.5 2.5 0 0 0 2.5-2.5c0-1.6-1.3-2.3-2.5-4-1.2 1.7-2.5 2.4-2.5 4A2.5 2.5 0 0 0 12 21z" fill="currentColor" stroke="none" />
+    </Svg>
   ),
-  flag: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M4 4v16" />
-      <path d="M4 8h12" />
-      <circle cx="8" cy="12" r="2" />
-      <path d="M10 12h6" />
-      <path d="M12 10v4" />
-      <path d="M16 10v4" />
-    </svg>
+  // Estiramiento: flexión hacia adelante
+  stretch: (p) => (
+    <Svg {...p}>
+      <Head cx={7} cy={5} r={2} />
+      <path d="M8 6.5q3 5 7 6" />
+      <path d="M9 8 15 12.5" />
+      <path d="M15 12.5h5" />
+      <path d="M20 12.5v3" />
+    </Svg>
   ),
-  start: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <polygon points="10,8 16,12 10,16" fill="currentColor" />
-    </svg>
+  // Cardio: corazón con pulso
+  cardio: (p) => (
+    <Svg {...p}>
+      <path d="M20.4 5.6a5 5 0 0 0-7.1 0l-1.3 1.3-1.3-1.3a5 5 0 0 0-7.1 7.1L12 20.5l8.4-8.4a5 5 0 0 0 0-6.5z" />
+      <path d="M4 12.5h5l1.5-3 2.5 5 1.5-2h4" />
+    </Svg>
   ),
-  finish: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
-      <line x1="4" y1="22" x2="4" y2="15" />
-    </svg>
-  ),
-  rest: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
-      <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
-      <line x1="6" y1="1" x2="6" y2="4" />
-      <line x1="10" y1="1" x2="10" y2="4" />
-      <line x1="14" y1="1" x2="14" y2="4" />
-    </svg>
-  ),
-  warmup: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 2v4" />
-      <path d="M12 18v4" />
-      <path d="M4.93 4.93l2.83 2.83" />
-      <path d="M16.24 16.24l2.83 2.83" />
-      <path d="M2 12h4" />
-      <path d="M18 12h4" />
-      <path d="M4.93 19.07l2.83-2.83" />
-      <path d="M16.24 7.76l2.83-2.83" />
-      <circle cx="12" cy="12" r="4" />
-    </svg>
-  ),
-  stretch: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="4" r="2" />
-      <path d="M12 6v6" />
-      <path d="M8 8l4 4 4-4" />
-      <path d="M6 16l6-4 6 4" />
-      <path d="M8 20l4-4 4 4" />
-    </svg>
-  ),
-  cardio: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z" />
-      <path d="M3.5 12h6l1-2 2 4 2-2h6" />
-    </svg>
-  ),
-  core: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <ellipse cx="12" cy="12" rx="8" ry="10" />
-      <path d="M12 2v20" />
-      <path d="M4 12h16" />
-    </svg>
-  ),
-  arms: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M6 6l6 6" />
-      <path d="M4 10l4-4" />
-      <path d="M18 6l-6 6" />
-      <path d="M20 10l-4-4" />
-      <ellipse cx="12" cy="16" rx="4" ry="2" />
-      <path d="M12 14v4" />
-    </svg>
-  ),
-  legs: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M10 4v8l-4 8" />
-      <path d="M14 4v8l4 8" />
-      <path d="M8 8h8" />
-      <path d="M6 20h4" />
-      <path d="M14 20h4" />
-    </svg>
-  ),
-  back: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  // Core: abdominales
+  core: (p) => (
+    <Svg {...p}>
+      <rect x={8} y={3} width={8} height={18} rx={4} />
       <path d="M12 4v16" />
-      <path d="M8 8l4-4 4 4" />
+      <path d="M8.5 8.5h7" />
+      <path d="M8.5 12h7" />
+      <path d="M8.5 15.5h7" />
+    </Svg>
+  ),
+  // Brazos: mancuerna
+  arms: (p) => (
+    <Svg {...p}>
+      <path d="M3 9v6" />
+      <path d="M6 6.5v11" />
       <path d="M6 12h12" />
-      <path d="M8 16l4 4 4-4" />
-    </svg>
+      <path d="M18 6.5v11" />
+      <path d="M21 9v6" />
+    </Svg>
   ),
-  chest: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <ellipse cx="8" cy="10" rx="4" ry="6" />
-      <ellipse cx="16" cy="10" rx="4" ry="6" />
-      <path d="M12 4v12" />
-    </svg>
+  // Piernas: par de piernas flexionadas
+  legs: (p) => (
+    <Svg {...p}>
+      <path d="M9 4h6" />
+      <path d="M10 4v8l-3 8" />
+      <path d="M14 4v8l3 8" />
+      <path d="M5 20h4" />
+      <path d="M15 20h4" />
+    </Svg>
   ),
-  shoulders: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="6" r="3" />
-      <path d="M5 14l3-4h8l3 4" />
-      <path d="M5 14v4" />
-      <path d="M19 14v4" />
-    </svg>
+  // Espalda: taper en V
+  back: (p) => (
+    <Svg {...p}>
+      <Head cx={12} cy={4.5} r={1.8} />
+      <path d="M12 6v13" />
+      <path d="M12 7 6 11l1.5 8" />
+      <path d="M12 7 18 11l-1.5 8" />
+    </Svg>
   ),
-  none: ({ className = '', size = 24 }) => (
-    <svg className={className} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="4" y="4" width="16" height="16" rx="2" />
-    </svg>
+  // Pecho: pectorales
+  chest: (p) => (
+    <Svg {...p}>
+      <path d="M12 6C8 4 4 5.5 4 9.5c0 3 4 5 8 2" />
+      <path d="M12 6c4-2 8-.5 8 3.5 0 3-4 5-8 2" />
+      <path d="M12 6v7.5" />
+    </Svg>
+  ),
+  // Hombros: deltoides
+  shoulders: (p) => (
+    <Svg {...p}>
+      <Head cx={12} cy={6} r={2.6} />
+      <path d="M4 16c0-4 3.5-6 8-6s8 2 8 6" />
+      <path d="M4 16v3" />
+      <path d="M20 16v3" />
+    </Svg>
+  ),
+  // Sin icono
+  none: (p) => (
+    <Svg {...p}>
+      <circle cx={12} cy={12} r={9} strokeDasharray="3 3" />
+    </Svg>
   ),
 };
 
