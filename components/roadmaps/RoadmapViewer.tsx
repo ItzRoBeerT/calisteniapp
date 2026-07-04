@@ -175,6 +175,8 @@ export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapVi
 
         return {
           ...node,
+          // Sections al fondo; el resto de nodos por encima
+          zIndex: nodeType === 'section' ? 0 : 1,
           data: {
             ...node.data,
             mode: 'viewer' as const,

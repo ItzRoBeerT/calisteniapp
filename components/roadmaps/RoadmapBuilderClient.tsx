@@ -35,10 +35,24 @@ const nodeTypes = builderNodeTypes;
 // Tipos de nodos de texto (su tamaño se controla solo con NodeResizer)
 const TEXT_NODE_TYPES = ['title'];
 
+// Dimensiones de un nodo: medida de RF primero, luego data/style
+const nodeW = (n: Node<AnyNodeData>): number =>
+  Number(n.width ?? n.data?.width ?? n.style?.width ?? 0) || 0;
+const nodeH = (n: Node<AnyNodeData>): number =>
+  Number(n.height ?? n.data?.height ?? n.style?.height ?? 0) || 0;
+
 function RoadmapBuilder() {
   const t = useTranslations('RoadmapBuilder');
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+
+  // Estado del arrastre de una section (para mover su contenido con ella)
+  const sectionDragRef = useRef<{
+    id: string;
+    lastX: number;
+    lastY: number;
+    childIds: string[];
+  } | null>(null);
 
   // Estados de nodos y edges
   const [nodes, setNodes, onNodesChange] = useNodesState<AnyNodeData>([]);
@@ -143,6 +157,64 @@ function RoadmapBuilder() {
     },
     [reactFlowInstance, setNodes]
   );
+
+  // Al empezar a arrastrar una section: capturar los nodos que contiene
+  const onNodeDragStart = useCallback(
+    (_: React.MouseEvent, node: Node<AnyNodeData>) => {
+      if (node.data?.nodeType !== 'section') {
+        sectionDragRef.current = null;
+        return;
+      }
+      const all = reactFlowInstance?.getNodes() ?? nodes;
+      const section = all.find((n) => n.id === node.id) ?? node;
+      const sx = node.position.x;
+      const sy = node.position.y;
+      const sw = nodeW(section);
+      const sh = nodeH(section);
+
+      // Hijos = nodos cuyo centro cae dentro del rectángulo de la section
+      const childIds = all
+        .filter((n) => n.id !== node.id)
+        .filter((n) => {
+          const cx = n.position.x + nodeW(n) / 2;
+          const cy = n.position.y + nodeH(n) / 2;
+          return cx >= sx && cx <= sx + sw && cy >= sy && cy <= sy + sh;
+        })
+        .map((n) => n.id);
+
+      sectionDragRef.current = { id: node.id, lastX: sx, lastY: sy, childIds };
+    },
+    [reactFlowInstance, nodes]
+  );
+
+  // Durante el arrastre de la section: trasladar sus hijos por el mismo delta
+  const onNodeDrag = useCallback(
+    (_: React.MouseEvent, node: Node<AnyNodeData>) => {
+      const st = sectionDragRef.current;
+      if (!st || st.id !== node.id || st.childIds.length === 0) return;
+
+      const dx = node.position.x - st.lastX;
+      const dy = node.position.y - st.lastY;
+      if (dx === 0 && dy === 0) return;
+      st.lastX = node.position.x;
+      st.lastY = node.position.y;
+
+      const childSet = new Set(st.childIds);
+      setNodes((nds) =>
+        nds.map((n) =>
+          // Saltar los seleccionados: ReactFlow ya los mueve (evita doble delta)
+          childSet.has(n.id) && !n.selected
+            ? { ...n, position: { x: n.position.x + dx, y: n.position.y + dy } }
+            : n
+        )
+      );
+    },
+    [setNodes]
+  );
+
+  const onNodeDragStop = useCallback(() => {
+    sectionDragRef.current = null;
+  }, []);
 
   // Manejar drag start desde template sidebar
   const handleTemplateDragStart = useCallback((event: React.DragEvent, template: NodeTemplate) => {
@@ -481,6 +553,8 @@ function RoadmapBuilder() {
     () =>
       nodes.map((node) => ({
         ...node,
+        // Sections al fondo; el resto de nodos por encima
+        zIndex: node.data?.nodeType === 'section' ? 0 : 1,
         data: {
           ...node.data,
           mode: 'builder' as const,
@@ -610,6 +684,9 @@ function RoadmapBuilder() {
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             onInit={setReactFlowInstance}
+            onNodeDragStart={onNodeDragStart}
+            onNodeDrag={onNodeDrag}
+            onNodeDragStop={onNodeDragStop}
             onDrop={onDrop}
             onDragOver={onDragOver}
             onEdgeClick={handleEdgeClick}
