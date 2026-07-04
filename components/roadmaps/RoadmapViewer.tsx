@@ -14,81 +14,6 @@ import 'reactflow/dist/style.css';
 import { viewerNodeTypes } from './nodes';
 import { normalizeRoadmapGraph } from './normalizeRoadmap';
 import type { AnyNodeData } from '@/types/RoadmapNodes';
-
-// Estilos CSS específicos para React Flow en el visor de roadmaps
-const roadmapFlowStyles = `
-@keyframes flow {
-  0% { stroke-dashoffset: 24; }
-  100% { stroke-dashoffset: 0; }
-}
-
-.roadmap-flow .react-flow__node {
-  transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
-}
-
-.roadmap-flow .react-flow__edge-path {
-  stroke-width: 2;
-  stroke-linecap: round;
-}
-
-.roadmap-flow .react-flow__edge.animated path:not([style*="strokeDasharray"]) {
-  stroke-dasharray: 5 5;
-  animation: flow 0.8s linear infinite;
-}
-
-.roadmap-flow .react-flow__edge.selected path {
-  stroke-width: 3;
-}
-
-.roadmap-flow .react-flow__handle {
-  width: 10px;
-  height: 10px;
-  background: rgba(187, 134, 252, 0.6);
-  border: 2px solid rgba(187, 134, 252, 0.8);
-  transition: all 0.2s ease-out;
-}
-
-.roadmap-flow .react-flow__handle:hover {
-  background: rgba(187, 134, 252, 0.9);
-  transform: scale(1.2);
-}
-
-.roadmap-flow .react-flow__controls {
-  background: rgba(30, 30, 30, 0.8);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.roadmap-flow .react-flow__controls-button {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.7);
-  transition: all 0.2s ease;
-}
-
-.roadmap-flow .react-flow__controls-button:hover {
-  background: rgba(187, 134, 252, 0.2);
-  color: #BB86FC;
-}
-
-.roadmap-flow .react-flow__controls-button svg {
-  fill: currentColor;
-}
-
-.roadmap-flow .react-flow__minimap {
-  background: rgba(30, 30, 30, 0.8);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.roadmap-flow .react-flow__minimap svg {
-  border-radius: 12px;
-}
-`;
 import NodeDetailPanel from './NodeDetailPanel';
 import RoadmapProgress from './RoadmapProgress';
 import { useRoadmapProgress } from '@/hooks/useRoadmapProgress';
@@ -250,6 +175,8 @@ export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapVi
 
         return {
           ...node,
+          // Sections al fondo; el resto de nodos por encima
+          zIndex: nodeType === 'section' ? 0 : 1,
           data: {
             ...node.data,
             mode: 'viewer' as const,
@@ -306,9 +233,6 @@ export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapVi
 
   return (
     <div className="relative w-full space-y-4">
-      {/* Estilos específicos del visor */}
-      <style>{roadmapFlowStyles}</style>
-
       {/* Barra de progreso global */}
       {isLoaded && trackableNodesCount > 0 && (
         <RoadmapProgress
@@ -368,11 +292,11 @@ export default function RoadmapViewer({ roadmap, isEditable = false }: RoadmapVi
             className="!bg-surface/80 !backdrop-blur-md !border-foreground/10 !rounded-xl !shadow-lg"
           />
 
-          {/* MiniMap */}
+          {/* MiniMap (solo desktop, en móvil tapa el canvas) */}
           <MiniMap
             nodeColor={miniMapNodeColor}
             maskColor="rgba(18, 18, 18, 0.85)"
-            className="!bg-surface/80 !backdrop-blur-md !border-foreground/10 !rounded-xl"
+            className="!hidden md:!block !bg-surface/80 !backdrop-blur-md !border-foreground/10 !rounded-xl"
             pannable
             zoomable
           />

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import ReactFlow, {
   Background,
@@ -34,10 +35,24 @@ const nodeTypes = builderNodeTypes;
 // Tipos de nodos de texto (su tamaño se controla solo con NodeResizer)
 const TEXT_NODE_TYPES = ['title'];
 
+// Dimensiones de un nodo: medida de RF primero, luego data/style
+const nodeW = (n: Node<AnyNodeData>): number =>
+  Number(n.width ?? n.data?.width ?? n.style?.width ?? 0) || 0;
+const nodeH = (n: Node<AnyNodeData>): number =>
+  Number(n.height ?? n.data?.height ?? n.style?.height ?? 0) || 0;
+
 function RoadmapBuilder() {
   const t = useTranslations('RoadmapBuilder');
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const [reactFlowInstance, setReactFlowInstance] = useState<ReactFlowInstance | null>(null);
+
+  // Estado del arrastre de una section (para mover su contenido con ella)
+  const sectionDragRef = useRef<{
+    id: string;
+    lastX: number;
+    lastY: number;
+    childIds: string[];
+  } | null>(null);
 
   // Estados de nodos y edges
   const [nodes, setNodes, onNodesChange] = useNodesState<AnyNodeData>([]);
@@ -142,6 +157,64 @@ function RoadmapBuilder() {
     },
     [reactFlowInstance, setNodes]
   );
+
+  // Al empezar a arrastrar una section: capturar los nodos que contiene
+  const onNodeDragStart = useCallback(
+    (_: React.MouseEvent, node: Node<AnyNodeData>) => {
+      if (node.data?.nodeType !== 'section') {
+        sectionDragRef.current = null;
+        return;
+      }
+      const all = reactFlowInstance?.getNodes() ?? nodes;
+      const section = all.find((n) => n.id === node.id) ?? node;
+      const sx = node.position.x;
+      const sy = node.position.y;
+      const sw = nodeW(section);
+      const sh = nodeH(section);
+
+      // Hijos = nodos cuyo centro cae dentro del rectángulo de la section
+      const childIds = all
+        .filter((n) => n.id !== node.id)
+        .filter((n) => {
+          const cx = n.position.x + nodeW(n) / 2;
+          const cy = n.position.y + nodeH(n) / 2;
+          return cx >= sx && cx <= sx + sw && cy >= sy && cy <= sy + sh;
+        })
+        .map((n) => n.id);
+
+      sectionDragRef.current = { id: node.id, lastX: sx, lastY: sy, childIds };
+    },
+    [reactFlowInstance, nodes]
+  );
+
+  // Durante el arrastre de la section: trasladar sus hijos por el mismo delta
+  const onNodeDrag = useCallback(
+    (_: React.MouseEvent, node: Node<AnyNodeData>) => {
+      const st = sectionDragRef.current;
+      if (!st || st.id !== node.id || st.childIds.length === 0) return;
+
+      const dx = node.position.x - st.lastX;
+      const dy = node.position.y - st.lastY;
+      if (dx === 0 && dy === 0) return;
+      st.lastX = node.position.x;
+      st.lastY = node.position.y;
+
+      const childSet = new Set(st.childIds);
+      setNodes((nds) =>
+        nds.map((n) =>
+          // Saltar los seleccionados: ReactFlow ya los mueve (evita doble delta)
+          childSet.has(n.id) && !n.selected
+            ? { ...n, position: { x: n.position.x + dx, y: n.position.y + dy } }
+            : n
+        )
+      );
+    },
+    [setNodes]
+  );
+
+  const onNodeDragStop = useCallback(() => {
+    sectionDragRef.current = null;
+  }, []);
 
   // Manejar drag start desde template sidebar
   const handleTemplateDragStart = useCallback((event: React.DragEvent, template: NodeTemplate) => {
@@ -266,11 +339,21 @@ function RoadmapBuilder() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [nodes, edges, selectedNodeId, selectedEdgeId, setNodes, setEdges]);
 
+  // Modal de guardado (nombre + visibilidad)
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [saveName, setSaveName] = useState('');
+  const [saveIsPublic, setSaveIsPublic] = useState(true);
+
+  const handleOpenSave = useCallback(() => {
+    setSaveName(roadmapId || t('defaultName'));
+    setShowSaveModal(true);
+  }, [roadmapId, t]);
+
   // Guardar roadmap en el servidor
   const handleSave = useCallback(async () => {
-    const defaultName = roadmapId || t('defaultName');
-    const name = prompt(t('savePrompt'), defaultName);
+    const name = saveName.trim();
     if (!name) return;
+    setShowSaveModal(false);
 
     const sanitizedName = name.toLowerCase().replace(/[^a-z0-9-_]/g, '-').replace(/-+/g, '-');
 
@@ -296,7 +379,7 @@ function RoadmapBuilder() {
         id: sanitizedName,
         title: name,
         description: t('defaultDescription'),
-        isPublic: true,
+        isPublic: saveIsPublic,
         totalNodes: nodes.length,
         completedNodes: 0,
         nodes: nodesToSave,
@@ -336,7 +419,7 @@ function RoadmapBuilder() {
     } finally {
       setIsSaving(false);
     }
-  }, [nodes, edges, roadmapId, t]);
+  }, [nodes, edges, saveName, saveIsPublic, t]);
 
   // Cargar lista de roadmaps disponibles
   const loadAvailableRoadmaps = useCallback(async () => {
@@ -361,9 +444,10 @@ function RoadmapBuilder() {
 
   // Importar roadmap desde el servidor
   const handleImportRoadmap = useCallback(
-    async (roadmapId: string) => {
+    async (roadmapId: string, silent = false) => {
       try {
-        const response = await fetch(`/api/roadmaps?id=${roadmapId}`);
+        const response = await fetch(`/api/roadmaps?id=${encodeURIComponent(roadmapId)}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
 
          
@@ -429,8 +513,11 @@ function RoadmapBuilder() {
         setSelectedNodeId(null);
         setSelectedEdgeId(null);
         setRoadmapId(data.id || null);
+        setSaveIsPublic(data.isPublic ?? true);
         setShowImportModal(false);
-        alert(t('importSuccess', { title: data.title ?? t('untitledRoadmap') }));
+        if (!silent) {
+          alert(t('importSuccess', { title: data.title ?? t('untitledRoadmap') }));
+        }
       } catch (error) {
         console.error('Error importing roadmap:', error);
         alert(t('importError'));
@@ -438,6 +525,17 @@ function RoadmapBuilder() {
     },
     [setNodes, setEdges, t]
   );
+
+  // Editar un roadmap existente llegando con ?id=<slug> desde el listado
+  const searchParams = useSearchParams();
+  const autoLoadedRef = useRef(false);
+  useEffect(() => {
+    const editId = searchParams.get('id');
+    if (editId && !autoLoadedRef.current) {
+      autoLoadedRef.current = true;
+      handleImportRoadmap(editId, true);
+    }
+  }, [searchParams, handleImportRoadmap]);
 
   // Limpiar canvas
   const handleClear = useCallback(() => {
@@ -455,6 +553,8 @@ function RoadmapBuilder() {
     () =>
       nodes.map((node) => ({
         ...node,
+        // Sections al fondo; el resto de nodos por encima
+        zIndex: node.data?.nodeType === 'section' ? 0 : 1,
         data: {
           ...node.data,
           mode: 'builder' as const,
@@ -511,7 +611,7 @@ function RoadmapBuilder() {
           </button>
 
           <button
-            onClick={handleSave}
+            onClick={handleOpenSave}
             disabled={isSaving || nodes.length === 0}
             className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600
                        text-white rounded-lg transition-colors text-sm font-medium
@@ -584,6 +684,9 @@ function RoadmapBuilder() {
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             onInit={setReactFlowInstance}
+            onNodeDragStart={onNodeDragStart}
+            onNodeDrag={onNodeDrag}
+            onNodeDragStop={onNodeDragStop}
             onDrop={onDrop}
             onDragOver={onDragOver}
             onEdgeClick={handleEdgeClick}
@@ -642,6 +745,56 @@ function RoadmapBuilder() {
           />
         )}
       </div>
+
+      {/* Save Modal */}
+      {showSaveModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-surface border border-foreground/10 rounded-xl shadow-2xl max-w-md w-full p-6">
+            <h2 className="text-xl font-bold text-foreground mb-4">{t('saveTitle')}</h2>
+
+            <label className="block text-sm text-foreground/70 mb-1">{t('nameLabel')}</label>
+            <input
+              type="text"
+              value={saveName}
+              onChange={(e) => setSaveName(e.target.value)}
+              autoFocus
+              className="w-full px-3 py-2 mb-4 bg-background border border-foreground/20 rounded-lg
+                       text-foreground focus:border-primary-500 focus:outline-none"
+            />
+
+            <label className="flex items-start gap-3 mb-6 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={saveIsPublic}
+                onChange={(e) => setSaveIsPublic(e.target.checked)}
+                className="mt-1 accent-primary-500"
+              />
+              <span>
+                <span className="block text-sm text-foreground">{t('publicLabel')}</span>
+                <span className="block text-xs text-foreground/50">{t('publicHint')}</span>
+              </span>
+            </label>
+
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowSaveModal(false)}
+                className="px-4 py-2 text-sm rounded-lg bg-foreground/10 hover:bg-foreground/20
+                         text-foreground/70 transition-colors"
+              >
+                {t('cancel')}
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={!saveName.trim()}
+                className="px-4 py-2 text-sm rounded-lg bg-primary-500 hover:bg-primary-600 text-white
+                         font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {t('save')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Import Modal */}
       {showImportModal && (
